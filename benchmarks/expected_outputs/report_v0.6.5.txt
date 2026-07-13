@@ -1,0 +1,1567 @@
+======================================================================
+PREDICTRON ENGINE BENCHMARK REPORT
+Engine Version: 0.6.5
+Cases Evaluated: 10
+======================================================================
+
+SUMMARY
+  Passed: 10
+  Failed: 0
+  Avg Overall Score: 58.7
+  Avg Confidence: 0.73
+  Avg Processing Time: 2.7ms
+
+──────────────────────────────────────────────────────────────────────
+PER-CASE RESULTS
+──────────────────────────────────────────────────────────────────────
+
+  Case: b2b_saas
+  Label: B2B SaaS — Cloud analytics platform
+  Status: PASS
+
+  Extracted Features:
+    Industry: enterprise_saas
+    Sub-Industry: None
+    Business Model: saas
+    Customer Type: b2b
+    Geography: None
+    Funding Stage: None
+    Has Revenue: True
+    Keywords: ['analytix', 'cloud', 'saas', 'platform', 'providing', 'real', 'time', 'analytics', 'business', 'intelligence', 'market', 'enterprises', 'integrates', 'existing', 'data', 'warehouses', 'delivers', 'automated', 'insight', 'generation']
+    Tech Stack: []
+    Data Completeness: 88%
+
+  Evidence (13 items):
+    1. [industry/sales_cycle] Enterprise SaaS sales cycles range from 3 to 12 months.
+       Source: knowledge/taxonomies.py:enterprise_saas (relevance: 1.00)
+    2. [industry/switching_costs] Enterprise integrations create meaningful switching costs.
+       Source: knowledge/taxonomies.py:enterprise_saas (relevance: 1.00)
+    3. [industry/market_size] Global enterprise software market exceeds $500 billion.
+       Source: knowledge/taxonomies.py:enterprise_saas (relevance: 1.00)
+    4. [industry/unit_economics] SaaS benefits from recurring revenue and high gross margins.
+       Source: knowledge/taxonomies.py:enterprise_saas (relevance: 1.00)
+    5. [industry/competition] Enterprise SaaS markets tend toward winner-take-most dynamics.
+       Source: knowledge/taxonomies.py:enterprise_saas (relevance: 1.00)
+    6. [business_model/unit_economics] SaaS businesses typically achieve 70-90% gross margins.
+       Source: knowledge/taxonomies.py:saas (relevance: 1.00)
+    7. [business_model/revenue_model] Subscription revenue provides predictable recurring cash flows.
+       Source: knowledge/taxonomies.py:saas (relevance: 1.00)
+    8. [business_model/retention] Net revenue retention above 100% indicates strong product stickiness.
+       Source: knowledge/taxonomies.py:saas (relevance: 1.00)
+    9. [business_model/competition] SaaS markets consolidate rapidly around category leaders.
+       Source: knowledge/taxonomies.py:saas (relevance: 1.00)
+    10. [geography/market_size] North America has the largest venture capital market globally.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+    11. [geography/competition] North American markets are highly competitive with many well-funded competitors.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+    12. [geography/talent] North America has deep talent pools in technology and business.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+    13. [geography/regulatory] Regulatory environment varies by state and federal jurisdiction.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+
+  Observations (6 items):
+    1. [market_opportunity] The enterprise_saas market presents domain-specific factors including competition, market_size, sales_cycle.
+       Rule: MarketContextRule | Confidence: 1.00 | Importance: 0.80
+    2. [market_opportunity] The north_america geographic market has 4 documented domain factors.
+       Rule: MarketContextRule | Confidence: 0.90 | Importance: 0.60
+    3. [business_model_viability] The startup follows a saas model within the enterprise_saas industry. Domain knowledge covers 4 factors including competition, retention, revenue_model.
+       Rule: BusinessModelContextRule | Confidence: 0.90 | Importance: 0.70
+    4. [founder_quality] Identified 2 founder profile(s) associated with this startup.
+       Rule: TeamAssessmentRule | Confidence: 0.70 | Importance: 0.60
+    5. [team_execution] Team size indicator suggests a 11-50 team.
+       Rule: TeamAssessmentRule | Confidence: 0.50 | Importance: 0.50
+    6. [data_quality] High data completeness — analysis is well-supported.
+       Rule: DataQualityRule | Confidence: 1.00 | Importance: 0.40
+
+  Dimension Assessments (7):
+    [market_opportunity]
+      Summary: Assessed market_opportunity based on 2 observations and 5 evidence items (average confidence: 0.95).
+      Score: None
+      Confidence: 0.95
+    [founder_quality]
+      Summary: Assessed founder_quality based on 1 observations and 0 evidence items (average confidence: 0.70).
+      Score: None
+      Confidence: 0.70
+    [product_strength]
+      Summary: No observations available for product_strength.
+      Score: None
+      Confidence: 0.00
+    [traction_signals]
+      Summary: No observations available for traction_signals.
+      Score: None
+      Confidence: 0.00
+    [business_model_viability]
+      Summary: Assessed business_model_viability based on 1 observations and 4 evidence items (average confidence: 0.90).
+      Score: None
+      Confidence: 0.90
+    [competitive_position]
+      Summary: No observations available for competitive_position.
+      Score: None
+      Confidence: 0.00
+    [team_execution]
+      Summary: Assessed team_execution based on 1 observations and 0 evidence items (average confidence: 0.50).
+      Score: None
+      Confidence: 0.50
+
+  Scores:
+    market_opportunity: 60.0
+      Rationale: Placeholder scoring for Market Opportunity dimension.
+    product_strength: 60.0
+      Rationale: Placeholder scoring for Product Strength dimension.
+    founder_quality: 60.0
+      Rationale: Placeholder scoring for Founder Quality dimension.
+    traction_signals: 60.0
+      Rationale: Placeholder scoring for Traction Signals dimension.
+    business_model_viability: 60.0
+      Rationale: Placeholder scoring for Business Model Viability dimension.
+    competitive_position: 60.0
+      Rationale: Placeholder scoring for Competitive Position dimension.
+    team_execution: 60.0
+      Rationale: Placeholder scoring for Team & Execution dimension.
+    Overall: 60.0
+
+  Recommendations (5):
+    1. [MEDIUM] opportunity
+       Action: Conduct detailed market sizing analysis.
+       Title: Deep-Dive Market Analysis
+    2. [MEDIUM] opportunity
+       Action: Conduct in-depth team due diligence.
+       Title: Team Deep-Dive Assessment
+    3. [MEDIUM] due_diligence
+       Action: Request technology stack details.
+       Title: Identify Technology Stack
+    4. [MEDIUM] opportunity
+       Action: Analyze unit economics and scalability.
+       Title: Unit Economics Deep-Dive
+    5. [MEDIUM] due_diligence
+       Action: Clarify current funding stage and capital requirements.
+       Title: Identify Funding Stage
+
+  Confidence Assessments:
+    market_opportunity: 0.94 (data completeness: 88%)
+    product_strength: 0.46 (data completeness: 88%)
+    founder_quality: 0.81 (data completeness: 88%)
+    traction_signals: 0.46 (data completeness: 88%)
+    business_model_viability: 0.91 (data completeness: 88%)
+    competitive_position: 0.46 (data completeness: 88%)
+    team_execution: 0.71 (data completeness: 88%)
+    Overall: 0.68
+
+  Processing Time: 5.2ms
+  Stage Breakdown:
+    normalize: 0.1ms
+    collect: 0.1ms
+    extract: 0.7ms
+    evidence: 0.1ms
+    reasoning: 0.1ms
+    evaluation: 0.3ms
+    scoring: 0.1ms
+    recommendations: 3.4ms
+    confidence: 0.2ms
+    report_builder: 0.1ms
+
+  Case: healthcare_ai
+  Label: Healthcare AI — Diagnostic imaging
+  Status: PASS
+
+  Extracted Features:
+    Industry: healthtech
+    Sub-Industry: None
+    Business Model: paas
+    Customer Type: b2b
+    Geography: None
+    Funding Stage: series_a
+    Has Revenue: True
+    Keywords: ['medvision', 'develops', 'cleared', 'diagnostic', 'tools', 'medical', 'imaging', 'platform', 'analyzes', 'rays', 'mris', 'scans', 'assist', 'radiologists', 'detecting', 'anomalies', 'sensitivity', 'company', 'holds', 'patents']
+    Tech Stack: []
+    Data Completeness: 88%
+
+  Evidence (16 items):
+    1. [industry/regulatory] Healthcare products face extensive regulatory approval.
+       Source: knowledge/taxonomies.py:healthtech (relevance: 1.00)
+    2. [industry/sales_cycle] Hospital sales cycles typically exceed 12 months.
+       Source: knowledge/taxonomies.py:healthtech (relevance: 1.00)
+    3. [industry/switching_costs] Clinical workflow integration creates high switching costs.
+       Source: knowledge/taxonomies.py:healthtech (relevance: 1.00)
+    4. [industry/market_size] Digital health market is projected to exceed $300B by 2030.
+       Source: knowledge/taxonomies.py:healthtech (relevance: 1.00)
+    5. [industry/data_privacy] HIPAA imposes strict data handling requirements.
+       Source: knowledge/taxonomies.py:healthtech (relevance: 1.00)
+    6. [business_model/unit_economics] Platform businesses benefit from usage-based scaling.
+       Source: knowledge/taxonomies.py:paas (relevance: 1.00)
+    7. [business_model/switching_costs] Developer platform adoption creates deep integration lock-in.
+       Source: knowledge/taxonomies.py:paas (relevance: 1.00)
+    8. [business_model/competition] Platform markets tend toward monopoly or duopoly outcomes.
+       Source: knowledge/taxonomies.py:paas (relevance: 1.00)
+    9. [funding_stage/expectations] Series A companies have early product-market fit.
+       Source: knowledge/stages.py:Series A (relevance: 1.00)
+    10. [funding_stage/metrics] Revenue growth and unit economics become important.
+       Source: knowledge/stages.py:Series A (relevance: 1.00)
+    11. [funding_stage/diligence] Go-to-market scalability is the primary focus.
+       Source: knowledge/stages.py:Series A (relevance: 1.00)
+    12. [funding_stage/context] Product-market fit emerging, scaling initial traction.
+       Source: knowledge/stages.py:Series A (relevance: 1.00)
+    13. [geography/market_size] North America has the largest venture capital market globally.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+    14. [geography/competition] North American markets are highly competitive with many well-funded competitors.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+    15. [geography/talent] North America has deep talent pools in technology and business.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+    16. [geography/regulatory] Regulatory environment varies by state and federal jurisdiction.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+
+  Observations (6 items):
+    1. [market_opportunity] The healthtech market presents domain-specific factors including data_privacy, market_size, regulatory.
+       Rule: MarketContextRule | Confidence: 1.00 | Importance: 0.80
+    2. [market_opportunity] The north_america geographic market has 4 documented domain factors.
+       Rule: MarketContextRule | Confidence: 0.90 | Importance: 0.60
+    3. [business_model_viability] The startup follows a paas model within the healthtech industry. Domain knowledge covers 3 factors including competition, switching_costs, unit_economics.
+       Rule: BusinessModelContextRule | Confidence: 0.80 | Importance: 0.70
+    4. [traction_signals] At the series_a stage, evaluation should consider context, diligence, expectations.
+       Rule: StageExpectationRule | Confidence: 0.90 | Importance: 0.70
+    5. [founder_quality] Identified 1 founder profile(s) associated with this startup.
+       Rule: TeamAssessmentRule | Confidence: 0.55 | Importance: 0.60
+    6. [data_quality] High data completeness — analysis is well-supported.
+       Rule: DataQualityRule | Confidence: 1.00 | Importance: 0.40
+
+  Dimension Assessments (7):
+    [market_opportunity]
+      Summary: Assessed market_opportunity based on 2 observations and 5 evidence items (average confidence: 0.95).
+      Score: None
+      Confidence: 0.95
+    [founder_quality]
+      Summary: Assessed founder_quality based on 1 observations and 0 evidence items (average confidence: 0.55).
+      Score: None
+      Confidence: 0.55
+    [product_strength]
+      Summary: No observations available for product_strength.
+      Score: None
+      Confidence: 0.00
+    [traction_signals]
+      Summary: Assessed traction_signals based on 1 observations and 0 evidence items (average confidence: 0.90).
+      Score: None
+      Confidence: 0.90
+    [business_model_viability]
+      Summary: Assessed business_model_viability based on 1 observations and 3 evidence items (average confidence: 0.80).
+      Score: None
+      Confidence: 0.80
+    [competitive_position]
+      Summary: No observations available for competitive_position.
+      Score: None
+      Confidence: 0.00
+    [team_execution]
+      Summary: No observations available for team_execution.
+      Score: None
+      Confidence: 0.00
+
+  Scores:
+    market_opportunity: 60.0
+      Rationale: Placeholder scoring for Market Opportunity dimension.
+    product_strength: 60.0
+      Rationale: Placeholder scoring for Product Strength dimension.
+    founder_quality: 60.0
+      Rationale: Placeholder scoring for Founder Quality dimension.
+    traction_signals: 60.0
+      Rationale: Placeholder scoring for Traction Signals dimension.
+    business_model_viability: 60.0
+      Rationale: Placeholder scoring for Business Model Viability dimension.
+    competitive_position: 60.0
+      Rationale: Placeholder scoring for Competitive Position dimension.
+    team_execution: 60.0
+      Rationale: Placeholder scoring for Team & Execution dimension.
+    Overall: 60.0
+
+  Recommendations (6):
+    1. [MEDIUM] opportunity
+       Action: Conduct detailed market sizing analysis.
+       Title: Deep-Dive Market Analysis
+    2. [MEDIUM] follow_up
+       Action: Inquire about the full founding team composition.
+       Title: Expand Team Visibility
+    3. [MEDIUM] due_diligence
+       Action: Request technology stack details.
+       Title: Identify Technology Stack
+    4. [MEDIUM] opportunity
+       Action: Analyze unit economics and scalability.
+       Title: Unit Economics Deep-Dive
+    5. [MEDIUM] opportunity
+       Action: Validate traction metrics with supporting data.
+       Title: Traction Validation
+    6. [MEDIUM] follow_up
+       Action: Validate series_a stage benchmarks.
+       Title: Stage Benchmark Validation (series_a)
+
+  Confidence Assessments:
+    market_opportunity: 0.94 (data completeness: 88%)
+    product_strength: 0.46 (data completeness: 88%)
+    founder_quality: 0.74 (data completeness: 88%)
+    traction_signals: 0.91 (data completeness: 88%)
+    business_model_viability: 0.86 (data completeness: 88%)
+    competitive_position: 0.46 (data completeness: 88%)
+    team_execution: 0.46 (data completeness: 88%)
+    Overall: 0.69
+
+  Processing Time: 2.1ms
+  Stage Breakdown:
+    normalize: 0.1ms
+    collect: 0.1ms
+    extract: 1.0ms
+    evidence: 0.2ms
+    reasoning: 0.2ms
+    evaluation: 0.2ms
+    scoring: 0.1ms
+    recommendations: 0.1ms
+    confidence: 0.1ms
+    report_builder: 0.1ms
+
+  Case: fintech
+  Label: FinTech — Embedded payments
+  Status: PASS
+
+  Extracted Features:
+    Industry: fintech
+    Sub-Industry: None
+    Business Model: paas
+    Customer Type: b2b
+    Geography: None
+    Funding Stage: series_b
+    Has Revenue: None
+    Keywords: ['paybridge', 'provides', 'embedded', 'payment', 'infrastructure', 'marketplace', 'platform', 'businesses', 'first', 'solution', 'handles', 'split', 'payments', 'escrow', 'compliance', 'multi', 'currency', 'settlement', 'across', 'countries']
+    Tech Stack: []
+    Data Completeness: 88%
+
+  Evidence (16 items):
+    1. [industry/regulatory] Financial services require regulatory compliance.
+       Source: knowledge/taxonomies.py:fintech (relevance: 1.00)
+    2. [industry/sales_cycle] Enterprise financial institutions have long procurement cycles.
+       Source: knowledge/taxonomies.py:fintech (relevance: 1.00)
+    3. [industry/switching_costs] Financial infrastructure changes carry integration risk.
+       Source: knowledge/taxonomies.py:fintech (relevance: 1.00)
+    4. [industry/market_size] Global financial services market exceeds $25 trillion.
+       Source: knowledge/taxonomies.py:fintech (relevance: 1.00)
+    5. [industry/trust] Trust and security track record are critical buying factors.
+       Source: knowledge/taxonomies.py:fintech (relevance: 1.00)
+    6. [business_model/unit_economics] Platform businesses benefit from usage-based scaling.
+       Source: knowledge/taxonomies.py:paas (relevance: 1.00)
+    7. [business_model/switching_costs] Developer platform adoption creates deep integration lock-in.
+       Source: knowledge/taxonomies.py:paas (relevance: 1.00)
+    8. [business_model/competition] Platform markets tend toward monopoly or duopoly outcomes.
+       Source: knowledge/taxonomies.py:paas (relevance: 1.00)
+    9. [funding_stage/expectations] Series B companies have a proven model.
+       Source: knowledge/stages.py:Series B (relevance: 1.00)
+    10. [funding_stage/metrics] Revenue growth and retention are key metrics.
+       Source: knowledge/stages.py:Series B (relevance: 1.00)
+    11. [funding_stage/diligence] Path to profitability and positioning are priorities.
+       Source: knowledge/stages.py:Series B (relevance: 1.00)
+    12. [funding_stage/context] Proven model, scaling operations and market expansion.
+       Source: knowledge/stages.py:Series B (relevance: 1.00)
+    13. [geography/market_size] North America has the largest venture capital market globally.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+    14. [geography/competition] North American markets are highly competitive with many well-funded competitors.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+    15. [geography/talent] North America has deep talent pools in technology and business.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+    16. [geography/regulatory] Regulatory environment varies by state and federal jurisdiction.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+
+  Observations (7 items):
+    1. [market_opportunity] The fintech market presents domain-specific factors including market_size, regulatory, sales_cycle.
+       Rule: MarketContextRule | Confidence: 1.00 | Importance: 0.80
+    2. [market_opportunity] The north_america geographic market has 4 documented domain factors.
+       Rule: MarketContextRule | Confidence: 0.90 | Importance: 0.60
+    3. [business_model_viability] The startup follows a paas model within the fintech industry. Domain knowledge covers 3 factors including competition, switching_costs, unit_economics.
+       Rule: BusinessModelContextRule | Confidence: 0.80 | Importance: 0.70
+    4. [traction_signals] At the series_b stage, evaluation should consider context, diligence, expectations.
+       Rule: StageExpectationRule | Confidence: 0.90 | Importance: 0.70
+    5. [founder_quality] Identified 3 founder profile(s) associated with this startup.
+       Rule: TeamAssessmentRule | Confidence: 0.85 | Importance: 0.60
+    6. [team_execution] Team size indicator suggests a 51-200 team.
+       Rule: TeamAssessmentRule | Confidence: 0.50 | Importance: 0.50
+    7. [data_quality] High data completeness — analysis is well-supported.
+       Rule: DataQualityRule | Confidence: 1.00 | Importance: 0.40
+
+  Dimension Assessments (7):
+    [market_opportunity]
+      Summary: Assessed market_opportunity based on 2 observations and 5 evidence items (average confidence: 0.95).
+      Score: None
+      Confidence: 0.95
+    [founder_quality]
+      Summary: Assessed founder_quality based on 1 observations and 0 evidence items (average confidence: 0.85).
+      Score: None
+      Confidence: 0.85
+    [product_strength]
+      Summary: No observations available for product_strength.
+      Score: None
+      Confidence: 0.00
+    [traction_signals]
+      Summary: Assessed traction_signals based on 1 observations and 0 evidence items (average confidence: 0.90).
+      Score: None
+      Confidence: 0.90
+    [business_model_viability]
+      Summary: Assessed business_model_viability based on 1 observations and 3 evidence items (average confidence: 0.80).
+      Score: None
+      Confidence: 0.80
+    [competitive_position]
+      Summary: No observations available for competitive_position.
+      Score: None
+      Confidence: 0.00
+    [team_execution]
+      Summary: Assessed team_execution based on 1 observations and 0 evidence items (average confidence: 0.50).
+      Score: None
+      Confidence: 0.50
+
+  Scores:
+    market_opportunity: 60.0
+      Rationale: Placeholder scoring for Market Opportunity dimension.
+    product_strength: 60.0
+      Rationale: Placeholder scoring for Product Strength dimension.
+    founder_quality: 60.0
+      Rationale: Placeholder scoring for Founder Quality dimension.
+    traction_signals: 60.0
+      Rationale: Placeholder scoring for Traction Signals dimension.
+    business_model_viability: 60.0
+      Rationale: Placeholder scoring for Business Model Viability dimension.
+    competitive_position: 60.0
+      Rationale: Placeholder scoring for Competitive Position dimension.
+    team_execution: 60.0
+      Rationale: Placeholder scoring for Team & Execution dimension.
+    Overall: 60.0
+
+  Recommendations (6):
+    1. [MEDIUM] opportunity
+       Action: Conduct detailed market sizing analysis.
+       Title: Deep-Dive Market Analysis
+    2. [MEDIUM] opportunity
+       Action: Conduct in-depth team due diligence.
+       Title: Team Deep-Dive Assessment
+    3. [MEDIUM] due_diligence
+       Action: Request technology stack details.
+       Title: Identify Technology Stack
+    4. [MEDIUM] follow_up
+       Action: Request revenue and traction metrics.
+       Title: Validate Revenue Status
+    5. [HIGH] risk_mitigation
+       Action: Investigate revenue generation status for mature company.
+       Title: Revenue Validation for Mature Startup
+    6. [MEDIUM] follow_up
+       Action: Validate series_b stage benchmarks.
+       Title: Stage Benchmark Validation (series_b)
+
+  Confidence Assessments:
+    market_opportunity: 0.94 (data completeness: 88%)
+    product_strength: 0.46 (data completeness: 88%)
+    founder_quality: 0.89 (data completeness: 88%)
+    traction_signals: 0.91 (data completeness: 88%)
+    business_model_viability: 0.86 (data completeness: 88%)
+    competitive_position: 0.46 (data completeness: 88%)
+    team_execution: 0.71 (data completeness: 88%)
+    Overall: 0.75
+
+  Processing Time: 2.0ms
+  Stage Breakdown:
+    normalize: 0.1ms
+    collect: 0.1ms
+    extract: 0.9ms
+    evidence: 0.1ms
+    reasoning: 0.1ms
+    evaluation: 0.2ms
+    scoring: 0.1ms
+    recommendations: 0.2ms
+    confidence: 0.1ms
+    report_builder: 0.1ms
+
+  Case: devtools
+  Label: DevTools — CI/CD platform
+  Status: PASS
+
+  Extracted Features:
+    Industry: ai_ml
+    Sub-Industry: None
+    Business Model: paas
+    Customer Type: b2b2c
+    Geography: None
+    Funding Stage: None
+    Has Revenue: True
+    Keywords: ['shipkit', 'open', 'source', 'first', 'platform', 'designed', 'monorepo', 'architectures', 'provides', 'incremental', 'builds', 'intelligent', 'test', 'parallelization', 'deployment', 'orchestration', 'teams', 'running', 'microservices', 'core']
+    Tech Stack: []
+    Data Completeness: 75%
+
+  Evidence (11 items):
+    1. [industry/competition] AI/ML talent is scarce and expensive to recruit.
+       Source: knowledge/taxonomies.py:ai_ml (relevance: 1.00)
+    2. [industry/market_size] AI market is projected to exceed $2 trillion by 2030.
+       Source: knowledge/taxonomies.py:ai_ml (relevance: 1.00)
+    3. [industry/moat] Proprietary data and model performance create defensible moats.
+       Source: knowledge/taxonomies.py:ai_ml (relevance: 1.00)
+    4. [industry/regulatory] AI regulation is evolving with new compliance requirements.
+       Source: knowledge/taxonomies.py:ai_ml (relevance: 1.00)
+    5. [business_model/unit_economics] Platform businesses benefit from usage-based scaling.
+       Source: knowledge/taxonomies.py:paas (relevance: 1.00)
+    6. [business_model/switching_costs] Developer platform adoption creates deep integration lock-in.
+       Source: knowledge/taxonomies.py:paas (relevance: 1.00)
+    7. [business_model/competition] Platform markets tend toward monopoly or duopoly outcomes.
+       Source: knowledge/taxonomies.py:paas (relevance: 1.00)
+    8. [geography/market_size] North America has the largest venture capital market globally.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+    9. [geography/competition] North American markets are highly competitive with many well-funded competitors.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+    10. [geography/talent] North America has deep talent pools in technology and business.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+    11. [geography/regulatory] Regulatory environment varies by state and federal jurisdiction.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+
+  Observations (6 items):
+    1. [market_opportunity] The ai_ml market presents domain-specific factors including competition, market_size, moat.
+       Rule: MarketContextRule | Confidence: 0.90 | Importance: 0.80
+    2. [market_opportunity] The north_america geographic market has 4 documented domain factors.
+       Rule: MarketContextRule | Confidence: 0.90 | Importance: 0.60
+    3. [business_model_viability] The startup follows a paas model within the ai_ml industry. Domain knowledge covers 3 factors including competition, switching_costs, unit_economics.
+       Rule: BusinessModelContextRule | Confidence: 0.80 | Importance: 0.70
+    4. [founder_quality] Identified 2 founder profile(s) associated with this startup.
+       Rule: TeamAssessmentRule | Confidence: 0.70 | Importance: 0.60
+    5. [data_quality] High data completeness — analysis is well-supported.
+       Rule: DataQualityRule | Confidence: 0.95 | Importance: 0.40
+    6. [product_strength] No pitch deck available for analysis.
+       Rule: RiskIndicatorRule | Confidence: 0.90 | Importance: 0.50
+
+  Dimension Assessments (7):
+    [market_opportunity]
+      Summary: Assessed market_opportunity based on 2 observations and 4 evidence items (average confidence: 0.90).
+      Score: None
+      Confidence: 0.90
+    [founder_quality]
+      Summary: Assessed founder_quality based on 1 observations and 0 evidence items (average confidence: 0.70).
+      Score: None
+      Confidence: 0.70
+    [product_strength]
+      Summary: Assessed product_strength based on 1 observations and 0 evidence items (average confidence: 0.90).
+      Score: None
+      Confidence: 0.90
+    [traction_signals]
+      Summary: No observations available for traction_signals.
+      Score: None
+      Confidence: 0.00
+    [business_model_viability]
+      Summary: Assessed business_model_viability based on 1 observations and 3 evidence items (average confidence: 0.80).
+      Score: None
+      Confidence: 0.80
+    [competitive_position]
+      Summary: No observations available for competitive_position.
+      Score: None
+      Confidence: 0.00
+    [team_execution]
+      Summary: No observations available for team_execution.
+      Score: None
+      Confidence: 0.00
+
+  Scores:
+    market_opportunity: 55.0
+      Rationale: Placeholder scoring for Market Opportunity dimension.
+    product_strength: 55.0
+      Rationale: Placeholder scoring for Product Strength dimension.
+    founder_quality: 55.0
+      Rationale: Placeholder scoring for Founder Quality dimension.
+    traction_signals: 55.0
+      Rationale: Placeholder scoring for Traction Signals dimension.
+    business_model_viability: 55.0
+      Rationale: Placeholder scoring for Business Model Viability dimension.
+    competitive_position: 55.0
+      Rationale: Placeholder scoring for Competitive Position dimension.
+    team_execution: 55.0
+      Rationale: Placeholder scoring for Team & Execution dimension.
+    Overall: 55.0
+
+  Recommendations (6):
+    1. [MEDIUM] opportunity
+       Action: Conduct detailed market sizing analysis.
+       Title: Deep-Dive Market Analysis
+    2. [MEDIUM] opportunity
+       Action: Conduct in-depth team due diligence.
+       Title: Team Deep-Dive Assessment
+    3. [MEDIUM] due_diligence
+       Action: Request technology stack details.
+       Title: Identify Technology Stack
+    4. [HIGH] due_diligence
+       Action: Request the pitch deck for product analysis.
+       Title: Obtain Pitch Deck
+    5. [MEDIUM] opportunity
+       Action: Analyze unit economics and scalability.
+       Title: Unit Economics Deep-Dive
+    6. [MEDIUM] due_diligence
+       Action: Clarify current funding stage and capital requirements.
+       Title: Identify Funding Stage
+
+  Confidence Assessments:
+    market_opportunity: 0.88 (data completeness: 75%)
+    product_strength: 0.88 (data completeness: 75%)
+    founder_quality: 0.78 (data completeness: 75%)
+    traction_signals: 0.42 (data completeness: 75%)
+    business_model_viability: 0.82 (data completeness: 75%)
+    competitive_position: 0.42 (data completeness: 75%)
+    team_execution: 0.42 (data completeness: 75%)
+    Overall: 0.66
+
+  Processing Time: 2.3ms
+  Stage Breakdown:
+    normalize: 0.1ms
+    collect: 0.1ms
+    extract: 1.3ms
+    evidence: 0.1ms
+    reasoning: 0.1ms
+    evaluation: 0.2ms
+    scoring: 0.1ms
+    recommendations: 0.1ms
+    confidence: 0.1ms
+    report_builder: 0.1ms
+
+  Case: marketplace
+  Label: Marketplace — B2B industrial supplies
+  Status: PASS
+
+  Extracted Features:
+    Industry: marketplace
+    Sub-Industry: None
+    Business Model: marketplace
+    Customer Type: b2b2c
+    Geography: None
+    Funding Stage: series_a
+    Has Revenue: True
+    Keywords: ['supplyhub', 'operates', 'sided', 'marketplace', 'connecting', 'industrial', 'equipment', 'manufacturers', 'small', 'size', 'manufacturing', 'facilities', 'platform', 'handles', 'quoting', 'procurement', 'logistics', 'supplies', 'across', 'north']
+    Tech Stack: []
+    Data Completeness: 88%
+
+  Evidence (14 items):
+    1. [industry/competition] Marketplaces face chicken-and-egg cold start problems.
+       Source: knowledge/taxonomies.py:marketplace (relevance: 1.00)
+    2. [industry/unit_economics] Marketplace take rates vary significantly by vertical.
+       Source: knowledge/taxonomies.py:marketplace (relevance: 1.00)
+    3. [industry/network_effects] Successful marketplaces benefit from strong network effects.
+       Source: knowledge/taxonomies.py:marketplace (relevance: 1.00)
+    4. [business_model/unit_economics] Marketplace take rates vary from 5-30% depending on vertical.
+       Source: knowledge/taxonomies.py:marketplace (relevance: 1.00)
+    5. [business_model/competition] Marketplace businesses benefit from strong network effects.
+       Source: knowledge/taxonomies.py:marketplace (relevance: 1.00)
+    6. [business_model/growth] Two-sided marketplaces face chicken-and-egg cold start challenges.
+       Source: knowledge/taxonomies.py:marketplace (relevance: 1.00)
+    7. [funding_stage/expectations] Series A companies have early product-market fit.
+       Source: knowledge/stages.py:Series A (relevance: 1.00)
+    8. [funding_stage/metrics] Revenue growth and unit economics become important.
+       Source: knowledge/stages.py:Series A (relevance: 1.00)
+    9. [funding_stage/diligence] Go-to-market scalability is the primary focus.
+       Source: knowledge/stages.py:Series A (relevance: 1.00)
+    10. [funding_stage/context] Product-market fit emerging, scaling initial traction.
+       Source: knowledge/stages.py:Series A (relevance: 1.00)
+    11. [geography/market_size] North America has the largest venture capital market globally.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+    12. [geography/competition] North American markets are highly competitive with many well-funded competitors.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+    13. [geography/talent] North America has deep talent pools in technology and business.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+    14. [geography/regulatory] Regulatory environment varies by state and federal jurisdiction.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+
+  Observations (7 items):
+    1. [market_opportunity] The marketplace market presents domain-specific factors including competition, network_effects, unit_economics.
+       Rule: MarketContextRule | Confidence: 0.80 | Importance: 0.80
+    2. [market_opportunity] The north_america geographic market has 4 documented domain factors.
+       Rule: MarketContextRule | Confidence: 0.90 | Importance: 0.60
+    3. [business_model_viability] The startup follows a marketplace model within the marketplace industry. Domain knowledge covers 3 factors including competition, growth, unit_economics.
+       Rule: BusinessModelContextRule | Confidence: 0.80 | Importance: 0.70
+    4. [traction_signals] At the series_a stage, evaluation should consider context, diligence, expectations.
+       Rule: StageExpectationRule | Confidence: 0.90 | Importance: 0.70
+    5. [founder_quality] Identified 1 founder profile(s) associated with this startup.
+       Rule: TeamAssessmentRule | Confidence: 0.55 | Importance: 0.60
+    6. [team_execution] Team size indicator suggests a 51-200 team.
+       Rule: TeamAssessmentRule | Confidence: 0.50 | Importance: 0.50
+    7. [data_quality] High data completeness — analysis is well-supported.
+       Rule: DataQualityRule | Confidence: 1.00 | Importance: 0.40
+
+  Dimension Assessments (7):
+    [market_opportunity]
+      Summary: Assessed market_opportunity based on 2 observations and 3 evidence items (average confidence: 0.85).
+      Score: None
+      Confidence: 0.85
+    [founder_quality]
+      Summary: Assessed founder_quality based on 1 observations and 0 evidence items (average confidence: 0.55).
+      Score: None
+      Confidence: 0.55
+    [product_strength]
+      Summary: No observations available for product_strength.
+      Score: None
+      Confidence: 0.00
+    [traction_signals]
+      Summary: Assessed traction_signals based on 1 observations and 0 evidence items (average confidence: 0.90).
+      Score: None
+      Confidence: 0.90
+    [business_model_viability]
+      Summary: Assessed business_model_viability based on 1 observations and 3 evidence items (average confidence: 0.80).
+      Score: None
+      Confidence: 0.80
+    [competitive_position]
+      Summary: No observations available for competitive_position.
+      Score: None
+      Confidence: 0.00
+    [team_execution]
+      Summary: Assessed team_execution based on 1 observations and 0 evidence items (average confidence: 0.50).
+      Score: None
+      Confidence: 0.50
+
+  Scores:
+    market_opportunity: 60.0
+      Rationale: Placeholder scoring for Market Opportunity dimension.
+    product_strength: 60.0
+      Rationale: Placeholder scoring for Product Strength dimension.
+    founder_quality: 60.0
+      Rationale: Placeholder scoring for Founder Quality dimension.
+    traction_signals: 60.0
+      Rationale: Placeholder scoring for Traction Signals dimension.
+    business_model_viability: 60.0
+      Rationale: Placeholder scoring for Business Model Viability dimension.
+    competitive_position: 60.0
+      Rationale: Placeholder scoring for Competitive Position dimension.
+    team_execution: 60.0
+      Rationale: Placeholder scoring for Team & Execution dimension.
+    Overall: 60.0
+
+  Recommendations (6):
+    1. [MEDIUM] opportunity
+       Action: Conduct detailed market sizing analysis.
+       Title: Deep-Dive Market Analysis
+    2. [MEDIUM] follow_up
+       Action: Inquire about the full founding team composition.
+       Title: Expand Team Visibility
+    3. [MEDIUM] due_diligence
+       Action: Request technology stack details.
+       Title: Identify Technology Stack
+    4. [MEDIUM] opportunity
+       Action: Analyze unit economics and scalability.
+       Title: Unit Economics Deep-Dive
+    5. [MEDIUM] opportunity
+       Action: Validate traction metrics with supporting data.
+       Title: Traction Validation
+    6. [MEDIUM] follow_up
+       Action: Validate series_a stage benchmarks.
+       Title: Stage Benchmark Validation (series_a)
+
+  Confidence Assessments:
+    market_opportunity: 0.89 (data completeness: 88%)
+    product_strength: 0.46 (data completeness: 88%)
+    founder_quality: 0.74 (data completeness: 88%)
+    traction_signals: 0.91 (data completeness: 88%)
+    business_model_viability: 0.86 (data completeness: 88%)
+    competitive_position: 0.46 (data completeness: 88%)
+    team_execution: 0.71 (data completeness: 88%)
+    Overall: 0.72
+
+  Processing Time: 2.1ms
+  Stage Breakdown:
+    normalize: 0.1ms
+    collect: 0.1ms
+    extract: 0.9ms
+    evidence: 0.1ms
+    reasoning: 0.1ms
+    evaluation: 0.2ms
+    scoring: 0.1ms
+    recommendations: 0.2ms
+    confidence: 0.1ms
+    report_builder: 0.1ms
+
+  Case: consumer_app
+  Label: Consumer App — Fitness social network
+  Status: PASS
+
+  Extracted Features:
+    Industry: consumer_tech
+    Sub-Industry: None
+    Business Model: saas
+    Customer Type: b2c
+    Geography: None
+    Funding Stage: pre_seed
+    Has Revenue: None
+    Keywords: ['fitsocial', 'consumer', 'mobile', 'application', 'combines', 'fitness', 'tracking', 'social', 'networking', 'users', 'workouts', 'share', 'progress', 'participate', 'community', 'challenges', 'monetization', 'through', 'freemium', 'model']
+    Tech Stack: []
+    Data Completeness: 62%
+
+  Evidence (16 items):
+    1. [industry/adoption] Consumer adoption is driven by network effects and virality.
+       Source: knowledge/taxonomies.py:consumer_tech (relevance: 1.00)
+    2. [industry/market_size] Consumer tech market is vast but highly competitive.
+       Source: knowledge/taxonomies.py:consumer_tech (relevance: 1.00)
+    3. [industry/competition] Consumer markets have low switching costs and high churn risk.
+       Source: knowledge/taxonomies.py:consumer_tech (relevance: 1.00)
+    4. [industry/monetization] Consumer monetization typically requires large user bases.
+       Source: knowledge/taxonomies.py:consumer_tech (relevance: 1.00)
+    5. [business_model/unit_economics] SaaS businesses typically achieve 70-90% gross margins.
+       Source: knowledge/taxonomies.py:saas (relevance: 1.00)
+    6. [business_model/revenue_model] Subscription revenue provides predictable recurring cash flows.
+       Source: knowledge/taxonomies.py:saas (relevance: 1.00)
+    7. [business_model/retention] Net revenue retention above 100% indicates strong product stickiness.
+       Source: knowledge/taxonomies.py:saas (relevance: 1.00)
+    8. [business_model/competition] SaaS markets consolidate rapidly around category leaders.
+       Source: knowledge/taxonomies.py:saas (relevance: 1.00)
+    9. [funding_stage/expectations] Pre-seed companies are typically pre-product.
+       Source: knowledge/stages.py:Pre-Seed (relevance: 1.00)
+    10. [funding_stage/risk] Pre-seed investments carry the highest risk.
+       Source: knowledge/stages.py:Pre-Seed (relevance: 1.00)
+    11. [funding_stage/diligence] Founding team quality is the primary criterion.
+       Source: knowledge/stages.py:Pre-Seed (relevance: 1.00)
+    12. [funding_stage/context] Earliest stage, typically pre-product or early prototype.
+       Source: knowledge/stages.py:Pre-Seed (relevance: 1.00)
+    13. [geography/market_size] North America has the largest venture capital market globally.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+    14. [geography/competition] North American markets are highly competitive with many well-funded competitors.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+    15. [geography/talent] North America has deep talent pools in technology and business.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+    16. [geography/regulatory] Regulatory environment varies by state and federal jurisdiction.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+
+  Observations (8 items):
+    1. [market_opportunity] The consumer_tech market presents domain-specific factors including adoption, competition, market_size.
+       Rule: MarketContextRule | Confidence: 0.90 | Importance: 0.80
+    2. [market_opportunity] The north_america geographic market has 4 documented domain factors.
+       Rule: MarketContextRule | Confidence: 0.90 | Importance: 0.60
+    3. [business_model_viability] The startup follows a saas model within the consumer_tech industry. Domain knowledge covers 4 factors including competition, retention, revenue_model.
+       Rule: BusinessModelContextRule | Confidence: 0.90 | Importance: 0.70
+    4. [traction_signals] At the pre_seed stage, evaluation should consider context, diligence, expectations.
+       Rule: StageExpectationRule | Confidence: 0.90 | Importance: 0.70
+    5. [team_execution] Team size indicator suggests a 11-50 team.
+       Rule: TeamAssessmentRule | Confidence: 0.50 | Importance: 0.50
+    6. [data_quality] Moderate data completeness — analysis has some gaps.
+       Rule: DataQualityRule | Confidence: 0.82 | Importance: 0.50
+    7. [product_strength] No pitch deck available for analysis.
+       Rule: RiskIndicatorRule | Confidence: 0.90 | Importance: 0.50
+    8. [founder_quality] No founder profiles identified.
+       Rule: RiskIndicatorRule | Confidence: 0.90 | Importance: 0.60
+
+  Dimension Assessments (7):
+    [market_opportunity]
+      Summary: Assessed market_opportunity based on 2 observations and 4 evidence items (average confidence: 0.90).
+      Score: None
+      Confidence: 0.90
+    [founder_quality]
+      Summary: Assessed founder_quality based on 1 observations and 0 evidence items (average confidence: 0.90).
+      Score: None
+      Confidence: 0.90
+    [product_strength]
+      Summary: Assessed product_strength based on 1 observations and 0 evidence items (average confidence: 0.90).
+      Score: None
+      Confidence: 0.90
+    [traction_signals]
+      Summary: Assessed traction_signals based on 1 observations and 0 evidence items (average confidence: 0.90).
+      Score: None
+      Confidence: 0.90
+    [business_model_viability]
+      Summary: Assessed business_model_viability based on 1 observations and 4 evidence items (average confidence: 0.90).
+      Score: None
+      Confidence: 0.90
+    [competitive_position]
+      Summary: No observations available for competitive_position.
+      Score: None
+      Confidence: 0.00
+    [team_execution]
+      Summary: Assessed team_execution based on 1 observations and 0 evidence items (average confidence: 0.50).
+      Score: None
+      Confidence: 0.50
+
+  Scores:
+    market_opportunity: 52.0
+      Rationale: Placeholder scoring for Market Opportunity dimension.
+    product_strength: 52.0
+      Rationale: Placeholder scoring for Product Strength dimension.
+    founder_quality: 52.0
+      Rationale: Placeholder scoring for Founder Quality dimension.
+    traction_signals: 52.0
+      Rationale: Placeholder scoring for Traction Signals dimension.
+    business_model_viability: 52.0
+      Rationale: Placeholder scoring for Business Model Viability dimension.
+    competitive_position: 52.0
+      Rationale: Placeholder scoring for Competitive Position dimension.
+    team_execution: 52.0
+      Rationale: Placeholder scoring for Team & Execution dimension.
+    Overall: 52.0
+
+  Recommendations (7):
+    1. [MEDIUM] opportunity
+       Action: Conduct detailed market sizing analysis.
+       Title: Deep-Dive Market Analysis
+    2. [HIGH] due_diligence
+       Action: Request founder profiles and background information.
+       Title: Obtain Founder Information
+    3. [MEDIUM] due_diligence
+       Action: Request technology stack details.
+       Title: Identify Technology Stack
+    4. [HIGH] due_diligence
+       Action: Request the pitch deck for product analysis.
+       Title: Obtain Pitch Deck
+    5. [MEDIUM] follow_up
+       Action: Request revenue and traction metrics.
+       Title: Validate Revenue Status
+    6. [HIGH] risk_mitigation
+       Action: Investigate revenue generation status for mature company.
+       Title: Revenue Validation for Mature Startup
+    7. [MEDIUM] follow_up
+       Action: Validate pre_seed stage benchmarks.
+       Title: Stage Benchmark Validation (pre_seed)
+
+  Confidence Assessments:
+    market_opportunity: 0.84 (data completeness: 62%)
+    product_strength: 0.84 (data completeness: 62%)
+    founder_quality: 0.84 (data completeness: 62%)
+    traction_signals: 0.84 (data completeness: 62%)
+    business_model_viability: 0.84 (data completeness: 62%)
+    competitive_position: 0.39 (data completeness: 62%)
+    team_execution: 0.64 (data completeness: 62%)
+    Overall: 0.74
+
+  Processing Time: 5.9ms
+  Stage Breakdown:
+    normalize: 0.0ms
+    collect: 0.1ms
+    extract: 4.8ms
+    evidence: 0.1ms
+    reasoning: 0.1ms
+    evaluation: 0.3ms
+    scoring: 0.1ms
+    recommendations: 0.2ms
+    confidence: 0.1ms
+    report_builder: 0.1ms
+
+  Case: climate_tech
+  Label: Climate Tech — Carbon measurement
+  Status: PASS
+
+  Extracted Features:
+    Industry: enterprise_saas
+    Sub-Industry: None
+    Business Model: paas
+    Customer Type: b2b
+    Geography: None
+    Funding Stage: seed
+    Has Revenue: True
+    Keywords: ['carbonlens', 'provides', 'enterprise', 'grade', 'carbon', 'accounting', 'emissions', 'tracking', 'software', 'scope', 'platform', 'integrates', 'systems', 'supply', 'chain', 'tools', 'sensors', 'automate', 'data', 'collection']
+    Tech Stack: []
+    Data Completeness: 88%
+
+  Evidence (16 items):
+    1. [industry/sales_cycle] Enterprise SaaS sales cycles range from 3 to 12 months.
+       Source: knowledge/taxonomies.py:enterprise_saas (relevance: 1.00)
+    2. [industry/switching_costs] Enterprise integrations create meaningful switching costs.
+       Source: knowledge/taxonomies.py:enterprise_saas (relevance: 1.00)
+    3. [industry/market_size] Global enterprise software market exceeds $500 billion.
+       Source: knowledge/taxonomies.py:enterprise_saas (relevance: 1.00)
+    4. [industry/unit_economics] SaaS benefits from recurring revenue and high gross margins.
+       Source: knowledge/taxonomies.py:enterprise_saas (relevance: 1.00)
+    5. [industry/competition] Enterprise SaaS markets tend toward winner-take-most dynamics.
+       Source: knowledge/taxonomies.py:enterprise_saas (relevance: 1.00)
+    6. [business_model/unit_economics] Platform businesses benefit from usage-based scaling.
+       Source: knowledge/taxonomies.py:paas (relevance: 1.00)
+    7. [business_model/switching_costs] Developer platform adoption creates deep integration lock-in.
+       Source: knowledge/taxonomies.py:paas (relevance: 1.00)
+    8. [business_model/competition] Platform markets tend toward monopoly or duopoly outcomes.
+       Source: knowledge/taxonomies.py:paas (relevance: 1.00)
+    9. [funding_stage/expectations] Seed companies are building MVP and initial customers.
+       Source: knowledge/stages.py:Seed (relevance: 1.00)
+    10. [funding_stage/risk] Seed investments have high failure rates but high upside.
+       Source: knowledge/stages.py:Seed (relevance: 1.00)
+    11. [funding_stage/diligence] Product-market fit signals are the key diligence focus.
+       Source: knowledge/stages.py:Seed (relevance: 1.00)
+    12. [funding_stage/context] Early product development and initial market testing.
+       Source: knowledge/stages.py:Seed (relevance: 1.00)
+    13. [geography/market_size] North America has the largest venture capital market globally.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+    14. [geography/competition] North American markets are highly competitive with many well-funded competitors.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+    15. [geography/talent] North America has deep talent pools in technology and business.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+    16. [geography/regulatory] Regulatory environment varies by state and federal jurisdiction.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+
+  Observations (7 items):
+    1. [market_opportunity] The enterprise_saas market presents domain-specific factors including competition, market_size, sales_cycle.
+       Rule: MarketContextRule | Confidence: 1.00 | Importance: 0.80
+    2. [market_opportunity] The north_america geographic market has 4 documented domain factors.
+       Rule: MarketContextRule | Confidence: 0.90 | Importance: 0.60
+    3. [business_model_viability] The startup follows a paas model within the enterprise_saas industry. Domain knowledge covers 3 factors including competition, switching_costs, unit_economics.
+       Rule: BusinessModelContextRule | Confidence: 0.80 | Importance: 0.70
+    4. [traction_signals] At the seed stage, evaluation should consider context, diligence, expectations.
+       Rule: StageExpectationRule | Confidence: 0.90 | Importance: 0.70
+    5. [founder_quality] Identified 2 founder profile(s) associated with this startup.
+       Rule: TeamAssessmentRule | Confidence: 0.70 | Importance: 0.60
+    6. [team_execution] Team size indicator suggests a 11-50 team.
+       Rule: TeamAssessmentRule | Confidence: 0.50 | Importance: 0.50
+    7. [data_quality] High data completeness — analysis is well-supported.
+       Rule: DataQualityRule | Confidence: 1.00 | Importance: 0.40
+
+  Dimension Assessments (7):
+    [market_opportunity]
+      Summary: Assessed market_opportunity based on 2 observations and 5 evidence items (average confidence: 0.95).
+      Score: None
+      Confidence: 0.95
+    [founder_quality]
+      Summary: Assessed founder_quality based on 1 observations and 0 evidence items (average confidence: 0.70).
+      Score: None
+      Confidence: 0.70
+    [product_strength]
+      Summary: No observations available for product_strength.
+      Score: None
+      Confidence: 0.00
+    [traction_signals]
+      Summary: Assessed traction_signals based on 1 observations and 0 evidence items (average confidence: 0.90).
+      Score: None
+      Confidence: 0.90
+    [business_model_viability]
+      Summary: Assessed business_model_viability based on 1 observations and 3 evidence items (average confidence: 0.80).
+      Score: None
+      Confidence: 0.80
+    [competitive_position]
+      Summary: No observations available for competitive_position.
+      Score: None
+      Confidence: 0.00
+    [team_execution]
+      Summary: Assessed team_execution based on 1 observations and 0 evidence items (average confidence: 0.50).
+      Score: None
+      Confidence: 0.50
+
+  Scores:
+    market_opportunity: 60.0
+      Rationale: Placeholder scoring for Market Opportunity dimension.
+    product_strength: 60.0
+      Rationale: Placeholder scoring for Product Strength dimension.
+    founder_quality: 60.0
+      Rationale: Placeholder scoring for Founder Quality dimension.
+    traction_signals: 60.0
+      Rationale: Placeholder scoring for Traction Signals dimension.
+    business_model_viability: 60.0
+      Rationale: Placeholder scoring for Business Model Viability dimension.
+    competitive_position: 60.0
+      Rationale: Placeholder scoring for Competitive Position dimension.
+    team_execution: 60.0
+      Rationale: Placeholder scoring for Team & Execution dimension.
+    Overall: 60.0
+
+  Recommendations (6):
+    1. [MEDIUM] opportunity
+       Action: Conduct detailed market sizing analysis.
+       Title: Deep-Dive Market Analysis
+    2. [MEDIUM] opportunity
+       Action: Conduct in-depth team due diligence.
+       Title: Team Deep-Dive Assessment
+    3. [MEDIUM] due_diligence
+       Action: Request technology stack details.
+       Title: Identify Technology Stack
+    4. [MEDIUM] opportunity
+       Action: Analyze unit economics and scalability.
+       Title: Unit Economics Deep-Dive
+    5. [MEDIUM] opportunity
+       Action: Validate traction metrics with supporting data.
+       Title: Traction Validation
+    6. [MEDIUM] follow_up
+       Action: Validate seed stage benchmarks.
+       Title: Stage Benchmark Validation (seed)
+
+  Confidence Assessments:
+    market_opportunity: 0.94 (data completeness: 88%)
+    product_strength: 0.46 (data completeness: 88%)
+    founder_quality: 0.81 (data completeness: 88%)
+    traction_signals: 0.91 (data completeness: 88%)
+    business_model_viability: 0.86 (data completeness: 88%)
+    competitive_position: 0.46 (data completeness: 88%)
+    team_execution: 0.71 (data completeness: 88%)
+    Overall: 0.74
+
+  Processing Time: 1.7ms
+  Stage Breakdown:
+    normalize: 0.1ms
+    collect: 0.1ms
+    extract: 0.6ms
+    evidence: 0.2ms
+    reasoning: 0.1ms
+    evaluation: 0.2ms
+    scoring: 0.1ms
+    recommendations: 0.2ms
+    confidence: 0.1ms
+    report_builder: 0.0ms
+
+  Case: robotics
+  Label: Robotics — Warehouse automation
+  Status: PASS
+
+  Extracted Features:
+    Industry: ai_ml
+    Sub-Industry: None
+    Business Model: hardware_plus_software
+    Customer Type: None
+    Geography: None
+    Funding Stage: series_b
+    Has Revenue: True
+    Keywords: ['autoware', 'robotics', 'builds', 'autonomous', 'mobile', 'robots', 'warehouse', 'fulfillment', 'center', 'operations', 'lidar', 'based', 'slam', 'navigation', 'handle', 'goods', 'person', 'picking', 'inventory', 'scanning']
+    Tech Stack: []
+    Data Completeness: 88%
+
+  Evidence (15 items):
+    1. [industry/competition] AI/ML talent is scarce and expensive to recruit.
+       Source: knowledge/taxonomies.py:ai_ml (relevance: 1.00)
+    2. [industry/market_size] AI market is projected to exceed $2 trillion by 2030.
+       Source: knowledge/taxonomies.py:ai_ml (relevance: 1.00)
+    3. [industry/moat] Proprietary data and model performance create defensible moats.
+       Source: knowledge/taxonomies.py:ai_ml (relevance: 1.00)
+    4. [industry/regulatory] AI regulation is evolving with new compliance requirements.
+       Source: knowledge/taxonomies.py:ai_ml (relevance: 1.00)
+    5. [business_model/unit_economics] Hardware margins are typically lower than software-only businesses.
+       Source: knowledge/taxonomies.py:hardware_plus_software (relevance: 1.00)
+    6. [business_model/operations] Hardware production requires supply chain and manufacturing management.
+       Source: knowledge/taxonomies.py:hardware_plus_software (relevance: 1.00)
+    7. [business_model/switching_costs] Hardware-software integration creates strong ecosystem lock-in.
+       Source: knowledge/taxonomies.py:hardware_plus_software (relevance: 1.00)
+    8. [funding_stage/expectations] Series B companies have a proven model.
+       Source: knowledge/stages.py:Series B (relevance: 1.00)
+    9. [funding_stage/metrics] Revenue growth and retention are key metrics.
+       Source: knowledge/stages.py:Series B (relevance: 1.00)
+    10. [funding_stage/diligence] Path to profitability and positioning are priorities.
+       Source: knowledge/stages.py:Series B (relevance: 1.00)
+    11. [funding_stage/context] Proven model, scaling operations and market expansion.
+       Source: knowledge/stages.py:Series B (relevance: 1.00)
+    12. [geography/market_size] North America has the largest venture capital market globally.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+    13. [geography/competition] North American markets are highly competitive with many well-funded competitors.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+    14. [geography/talent] North America has deep talent pools in technology and business.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+    15. [geography/regulatory] Regulatory environment varies by state and federal jurisdiction.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+
+  Observations (7 items):
+    1. [market_opportunity] The ai_ml market presents domain-specific factors including competition, market_size, moat.
+       Rule: MarketContextRule | Confidence: 0.90 | Importance: 0.80
+    2. [market_opportunity] The north_america geographic market has 4 documented domain factors.
+       Rule: MarketContextRule | Confidence: 0.90 | Importance: 0.60
+    3. [business_model_viability] The startup follows a hardware_plus_software model within the ai_ml industry. Domain knowledge covers 3 factors including operations, switching_costs, unit_economics.
+       Rule: BusinessModelContextRule | Confidence: 0.80 | Importance: 0.70
+    4. [traction_signals] At the series_b stage, evaluation should consider context, diligence, expectations.
+       Rule: StageExpectationRule | Confidence: 0.90 | Importance: 0.70
+    5. [founder_quality] Identified 3 founder profile(s) associated with this startup.
+       Rule: TeamAssessmentRule | Confidence: 0.85 | Importance: 0.60
+    6. [team_execution] Team size indicator suggests a 51-200 team.
+       Rule: TeamAssessmentRule | Confidence: 0.50 | Importance: 0.50
+    7. [data_quality] High data completeness — analysis is well-supported.
+       Rule: DataQualityRule | Confidence: 1.00 | Importance: 0.40
+
+  Dimension Assessments (7):
+    [market_opportunity]
+      Summary: Assessed market_opportunity based on 2 observations and 4 evidence items (average confidence: 0.90).
+      Score: None
+      Confidence: 0.90
+    [founder_quality]
+      Summary: Assessed founder_quality based on 1 observations and 0 evidence items (average confidence: 0.85).
+      Score: None
+      Confidence: 0.85
+    [product_strength]
+      Summary: No observations available for product_strength.
+      Score: None
+      Confidence: 0.00
+    [traction_signals]
+      Summary: Assessed traction_signals based on 1 observations and 0 evidence items (average confidence: 0.90).
+      Score: None
+      Confidence: 0.90
+    [business_model_viability]
+      Summary: Assessed business_model_viability based on 1 observations and 3 evidence items (average confidence: 0.80).
+      Score: None
+      Confidence: 0.80
+    [competitive_position]
+      Summary: No observations available for competitive_position.
+      Score: None
+      Confidence: 0.00
+    [team_execution]
+      Summary: Assessed team_execution based on 1 observations and 0 evidence items (average confidence: 0.50).
+      Score: None
+      Confidence: 0.50
+
+  Scores:
+    market_opportunity: 60.0
+      Rationale: Placeholder scoring for Market Opportunity dimension.
+    product_strength: 60.0
+      Rationale: Placeholder scoring for Product Strength dimension.
+    founder_quality: 60.0
+      Rationale: Placeholder scoring for Founder Quality dimension.
+    traction_signals: 60.0
+      Rationale: Placeholder scoring for Traction Signals dimension.
+    business_model_viability: 60.0
+      Rationale: Placeholder scoring for Business Model Viability dimension.
+    competitive_position: 60.0
+      Rationale: Placeholder scoring for Competitive Position dimension.
+    team_execution: 60.0
+      Rationale: Placeholder scoring for Team & Execution dimension.
+    Overall: 60.0
+
+  Recommendations (6):
+    1. [MEDIUM] opportunity
+       Action: Conduct detailed market sizing analysis.
+       Title: Deep-Dive Market Analysis
+    2. [MEDIUM] opportunity
+       Action: Conduct in-depth team due diligence.
+       Title: Team Deep-Dive Assessment
+    3. [MEDIUM] due_diligence
+       Action: Request technology stack details.
+       Title: Identify Technology Stack
+    4. [MEDIUM] opportunity
+       Action: Analyze unit economics and scalability.
+       Title: Unit Economics Deep-Dive
+    5. [MEDIUM] opportunity
+       Action: Validate traction metrics with supporting data.
+       Title: Traction Validation
+    6. [MEDIUM] follow_up
+       Action: Validate series_b stage benchmarks.
+       Title: Stage Benchmark Validation (series_b)
+
+  Confidence Assessments:
+    market_opportunity: 0.91 (data completeness: 88%)
+    product_strength: 0.46 (data completeness: 88%)
+    founder_quality: 0.89 (data completeness: 88%)
+    traction_signals: 0.91 (data completeness: 88%)
+    business_model_viability: 0.86 (data completeness: 88%)
+    competitive_position: 0.46 (data completeness: 88%)
+    team_execution: 0.71 (data completeness: 88%)
+    Overall: 0.75
+
+  Processing Time: 1.3ms
+  Stage Breakdown:
+    normalize: 0.0ms
+    collect: 0.1ms
+    extract: 0.6ms
+    evidence: 0.1ms
+    reasoning: 0.1ms
+    evaluation: 0.1ms
+    scoring: 0.0ms
+    recommendations: 0.1ms
+    confidence: 0.1ms
+    report_builder: 0.0ms
+
+  Case: enterprise_software
+  Label: Enterprise Software — Compliance platform
+  Status: PASS
+
+  Extracted Features:
+    Industry: enterprise_saas
+    Sub-Industry: None
+    Business Model: paas
+    Customer Type: b2b
+    Geography: None
+    Funding Stage: series_c
+    Has Revenue: None
+    Keywords: ['complianceos', 'enterprise', 'compliance', 'management', 'platform', 'automates', 'regulatory', 'tracking', 'policy', 'audit', 'preparation', 'financial', 'services', 'companies', 'covers', 'gdpr', 'ccpa', 'workflows', 'automated', 'evidence']
+    Tech Stack: []
+    Data Completeness: 88%
+
+  Evidence (16 items):
+    1. [industry/sales_cycle] Enterprise SaaS sales cycles range from 3 to 12 months.
+       Source: knowledge/taxonomies.py:enterprise_saas (relevance: 1.00)
+    2. [industry/switching_costs] Enterprise integrations create meaningful switching costs.
+       Source: knowledge/taxonomies.py:enterprise_saas (relevance: 1.00)
+    3. [industry/market_size] Global enterprise software market exceeds $500 billion.
+       Source: knowledge/taxonomies.py:enterprise_saas (relevance: 1.00)
+    4. [industry/unit_economics] SaaS benefits from recurring revenue and high gross margins.
+       Source: knowledge/taxonomies.py:enterprise_saas (relevance: 1.00)
+    5. [industry/competition] Enterprise SaaS markets tend toward winner-take-most dynamics.
+       Source: knowledge/taxonomies.py:enterprise_saas (relevance: 1.00)
+    6. [business_model/unit_economics] Platform businesses benefit from usage-based scaling.
+       Source: knowledge/taxonomies.py:paas (relevance: 1.00)
+    7. [business_model/switching_costs] Developer platform adoption creates deep integration lock-in.
+       Source: knowledge/taxonomies.py:paas (relevance: 1.00)
+    8. [business_model/competition] Platform markets tend toward monopoly or duopoly outcomes.
+       Source: knowledge/taxonomies.py:paas (relevance: 1.00)
+    9. [funding_stage/expectations] Series C companies are accelerating growth.
+       Source: knowledge/stages.py:Series C (relevance: 1.00)
+    10. [funding_stage/metrics] Revenue scale and margin trajectory are key.
+       Source: knowledge/stages.py:Series C (relevance: 1.00)
+    11. [funding_stage/diligence] International expansion and M&A are topics.
+       Source: knowledge/stages.py:Series C (relevance: 1.00)
+    12. [funding_stage/context] Established business accelerating growth.
+       Source: knowledge/stages.py:Series C (relevance: 1.00)
+    13. [geography/market_size] North America has the largest venture capital market globally.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+    14. [geography/competition] North American markets are highly competitive with many well-funded competitors.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+    15. [geography/talent] North America has deep talent pools in technology and business.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+    16. [geography/regulatory] Regulatory environment varies by state and federal jurisdiction.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+
+  Observations (7 items):
+    1. [market_opportunity] The enterprise_saas market presents domain-specific factors including competition, market_size, sales_cycle.
+       Rule: MarketContextRule | Confidence: 1.00 | Importance: 0.80
+    2. [market_opportunity] The north_america geographic market has 4 documented domain factors.
+       Rule: MarketContextRule | Confidence: 0.90 | Importance: 0.60
+    3. [business_model_viability] The startup follows a paas model within the enterprise_saas industry. Domain knowledge covers 3 factors including competition, switching_costs, unit_economics.
+       Rule: BusinessModelContextRule | Confidence: 0.80 | Importance: 0.70
+    4. [traction_signals] At the series_c stage, evaluation should consider context, diligence, expectations.
+       Rule: StageExpectationRule | Confidence: 0.90 | Importance: 0.70
+    5. [founder_quality] Identified 1 founder profile(s) associated with this startup.
+       Rule: TeamAssessmentRule | Confidence: 0.55 | Importance: 0.60
+    6. [team_execution] Team size indicator suggests a 51-200 team.
+       Rule: TeamAssessmentRule | Confidence: 0.50 | Importance: 0.50
+    7. [data_quality] High data completeness — analysis is well-supported.
+       Rule: DataQualityRule | Confidence: 1.00 | Importance: 0.40
+
+  Dimension Assessments (7):
+    [market_opportunity]
+      Summary: Assessed market_opportunity based on 2 observations and 5 evidence items (average confidence: 0.95).
+      Score: None
+      Confidence: 0.95
+    [founder_quality]
+      Summary: Assessed founder_quality based on 1 observations and 0 evidence items (average confidence: 0.55).
+      Score: None
+      Confidence: 0.55
+    [product_strength]
+      Summary: No observations available for product_strength.
+      Score: None
+      Confidence: 0.00
+    [traction_signals]
+      Summary: Assessed traction_signals based on 1 observations and 0 evidence items (average confidence: 0.90).
+      Score: None
+      Confidence: 0.90
+    [business_model_viability]
+      Summary: Assessed business_model_viability based on 1 observations and 3 evidence items (average confidence: 0.80).
+      Score: None
+      Confidence: 0.80
+    [competitive_position]
+      Summary: No observations available for competitive_position.
+      Score: None
+      Confidence: 0.00
+    [team_execution]
+      Summary: Assessed team_execution based on 1 observations and 0 evidence items (average confidence: 0.50).
+      Score: None
+      Confidence: 0.50
+
+  Scores:
+    market_opportunity: 60.0
+      Rationale: Placeholder scoring for Market Opportunity dimension.
+    product_strength: 60.0
+      Rationale: Placeholder scoring for Product Strength dimension.
+    founder_quality: 60.0
+      Rationale: Placeholder scoring for Founder Quality dimension.
+    traction_signals: 60.0
+      Rationale: Placeholder scoring for Traction Signals dimension.
+    business_model_viability: 60.0
+      Rationale: Placeholder scoring for Business Model Viability dimension.
+    competitive_position: 60.0
+      Rationale: Placeholder scoring for Competitive Position dimension.
+    team_execution: 60.0
+      Rationale: Placeholder scoring for Team & Execution dimension.
+    Overall: 60.0
+
+  Recommendations (6):
+    1. [MEDIUM] opportunity
+       Action: Conduct detailed market sizing analysis.
+       Title: Deep-Dive Market Analysis
+    2. [MEDIUM] follow_up
+       Action: Inquire about the full founding team composition.
+       Title: Expand Team Visibility
+    3. [MEDIUM] due_diligence
+       Action: Request technology stack details.
+       Title: Identify Technology Stack
+    4. [MEDIUM] follow_up
+       Action: Request revenue and traction metrics.
+       Title: Validate Revenue Status
+    5. [HIGH] risk_mitigation
+       Action: Investigate revenue generation status for mature company.
+       Title: Revenue Validation for Mature Startup
+    6. [MEDIUM] follow_up
+       Action: Validate series_c stage benchmarks.
+       Title: Stage Benchmark Validation (series_c)
+
+  Confidence Assessments:
+    market_opportunity: 0.94 (data completeness: 88%)
+    product_strength: 0.46 (data completeness: 88%)
+    founder_quality: 0.74 (data completeness: 88%)
+    traction_signals: 0.91 (data completeness: 88%)
+    business_model_viability: 0.86 (data completeness: 88%)
+    competitive_position: 0.46 (data completeness: 88%)
+    team_execution: 0.71 (data completeness: 88%)
+    Overall: 0.73
+
+  Processing Time: 2.3ms
+  Stage Breakdown:
+    normalize: 0.0ms
+    collect: 0.1ms
+    extract: 1.1ms
+    evidence: 0.2ms
+    reasoning: 0.2ms
+    evaluation: 0.2ms
+    scoring: 0.1ms
+    recommendations: 0.2ms
+    confidence: 0.1ms
+    report_builder: 0.1ms
+
+  Case: ai_infrastructure
+  Label: AI Infrastructure — Model serving platform
+  Status: PASS
+
+  Extracted Features:
+    Industry: enterprise_saas
+    Sub-Industry: None
+    Business Model: paas
+    Customer Type: b2b
+    Geography: None
+    Funding Stage: series_a
+    Has Revenue: None
+    Keywords: ['inference', 'labs', 'provides', 'optimized', 'model', 'serving', 'infrastructure', 'teams', 'deploying', 'large', 'language', 'models', 'production', 'platform', 'handles', 'auto', 'scaling', 'versioning', 'testing', 'cost']
+    Tech Stack: ['tensorflow', 'pytorch']
+    Data Completeness: 88%
+
+  Evidence (20 items):
+    1. [industry/sales_cycle] Enterprise SaaS sales cycles range from 3 to 12 months.
+       Source: knowledge/taxonomies.py:enterprise_saas (relevance: 1.00)
+    2. [industry/switching_costs] Enterprise integrations create meaningful switching costs.
+       Source: knowledge/taxonomies.py:enterprise_saas (relevance: 1.00)
+    3. [industry/market_size] Global enterprise software market exceeds $500 billion.
+       Source: knowledge/taxonomies.py:enterprise_saas (relevance: 1.00)
+    4. [industry/unit_economics] SaaS benefits from recurring revenue and high gross margins.
+       Source: knowledge/taxonomies.py:enterprise_saas (relevance: 1.00)
+    5. [industry/competition] Enterprise SaaS markets tend toward winner-take-most dynamics.
+       Source: knowledge/taxonomies.py:enterprise_saas (relevance: 1.00)
+    6. [business_model/unit_economics] Platform businesses benefit from usage-based scaling.
+       Source: knowledge/taxonomies.py:paas (relevance: 1.00)
+    7. [business_model/switching_costs] Developer platform adoption creates deep integration lock-in.
+       Source: knowledge/taxonomies.py:paas (relevance: 1.00)
+    8. [business_model/competition] Platform markets tend toward monopoly or duopoly outcomes.
+       Source: knowledge/taxonomies.py:paas (relevance: 1.00)
+    9. [funding_stage/expectations] Series A companies have early product-market fit.
+       Source: knowledge/stages.py:Series A (relevance: 1.00)
+    10. [funding_stage/metrics] Revenue growth and unit economics become important.
+       Source: knowledge/stages.py:Series A (relevance: 1.00)
+    11. [funding_stage/diligence] Go-to-market scalability is the primary focus.
+       Source: knowledge/stages.py:Series A (relevance: 1.00)
+    12. [funding_stage/context] Product-market fit emerging, scaling initial traction.
+       Source: knowledge/stages.py:Series A (relevance: 1.00)
+    13. [technology/ecosystem] TensorFlow is a mature ML framework with deployment tools.
+       Source: knowledge/tech:tensorflow (relevance: 1.00)
+    14. [technology/competition] TensorFlow competes with PyTorch for deep learning adoption.
+       Source: knowledge/tech:tensorflow (relevance: 1.00)
+    15. [technology/ecosystem] PyTorch is the dominant framework for ML research.
+       Source: knowledge/tech:pytorch (relevance: 1.00)
+    16. [technology/talent] PyTorch expertise is common among ML engineers.
+       Source: knowledge/tech:pytorch (relevance: 1.00)
+    17. [geography/market_size] North America has the largest venture capital market globally.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+    18. [geography/competition] North American markets are highly competitive with many well-funded competitors.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+    19. [geography/talent] North America has deep talent pools in technology and business.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+    20. [geography/regulatory] Regulatory environment varies by state and federal jurisdiction.
+       Source: knowledge/geography:north_america (relevance: 1.00)
+
+  Observations (8 items):
+    1. [market_opportunity] The enterprise_saas market presents domain-specific factors including competition, market_size, sales_cycle.
+       Rule: MarketContextRule | Confidence: 1.00 | Importance: 0.80
+    2. [market_opportunity] The north_america geographic market has 4 documented domain factors.
+       Rule: MarketContextRule | Confidence: 0.90 | Importance: 0.60
+    3. [business_model_viability] The startup follows a paas model within the enterprise_saas industry. Domain knowledge covers 3 factors including competition, switching_costs, unit_economics.
+       Rule: BusinessModelContextRule | Confidence: 0.80 | Importance: 0.70
+    4. [traction_signals] At the series_a stage, evaluation should consider context, diligence, expectations.
+       Rule: StageExpectationRule | Confidence: 0.90 | Importance: 0.70
+    5. [product_strength] The technology stack includes 2 identified technologies with 4 documented domain factors.
+       Rule: TechnologyContextRule | Confidence: 0.70 | Importance: 0.60
+    6. [founder_quality] Identified 2 founder profile(s) associated with this startup.
+       Rule: TeamAssessmentRule | Confidence: 0.70 | Importance: 0.60
+    7. [team_execution] Team size indicator suggests a 51-200 team.
+       Rule: TeamAssessmentRule | Confidence: 0.50 | Importance: 0.50
+    8. [data_quality] High data completeness — analysis is well-supported.
+       Rule: DataQualityRule | Confidence: 1.00 | Importance: 0.40
+
+  Dimension Assessments (7):
+    [market_opportunity]
+      Summary: Assessed market_opportunity based on 2 observations and 5 evidence items (average confidence: 0.95).
+      Score: None
+      Confidence: 0.95
+    [founder_quality]
+      Summary: Assessed founder_quality based on 1 observations and 0 evidence items (average confidence: 0.70).
+      Score: None
+      Confidence: 0.70
+    [product_strength]
+      Summary: Assessed product_strength based on 1 observations and 4 evidence items (average confidence: 0.70).
+      Score: None
+      Confidence: 0.70
+    [traction_signals]
+      Summary: Assessed traction_signals based on 1 observations and 0 evidence items (average confidence: 0.90).
+      Score: None
+      Confidence: 0.90
+    [business_model_viability]
+      Summary: Assessed business_model_viability based on 1 observations and 3 evidence items (average confidence: 0.80).
+      Score: None
+      Confidence: 0.80
+    [competitive_position]
+      Summary: No observations available for competitive_position.
+      Score: None
+      Confidence: 0.00
+    [team_execution]
+      Summary: Assessed team_execution based on 1 observations and 0 evidence items (average confidence: 0.50).
+      Score: None
+      Confidence: 0.50
+
+  Scores:
+    market_opportunity: 60.0
+      Rationale: Placeholder scoring for Market Opportunity dimension.
+    product_strength: 60.0
+      Rationale: Placeholder scoring for Product Strength dimension.
+    founder_quality: 60.0
+      Rationale: Placeholder scoring for Founder Quality dimension.
+    traction_signals: 60.0
+      Rationale: Placeholder scoring for Traction Signals dimension.
+    business_model_viability: 60.0
+      Rationale: Placeholder scoring for Business Model Viability dimension.
+    competitive_position: 60.0
+      Rationale: Placeholder scoring for Competitive Position dimension.
+    team_execution: 60.0
+      Rationale: Placeholder scoring for Team & Execution dimension.
+    Overall: 60.0
+
+  Recommendations (7):
+    1. [MEDIUM] opportunity
+       Action: Conduct detailed market sizing analysis.
+       Title: Deep-Dive Market Analysis
+    2. [MEDIUM] opportunity
+       Action: Conduct in-depth team due diligence.
+       Title: Team Deep-Dive Assessment
+    3. [MEDIUM] opportunity
+       Action: Evaluate technical differentiation and moat.
+       Title: Assess Technical Differentiation
+    4. [MEDIUM] follow_up
+       Action: Request revenue and traction metrics.
+       Title: Validate Revenue Status
+    5. [MEDIUM] opportunity
+       Action: Validate traction metrics with supporting data.
+       Title: Traction Validation
+    6. [MEDIUM] follow_up
+       Action: Validate series_a stage benchmarks.
+       Title: Stage Benchmark Validation (series_a)
+    7. [MEDIUM] opportunity
+       Action: Consider scheduling an investment deep-dive.
+       Title: Investment Deep-Dive Readiness
+
+  Confidence Assessments:
+    market_opportunity: 0.94 (data completeness: 88%)
+    product_strength: 0.81 (data completeness: 88%)
+    founder_quality: 0.81 (data completeness: 88%)
+    traction_signals: 0.91 (data completeness: 88%)
+    business_model_viability: 0.86 (data completeness: 88%)
+    competitive_position: 0.46 (data completeness: 88%)
+    team_execution: 0.71 (data completeness: 88%)
+    Overall: 0.79
+
+  Processing Time: 2.3ms
+  Stage Breakdown:
+    normalize: 0.1ms
+    collect: 0.1ms
+    extract: 1.0ms
+    evidence: 0.2ms
+    reasoning: 0.2ms
+    evaluation: 0.2ms
+    scoring: 0.1ms
+    recommendations: 0.2ms
+    confidence: 0.1ms
+    report_builder: 0.1ms
+
+======================================================================
+END OF REPORT
+======================================================================

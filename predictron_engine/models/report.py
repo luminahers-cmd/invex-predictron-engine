@@ -1,0 +1,317 @@
+"""Output models for the analysis pipeline."""
+
+from __future__ import annotations
+
+from datetime import UTC, datetime
+
+from pydantic import BaseModel, Field
+
+from predictron_engine.models.extracted_features import ExtractedFeatures
+from predictron_engine.models.startup import Startup
+
+
+class EvidenceItem(BaseModel):
+    """A single piece of contextual evidence about a startup's domain.
+
+    Evidence items are objective facts retrieved from the knowledge base.
+    They are NOT conclusions about the startup — they are observations
+    about the domain the startup operates in.
+    """
+
+    domain: str = Field(
+        ..., description="Feature domain this evidence relates to"
+    )
+    category: str = Field(
+        ..., description="Evidence sub-category (e.g. sales_cycle, regulatory)"
+    )
+    statement: str = Field(
+        ..., description="Objective factual statement about the domain"
+    )
+    source: str = Field(
+        ..., description="Knowledge source that produced this evidence"
+    )
+    relevance_score: float = Field(
+        default=1.0,
+        ge=0.0,
+        le=1.0,
+        description="How relevant this evidence is to the specific startup",
+    )
+
+
+class Observation(BaseModel):
+    """An explainable observation derived from extracted features and evidence.
+
+    Each observation links a conclusion to the specific features and
+    evidence that support it, enabling transparent reasoning auditability.
+    Every observation carries enough metadata to trace its origin back
+    to the specific reasoning rule that produced it.
+    """
+
+    dimension: str = Field(
+        ..., description="Analysis dimension this observation relates to"
+    )
+    category: str = Field(
+        ..., description="Reasoning category (market_context, team_assessment, etc.)"
+    )
+    statement: str = Field(..., description="Human-readable observation text")
+    evidence: list[str] = Field(
+        default_factory=list,
+        description="Supporting evidence and feature references",
+    )
+    confidence: float = Field(
+        default=0.0,
+        ge=0.0,
+        le=1.0,
+        description="How strongly the evidence supports this observation",
+    )
+    importance: float = Field(
+        default=0.5,
+        ge=0.0,
+        le=1.0,
+        description="Relative importance of this observation (0.0-1.0)",
+    )
+    source_rule: str = Field(
+        default="",
+        description="Name of the reasoning rule that produced this observation",
+    )
+
+
+class ScoreResult(BaseModel):
+    """A numerical score for a single analysis dimension."""
+
+    dimension: str = Field(..., description="Analysis dimension being scored")
+    score: float = Field(
+        ..., ge=0.0, le=100.0, description="Score value on a 0-100 scale"
+    )
+    rationale: str = Field(
+        default="", description="Explanation of why this score was assigned"
+    )
+    evidence: list[str] = Field(
+        default_factory=list,
+        description="Observations that contributed to this score",
+    )
+
+
+class Recommendation(BaseModel):
+    """An actionable recommendation for the investor.
+
+    v0.6 extended model with rich recommendation fields. All new fields
+    have defaults to maintain backward compatibility with v0.5 code
+    that creates Recommendation with only category, action, priority,
+    and rationale.
+    """
+
+    category: str = Field(
+        ...,
+        description="Recommendation category (e.g. due_diligence, risk, opportunity)",
+    )
+    action: str = Field(..., description="The specific recommended action")
+    priority: str = Field(
+        default="medium", description="Priority level (high, medium, low)"
+    )
+    rationale: str = Field(
+        default="", description="Why this recommendation was generated"
+    )
+    title: str = Field(
+        default="", description="Short, descriptive title for the recommendation"
+    )
+    description: str = Field(
+        default="", description="Detailed description of the recommendation"
+    )
+    supporting_observations: list[Observation] = Field(
+        default_factory=list,
+        description="Observations that support this recommendation",
+    )
+    supporting_assessments: list[DimensionAssessment] = Field(
+        default_factory=list,
+        description="Dimension assessments that support this recommendation",
+    )
+    expected_impact: str = Field(
+        default="",
+        description="Expected outcome if this recommendation is followed",
+    )
+    confidence: float = Field(
+        default=0.0,
+        ge=0.0,
+        le=1.0,
+        description="Confidence in this recommendation (0.0-1.0)",
+    )
+    action_items: list[str] = Field(
+        default_factory=list,
+        description="Specific actionable steps to follow this recommendation",
+    )
+    metadata: dict[str, str | int | float | bool | list[str]] = Field(
+        default_factory=dict,
+        description="Additional metadata about the recommendation",
+    )
+
+
+class ConfidenceAssessment(BaseModel):
+    """Confidence level for a specific scoring dimension."""
+
+    dimension: str = Field(
+        ..., description="The scoring dimension this assessment applies to"
+    )
+    confidence: float = Field(
+        ..., ge=0.0, le=1.0, description="Confidence level from 0.0 to 1.0"
+    )
+    factors: list[str] = Field(
+        default_factory=list,
+        description="Factors influencing this confidence level",
+    )
+    data_completeness: float = Field(
+        default=0.0,
+        ge=0.0,
+        le=1.0,
+        description="Fraction of relevant data that was available",
+    )
+
+
+class DimensionAssessment(BaseModel):
+    """Explainable assessment for a single analysis dimension.
+
+    Each assessment provides a structured summary of what the observations
+    and evidence collectively tell us about a specific venture dimension.
+    This is NOT a score — it's an interpretive synthesis that explains
+    the dimension's status, strengths, weaknesses, and supporting evidence.
+    """
+
+    dimension: str = Field(
+        ..., description="Analysis dimension being assessed"
+    )
+    summary: str = Field(
+        ..., description="High-level summary of the dimension's status"
+    )
+    rationale: str = Field(
+        ..., description="Detailed explanation of the assessment reasoning"
+    )
+    confidence: float = Field(
+        default=0.0,
+        ge=0.0,
+        le=1.0,
+        description="Confidence in this assessment (0.0-1.0)",
+    )
+    score: float | None = Field(
+        default=None,
+        ge=0.0,
+        le=100.0,
+        description="Placeholder score (0-100) for backward compatibility",
+    )
+    supporting_observations: list[Observation] = Field(
+        default_factory=list,
+        description="Observations that contributed to this assessment",
+    )
+    supporting_evidence: list[EvidenceItem] = Field(
+        default_factory=list,
+        description="Evidence items that support this assessment",
+    )
+    metadata: dict[str, str | int | float | bool | list[str]] = Field(
+        default_factory=dict,
+        description="Additional metadata about the assessment",
+    )
+
+
+class EvaluationResult(BaseModel):
+    """Composite result containing all dimension assessments.
+
+    This is the output of the evaluation layer. It aggregates all
+    individual dimension assessments into a single result that
+    downstream layers (recommendations, confidence, report) consume.
+    """
+
+    assessments: list[DimensionAssessment] = Field(
+        default_factory=list,
+        description="Individual dimension assessments",
+    )
+    overall_summary: str = Field(
+        default="",
+        description="High-level summary across all dimensions",
+    )
+    overall_confidence: float = Field(
+        default=0.0,
+        ge=0.0,
+        le=1.0,
+        description="Average confidence across all assessments",
+    )
+    dimensions_assessed: int = Field(
+        default=0,
+        description="Number of dimensions assessed",
+    )
+    metadata: dict[str, str | int | float | bool | list[str]] = Field(
+        default_factory=dict,
+        description="Additional metadata about the evaluation",
+    )
+
+
+class AnalysisMetadata(BaseModel):
+    """Metadata about the analysis execution itself."""
+
+    engine_version: str = Field(default="0.1.0", description="Engine version")
+    pipeline_stages_completed: list[str] = Field(
+        default_factory=list,
+        description="Pipeline stages that executed successfully",
+    )
+    processing_time_ms: float = Field(
+        default=0.0,
+        description="Total wall-clock processing time in milliseconds",
+    )
+    timestamp: datetime = Field(
+        default_factory=lambda: datetime.now(UTC),
+        description="UTC timestamp of analysis completion",
+    )
+    data_completeness: float = Field(
+        default=0.0,
+        ge=0.0,
+        le=1.0,
+        description="Overall data completeness ratio",
+    )
+
+
+class Report(BaseModel):
+    """Complete analysis report assembled from all pipeline stages.
+
+    This is the final output of the Predictron Engine. It aggregates
+    every stage of the pipeline into a single structured object that
+    the adapter layer converts into an API response.
+    """
+
+    startup: Startup = Field(..., description="The normalized startup data")
+    features: ExtractedFeatures = Field(
+        ..., description="Extracted factual features"
+    )
+    evidence: list[EvidenceItem] = Field(
+        default_factory=list,
+        description="Contextual domain evidence gathered from knowledge base",
+    )
+    observations: list[Observation] = Field(
+        default_factory=list, description="Reasoning layer observations"
+    )
+    dimension_assessments: list[DimensionAssessment] = Field(
+        default_factory=list,
+        description="Structured assessments for each analysis dimension",
+    )
+    scores: list[ScoreResult] = Field(
+        default_factory=list, description="Dimension scores from the scoring layer"
+    )
+    overall_score: float = Field(
+        default=0.0,
+        ge=0.0,
+        le=100.0,
+        description="Aggregated overall score",
+    )
+    recommendations: list[Recommendation] = Field(
+        default_factory=list, description="Actionable recommendations"
+    )
+    confidence: list[ConfidenceAssessment] = Field(
+        default_factory=list,
+        description="Per-dimension confidence assessments",
+    )
+    overall_confidence: float = Field(
+        default=0.0,
+        ge=0.0,
+        le=1.0,
+        description="Aggregated overall confidence level",
+    )
+    analysis_metadata: AnalysisMetadata = Field(
+        default_factory=AnalysisMetadata, description="Execution metadata"
+    )

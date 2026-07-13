@@ -1,0 +1,476 @@
+"""Benchmark runner — executes startup cases through the Predictron Engine.
+
+Runs every benchmark case through the complete analysis pipeline and
+captures the full output for each stage. Produces structured results
+that can be used for regression comparison and report generation.
+
+Usage:
+    python -m benchmarks.benchmark_runner
+    python -m benchmarks.benchmark_runner --case b2b_saas
+    python -m benchmarks.benchmark_runner --save-snapshot
+    python -m benchmarks.benchmark_runner --save-snapshot --version 0.6.5
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import logging
+import time
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any
+
+from app.schemas.analysis import StartupAnalysisRequest
+from benchmarks.startup_cases.cases import (
+    BENCHMARK_CASES,
+    get_case_by_id,
+)
+from predictron_engine.engine import ENGINE_VERSION, PredictronEngine
+from predictron_engine.models.report import Report
+
+logger = logging.getLogger(__name__)
+
+BENCHMARKS_DIR = Path(__file__).parent
+EXPECTED_OUTPUTS_DIR = BENCHMARKS_DIR / "expected_outputs"
+
+
+@dataclass
+class CaseResult:
+    """Result of running a single benchmark case through the engine."""
+
+    case_id: str
+    case_label: str
+    request: dict[str, Any]
+    success: bool
+    processing_time_ms: float
+    report: Report | None = None
+    error: str | None = None
+    stage_timings: dict[str, float] = field(default_factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
+        """Serialize the case result for JSON output."""
+        if self.report is None:
+            return {
+                "case_id": self.case_id,
+                "case_label": self.case_label,
+                "success": self.success,
+                "error": self.error,
+                "processing_time_ms": self.processing_time_ms,
+            }
+
+        r = self.report
+        return {
+            "case_id": self.case_id,
+            "case_label": self.case_label,
+            "success": self.success,
+            "processing_time_ms": self.processing_time_ms,
+            "engine_version": r.analysis_metadata.engine_version,
+            "extracted_features": {
+                "industry": r.features.industry,
+                "sub_industry": r.features.sub_industry,
+                "business_model": r.features.business_model,
+                "funding_stage": r.features.funding_stage,
+                "geography": r.features.geography,
+                "customer_type": r.features.customer_type,
+                "technology_stack": r.features.technology_stack,
+                "team_size_indicator": r.features.team_size_indicator,
+                "founded_year": r.features.founded_year,
+                "has_revenue": r.features.has_revenue,
+                "key_keywords": r.features.key_keywords,
+                "has_pitch_deck": r.features.has_pitch_deck,
+                "founder_profile_count": r.features.founder_profile_count,
+                "data_completeness": r.features.data_completeness,
+            },
+            "evidence": [
+                {
+                    "domain": e.domain,
+                    "category": e.category,
+                    "statement": e.statement,
+                    "source": e.source,
+                    "relevance_score": e.relevance_score,
+                }
+                for e in r.evidence
+            ],
+            "observations": [
+                {
+                    "dimension": o.dimension,
+                    "category": o.category,
+                    "statement": o.statement,
+                    "confidence": o.confidence,
+                    "importance": o.importance,
+                    "source_rule": o.source_rule,
+                }
+                for o in r.observations
+            ],
+            "dimension_assessments": [
+                {
+                    "dimension": a.dimension,
+                    "summary": a.summary,
+                    "rationale": a.rationale,
+                    "confidence": a.confidence,
+                    "score": a.score,
+                }
+                for a in r.dimension_assessments
+            ],
+            "scores": [
+                {
+                    "dimension": s.dimension,
+                    "score": s.score,
+                    "rationale": s.rationale,
+                }
+                for s in r.scores
+            ],
+            "overall_score": r.overall_score,
+            "recommendations": [
+                {
+                    "category": rec.category,
+                    "action": rec.action,
+                    "priority": rec.priority,
+                    "title": rec.title,
+                    "confidence": rec.confidence,
+                }
+                for rec in r.recommendations
+            ],
+            "confidence": [
+                {
+                    "dimension": c.dimension,
+                    "confidence": c.confidence,
+                    "data_completeness": c.data_completeness,
+                }
+                for c in r.confidence
+            ],
+            "overall_confidence": r.overall_confidence,
+            "stage_timings": self.stage_timings,
+        }
+
+
+def _build_request(case: dict[str, Any]) -> StartupAnalysisRequest:
+    """Convert a benchmark case dict into a StartupAnalysisRequest."""
+    raw = case["request"]
+    kwargs: dict[str, Any] = {
+        "startup_name": raw["startup_name"],
+        "website": raw["website"],
+        "description": raw["description"],
+    }
+    if raw.get("pitch_deck_url"):
+        kwargs["pitch_deck_url"] = raw["pitch_deck_url"]
+    if raw.get("founder_linkedin_urls"):
+        kwargs["founder_linkedin_urls"] = raw["founder_linkedin_urls"]
+    return StartupAnalysisRequest(**kwargs)
+
+
+def _run_with_stage_timings(
+    engine: PredictronEngine, request: StartupAnalysisRequest
+) -> tuple[Report, dict[str, float]]:
+    """Run the engine and capture per-stage timing breakdowns.
+
+    This manually executes each pipeline stage with timing instrumentation
+    to provide visibility into which stages consume the most time.
+    """
+    timings: dict[str, float] = {}
+    start = time.perf_counter()
+
+    startup = engine._normalizer.normalize(request)
+    timings["normalize"] = _elapsed(start)
+
+    t = time.perf_counter()
+    collected_data = engine._collector.collect(startup)
+    timings["collect"] = _elapsed(t)
+
+    t = time.perf_counter()
+    features = engine._extractor.extract(startup, collected_data)
+    timings["extract"] = _elapsed(t)
+
+    t = time.perf_counter()
+    evidence_set = engine._evidence.gather(features)
+    timings["evidence"] = _elapsed(t)
+
+    t = time.perf_counter()
+    observations = engine._reasoning.reason(features, evidence_set.items)
+    timings["reasoning"] = _elapsed(t)
+
+    t = time.perf_counter()
+    evaluation_result = engine._evaluation.evaluate(
+        features, observations, evidence_set.items
+    )
+    timings["evaluation"] = _elapsed(t)
+
+    t = time.perf_counter()
+    scores = engine._scoring.score(features, observations)
+    timings["scoring"] = _elapsed(t)
+
+    t = time.perf_counter()
+    recs = engine._recommendations.recommend(
+        features, observations, scores, evaluation_result.assessments
+    )
+    timings["recommendations"] = _elapsed(t)
+
+    t = time.perf_counter()
+    conf = engine._confidence.assess(
+        features, observations, scores, evaluation_result.assessments
+    )
+    timings["confidence"] = _elapsed(t)
+
+    t = time.perf_counter()
+    report = engine._report_builder.build(
+        startup,
+        features,
+        evidence_set.items,
+        observations,
+        scores,
+        recs,
+        conf,
+        evaluation_result.assessments,
+    )
+    timings["report_builder"] = _elapsed(t)
+
+    total = (time.perf_counter() - start) * 1000
+    report.analysis_metadata.processing_time_ms = round(total, 2)
+    timings["total"] = round(total, 2)
+
+    return report, timings
+
+
+def _elapsed(start: float) -> float:
+    """Return elapsed milliseconds since start."""
+    return round((time.perf_counter() - start) * 1000, 2)
+
+
+def run_benchmark(
+    case_ids: list[str] | None = None,
+    engine: PredictronEngine | None = None,
+) -> list[CaseResult]:
+    """Run benchmark cases through the engine and return results.
+
+    Args:
+        case_ids: Specific case IDs to run. If None, runs all cases.
+        engine: Engine instance to use. If None, creates a default engine.
+
+    Returns:
+        List of CaseResult objects with full output capture.
+    """
+    if engine is None:
+        engine = PredictronEngine()
+
+    if case_ids is None:
+        target_cases = BENCHMARK_CASES
+    else:
+        target_cases = []
+        for cid in case_ids:
+            case = get_case_by_id(cid)
+            if case is None:
+                logger.warning("Unknown case ID: %s, skipping", cid)
+                continue
+            target_cases.append(case)
+
+    results: list[CaseResult] = []
+
+    for case in target_cases:
+        case_id = case["id"]
+        logger.info("Running benchmark: %s (%s)", case_id, case["label"])
+
+        try:
+            request = _build_request(case)
+            report, stage_timings = _run_with_stage_timings(engine, request)
+
+            result = CaseResult(
+                case_id=case_id,
+                case_label=case["label"],
+                request=case["request"],
+                success=True,
+                processing_time_ms=stage_timings["total"],
+                report=report,
+                stage_timings=stage_timings,
+            )
+        except Exception as exc:
+            logger.error("Benchmark %s failed: %s", case_id, exc, exc_info=True)
+            result = CaseResult(
+                case_id=case_id,
+                case_label=case["label"],
+                request=case["request"],
+                success=False,
+                processing_time_ms=0.0,
+                error=str(exc),
+            )
+
+        results.append(result)
+
+    return results
+
+
+def save_snapshot(results: list[CaseResult], version: str | None = None) -> Path:
+    """Save benchmark results as a JSON snapshot for regression comparison.
+
+    Args:
+        results: List of CaseResult objects from run_benchmark().
+        version: Engine version string. Defaults to ENGINE_VERSION.
+
+    Returns:
+        Path to the saved snapshot file.
+    """
+    if version is None:
+        version = ENGINE_VERSION
+
+    snapshot = {
+        "engine_version": version,
+        "benchmark_version": "1.0.0",
+        "total_cases": len(results),
+        "successful_cases": sum(1 for r in results if r.success),
+        "failed_cases": sum(1 for r in results if not r.success),
+        "results": [r.to_dict() for r in results],
+    }
+
+    snapshot_dir = EXPECTED_OUTPUTS_DIR
+    snapshot_dir.mkdir(parents=True, exist_ok=True)
+    snapshot_path = snapshot_dir / f"snapshot_v{version}.json"
+
+    snapshot_path.write_text(json.dumps(snapshot, indent=2, default=str), encoding="utf-8")
+    logger.info("Snapshot saved to %s", snapshot_path)
+    return snapshot_path
+
+
+def load_snapshot(version: str) -> dict[str, Any] | None:
+    """Load a previously saved benchmark snapshot.
+
+    Args:
+        version: Engine version to load snapshot for.
+
+    Returns:
+        Parsed snapshot dict, or None if not found.
+    """
+    snapshot_path = EXPECTED_OUTPUTS_DIR / f"snapshot_v{version}.json"
+    if not snapshot_path.exists():
+        return None
+    return json.loads(snapshot_path.read_text(encoding="utf-8"))
+
+
+def _print_case_summary(result: CaseResult) -> None:
+    """Print a concise summary for a single case result."""
+    status = "PASS" if result.success else "FAIL"
+    print(f"\n  [{status}] {result.case_id}: {result.case_label}")
+
+    if not result.success:
+        print(f"    Error: {result.error}")
+        return
+
+    r = result.report
+    print(f"    Industry: {r.features.industry} | Model: {r.features.business_model}")
+    print(f"    Features completeness: {r.features.data_completeness:.0%}")
+    print(f"    Evidence items: {len(r.evidence)}")
+    print(f"    Observations: {len(r.observations)}")
+    print(f"    Assessments: {len(r.dimension_assessments)}")
+    print(f"    Scores: {len(r.scores)} | Overall: {r.overall_score:.1f}")
+    print(f"    Recommendations: {len(r.recommendations)}")
+    print(f"    Overall confidence: {r.overall_confidence:.2f}")
+    print(f"    Processing time: {result.processing_time_ms:.1f}ms")
+
+
+def main() -> None:
+    """CLI entry point for the benchmark runner."""
+    parser = argparse.ArgumentParser(
+        description="Predictron Engine Benchmark Runner",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=(
+            "Examples:\n"
+            "  python -m benchmarks.benchmark_runner\n"
+            "  python -m benchmarks.benchmark_runner --case b2b_saas fintech\n"
+            "  python -m benchmarks.benchmark_runner --save-snapshot\n"
+            "  python -m benchmarks.benchmark_runner --save-snapshot --version 0.6.5\n"
+            "  python -m benchmarks.benchmark_runner --list-cases\n"
+        ),
+    )
+    parser.add_argument(
+        "--case",
+        nargs="*",
+        help="Specific case IDs to run (default: all)",
+    )
+    parser.add_argument(
+        "--save-snapshot",
+        action="store_true",
+        help="Save results as a versioned JSON snapshot",
+    )
+    parser.add_argument(
+        "--version",
+        default=None,
+        help="Engine version for snapshot naming (default: current version)",
+    )
+    parser.add_argument(
+        "--list-cases",
+        action="store_true",
+        help="List all available benchmark cases and exit",
+    )
+    parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output results as JSON to stdout",
+    )
+
+    args = parser.parse_args()
+
+    logging.basicConfig(
+        level=logging.WARNING,
+        format="%(levelname)s %(name)s: %(message)s",
+    )
+
+    if args.list_cases:
+        print("Available benchmark cases:\n")
+        for case in BENCHMARK_CASES:
+            print(f"  {case['id']:25s} {case['label']}")
+        print(f"\nTotal: {len(BENCHMARK_CASES)} cases")
+        return
+
+    case_ids = args.case if args.case else None
+
+    print(f"Predictron Engine Benchmark Suite (v{ENGINE_VERSION})")
+    print("=" * 60)
+
+    results = run_benchmark(case_ids=case_ids)
+
+    if args.json:
+        output = {
+            "engine_version": ENGINE_VERSION,
+            "results": [r.to_dict() for r in results],
+        }
+        print(json.dumps(output, indent=2, default=str))
+    else:
+        print(f"\n{'Case':<25} {'Status':<8} {'Time (ms)':<12} {'Score':<8} {'Conf':<8}")
+        print("-" * 61)
+
+        for result in results:
+            if result.success:
+                r = result.report
+                print(
+                    f"{result.case_id:<25} {'PASS':<8} "
+                    f"{result.processing_time_ms:<12.1f} "
+                    f"{r.overall_score:<8.1f} "
+                    f"{r.overall_confidence:<8.2f}"
+                )
+            else:
+                print(
+                    f"{result.case_id:<25} {'FAIL':<8} "
+                    f"{'N/A':<12} {'N/A':<8} {'N/A':<8}"
+                )
+
+        print("-" * 61)
+        passed = sum(1 for r in results if r.success)
+        total = len(results)
+        print(f"\n{passed}/{total} cases passed")
+
+        if passed < total:
+            print("\nFailed cases:")
+            for r in results:
+                if not r.success:
+                    print(f"  - {r.case_id}: {r.error}")
+
+        print("\nDetailed Results:")
+        for result in results:
+            _print_case_summary(result)
+
+    if args.save_snapshot:
+        path = save_snapshot(results, version=args.version)
+        print(f"\nSnapshot saved: {path}")
+
+
+if __name__ == "__main__":
+    main()
