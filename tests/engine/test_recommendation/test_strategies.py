@@ -170,6 +170,50 @@ class TestMarketStrategy:
         result = MarketStrategy().generate(features, [], [])
         assert result == []
 
+    def test_strong_network_effects_triggers_strategy(self):
+        features = ExtractedFeatures(
+            industry="enterprise_saas",
+            geography="north_america",
+            network_effect_competition="strong_network_effects",
+            data_completeness=0.5,
+        )
+        result = MarketStrategy().generate(features, [], [])
+        titles = [r.title for r in result]
+        assert "Network Effects Strategy" in titles
+
+    def test_moderate_network_effects_no_strategy(self):
+        features = ExtractedFeatures(
+            industry="enterprise_saas",
+            geography="north_america",
+            network_effect_competition="moderate_network_effects",
+            data_completeness=0.5,
+        )
+        result = MarketStrategy().generate(features, [], [])
+        titles = [r.title for r in result]
+        assert "Network Effects Strategy" not in titles
+
+    def test_fragmented_market_triggers_opportunity(self):
+        features = ExtractedFeatures(
+            industry="enterprise_saas",
+            geography="north_america",
+            market_concentration="fragmented",
+            data_completeness=0.5,
+        )
+        result = MarketStrategy().generate(features, [], [])
+        titles = [r.title for r in result]
+        assert "Fragmented Market Opportunity" in titles
+
+    def test_concentrated_market_no_fragmentation_rec(self):
+        features = ExtractedFeatures(
+            industry="enterprise_saas",
+            geography="north_america",
+            market_concentration="concentrated",
+            data_completeness=0.5,
+        )
+        result = MarketStrategy().generate(features, [], [])
+        titles = [r.title for r in result]
+        assert "Fragmented Market Opportunity" not in titles
+
 
 class TestTeamStrategy:
     """Tests for the TeamStrategy."""
@@ -315,6 +359,83 @@ class TestRiskStrategy:
         result = RiskStrategy().generate(features, obs, [])
         titles = [r.title for r in result]
         assert "Risk Factor Review" in titles
+
+    def test_concentrated_market_triggers_risk(self):
+        features = ExtractedFeatures(
+            market_concentration="concentrated",
+            data_completeness=0.5,
+        )
+        result = RiskStrategy().generate(features, [], [])
+        titles = [r.title for r in result]
+        assert "Concentrated Market Risk" in titles
+
+    def test_dominated_market_triggers_risk(self):
+        features = ExtractedFeatures(
+            market_concentration="dominated",
+            data_completeness=0.5,
+        )
+        result = RiskStrategy().generate(features, [], [])
+        titles = [r.title for r in result]
+        assert "Concentrated Market Risk" in titles
+
+    def test_fragmented_market_no_concentration_risk(self):
+        features = ExtractedFeatures(
+            market_concentration="fragmented",
+            data_completeness=0.5,
+        )
+        result = RiskStrategy().generate(features, [], [])
+        titles = [r.title for r in result]
+        assert "Concentrated Market Risk" not in titles
+
+    def test_open_source_competition_triggers_response(self):
+        features = ExtractedFeatures(
+            open_source_competition=["tool1", "tool2"],
+            data_completeness=0.5,
+        )
+        result = RiskStrategy().generate(features, [], [])
+        titles = [r.title for r in result]
+        assert "Open-Source Competition Response" in titles
+
+    def test_no_open_source_no_response(self):
+        features = ExtractedFeatures(data_completeness=0.5)
+        result = RiskStrategy().generate(features, [], [])
+        titles = [r.title for r in result]
+        assert "Open-Source Competition Response" not in titles
+
+    def test_no_moats_triggers_development(self):
+        features = ExtractedFeatures(data_completeness=0.5)
+        result = RiskStrategy().generate(features, [], [])
+        titles = [r.title for r in result]
+        assert "Strengthen Competitive Moats" in titles
+
+    def test_moats_present_no_development(self):
+        features = ExtractedFeatures(
+            competitive_moat_indicators=["proprietary_data"],
+            data_completeness=0.5,
+        )
+        result = RiskStrategy().generate(features, [], [])
+        titles = [r.title for r in result]
+        assert "Strengthen Competitive Moats" not in titles
+
+    def test_switching_costs_suppress_moat_development(self):
+        features = ExtractedFeatures(
+            switching_cost_signals=["integration_lock_in"],
+            data_completeness=0.5,
+        )
+        result = RiskStrategy().generate(features, [], [])
+        titles = [r.title for r in result]
+        assert "Strengthen Competitive Moats" not in titles
+
+    def test_all_recommendations_have_metadata(self):
+        features = ExtractedFeatures(
+            market_concentration="concentrated",
+            open_source_competition=["tool"],
+            data_completeness=0.5,
+        )
+        result = RiskStrategy().generate(features, [], [])
+        for rec in result:
+            assert isinstance(rec.metadata, dict)
+            assert "strategy" in rec.metadata
 
 
 class TestFundraisingStrategy:

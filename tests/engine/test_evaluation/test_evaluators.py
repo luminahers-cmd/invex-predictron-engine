@@ -171,6 +171,48 @@ class TestRiskEvaluator:
         assert result.summary
         assert result.rationale
 
+    def test_evaluate_with_no_observations(self, sample_features):
+        evaluator = RiskEvaluator()
+        result = evaluator.evaluate(sample_features, [], [])
+
+        assert isinstance(result, DimensionAssessment)
+        assert result.dimension == "competitive_position"
+        assert result.confidence == 0.0
+        assert len(result.supporting_observations) == 0
+
+    def test_metadata_includes_competition_fields(self):
+        from predictron_engine.models.extracted_features import ExtractedFeatures
+
+        evaluator = RiskEvaluator()
+        features = ExtractedFeatures(
+            market_concentration="concentrated",
+            competitive_density="dense",
+            network_effect_competition="strong_network_effects",
+            competitive_moat_indicators=["proprietary_data"],
+            switching_cost_signals=["integration_lock_in"],
+            barriers_to_entry=["regulatory"],
+            open_source_competition=["tool"],
+        )
+        result = evaluator.evaluate(features, [], [])
+        assert result.metadata["market_concentration"] == "concentrated"
+        assert result.metadata["competitive_density"] == "dense"
+        assert result.metadata["network_effect_competition"] == "strong_network_effects"
+        assert result.metadata["moat_count"] == 1
+        assert result.metadata["switching_cost_count"] == 1
+        assert result.metadata["barrier_count"] == 1
+        assert result.metadata["open_source_competition_count"] == 1
+
+    def test_metadata_defaults_to_unknown(self):
+        from predictron_engine.models.extracted_features import ExtractedFeatures
+
+        evaluator = RiskEvaluator()
+        features = ExtractedFeatures()
+        result = evaluator.evaluate(features, [], [])
+        assert result.metadata["market_concentration"] == "unknown"
+        assert result.metadata["competitive_density"] == "unknown"
+        assert result.metadata["network_effect_competition"] == "unknown"
+        assert result.metadata["moat_count"] == 0
+
 
 class TestDataQualityEvaluator:
     """Tests for the data quality dimension evaluator."""

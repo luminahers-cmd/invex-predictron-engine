@@ -58,5 +58,12 @@ class RiskEvaluator:
             metadata={
                 "industry": features.industry or "unknown",
                 "geography": features.geography or "unknown",
+                "market_concentration": features.market_concentration or "unknown",
+                "competitive_density": features.competitive_density or "unknown",
+                "network_effect_competition": features.network_effect_competition or "unknown",
+                "moat_count": len(features.competitive_moat_indicators),
+                "switching_cost_count": len(features.switching_cost_signals),
+                "barrier_count": len(features.barriers_to_entry),
+                "open_source_competition_count": len(features.open_source_competition),
             },
         )

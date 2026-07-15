@@ -83,9 +83,194 @@ class PlaceholderDimensionScorer:
         )
 
 
+class CompetitionScorer:
+    """Scores the COMPETITIVE_POSITION dimension based on competition features.
+
+    Uses weighted contributions from market concentration, competitive density,
+    moat indicators, switching costs, network effects, and barriers to entry.
+    All scoring logic is deterministic and traceable.
+    """
+
+    def __init__(self) -> None:
+        self._dimension = AnalysisDimension.COMPETITIVE_POSITION
+
+    def score(
+        self, features: ExtractedFeatures, observations: list[Observation]
+    ) -> ScoreResult:
+        relevant_obs = [
+            o for o in observations if o.dimension == self._dimension.value
+        ]
+
+        base_score = 50.0
+        adjustments: list[tuple[str, float]] = []
+
+        base_score, adj_conc = self._score_concentration(base_score, features)
+        if adj_conc != 0:
+            adjustments.append(("market_concentration", adj_conc))
+
+        base_score, adj_den = self._score_density(base_score, features)
+        if adj_den != 0:
+            adjustments.append(("competitive_density", adj_den))
+
+        base_score, adj_moat = self._score_moats(base_score, features)
+        if adj_moat != 0:
+            adjustments.append(("moat_indicators", adj_moat))
+
+        base_score, adj_sw = self._score_switching(base_score, features)
+        if adj_sw != 0:
+            adjustments.append(("switching_costs", adj_sw))
+
+        base_score, adj_net = self._score_network(base_score, features)
+        if adj_net != 0:
+            adjustments.append(("network_effects", adj_net))
+
+        base_score, adj_bar = self._score_barriers(base_score, features)
+        if adj_bar != 0:
+            adjustments.append(("barriers_to_entry", adj_bar))
+
+        base_score, adj_oss = self._score_open_source(base_score, features)
+        if adj_oss != 0:
+            adjustments.append(("open_source_competition", adj_oss))
+
+        base_score, adj_diff = self._score_differentiation(base_score, features)
+        if adj_diff != 0:
+            adjustments.append(("differentiation", adj_diff))
+
+        base_score, adj_obs = self._score_observations(base_score, relevant_obs)
+        if adj_obs != 0:
+            adjustments.append(("observations", adj_obs))
+
+        final_score = max(0.0, min(100.0, base_score))
+        rationale = (
+            f"Competitive position scored from {len(adjustments)} signal dimensions. "
+            f"Base 50, final {final_score:.1f}."
+        )
+
+        return ScoreResult(
+            dimension=self._dimension.value,
+            score=final_score,
+            rationale=rationale,
+            evidence=[o.statement for o in relevant_obs],
+        )
+
+    @staticmethod
+    def _score_concentration(
+        score: float, features: ExtractedFeatures
+    ) -> tuple[float, float]:
+        if not features.market_concentration:
+            return score, 0.0
+        key = features.market_concentration.lower()
+        mapping = {
+            "fragmented": 5.0,
+            "moderately_concentrated": 0.0,
+            "concentrated": -8.0,
+            "dominated": -15.0,
+        }
+        delta = mapping.get(key, 0.0)
+        return score + delta, delta
+
+    @staticmethod
+    def _score_density(
+        score: float, features: ExtractedFeatures
+    ) -> tuple[float, float]:
+        if not features.competitive_density:
+            return score, 0.0
+        key = features.competitive_density.lower()
+        mapping = {
+            "sparse": 5.0,
+            "moderate": 0.0,
+            "dense": -6.0,
+            "hyper_competitive": -12.0,
+        }
+        delta = mapping.get(key, 0.0)
+        return score + delta, delta
+
+    @staticmethod
+    def _score_moats(
+        score: float, features: ExtractedFeatures
+    ) -> tuple[float, float]:
+        if not features.competitive_moat_indicators:
+            return score, 0.0
+        count = len(features.competitive_moat_indicators)
+        delta = min(15.0, count * 3.0)
+        return score + delta, delta
+
+    @staticmethod
+    def _score_switching(
+        score: float, features: ExtractedFeatures
+    ) -> tuple[float, float]:
+        if not features.switching_cost_signals:
+            return score, 0.0
+        count = len(features.switching_cost_signals)
+        delta = min(12.0, count * 3.0)
+        return score + delta, delta
+
+    @staticmethod
+    def _score_network(
+        score: float, features: ExtractedFeatures
+    ) -> tuple[float, float]:
+        if not features.network_effect_competition:
+            return score, 0.0
+        key = features.network_effect_competition.lower()
+        mapping = {
+            "strong_network_effects": 12.0,
+            "moderate_network_effects": 5.0,
+            "no_network_effects": -3.0,
+        }
+        delta = mapping.get(key, 0.0)
+        return score + delta, delta
+
+    @staticmethod
+    def _score_barriers(
+        score: float, features: ExtractedFeatures
+    ) -> tuple[float, float]:
+        if not features.barriers_to_entry:
+            return score, 0.0
+        count = len(features.barriers_to_entry)
+        delta = min(10.0, count * 3.0)
+        return score + delta, delta
+
+    @staticmethod
+    def _score_open_source(
+        score: float, features: ExtractedFeatures
+    ) -> tuple[float, float]:
+        if not features.open_source_competition:
+            return score, 0.0
+        count = len(features.open_source_competition)
+        delta = min(10.0, count * 2.5)
+        return score - delta, -delta
+
+    @staticmethod
+    def _score_differentiation(
+        score: float, features: ExtractedFeatures
+    ) -> tuple[float, float]:
+        if not features.differentiation_signals:
+            return score, 0.0
+        count = len(features.differentiation_signals)
+        delta = min(10.0, count * 2.5)
+        return score + delta, delta
+
+    @staticmethod
+    def _score_observations(
+        score: float, observations: list[Observation]
+    ) -> tuple[float, float]:
+        if not observations:
+            return score, 0.0
+        total_impact = sum(o.importance for o in observations if hasattr(o, "importance"))
+        avg_importance = total_impact / len(observations)
+        delta = avg_importance * 10.0
+        return score + delta, delta
+
+
 def _build_default_scorers() -> list[DimensionScorer]:
-    """Create a placeholder scorer for each default dimension."""
-    return [PlaceholderDimensionScorer(dim) for dim in AnalysisDimension]
+    """Create scorers for each default dimension."""
+    scorers: list[DimensionScorer] = []
+    for dim in AnalysisDimension:
+        if dim == AnalysisDimension.COMPETITIVE_POSITION:
+            scorers.append(CompetitionScorer())
+        else:
+            scorers.append(PlaceholderDimensionScorer(dim))
+    return scorers
 
 
 class DefaultScoringEngine:

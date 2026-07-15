@@ -131,6 +131,26 @@ class TestDefaultReasoningEngine:
 
         assert result == []
 
+    def test_competition_observations_generated(self):
+        from predictron_engine.models.extracted_features import ExtractedFeatures
+
+        features = ExtractedFeatures(
+            competitive_moat_indicators=["proprietary_data"],
+            market_concentration="concentrated",
+        )
+        engine = DefaultReasoningEngine()
+        result = engine.reason(features, [])
+        comp_obs = [
+            o for o in result if o.dimension == "competitive_position"
+        ]
+        assert len(comp_obs) > 0
+
+    def test_competition_rule_in_default_rules(self):
+        from predictron_engine.reasoning.rules import DEFAULT_RULES
+
+        rule_names = [r.name for r in DEFAULT_RULES]
+        assert "competition_assessment" in rule_names
+
     def test_rule_failure_does_not_break_others(
         self, sample_features, sample_evidence
     ):

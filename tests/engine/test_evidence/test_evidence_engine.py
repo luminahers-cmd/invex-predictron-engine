@@ -126,3 +126,43 @@ class TestDefaultEvidenceEngine:
         for a, b in zip(result_a.items, result_b.items):
             assert a.statement == b.statement
             assert a.domain == b.domain
+
+    def test_competition_provider_included(self):
+        from predictron_engine.models.extracted_features import ExtractedFeatures
+
+        engine = DefaultEvidenceEngine()
+        features = ExtractedFeatures(market_concentration="fragmented")
+        result = engine.gather(features)
+        domains = {item.domain for item in result.items}
+        assert "competition" in domains
+
+    def test_competition_evidence_domain(self):
+        from predictron_engine.models.extracted_features import ExtractedFeatures
+
+        engine = DefaultEvidenceEngine()
+        features = ExtractedFeatures(market_concentration="concentrated")
+        result = engine.gather(features)
+        comp_items = [
+            item for item in result.items if item.domain == "competition"
+        ]
+        assert len(comp_items) > 0
+
+    def test_coverage_includes_competition_fields(self):
+        from predictron_engine.models.extracted_features import ExtractedFeatures
+
+        engine = DefaultEvidenceEngine()
+        features = ExtractedFeatures(
+            industry="fintech",
+            business_model="saas",
+            funding_stage="seed",
+            technology_stack=["python"],
+            geography="north_america",
+            market_concentration="fragmented",
+            competitive_density="dense",
+            network_effect_competition="strong_network_effects",
+            competitive_moat_indicators=["proprietary_data"],
+            switching_cost_signals=["integration_lock_in"],
+            barriers_to_entry=["regulatory"],
+        )
+        result = engine.gather(features)
+        assert result.feature_coverage > 0.0

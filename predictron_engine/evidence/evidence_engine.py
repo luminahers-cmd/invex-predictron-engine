@@ -27,6 +27,9 @@ from predictron_engine.evidence.evidence_models import EvidenceItem, EvidenceSet
 from predictron_engine.evidence.providers.business_model_provider import (
     BusinessModelEvidenceProvider,
 )
+from predictron_engine.evidence.providers.competition_provider import (
+    CompetitionEvidenceProvider,
+)
 from predictron_engine.evidence.providers.geography_provider import (
     GeographyEvidenceProvider,
 )
@@ -50,6 +53,7 @@ def _default_providers() -> list[object]:
         StageEvidenceProvider(),
         TechnologyEvidenceProvider(),
         GeographyEvidenceProvider(),
+        CompetitionEvidenceProvider(),
     ]
 
 
@@ -113,6 +117,12 @@ class DefaultEvidenceEngine:
             features.funding_stage is not None,
             bool(features.technology_stack),
             features.geography is not None or features.headquarters_region is not None,
+            features.market_concentration is not None,
+            features.competitive_density is not None,
+            features.network_effect_competition is not None,
+            bool(features.competitive_moat_indicators),
+            bool(features.switching_cost_signals),
+            bool(features.barriers_to_entry),
         ]
         if not check_fields:
             return 0.0

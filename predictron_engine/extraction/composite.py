@@ -67,6 +67,23 @@ _LIST_FIELDS: frozenset[str] = frozenset({
     "open_source_signals",
     "developer_tooling_signals",
     "technology_keywords",
+    "direct_competitor_signals",
+    "indirect_competitor_signals",
+    "incumbent_signals",
+    "fragmentation_signals",
+    "winner_take_most_signals",
+    "switching_cost_signals",
+    "differentiation_signals",
+    "competitive_moat_indicators",
+    "barriers_to_entry",
+    "substitute_product_signals",
+    "platform_dependency",
+    "ecosystem_dependency",
+    "open_source_competition",
+    "regulatory_competition",
+    "geographic_competition",
+    "pricing_pressure",
+    "competitive_keywords",
 })
 
 

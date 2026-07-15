@@ -505,3 +505,103 @@ class ExtractedFeatures(BaseModel):
         le=1.0,
         description="Composite confidence in traction extraction accuracy (0.0-1.0)",
     )
+
+    # --- Competitive Intelligence fields (Sprint 7) ---
+
+    direct_competitor_signals: list[str] = Field(
+        default_factory=list,
+        description="Detected direct competitor mentions or references",
+    )
+    indirect_competitor_signals: list[str] = Field(
+        default_factory=list,
+        description="Detected indirect or adjacent competitor signals",
+    )
+    incumbent_signals: list[str] = Field(
+        default_factory=list,
+        description="Detected incumbent or legacy player signals",
+    )
+    market_concentration: str | None = Field(
+        default=None,
+        description=(
+            "Market concentration level"
+            " (fragmented, moderately_concentrated, concentrated,"
+            " dominated, unknown)"
+        ),
+    )
+    competitive_density: str | None = Field(
+        default=None,
+        description=(
+            "Density of competitive activity"
+            " (sparse, moderate, dense, hyper_competitive, unknown)"
+        ),
+    )
+    fragmentation_signals: list[str] = Field(
+        default_factory=list,
+        description="Detected market fragmentation indicators",
+    )
+    winner_take_most_signals: list[str] = Field(
+        default_factory=list,
+        description="Detected winner-take-most or winner-take-all dynamics",
+    )
+    network_effect_competition: str | None = Field(
+        default=None,
+        description=(
+            "Network effect competitive dynamics"
+            " (strong_network_effects, moderate_network_effects,"
+            " no_network_effects, unknown)"
+        ),
+    )
+    switching_cost_signals: list[str] = Field(
+        default_factory=list,
+        description="Detected switching cost and lock-in competitive signals",
+    )
+    differentiation_signals: list[str] = Field(
+        default_factory=list,
+        description="Detected competitive differentiation signals",
+    )
+    competitive_moat_indicators: list[str] = Field(
+        default_factory=list,
+        description="Detected competitive moat indicators",
+    )
+    barriers_to_entry: list[str] = Field(
+        default_factory=list,
+        description="Detected barriers to entry in the market",
+    )
+    substitute_product_signals: list[str] = Field(
+        default_factory=list,
+        description="Detected substitute product or alternative solution signals",
+    )
+    platform_dependency: list[str] = Field(
+        default_factory=list,
+        description="Detected platform dependency competitive signals",
+    )
+    ecosystem_dependency: list[str] = Field(
+        default_factory=list,
+        description="Detected ecosystem dependency competitive signals",
+    )
+    open_source_competition: list[str] = Field(
+        default_factory=list,
+        description="Detected open-source competition signals",
+    )
+    regulatory_competition: list[str] = Field(
+        default_factory=list,
+        description="Detected regulatory competitive advantage signals",
+    )
+    geographic_competition: list[str] = Field(
+        default_factory=list,
+        description="Detected geographic competition signals",
+    )
+    pricing_pressure: list[str] = Field(
+        default_factory=list,
+        description="Detected pricing pressure or price competition signals",
+    )
+    competitive_keywords: list[str] = Field(
+        default_factory=list,
+        description="Domain-specific competitive terms extracted from description",
+    )
+    competition_confidence: float = Field(
+        default=0.0,
+        ge=0.0,
+        le=1.0,
+        description="Composite confidence in competition extraction accuracy (0.0-1.0)",
+    )
