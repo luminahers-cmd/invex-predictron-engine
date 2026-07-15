@@ -10,6 +10,9 @@ from predictron_engine.reasoning.rules.business_model_context import (
 from predictron_engine.reasoning.rules.competition_assessment import (
     CompetitionAssessmentRule,
 )
+from predictron_engine.reasoning.rules.cross_signal_reasoning import (
+    CrossSignalReasoningRule,
+)
 from predictron_engine.reasoning.rules.data_quality import DataQualityRule
 from predictron_engine.reasoning.rules.market_context import MarketContextRule
 from predictron_engine.reasoning.rules.risk_indicator import RiskIndicatorRule
@@ -24,6 +27,7 @@ from predictron_engine.reasoning.rules.technology_context import (
 __all__ = [
     "BusinessModelContextRule",
     "CompetitionAssessmentRule",
+    "CrossSignalReasoningRule",
     "DataQualityRule",
     "DEFAULT_RULES",
     "MarketContextRule",
@@ -42,4 +46,5 @@ DEFAULT_RULES = [
     DataQualityRule(),
     RiskIndicatorRule(),
     CompetitionAssessmentRule(),
+    CrossSignalReasoningRule(),
 ]

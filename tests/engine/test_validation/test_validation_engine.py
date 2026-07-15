@@ -21,7 +21,7 @@ class TestValidationEngineIntegration:
         debug = val_engine.validate_report(report)
 
         assert debug.pipeline_summary.startup_name == "CloudSync Pro"
-        assert debug.pipeline_summary.engine_version == "0.6.5"
+        assert debug.pipeline_summary.engine_version == "0.9.0"
         assert len(debug.stage_outputs) > 0
         assert debug.trace_graph is not None
         assert len(debug.trace_graph.nodes) > 0

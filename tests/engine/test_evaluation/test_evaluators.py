@@ -219,7 +219,7 @@ class TestDataQualityEvaluator:
 
     def test_dimension_property(self):
         evaluator = DataQualityEvaluator()
-        assert evaluator.dimension == "team_execution"
+        assert evaluator.dimension == "data_quality"
 
     def test_evaluate_with_observations(
         self, sample_features, sample_observations, sample_evidence
@@ -228,7 +228,7 @@ class TestDataQualityEvaluator:
         result = evaluator.evaluate(sample_features, sample_observations, sample_evidence)
 
         assert isinstance(result, DimensionAssessment)
-        assert result.dimension == "team_execution"
+        assert result.dimension == "data_quality"
         assert result.summary
         assert result.rationale
 

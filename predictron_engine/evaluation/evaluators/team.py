@@ -11,8 +11,10 @@ from typing import TYPE_CHECKING
 from predictron_engine.evaluation.evaluation_models import DimensionAssessment
 from predictron_engine.evaluation.evaluators.base import (
     calculate_average_confidence,
+    calculate_weighted_importance,
     filter_evidence_by_domain,
     filter_observations,
+    generate_cross_signal_context,
     generate_rationale,
     generate_summary,
 )
@@ -47,6 +49,11 @@ class TeamEvaluator:
         summary = generate_summary(self.dimension, team_obs, team_evidence)
         rationale = generate_rationale(self.dimension, team_obs, team_evidence)
         confidence = calculate_average_confidence(team_obs)
+        weighted_conf = calculate_weighted_importance(team_obs)
+
+        cross_ctx = generate_cross_signal_context(observations, self.dimension)
+        if cross_ctx:
+            rationale += cross_ctx
 
         metadata: dict[str, object] = {
             "founder_count": features.founder_profile_count,
@@ -62,6 +69,8 @@ class TeamEvaluator:
             "hiring_signals_count": len(features.hiring_signals),
             "advisor_mentions_count": len(features.advisor_mentions),
             "founder_confidence": features.founder_confidence,
+            "weighted_confidence": round(weighted_conf, 4),
+            "cross_signal_available": bool(cross_ctx),
         }
 
         return DimensionAssessment(

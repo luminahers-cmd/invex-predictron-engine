@@ -243,6 +243,93 @@ class EvaluationResult(BaseModel):
     )
 
 
+class SignalRelationship(BaseModel):
+    """Describes the relationship between signals from different dimensions."""
+
+    source_dimension: str = Field(
+        ..., description="The originating dimension of the first signal"
+    )
+    target_dimension: str = Field(
+        ..., description="The related dimension of the second signal"
+    )
+    relationship_type: str = Field(
+        ...,
+        description=(
+            "Type of relationship: reinforcing, conflicting, or contextual"
+        ),
+    )
+    description: str = Field(
+        ..., description="Human-readable explanation of the relationship"
+    )
+    confidence: float = Field(
+        default=0.5,
+        ge=0.0,
+        le=1.0,
+        description="Confidence in this signal relationship",
+    )
+    source_observations: list[str] = Field(
+        default_factory=list,
+        description="Category values of the observations that form this relationship",
+    )
+
+
+class InvestmentReadiness(BaseModel):
+    """Investment readiness assessment synthesizing all dimensions.
+
+    Provides a holistic view of how ready a startup is for investment,
+    combining evidence from all analysis dimensions into a structured
+    assessment with strengths, concerns, and gaps.
+    """
+
+    readiness_score: float = Field(
+        default=0.0,
+        ge=0.0,
+        le=100.0,
+        description="Overall investment readiness score (0-100)",
+    )
+    readiness_level: str = Field(
+        default="undetermined",
+        description=(
+            "Qualitative readiness level"
+            " (needs_data, early, developing, moderate, strong, investment_ready)"
+        ),
+    )
+    key_strengths: list[str] = Field(
+        default_factory=list,
+        description="Top strengths identified across all dimensions",
+    )
+    key_concerns: list[str] = Field(
+        default_factory=list,
+        description="Top concerns identified across all dimensions",
+    )
+    dimension_contributions: dict[str, float] = Field(
+        default_factory=dict,
+        description=(
+            "Per-dimension contribution to the readiness score (0-100)"
+        ),
+    )
+    signal_relationships: list[SignalRelationship] = Field(
+        default_factory=list,
+        description="Detected reinforcing and conflicting signal patterns",
+    )
+    reinforcing_count: int = Field(
+        default=0,
+        description="Number of reinforcing cross-signal relationships detected",
+    )
+    conflicting_count: int = Field(
+        default=0,
+        description="Number of conflicting cross-signal relationships detected",
+    )
+    gaps: list[str] = Field(
+        default_factory=list,
+        description="Information gaps that would improve the assessment",
+    )
+    summary: str = Field(
+        default="",
+        description="Executive summary of the investment readiness assessment",
+    )
+
+
 class AnalysisMetadata(BaseModel):
     """Metadata about the analysis execution itself."""
 
@@ -311,6 +398,14 @@ class Report(BaseModel):
         ge=0.0,
         le=1.0,
         description="Aggregated overall confidence level",
+    )
+    investment_readiness: InvestmentReadiness | None = Field(
+        default=None,
+        description="Investment readiness assessment (Sprint 8)",
+    )
+    signal_relationships: list[SignalRelationship] = Field(
+        default_factory=list,
+        description="Cross-signal relationships detected across dimensions",
     )
     analysis_metadata: AnalysisMetadata = Field(
         default_factory=AnalysisMetadata, description="Execution metadata"

@@ -11,6 +11,7 @@ from typing import TYPE_CHECKING
 from predictron_engine.evaluation.evaluation_models import DimensionAssessment
 from predictron_engine.evaluation.evaluators.base import (
     calculate_average_confidence,
+    calculate_weighted_importance,
     filter_evidence_by_domain,
     filter_observations,
     generate_rationale,
@@ -47,6 +48,7 @@ class RiskEvaluator:
         summary = generate_summary(self.dimension, risk_obs, risk_evidence)
         rationale = generate_rationale(self.dimension, risk_obs, risk_evidence)
         confidence = calculate_average_confidence(risk_obs)
+        weighted_conf = calculate_weighted_importance(risk_obs)
 
         return DimensionAssessment(
             dimension=self.dimension,
@@ -65,5 +67,6 @@ class RiskEvaluator:
                 "switching_cost_count": len(features.switching_cost_signals),
                 "barrier_count": len(features.barriers_to_entry),
                 "open_source_competition_count": len(features.open_source_competition),
+                "weighted_confidence": round(weighted_conf, 4),
             },
         )

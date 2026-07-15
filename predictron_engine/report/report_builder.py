@@ -5,11 +5,11 @@ outputs from every preceding stage and assembles them into a single
 structured Report object.
 
 Key principles:
-  - The builder has no logic beyond assembly and aggregation
   - Score aggregation is straightforward (average)
   - Confidence aggregation is straightforward (average)
   - Evidence is passed through without modification
   - Metadata is populated here (timing, version, completeness)
+  - Investment readiness is computed from all available signals (Sprint 8)
   - The Report is the single output consumed by the adapter layer
 """
 
@@ -17,6 +17,9 @@ import logging
 from datetime import UTC, datetime
 
 from predictron_engine.evaluation.evaluation_models import DimensionAssessment
+from predictron_engine.evaluation.investment_readiness import (
+    compute_investment_readiness,
+)
 from predictron_engine.models.extracted_features import ExtractedFeatures
 from predictron_engine.models.report import (
     AnalysisMetadata,
@@ -31,14 +34,14 @@ from predictron_engine.models.startup import Startup
 
 logger = logging.getLogger(__name__)
 
-ENGINE_VERSION = "0.6.5"
+ENGINE_VERSION = "0.9.0"
 
 
 class DefaultReportBuilder:
     """Standard implementation of the ReportBuilder protocol.
 
-    Assembles pipeline outputs into a Report with aggregated scores
-    and confidence levels.
+    Assembles pipeline outputs into a Report with aggregated scores,
+    confidence levels, and investment readiness assessment.
     """
 
     def build(
@@ -57,18 +60,27 @@ class DefaultReportBuilder:
 
         overall_score = self._aggregate_scores(scores)
         overall_confidence = self._aggregate_confidence(confidence)
+        assessments = dimension_assessments or []
+
+        investment_readiness = compute_investment_readiness(
+            features, observations, scores, assessments,
+        )
+
+        signal_relationships = investment_readiness.signal_relationships
 
         return Report(
             startup=startup,
             features=features,
             evidence=evidence,
             observations=observations,
-            dimension_assessments=dimension_assessments or [],
+            dimension_assessments=assessments,
             scores=scores,
             overall_score=overall_score,
             recommendations=recommendations,
             confidence=confidence,
             overall_confidence=overall_confidence,
+            investment_readiness=investment_readiness,
+            signal_relationships=signal_relationships,
             analysis_metadata=AnalysisMetadata(
                 engine_version=ENGINE_VERSION,
                 pipeline_stages_completed=[

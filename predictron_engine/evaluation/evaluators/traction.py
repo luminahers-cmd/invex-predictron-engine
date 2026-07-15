@@ -11,8 +11,10 @@ from typing import TYPE_CHECKING
 from predictron_engine.evaluation.evaluation_models import DimensionAssessment
 from predictron_engine.evaluation.evaluators.base import (
     calculate_average_confidence,
+    calculate_weighted_importance,
     filter_evidence_by_domain,
     filter_observations,
+    generate_cross_signal_context,
     generate_rationale,
     generate_summary,
 )
@@ -47,6 +49,11 @@ class TractionEvaluator:
         summary = generate_summary(self.dimension, traction_obs, traction_evidence)
         rationale = generate_rationale(self.dimension, traction_obs, traction_evidence)
         confidence = calculate_average_confidence(traction_obs)
+        weighted_conf = calculate_weighted_importance(traction_obs)
+
+        cross_ctx = generate_cross_signal_context(observations, self.dimension)
+        if cross_ctx:
+            rationale += cross_ctx
 
         return DimensionAssessment(
             dimension=self.dimension,
@@ -58,5 +65,7 @@ class TractionEvaluator:
             metadata={
                 "has_revenue": features.has_revenue or False,
                 "funding_stage": features.funding_stage or "unknown",
+                "weighted_confidence": round(weighted_conf, 4),
+                "cross_signal_available": bool(cross_ctx),
             },
         )

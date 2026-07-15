@@ -11,8 +11,10 @@ from typing import TYPE_CHECKING
 from predictron_engine.evaluation.evaluation_models import DimensionAssessment
 from predictron_engine.evaluation.evaluators.base import (
     calculate_average_confidence,
+    calculate_weighted_importance,
     filter_evidence_by_domain,
     filter_observations,
+    generate_cross_signal_context,
     generate_rationale,
     generate_summary,
 )
@@ -47,6 +49,11 @@ class TechnologyEvaluator:
         summary = generate_summary(self.dimension, tech_obs, tech_evidence)
         rationale = generate_rationale(self.dimension, tech_obs, tech_evidence)
         confidence = calculate_average_confidence(tech_obs)
+        weighted_conf = calculate_weighted_importance(tech_obs)
+
+        cross_ctx = generate_cross_signal_context(observations, self.dimension)
+        if cross_ctx:
+            rationale += cross_ctx
 
         return DimensionAssessment(
             dimension=self.dimension,
@@ -58,5 +65,7 @@ class TechnologyEvaluator:
             metadata={
                 "technology_stack": features.technology_stack,
                 "has_pitch_deck": features.has_pitch_deck,
+                "weighted_confidence": round(weighted_conf, 4),
+                "cross_signal_available": bool(cross_ctx),
             },
         )

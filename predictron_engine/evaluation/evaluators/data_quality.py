@@ -11,6 +11,7 @@ from typing import TYPE_CHECKING
 from predictron_engine.evaluation.evaluation_models import DimensionAssessment
 from predictron_engine.evaluation.evaluators.base import (
     calculate_average_confidence,
+    calculate_weighted_importance,
     filter_evidence_by_domain,
     filter_observations,
     generate_rationale,
@@ -32,7 +33,7 @@ class DataQualityEvaluator:
 
     @property
     def dimension(self) -> str:
-        return "team_execution"
+        return "data_quality"
 
     def evaluate(
         self,
@@ -47,6 +48,7 @@ class DataQualityEvaluator:
         summary = generate_summary(self.dimension, dq_obs, dq_evidence)
         rationale = generate_rationale(self.dimension, dq_obs, dq_evidence)
         confidence = calculate_average_confidence(dq_obs)
+        weighted_conf = calculate_weighted_importance(dq_obs)
 
         return DimensionAssessment(
             dimension=self.dimension,
@@ -58,5 +60,6 @@ class DataQualityEvaluator:
             metadata={
                 "data_completeness": features.data_completeness,
                 "description_length": features.description_length,
+                "weighted_confidence": round(weighted_conf, 4),
             },
         )
