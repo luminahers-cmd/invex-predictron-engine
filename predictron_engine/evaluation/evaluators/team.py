@@ -48,6 +48,22 @@ class TeamEvaluator:
         rationale = generate_rationale(self.dimension, team_obs, team_evidence)
         confidence = calculate_average_confidence(team_obs)
 
+        metadata: dict[str, object] = {
+            "founder_count": features.founder_profile_count,
+            "team_size": features.team_size_indicator or "unknown",
+            "founder_team_type": features.founder_team_type or "unknown",
+            "domain_expertise_count": len(features.domain_expertise_signals),
+            "serial_founder_signals": len(features.serial_founder_indicators),
+            "leadership_roles": features.leadership_roles,
+            "engineering_strength": features.engineering_strength or "unknown",
+            "product_strength": features.product_strength or "unknown",
+            "founder_market_fit_signals": len(features.founder_market_fit_signals),
+            "execution_signals_count": len(features.execution_signals),
+            "hiring_signals_count": len(features.hiring_signals),
+            "advisor_mentions_count": len(features.advisor_mentions),
+            "founder_confidence": features.founder_confidence,
+        }
+
         return DimensionAssessment(
             dimension=self.dimension,
             summary=summary,
@@ -55,8 +71,5 @@ class TeamEvaluator:
             confidence=confidence,
             supporting_observations=team_obs,
             supporting_evidence=team_evidence,
-            metadata={
-                "founder_count": features.founder_profile_count,
-                "team_size": features.team_size_indicator or "unknown",
-            },
+            metadata=metadata,
         )

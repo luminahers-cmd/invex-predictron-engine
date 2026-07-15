@@ -1,8 +1,8 @@
 """Team recommendation strategy.
 
 Generates recommendations based on team and founder observations
-and assessments. Focuses on founder quality, team composition,
-and execution capability.
+and assessments. Leverages the full spectrum of founder intelligence
+signals for more targeted and actionable recommendations.
 """
 
 from __future__ import annotations
@@ -26,7 +26,8 @@ class TeamStrategy:
     """Generates team-related recommendations.
 
     Focuses on founder quality, team composition, and execution
-    capability assessment.
+    capability assessment. Uses the full founder intelligence signal
+    spectrum for targeted recommendations.
     """
 
     @property
@@ -46,6 +47,7 @@ class TeamStrategy:
         conf = observation_confidence(team_obs)
         assess_conf = assessment_confidence(team_assess)
 
+        # --- Zero founder profiles ---
         if features.founder_profile_count == 0:
             recommendations.append(
                 Recommendation(
@@ -69,7 +71,17 @@ class TeamStrategy:
                     metadata={"strategy": "team", "founder_count": 0},
                 )
             )
+
+        # --- Single founder ---
         elif features.founder_profile_count == 1:
+            rec_items = [
+                "Ask about co-founders and key team members",
+                "Request team org chart or bios",
+                "Identify key hires planned",
+            ]
+            if not features.leadership_roles:
+                rec_items.append("Clarify leadership role distribution")
+
             recommendations.append(
                 Recommendation(
                     category=RecommendationCategory.FOLLOW_UP.value,
@@ -87,15 +99,92 @@ class TeamStrategy:
                     ),
                     confidence=0.4,
                     expected_impact="Provides fuller picture of team capabilities.",
-                    action_items=[
-                        "Ask about co-founders and key team members",
-                        "Request team org chart or bios",
-                        "Identify key hires planned",
-                    ],
+                    action_items=rec_items,
                     metadata={"strategy": "team", "founder_count": 1},
                 )
             )
 
+        # --- Weak execution signals with known team ---
+        elif (
+            features.founder_profile_count >= 2
+            and features.founder_confidence > 0
+            and features.founder_confidence < 0.3
+            and len(features.execution_signals) == 0
+        ):
+            recommendations.append(
+                Recommendation(
+                    category=RecommendationCategory.DUE_DILIGENCE.value,
+                    action=(
+                        "Request concrete traction metrics and execution evidence."
+                    ),
+                    priority=Priority.MEDIUM.value,
+                    rationale=(
+                        f"Founding team of {features.founder_profile_count} identified "
+                        f"but limited execution signals detected (confidence "
+                        f"{features.founder_confidence:.2f})."
+                    ),
+                    title="Validate Execution Capability",
+                    description=(
+                        "While the founding team is visible, limited traction "
+                        "evidence was detected. Requesting concrete metrics "
+                        "(ARR, customer count, retention) would strengthen "
+                        "the assessment."
+                    ),
+                    confidence=0.45,
+                    expected_impact="Provides concrete evidence of execution capability.",
+                    action_items=[
+                        "Request current ARR and growth trajectory",
+                        "Ask for customer retention and churn data",
+                        "Inquire about product development milestones achieved",
+                    ],
+                    metadata={
+                        "strategy": "team",
+                        "founder_count": features.founder_profile_count,
+                        "founder_confidence": features.founder_confidence,
+                    },
+                )
+            )
+
+        # --- Strong signals but no domain expertise ---
+        elif (
+            features.founder_profile_count >= 2
+            and not features.domain_expertise_signals
+            and features.founder_confidence >= 0.3
+        ):
+            recommendations.append(
+                Recommendation(
+                    category=RecommendationCategory.FOLLOW_UP.value,
+                    action=(
+                        "Explore founder background and domain expertise depth."
+                    ),
+                    priority=Priority.LOW.value,
+                    rationale=(
+                        "Founding team identified with moderate confidence but "
+                        "no explicit domain expertise signals detected."
+                    ),
+                    title="Assess Domain Expertise Depth",
+                    description=(
+                        "The founding team is present but domain-specific "
+                        "expertise was not evident in available data. "
+                        "Understanding industry background strengthens "
+                        "the team assessment."
+                    ),
+                    confidence=0.4,
+                    expected_impact="Clarifies domain alignment and industry knowledge.",
+                    action_items=[
+                        "Ask about founders' industry background",
+                        "Request details on domain-specific achievements",
+                        "Inquire about relevant professional certifications",
+                    ],
+                    metadata={
+                        "strategy": "team",
+                        "founder_count": features.founder_profile_count,
+                        "domain_expertise_count": len(features.domain_expertise_signals),
+                    },
+                )
+            )
+
+        # --- Default: team observations exist ---
         team_dimension_obs = filter_observations(observations, "team_execution")
         if team_dimension_obs and not team_obs:
             team_obs = team_dimension_obs
@@ -125,7 +214,11 @@ class TeamStrategy:
                         "Review past project outcomes",
                         "Assess technical and business skill coverage",
                     ],
-                    metadata={"strategy": "team", "observation_count": len(team_obs)},
+                    metadata={
+                        "strategy": "team",
+                        "observation_count": len(team_obs),
+                        "founder_confidence": features.founder_confidence,
+                    },
                 )
             )
 

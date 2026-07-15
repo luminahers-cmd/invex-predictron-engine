@@ -1,0 +1,5024 @@
+{
+  "engine_version": "0.9.0",
+  "benchmark_version": "1.0.0",
+  "total_cases": 10,
+  "successful_cases": 10,
+  "failed_cases": 0,
+  "results": [
+    {
+      "case_id": "b2b_saas",
+      "case_label": "B2B SaaS \u2014 Cloud analytics platform",
+      "success": true,
+      "processing_time_ms": 9.8,
+      "engine_version": "0.6.5",
+      "extracted_features": {
+        "industry": "enterprise_saas",
+        "sub_industry": "analytics",
+        "business_model": "saas",
+        "funding_stage": null,
+        "geography": "north_america",
+        "customer_type": "b2b",
+        "technology_stack": [],
+        "team_size_indicator": "11-50",
+        "founded_year": 2021,
+        "has_revenue": true,
+        "key_keywords": [
+          "analytix",
+          "cloud",
+          "saas",
+          "platform",
+          "providing",
+          "real",
+          "time",
+          "analytics",
+          "business",
+          "intelligence",
+          "market",
+          "enterprises",
+          "integrates",
+          "existing",
+          "data",
+          "warehouses",
+          "delivers",
+          "automated",
+          "insight",
+          "generation"
+        ],
+        "has_pitch_deck": true,
+        "founder_profile_count": 2,
+        "data_completeness": 0.88,
+        "founder_team_type": "technical",
+        "domain_expertise_signals": [],
+        "serial_founder_indicators": [
+          "...2M ARR with 140% net revenue retention. Founded in 2021, the team of 35 engineers and s..."
+        ],
+        "leadership_roles": [
+          "CEO",
+          "CTO"
+        ],
+        "hiring_signals": [
+          "...tention. Founded in 2021, the team of 35 engineers and sales professio...",
+          "...Founded in 2021, the team of 35 engineers and sales professionals opera..."
+        ],
+        "advisor_mentions": [],
+        "engineering_strength": null,
+        "product_strength": "moderate",
+        "founder_market_fit_signals": [],
+        "execution_signals": [
+          "arr_revenue: ...n-based with annual contracts averaging $48,000 ARR. The company has 85 enterprise clients...",
+          "revenue_mention: ...through proprietary query optimization. Revenue is subscription-based with annual contr...",
+          "customer_count: ...averaging $48,000 ARR. The company has 85 enterprise clients and has achieved $4.2M ARR with 140% ne...",
+          "retention_metric: ...clients and has achieved $4.2M ARR with 140% net revenue retention. Founded in 2021, the team of 35 engine...",
+          "founding_year: ...2M ARR with 140% net revenue retention. Founded in 2021, the team of 35 engineers and sales pro..."
+        ],
+        "founder_confidence": 0.54,
+        "product_category": "analytics",
+        "product_type": "platform",
+        "saas_model": "saas",
+        "ai_orientation": "ai_enabled",
+        "primary_capabilities": [
+          "analytics_and_reporting",
+          "automation",
+          "monitoring",
+          "integration"
+        ],
+        "feature_signals": [
+          "real_time"
+        ],
+        "integration_ecosystem": [
+          "data_warehouse"
+        ],
+        "deployment_model": "saas",
+        "target_workflow": "data_analytics",
+        "automation_level": "high",
+        "product_maturity": null,
+        "differentiation_signals": [
+          "proprietary_technology"
+        ],
+        "defensibility_signals": [],
+        "technical_complexity": "moderate",
+        "scalability_indicators": [],
+        "innovation_signals": [],
+        "product_keywords": [
+          "saas",
+          "real_time",
+          "platform",
+          "enterprise",
+          "automation",
+          "analytics",
+          "integration",
+          "subscription"
+        ],
+        "product_confidence": 0.89
+      },
+      "evidence": [
+        {
+          "domain": "industry",
+          "category": "sales_cycle",
+          "statement": "Enterprise SaaS sales cycles range from 3 to 12 months.",
+          "source": "knowledge/taxonomies.py:enterprise_saas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "industry",
+          "category": "switching_costs",
+          "statement": "Enterprise integrations create meaningful switching costs.",
+          "source": "knowledge/taxonomies.py:enterprise_saas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "industry",
+          "category": "market_size",
+          "statement": "Global enterprise software market exceeds $500 billion.",
+          "source": "knowledge/taxonomies.py:enterprise_saas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "industry",
+          "category": "unit_economics",
+          "statement": "SaaS benefits from recurring revenue and high gross margins.",
+          "source": "knowledge/taxonomies.py:enterprise_saas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "industry",
+          "category": "competition",
+          "statement": "Enterprise SaaS markets tend toward winner-take-most dynamics.",
+          "source": "knowledge/taxonomies.py:enterprise_saas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "business_model",
+          "category": "unit_economics",
+          "statement": "SaaS businesses typically achieve 70-90% gross margins.",
+          "source": "knowledge/taxonomies.py:saas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "business_model",
+          "category": "revenue_model",
+          "statement": "Subscription revenue provides predictable recurring cash flows.",
+          "source": "knowledge/taxonomies.py:saas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "business_model",
+          "category": "retention",
+          "statement": "Net revenue retention above 100% indicates strong product stickiness.",
+          "source": "knowledge/taxonomies.py:saas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "business_model",
+          "category": "competition",
+          "statement": "SaaS markets consolidate rapidly around category leaders.",
+          "source": "knowledge/taxonomies.py:saas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "market_size",
+          "statement": "North America has the largest venture capital market globally.",
+          "source": "knowledge/geography:north_america",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "competition",
+          "statement": "North American markets are highly competitive with many well-funded competitors.",
+          "source": "knowledge/geography:north_america",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "talent",
+          "statement": "North America has deep talent pools in technology and business.",
+          "source": "knowledge/geography:north_america",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "regulatory",
+          "statement": "Regulatory environment varies by state and federal jurisdiction.",
+          "source": "knowledge/geography:north_america",
+          "relevance_score": 1.0
+        }
+      ],
+      "observations": [
+        {
+          "dimension": "market_opportunity",
+          "category": "market_context",
+          "statement": "The enterprise_saas market presents domain-specific factors including competition, market_size, sales_cycle.",
+          "confidence": 1.0,
+          "importance": 0.8,
+          "source_rule": "MarketContextRule"
+        },
+        {
+          "dimension": "market_opportunity",
+          "category": "market_context",
+          "statement": "The north_america geographic market has 4 documented domain factors.",
+          "confidence": 0.9,
+          "importance": 0.6,
+          "source_rule": "MarketContextRule"
+        },
+        {
+          "dimension": "business_model_viability",
+          "category": "business_model_assessment",
+          "statement": "The startup follows a saas model within the enterprise_saas industry. Domain knowledge covers 4 factors including competition, retention, revenue_model.",
+          "confidence": 0.9,
+          "importance": 0.7,
+          "source_rule": "BusinessModelContextRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "team_assessment",
+          "statement": "Identified 2 founder profile(s) associated with this startup.",
+          "confidence": 0.7,
+          "importance": 0.6,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "team_assessment",
+          "statement": "Team size indicator suggests a 11-50 team.",
+          "confidence": 0.5,
+          "importance": 0.5,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "team_composition",
+          "statement": "Founding team composition leans technical.",
+          "confidence": 0.55,
+          "importance": 0.55,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "serial_founder",
+          "statement": "Detected 1 serial founder indicator(s) suggesting prior startup experience.",
+          "confidence": 0.55,
+          "importance": 0.6,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "leadership_roles",
+          "statement": "Detected leadership roles: CEO, CTO.",
+          "confidence": 0.6,
+          "importance": 0.55,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "product_strength",
+          "statement": "Product strength assessed as moderate.",
+          "confidence": 0.55,
+          "importance": 0.55,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "execution_signals",
+          "statement": "Detected 5 execution and traction signal(s) indicating operational progress.",
+          "confidence": 0.65,
+          "importance": 0.65,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "hiring_signals",
+          "statement": "Detected 2 hiring and team growth signal(s).",
+          "confidence": 0.5,
+          "importance": 0.4,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "founder_confidence",
+          "statement": "Composite founder confidence score: 0.54.",
+          "confidence": 0.54,
+          "importance": 0.7,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "data_quality",
+          "category": "data_assessment",
+          "statement": "High data completeness \u2014 analysis is well-supported.",
+          "confidence": 1.0,
+          "importance": 0.4,
+          "source_rule": "DataQualityRule"
+        }
+      ],
+      "dimension_assessments": [
+        {
+          "dimension": "market_opportunity",
+          "summary": "Assessed market_opportunity based on 2 observations and 5 evidence items (average confidence: 0.95).",
+          "rationale": "Key findings: The enterprise_saas market presents domain-specific factors including competition, market_size, sales_cycle.; The north_america geographic market has 4 documented domain factors.. Supported by evidence categories: competition, market_size, sales_cycle, switching_costs, unit_economics.",
+          "confidence": 0.95,
+          "score": null
+        },
+        {
+          "dimension": "founder_quality",
+          "summary": "Assessed founder_quality based on 5 observations and 0 evidence items (average confidence: 0.59).",
+          "rationale": "Key findings: Identified 2 founder profile(s) associated with this startup.; Founding team composition leans technical.; Detected 1 serial founder indicator(s) suggesting prior startup experience..",
+          "confidence": 0.588,
+          "score": null
+        },
+        {
+          "dimension": "product_strength",
+          "summary": "No observations available for product_strength.",
+          "rationale": "Insufficient data to assess product_strength.",
+          "confidence": 0.0,
+          "score": null
+        },
+        {
+          "dimension": "traction_signals",
+          "summary": "No observations available for traction_signals.",
+          "rationale": "Insufficient data to assess traction_signals.",
+          "confidence": 0.0,
+          "score": null
+        },
+        {
+          "dimension": "business_model_viability",
+          "summary": "Assessed business_model_viability based on 1 observations and 4 evidence items (average confidence: 0.90).",
+          "rationale": "Key findings: The startup follows a saas model within the enterprise_saas industry. Domain knowledge covers 4 factors including competition, retention, revenue_model.. Supported by evidence categories: competition, retention, revenue_model, unit_economics.",
+          "confidence": 0.9,
+          "score": null
+        },
+        {
+          "dimension": "competitive_position",
+          "summary": "No observations available for competitive_position.",
+          "rationale": "Insufficient data to assess competitive_position.",
+          "confidence": 0.0,
+          "score": null
+        },
+        {
+          "dimension": "team_execution",
+          "summary": "Assessed team_execution based on 4 observations and 0 evidence items (average confidence: 0.55).",
+          "rationale": "Key findings: Team size indicator suggests a 11-50 team.; Product strength assessed as moderate.; Detected 5 execution and traction signal(s) indicating operational progress..",
+          "confidence": 0.55,
+          "score": null
+        }
+      ],
+      "scores": [
+        {
+          "dimension": "market_opportunity",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Market Opportunity dimension."
+        },
+        {
+          "dimension": "product_strength",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Product Strength dimension."
+        },
+        {
+          "dimension": "founder_quality",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Founder Quality dimension."
+        },
+        {
+          "dimension": "traction_signals",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Traction Signals dimension."
+        },
+        {
+          "dimension": "business_model_viability",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Business Model Viability dimension."
+        },
+        {
+          "dimension": "competitive_position",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Competitive Position dimension."
+        },
+        {
+          "dimension": "team_execution",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Team & Execution dimension."
+        }
+      ],
+      "overall_score": 60.0,
+      "recommendations": [
+        {
+          "category": "opportunity",
+          "action": "Conduct detailed market sizing analysis.",
+          "priority": "medium",
+          "title": "Deep-Dive Market Analysis",
+          "confidence": 0.95
+        },
+        {
+          "category": "follow_up",
+          "action": "Explore founder background and domain expertise depth.",
+          "priority": "low",
+          "title": "Assess Domain Expertise Depth",
+          "confidence": 0.4
+        },
+        {
+          "category": "due_diligence",
+          "action": "Request technology stack details.",
+          "priority": "medium",
+          "title": "Identify Technology Stack",
+          "confidence": 0.4
+        },
+        {
+          "category": "opportunity",
+          "action": "Analyze unit economics and scalability.",
+          "priority": "medium",
+          "title": "Unit Economics Deep-Dive",
+          "confidence": 0.9
+        },
+        {
+          "category": "due_diligence",
+          "action": "Clarify current funding stage and capital requirements.",
+          "priority": "medium",
+          "title": "Identify Funding Stage",
+          "confidence": 0.3
+        }
+      ],
+      "confidence": [
+        {
+          "dimension": "market_opportunity",
+          "confidence": 0.939,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "product_strength",
+          "confidence": 0.464,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "founder_quality",
+          "confidence": 0.758,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "traction_signals",
+          "confidence": 0.464,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "business_model_viability",
+          "confidence": 0.914,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "competitive_position",
+          "confidence": 0.464,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "team_execution",
+          "confidence": 0.739,
+          "data_completeness": 0.88
+        }
+      ],
+      "overall_confidence": 0.6774,
+      "stage_timings": {
+        "normalize": 0.22,
+        "collect": 0.17,
+        "extract": 6.16,
+        "evidence": 0.1,
+        "reasoning": 0.17,
+        "evaluation": 0.28,
+        "scoring": 0.07,
+        "recommendations": 2.43,
+        "confidence": 0.1,
+        "report_builder": 0.06,
+        "total": 9.8
+      }
+    },
+    {
+      "case_id": "healthcare_ai",
+      "case_label": "Healthcare AI \u2014 Diagnostic imaging",
+      "success": true,
+      "processing_time_ms": 7.52,
+      "engine_version": "0.6.5",
+      "extracted_features": {
+        "industry": "healthtech",
+        "sub_industry": "diagnostic_imaging",
+        "business_model": "paas",
+        "funding_stage": "series_a",
+        "geography": "north_america",
+        "customer_type": "b2b",
+        "technology_stack": [],
+        "team_size_indicator": null,
+        "founded_year": null,
+        "has_revenue": true,
+        "key_keywords": [
+          "medvision",
+          "develops",
+          "cleared",
+          "diagnostic",
+          "tools",
+          "medical",
+          "imaging",
+          "platform",
+          "analyzes",
+          "rays",
+          "mris",
+          "scans",
+          "assist",
+          "radiologists",
+          "detecting",
+          "anomalies",
+          "sensitivity",
+          "company",
+          "holds",
+          "patents"
+        ],
+        "has_pitch_deck": true,
+        "founder_profile_count": 1,
+        "data_completeness": 0.88,
+        "founder_team_type": "technical",
+        "domain_expertise_signals": [],
+        "serial_founder_indicators": [],
+        "leadership_roles": [
+          "CEO"
+        ],
+        "hiring_signals": [],
+        "advisor_mentions": [],
+        "engineering_strength": null,
+        "product_strength": "strong",
+        "founder_market_fit_signals": [],
+        "execution_signals": [
+          "arr_revenue: ...ospital contracts. Currently generating $2.8M ARR from 40 hospital clients. Series A fund...",
+          "revenue_mention: ...ical trials across 12 hospital systems. Revenue model is per-study licensing with enter...",
+          "customer_count: ...nd has completed clinical trials across 12 hospital systems. Revenue model is per-study lic...",
+          "funding_stage: ...ing $2.8M ARR from 40 hospital clients. Series A funded with $12M raised from healthcare-focuse...",
+          "patent_count: ...th 97.3% sensitivity. The company holds 3 patents on its convolutional neural network arc..."
+        ],
+        "founder_confidence": 0.46,
+        "product_category": "diagnostics",
+        "product_type": "tool",
+        "saas_model": "licensing",
+        "ai_orientation": "ai_native",
+        "primary_capabilities": [
+          "compliance"
+        ],
+        "feature_signals": [],
+        "integration_ecosystem": [],
+        "deployment_model": null,
+        "target_workflow": "medical_diagnosis",
+        "automation_level": "moderate",
+        "product_maturity": null,
+        "differentiation_signals": [
+          "patent_protection",
+          "clinical_validation",
+          "fda_clearance"
+        ],
+        "defensibility_signals": [
+          "regulatory_moat",
+          "technology_moat"
+        ],
+        "technical_complexity": "high",
+        "scalability_indicators": [],
+        "innovation_signals": [
+          "patent_filed",
+          "clinical_validation",
+          "ai_native_approach"
+        ],
+        "product_keywords": [
+          "platform",
+          "enterprise"
+        ],
+        "product_confidence": 0.75
+      },
+      "evidence": [
+        {
+          "domain": "industry",
+          "category": "regulatory",
+          "statement": "Healthcare products face extensive regulatory approval.",
+          "source": "knowledge/taxonomies.py:healthtech",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "industry",
+          "category": "sales_cycle",
+          "statement": "Hospital sales cycles typically exceed 12 months.",
+          "source": "knowledge/taxonomies.py:healthtech",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "industry",
+          "category": "switching_costs",
+          "statement": "Clinical workflow integration creates high switching costs.",
+          "source": "knowledge/taxonomies.py:healthtech",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "industry",
+          "category": "market_size",
+          "statement": "Digital health market is projected to exceed $300B by 2030.",
+          "source": "knowledge/taxonomies.py:healthtech",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "industry",
+          "category": "data_privacy",
+          "statement": "HIPAA imposes strict data handling requirements.",
+          "source": "knowledge/taxonomies.py:healthtech",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "business_model",
+          "category": "unit_economics",
+          "statement": "Platform businesses benefit from usage-based scaling.",
+          "source": "knowledge/taxonomies.py:paas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "business_model",
+          "category": "switching_costs",
+          "statement": "Developer platform adoption creates deep integration lock-in.",
+          "source": "knowledge/taxonomies.py:paas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "business_model",
+          "category": "competition",
+          "statement": "Platform markets tend toward monopoly or duopoly outcomes.",
+          "source": "knowledge/taxonomies.py:paas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "funding_stage",
+          "category": "expectations",
+          "statement": "Series A companies have early product-market fit.",
+          "source": "knowledge/stages.py:Series A",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "funding_stage",
+          "category": "metrics",
+          "statement": "Revenue growth and unit economics become important.",
+          "source": "knowledge/stages.py:Series A",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "funding_stage",
+          "category": "diligence",
+          "statement": "Go-to-market scalability is the primary focus.",
+          "source": "knowledge/stages.py:Series A",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "funding_stage",
+          "category": "context",
+          "statement": "Product-market fit emerging, scaling initial traction.",
+          "source": "knowledge/stages.py:Series A",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "market_size",
+          "statement": "North America has the largest venture capital market globally.",
+          "source": "knowledge/geography:north_america",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "competition",
+          "statement": "North American markets are highly competitive with many well-funded competitors.",
+          "source": "knowledge/geography:north_america",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "talent",
+          "statement": "North America has deep talent pools in technology and business.",
+          "source": "knowledge/geography:north_america",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "regulatory",
+          "statement": "Regulatory environment varies by state and federal jurisdiction.",
+          "source": "knowledge/geography:north_america",
+          "relevance_score": 1.0
+        }
+      ],
+      "observations": [
+        {
+          "dimension": "market_opportunity",
+          "category": "market_context",
+          "statement": "The healthtech market presents domain-specific factors including data_privacy, market_size, regulatory.",
+          "confidence": 1.0,
+          "importance": 0.8,
+          "source_rule": "MarketContextRule"
+        },
+        {
+          "dimension": "market_opportunity",
+          "category": "market_context",
+          "statement": "The north_america geographic market has 4 documented domain factors.",
+          "confidence": 0.9,
+          "importance": 0.6,
+          "source_rule": "MarketContextRule"
+        },
+        {
+          "dimension": "business_model_viability",
+          "category": "business_model_assessment",
+          "statement": "The startup follows a paas model within the healthtech industry. Domain knowledge covers 3 factors including competition, switching_costs, unit_economics.",
+          "confidence": 0.8,
+          "importance": 0.7,
+          "source_rule": "BusinessModelContextRule"
+        },
+        {
+          "dimension": "traction_signals",
+          "category": "stage_assessment",
+          "statement": "At the series_a stage, evaluation should consider context, diligence, expectations.",
+          "confidence": 0.9,
+          "importance": 0.7,
+          "source_rule": "StageExpectationRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "team_assessment",
+          "statement": "Identified 1 founder profile(s) associated with this startup.",
+          "confidence": 0.55,
+          "importance": 0.6,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "team_composition",
+          "statement": "Founding team composition leans technical.",
+          "confidence": 0.55,
+          "importance": 0.55,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "leadership_roles",
+          "statement": "Detected leadership roles: CEO.",
+          "confidence": 0.6,
+          "importance": 0.55,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "product_strength",
+          "statement": "Product strength assessed as strong.",
+          "confidence": 0.55,
+          "importance": 0.55,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "execution_signals",
+          "statement": "Detected 5 execution and traction signal(s) indicating operational progress.",
+          "confidence": 0.65,
+          "importance": 0.65,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "founder_confidence",
+          "statement": "Composite founder confidence score: 0.46.",
+          "confidence": 0.46,
+          "importance": 0.7,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "data_quality",
+          "category": "data_assessment",
+          "statement": "High data completeness \u2014 analysis is well-supported.",
+          "confidence": 1.0,
+          "importance": 0.4,
+          "source_rule": "DataQualityRule"
+        }
+      ],
+      "dimension_assessments": [
+        {
+          "dimension": "market_opportunity",
+          "summary": "Assessed market_opportunity based on 2 observations and 5 evidence items (average confidence: 0.95).",
+          "rationale": "Key findings: The healthtech market presents domain-specific factors including data_privacy, market_size, regulatory.; The north_america geographic market has 4 documented domain factors.. Supported by evidence categories: data_privacy, market_size, regulatory, sales_cycle, switching_costs.",
+          "confidence": 0.95,
+          "score": null
+        },
+        {
+          "dimension": "founder_quality",
+          "summary": "Assessed founder_quality based on 4 observations and 0 evidence items (average confidence: 0.54).",
+          "rationale": "Key findings: Identified 1 founder profile(s) associated with this startup.; Founding team composition leans technical.; Detected leadership roles: CEO..",
+          "confidence": 0.54,
+          "score": null
+        },
+        {
+          "dimension": "product_strength",
+          "summary": "No observations available for product_strength.",
+          "rationale": "Insufficient data to assess product_strength.",
+          "confidence": 0.0,
+          "score": null
+        },
+        {
+          "dimension": "traction_signals",
+          "summary": "Assessed traction_signals based on 1 observations and 0 evidence items (average confidence: 0.90).",
+          "rationale": "Key findings: At the series_a stage, evaluation should consider context, diligence, expectations..",
+          "confidence": 0.9,
+          "score": null
+        },
+        {
+          "dimension": "business_model_viability",
+          "summary": "Assessed business_model_viability based on 1 observations and 3 evidence items (average confidence: 0.80).",
+          "rationale": "Key findings: The startup follows a paas model within the healthtech industry. Domain knowledge covers 3 factors including competition, switching_costs, unit_economics.. Supported by evidence categories: competition, switching_costs, unit_economics.",
+          "confidence": 0.8,
+          "score": null
+        },
+        {
+          "dimension": "competitive_position",
+          "summary": "No observations available for competitive_position.",
+          "rationale": "Insufficient data to assess competitive_position.",
+          "confidence": 0.0,
+          "score": null
+        },
+        {
+          "dimension": "team_execution",
+          "summary": "Assessed team_execution based on 2 observations and 0 evidence items (average confidence: 0.60).",
+          "rationale": "Key findings: Product strength assessed as strong.; Detected 5 execution and traction signal(s) indicating operational progress..",
+          "confidence": 0.6000000000000001,
+          "score": null
+        }
+      ],
+      "scores": [
+        {
+          "dimension": "market_opportunity",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Market Opportunity dimension."
+        },
+        {
+          "dimension": "product_strength",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Product Strength dimension."
+        },
+        {
+          "dimension": "founder_quality",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Founder Quality dimension."
+        },
+        {
+          "dimension": "traction_signals",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Traction Signals dimension."
+        },
+        {
+          "dimension": "business_model_viability",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Business Model Viability dimension."
+        },
+        {
+          "dimension": "competitive_position",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Competitive Position dimension."
+        },
+        {
+          "dimension": "team_execution",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Team & Execution dimension."
+        }
+      ],
+      "overall_score": 60.0,
+      "recommendations": [
+        {
+          "category": "opportunity",
+          "action": "Conduct detailed market sizing analysis.",
+          "priority": "medium",
+          "title": "Deep-Dive Market Analysis",
+          "confidence": 0.95
+        },
+        {
+          "category": "follow_up",
+          "action": "Inquire about the full founding team composition.",
+          "priority": "medium",
+          "title": "Expand Team Visibility",
+          "confidence": 0.4
+        },
+        {
+          "category": "due_diligence",
+          "action": "Request technology stack details.",
+          "priority": "medium",
+          "title": "Identify Technology Stack",
+          "confidence": 0.4
+        },
+        {
+          "category": "opportunity",
+          "action": "Analyze unit economics and scalability.",
+          "priority": "medium",
+          "title": "Unit Economics Deep-Dive",
+          "confidence": 0.8
+        },
+        {
+          "category": "opportunity",
+          "action": "Validate traction metrics with supporting data.",
+          "priority": "medium",
+          "title": "Traction Validation",
+          "confidence": 0.9
+        },
+        {
+          "category": "follow_up",
+          "action": "Validate series_a stage benchmarks.",
+          "priority": "medium",
+          "title": "Stage Benchmark Validation (series_a)",
+          "confidence": 0.9
+        }
+      ],
+      "confidence": [
+        {
+          "dimension": "market_opportunity",
+          "confidence": 0.939,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "product_strength",
+          "confidence": 0.464,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "founder_quality",
+          "confidence": 0.734,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "traction_signals",
+          "confidence": 0.914,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "business_model_viability",
+          "confidence": 0.864,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "competitive_position",
+          "confidence": 0.464,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "team_execution",
+          "confidence": 0.764,
+          "data_completeness": 0.88
+        }
+      ],
+      "overall_confidence": 0.7347,
+      "stage_timings": {
+        "normalize": 0.05,
+        "collect": 0.1,
+        "extract": 6.0,
+        "evidence": 0.24,
+        "reasoning": 0.22,
+        "evaluation": 0.3,
+        "scoring": 0.1,
+        "recommendations": 0.3,
+        "confidence": 0.1,
+        "report_builder": 0.1,
+        "total": 7.52
+      }
+    },
+    {
+      "case_id": "fintech",
+      "case_label": "FinTech \u2014 Embedded payments",
+      "success": true,
+      "processing_time_ms": 5.98,
+      "engine_version": "0.6.5",
+      "extracted_features": {
+        "industry": "fintech",
+        "sub_industry": "embedded_payments",
+        "business_model": "paas",
+        "funding_stage": "series_b",
+        "geography": "europe",
+        "customer_type": "b2b",
+        "technology_stack": [],
+        "team_size_indicator": "51-200",
+        "founded_year": 2019,
+        "has_revenue": null,
+        "key_keywords": [
+          "paybridge",
+          "provides",
+          "embedded",
+          "payment",
+          "infrastructure",
+          "marketplace",
+          "platform",
+          "businesses",
+          "first",
+          "solution",
+          "handles",
+          "split",
+          "payments",
+          "escrow",
+          "compliance",
+          "multi",
+          "currency",
+          "settlement",
+          "across",
+          "countries"
+        ],
+        "has_pitch_deck": true,
+        "founder_profile_count": 3,
+        "data_completeness": 0.88,
+        "founder_team_type": "technical",
+        "domain_expertise_signals": [],
+        "serial_founder_indicators": [
+          "...lients including 12 in the Fortune 500. Founded in 2019, team of 120 across London, Sin..."
+        ],
+        "leadership_roles": [
+          "CEO",
+          "COO",
+          "CTO"
+        ],
+        "hiring_signals": [
+          "...Fortune 500. Founded in 2019, team of 120 across London, Singapore, and..."
+        ],
+        "advisor_mentions": [],
+        "engineering_strength": "moderate",
+        "product_strength": "moderate",
+        "founder_market_fit_signals": [],
+        "execution_signals": [
+          "funding_raised: ...across London, Singapore, and New York. Raised $45M Series B from Tier 1 fintech investors.",
+          "funding_stage: ...n, Singapore, and New York. Raised $45M Series B from Tier 1 fintech investors.",
+          "processing_volume: ...urrency settlement across 35 countries. Processing $2.1B in annual payment volume with a take ra...",
+          "founding_year: ...lients including 12 in the Fortune 500. Founded in 2019, team of 120 across London, Singapore,..."
+        ],
+        "founder_confidence": 0.6,
+        "product_category": "payments",
+        "product_type": "api",
+        "saas_model": "api",
+        "ai_orientation": "unknown",
+        "primary_capabilities": [
+          "compliance",
+          "security"
+        ],
+        "feature_signals": [
+          "api_first",
+          "embedded"
+        ],
+        "integration_ecosystem": [
+          "api_ecosystem"
+        ],
+        "deployment_model": "edge",
+        "target_workflow": "payment_processing",
+        "automation_level": null,
+        "product_maturity": null,
+        "differentiation_signals": [],
+        "defensibility_signals": [
+          "regulatory_moat",
+          "brand_recognition"
+        ],
+        "technical_complexity": "high",
+        "scalability_indicators": [
+          "api_first"
+        ],
+        "innovation_signals": [],
+        "product_keywords": [
+          "api_first",
+          "platform",
+          "marketplace",
+          "compliance",
+          "infrastructure",
+          "embedded"
+        ],
+        "product_confidence": 0.87
+      },
+      "evidence": [
+        {
+          "domain": "industry",
+          "category": "regulatory",
+          "statement": "Financial services require regulatory compliance.",
+          "source": "knowledge/taxonomies.py:fintech",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "industry",
+          "category": "sales_cycle",
+          "statement": "Enterprise financial institutions have long procurement cycles.",
+          "source": "knowledge/taxonomies.py:fintech",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "industry",
+          "category": "switching_costs",
+          "statement": "Financial infrastructure changes carry integration risk.",
+          "source": "knowledge/taxonomies.py:fintech",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "industry",
+          "category": "market_size",
+          "statement": "Global financial services market exceeds $25 trillion.",
+          "source": "knowledge/taxonomies.py:fintech",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "industry",
+          "category": "trust",
+          "statement": "Trust and security track record are critical buying factors.",
+          "source": "knowledge/taxonomies.py:fintech",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "business_model",
+          "category": "unit_economics",
+          "statement": "Platform businesses benefit from usage-based scaling.",
+          "source": "knowledge/taxonomies.py:paas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "business_model",
+          "category": "switching_costs",
+          "statement": "Developer platform adoption creates deep integration lock-in.",
+          "source": "knowledge/taxonomies.py:paas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "business_model",
+          "category": "competition",
+          "statement": "Platform markets tend toward monopoly or duopoly outcomes.",
+          "source": "knowledge/taxonomies.py:paas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "funding_stage",
+          "category": "expectations",
+          "statement": "Series B companies have a proven model.",
+          "source": "knowledge/stages.py:Series B",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "funding_stage",
+          "category": "metrics",
+          "statement": "Revenue growth and retention are key metrics.",
+          "source": "knowledge/stages.py:Series B",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "funding_stage",
+          "category": "diligence",
+          "statement": "Path to profitability and positioning are priorities.",
+          "source": "knowledge/stages.py:Series B",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "funding_stage",
+          "category": "context",
+          "statement": "Proven model, scaling operations and market expansion.",
+          "source": "knowledge/stages.py:Series B",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "market_size",
+          "statement": "European tech market is growing but remains fragmented across countries.",
+          "source": "knowledge/geography:europe",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "regulatory",
+          "statement": "GDPR and EU regulations impose strict data privacy requirements.",
+          "source": "knowledge/geography:europe",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "competition",
+          "statement": "European markets have fewer mega-rounds but strong deep-tech ecosystems.",
+          "source": "knowledge/geography:europe",
+          "relevance_score": 1.0
+        }
+      ],
+      "observations": [
+        {
+          "dimension": "market_opportunity",
+          "category": "market_context",
+          "statement": "The fintech market presents domain-specific factors including market_size, regulatory, sales_cycle.",
+          "confidence": 1.0,
+          "importance": 0.8,
+          "source_rule": "MarketContextRule"
+        },
+        {
+          "dimension": "market_opportunity",
+          "category": "market_context",
+          "statement": "The europe geographic market has 3 documented domain factors.",
+          "confidence": 0.8,
+          "importance": 0.6,
+          "source_rule": "MarketContextRule"
+        },
+        {
+          "dimension": "business_model_viability",
+          "category": "business_model_assessment",
+          "statement": "The startup follows a paas model within the fintech industry. Domain knowledge covers 3 factors including competition, switching_costs, unit_economics.",
+          "confidence": 0.8,
+          "importance": 0.7,
+          "source_rule": "BusinessModelContextRule"
+        },
+        {
+          "dimension": "traction_signals",
+          "category": "stage_assessment",
+          "statement": "At the series_b stage, evaluation should consider context, diligence, expectations.",
+          "confidence": 0.9,
+          "importance": 0.7,
+          "source_rule": "StageExpectationRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "team_assessment",
+          "statement": "Identified 3 founder profile(s) associated with this startup.",
+          "confidence": 0.85,
+          "importance": 0.6,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "team_assessment",
+          "statement": "Team size indicator suggests a 51-200 team.",
+          "confidence": 0.5,
+          "importance": 0.5,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "team_composition",
+          "statement": "Founding team composition leans technical.",
+          "confidence": 0.55,
+          "importance": 0.55,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "serial_founder",
+          "statement": "Detected 1 serial founder indicator(s) suggesting prior startup experience.",
+          "confidence": 0.55,
+          "importance": 0.6,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "leadership_roles",
+          "statement": "Detected leadership roles: CEO, COO, CTO.",
+          "confidence": 0.6,
+          "importance": 0.55,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "engineering_strength",
+          "statement": "Engineering strength assessed as moderate.",
+          "confidence": 0.55,
+          "importance": 0.6,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "product_strength",
+          "statement": "Product strength assessed as moderate.",
+          "confidence": 0.55,
+          "importance": 0.55,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "execution_signals",
+          "statement": "Detected 4 execution and traction signal(s) indicating operational progress.",
+          "confidence": 0.6000000000000001,
+          "importance": 0.65,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "hiring_signals",
+          "statement": "Detected 1 hiring and team growth signal(s).",
+          "confidence": 0.5,
+          "importance": 0.4,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "founder_confidence",
+          "statement": "Composite founder confidence score: 0.60.",
+          "confidence": 0.6,
+          "importance": 0.7,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "data_quality",
+          "category": "data_assessment",
+          "statement": "High data completeness \u2014 analysis is well-supported.",
+          "confidence": 1.0,
+          "importance": 0.4,
+          "source_rule": "DataQualityRule"
+        }
+      ],
+      "dimension_assessments": [
+        {
+          "dimension": "market_opportunity",
+          "summary": "Assessed market_opportunity based on 2 observations and 5 evidence items (average confidence: 0.90).",
+          "rationale": "Key findings: The fintech market presents domain-specific factors including market_size, regulatory, sales_cycle.; The europe geographic market has 3 documented domain factors.. Supported by evidence categories: market_size, regulatory, sales_cycle, switching_costs, trust.",
+          "confidence": 0.9,
+          "score": null
+        },
+        {
+          "dimension": "founder_quality",
+          "summary": "Assessed founder_quality based on 5 observations and 0 evidence items (average confidence: 0.63).",
+          "rationale": "Key findings: Identified 3 founder profile(s) associated with this startup.; Founding team composition leans technical.; Detected 1 serial founder indicator(s) suggesting prior startup experience..",
+          "confidence": 0.63,
+          "score": null
+        },
+        {
+          "dimension": "product_strength",
+          "summary": "No observations available for product_strength.",
+          "rationale": "Insufficient data to assess product_strength.",
+          "confidence": 0.0,
+          "score": null
+        },
+        {
+          "dimension": "traction_signals",
+          "summary": "Assessed traction_signals based on 1 observations and 0 evidence items (average confidence: 0.90).",
+          "rationale": "Key findings: At the series_b stage, evaluation should consider context, diligence, expectations..",
+          "confidence": 0.9,
+          "score": null
+        },
+        {
+          "dimension": "business_model_viability",
+          "summary": "Assessed business_model_viability based on 1 observations and 3 evidence items (average confidence: 0.80).",
+          "rationale": "Key findings: The startup follows a paas model within the fintech industry. Domain knowledge covers 3 factors including competition, switching_costs, unit_economics.. Supported by evidence categories: competition, switching_costs, unit_economics.",
+          "confidence": 0.8,
+          "score": null
+        },
+        {
+          "dimension": "competitive_position",
+          "summary": "No observations available for competitive_position.",
+          "rationale": "Insufficient data to assess competitive_position.",
+          "confidence": 0.0,
+          "score": null
+        },
+        {
+          "dimension": "team_execution",
+          "summary": "Assessed team_execution based on 5 observations and 0 evidence items (average confidence: 0.54).",
+          "rationale": "Key findings: Team size indicator suggests a 51-200 team.; Engineering strength assessed as moderate.; Product strength assessed as moderate..",
+          "confidence": 0.54,
+          "score": null
+        }
+      ],
+      "scores": [
+        {
+          "dimension": "market_opportunity",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Market Opportunity dimension."
+        },
+        {
+          "dimension": "product_strength",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Product Strength dimension."
+        },
+        {
+          "dimension": "founder_quality",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Founder Quality dimension."
+        },
+        {
+          "dimension": "traction_signals",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Traction Signals dimension."
+        },
+        {
+          "dimension": "business_model_viability",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Business Model Viability dimension."
+        },
+        {
+          "dimension": "competitive_position",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Competitive Position dimension."
+        },
+        {
+          "dimension": "team_execution",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Team & Execution dimension."
+        }
+      ],
+      "overall_score": 60.0,
+      "recommendations": [
+        {
+          "category": "opportunity",
+          "action": "Conduct detailed market sizing analysis.",
+          "priority": "medium",
+          "title": "Deep-Dive Market Analysis",
+          "confidence": 0.9
+        },
+        {
+          "category": "follow_up",
+          "action": "Explore founder background and domain expertise depth.",
+          "priority": "low",
+          "title": "Assess Domain Expertise Depth",
+          "confidence": 0.4
+        },
+        {
+          "category": "due_diligence",
+          "action": "Request technology stack details.",
+          "priority": "medium",
+          "title": "Identify Technology Stack",
+          "confidence": 0.4
+        },
+        {
+          "category": "follow_up",
+          "action": "Request revenue and traction metrics.",
+          "priority": "medium",
+          "title": "Validate Revenue Status",
+          "confidence": 0.3
+        },
+        {
+          "category": "risk_mitigation",
+          "action": "Investigate revenue generation status for mature company.",
+          "priority": "high",
+          "title": "Revenue Validation for Mature Startup",
+          "confidence": 0.5
+        },
+        {
+          "category": "follow_up",
+          "action": "Validate series_b stage benchmarks.",
+          "priority": "medium",
+          "title": "Stage Benchmark Validation (series_b)",
+          "confidence": 0.9
+        }
+      ],
+      "confidence": [
+        {
+          "dimension": "market_opportunity",
+          "confidence": 0.914,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "product_strength",
+          "confidence": 0.464,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "founder_quality",
+          "confidence": 0.779,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "traction_signals",
+          "confidence": 0.914,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "business_model_viability",
+          "confidence": 0.864,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "competitive_position",
+          "confidence": 0.464,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "team_execution",
+          "confidence": 0.734,
+          "data_completeness": 0.88
+        }
+      ],
+      "overall_confidence": 0.7333,
+      "stage_timings": {
+        "normalize": 0.06,
+        "collect": 0.11,
+        "extract": 4.8,
+        "evidence": 0.09,
+        "reasoning": 0.14,
+        "evaluation": 0.51,
+        "scoring": 0.06,
+        "recommendations": 0.1,
+        "confidence": 0.06,
+        "report_builder": 0.03,
+        "total": 5.98
+      }
+    },
+    {
+      "case_id": "devtools",
+      "case_label": "DevTools \u2014 CI/CD platform",
+      "success": true,
+      "processing_time_ms": 6.83,
+      "engine_version": "0.6.5",
+      "extracted_features": {
+        "industry": "enterprise_saas",
+        "sub_industry": "devops",
+        "business_model": "paas",
+        "funding_stage": null,
+        "geography": "north_america",
+        "customer_type": "b2b2c",
+        "technology_stack": [],
+        "team_size_indicator": null,
+        "founded_year": 2023,
+        "has_revenue": true,
+        "key_keywords": [
+          "shipkit",
+          "open",
+          "source",
+          "first",
+          "platform",
+          "designed",
+          "monorepo",
+          "architectures",
+          "provides",
+          "incremental",
+          "builds",
+          "intelligent",
+          "test",
+          "parallelization",
+          "deployment",
+          "orchestration",
+          "teams",
+          "running",
+          "microservices",
+          "core"
+        ],
+        "has_pitch_deck": false,
+        "founder_profile_count": 2,
+        "data_completeness": 0.75,
+        "founder_team_type": "technical",
+        "domain_expertise_signals": [],
+        "serial_founder_indicators": [
+          "...l tier, currently in beta launch phase. Founded in 2023 by two ex-GitHub engineers base..."
+        ],
+        "leadership_roles": [
+          "CEO"
+        ],
+        "hiring_signals": [],
+        "advisor_mentions": [],
+        "engineering_strength": "strong",
+        "product_strength": "moderate",
+        "founder_market_fit_signals": [
+          "...ntly in beta launch phase. Founded in 2023 by two ex-GitHub engineers based in Seattle. https://linkedin.com/..."
+        ],
+        "execution_signals": [
+          "revenue_mention: ...users to paid plans at $299/month. Pre-revenue on commercial tier, currently in beta l...",
+          "founding_year: ...l tier, currently in beta launch phase. Founded in 2023 by two ex-GitHub engineers based in Sea..."
+        ],
+        "founder_confidence": 0.59,
+        "product_category": "ci_cd",
+        "product_type": "platform",
+        "saas_model": null,
+        "ai_orientation": "ai_enabled",
+        "primary_capabilities": [
+          "automation",
+          "compliance"
+        ],
+        "feature_signals": [
+          "open_source",
+          "sso",
+          "audit_logging"
+        ],
+        "integration_ecosystem": [
+          "github"
+        ],
+        "deployment_model": null,
+        "target_workflow": "ci_cd_pipeline",
+        "automation_level": "high",
+        "product_maturity": "beta",
+        "differentiation_signals": [
+          "open_source_community"
+        ],
+        "defensibility_signals": [],
+        "technical_complexity": "moderate",
+        "scalability_indicators": [],
+        "innovation_signals": [
+          "open_source_innovation"
+        ],
+        "product_keywords": [
+          "open_source",
+          "platform",
+          "open_source_first"
+        ],
+        "product_confidence": 0.81
+      },
+      "evidence": [
+        {
+          "domain": "industry",
+          "category": "sales_cycle",
+          "statement": "Enterprise SaaS sales cycles range from 3 to 12 months.",
+          "source": "knowledge/taxonomies.py:enterprise_saas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "industry",
+          "category": "switching_costs",
+          "statement": "Enterprise integrations create meaningful switching costs.",
+          "source": "knowledge/taxonomies.py:enterprise_saas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "industry",
+          "category": "market_size",
+          "statement": "Global enterprise software market exceeds $500 billion.",
+          "source": "knowledge/taxonomies.py:enterprise_saas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "industry",
+          "category": "unit_economics",
+          "statement": "SaaS benefits from recurring revenue and high gross margins.",
+          "source": "knowledge/taxonomies.py:enterprise_saas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "industry",
+          "category": "competition",
+          "statement": "Enterprise SaaS markets tend toward winner-take-most dynamics.",
+          "source": "knowledge/taxonomies.py:enterprise_saas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "business_model",
+          "category": "unit_economics",
+          "statement": "Platform businesses benefit from usage-based scaling.",
+          "source": "knowledge/taxonomies.py:paas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "business_model",
+          "category": "switching_costs",
+          "statement": "Developer platform adoption creates deep integration lock-in.",
+          "source": "knowledge/taxonomies.py:paas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "business_model",
+          "category": "competition",
+          "statement": "Platform markets tend toward monopoly or duopoly outcomes.",
+          "source": "knowledge/taxonomies.py:paas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "market_size",
+          "statement": "North America has the largest venture capital market globally.",
+          "source": "knowledge/geography:north_america",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "competition",
+          "statement": "North American markets are highly competitive with many well-funded competitors.",
+          "source": "knowledge/geography:north_america",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "talent",
+          "statement": "North America has deep talent pools in technology and business.",
+          "source": "knowledge/geography:north_america",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "regulatory",
+          "statement": "Regulatory environment varies by state and federal jurisdiction.",
+          "source": "knowledge/geography:north_america",
+          "relevance_score": 1.0
+        }
+      ],
+      "observations": [
+        {
+          "dimension": "market_opportunity",
+          "category": "market_context",
+          "statement": "The enterprise_saas market presents domain-specific factors including competition, market_size, sales_cycle.",
+          "confidence": 1.0,
+          "importance": 0.8,
+          "source_rule": "MarketContextRule"
+        },
+        {
+          "dimension": "market_opportunity",
+          "category": "market_context",
+          "statement": "The north_america geographic market has 4 documented domain factors.",
+          "confidence": 0.9,
+          "importance": 0.6,
+          "source_rule": "MarketContextRule"
+        },
+        {
+          "dimension": "business_model_viability",
+          "category": "business_model_assessment",
+          "statement": "The startup follows a paas model within the enterprise_saas industry. Domain knowledge covers 3 factors including competition, switching_costs, unit_economics.",
+          "confidence": 0.8,
+          "importance": 0.7,
+          "source_rule": "BusinessModelContextRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "team_assessment",
+          "statement": "Identified 2 founder profile(s) associated with this startup.",
+          "confidence": 0.7,
+          "importance": 0.6,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "team_composition",
+          "statement": "Founding team composition leans technical.",
+          "confidence": 0.55,
+          "importance": 0.55,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "serial_founder",
+          "statement": "Detected 1 serial founder indicator(s) suggesting prior startup experience.",
+          "confidence": 0.55,
+          "importance": 0.6,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "leadership_roles",
+          "statement": "Detected leadership roles: CEO.",
+          "confidence": 0.6,
+          "importance": 0.55,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "engineering_strength",
+          "statement": "Engineering strength assessed as strong.",
+          "confidence": 0.55,
+          "importance": 0.6,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "product_strength",
+          "statement": "Product strength assessed as moderate.",
+          "confidence": 0.55,
+          "importance": 0.55,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "founder_market_fit",
+          "statement": "Detected 1 founder-market fit signal(s) indicating relevant background and domain alignment.",
+          "confidence": 0.6,
+          "importance": 0.7,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "execution_signals",
+          "statement": "Detected 2 execution and traction signal(s) indicating operational progress.",
+          "confidence": 0.5,
+          "importance": 0.65,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "founder_confidence",
+          "statement": "Composite founder confidence score: 0.59.",
+          "confidence": 0.59,
+          "importance": 0.7,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "data_quality",
+          "category": "data_assessment",
+          "statement": "High data completeness \u2014 analysis is well-supported.",
+          "confidence": 0.95,
+          "importance": 0.4,
+          "source_rule": "DataQualityRule"
+        },
+        {
+          "dimension": "product_strength",
+          "category": "risk_indicator",
+          "statement": "No pitch deck available for analysis.",
+          "confidence": 0.9,
+          "importance": 0.5,
+          "source_rule": "RiskIndicatorRule"
+        }
+      ],
+      "dimension_assessments": [
+        {
+          "dimension": "market_opportunity",
+          "summary": "Assessed market_opportunity based on 2 observations and 5 evidence items (average confidence: 0.95).",
+          "rationale": "Key findings: The enterprise_saas market presents domain-specific factors including competition, market_size, sales_cycle.; The north_america geographic market has 4 documented domain factors.. Supported by evidence categories: competition, market_size, sales_cycle, switching_costs, unit_economics.",
+          "confidence": 0.95,
+          "score": null
+        },
+        {
+          "dimension": "founder_quality",
+          "summary": "Assessed founder_quality based on 6 observations and 0 evidence items (average confidence: 0.60).",
+          "rationale": "Key findings: Identified 2 founder profile(s) associated with this startup.; Founding team composition leans technical.; Detected 1 serial founder indicator(s) suggesting prior startup experience..",
+          "confidence": 0.5983333333333333,
+          "score": null
+        },
+        {
+          "dimension": "product_strength",
+          "summary": "Assessed product_strength based on 1 observations and 0 evidence items (average confidence: 0.90).",
+          "rationale": "Key findings: No pitch deck available for analysis..",
+          "confidence": 0.9,
+          "score": null
+        },
+        {
+          "dimension": "traction_signals",
+          "summary": "No observations available for traction_signals.",
+          "rationale": "Insufficient data to assess traction_signals.",
+          "confidence": 0.0,
+          "score": null
+        },
+        {
+          "dimension": "business_model_viability",
+          "summary": "Assessed business_model_viability based on 1 observations and 3 evidence items (average confidence: 0.80).",
+          "rationale": "Key findings: The startup follows a paas model within the enterprise_saas industry. Domain knowledge covers 3 factors including competition, switching_costs, unit_economics.. Supported by evidence categories: competition, switching_costs, unit_economics.",
+          "confidence": 0.8,
+          "score": null
+        },
+        {
+          "dimension": "competitive_position",
+          "summary": "No observations available for competitive_position.",
+          "rationale": "Insufficient data to assess competitive_position.",
+          "confidence": 0.0,
+          "score": null
+        },
+        {
+          "dimension": "team_execution",
+          "summary": "Assessed team_execution based on 3 observations and 0 evidence items (average confidence: 0.53).",
+          "rationale": "Key findings: Engineering strength assessed as strong.; Product strength assessed as moderate.; Detected 2 execution and traction signal(s) indicating operational progress..",
+          "confidence": 0.5333333333333333,
+          "score": null
+        }
+      ],
+      "scores": [
+        {
+          "dimension": "market_opportunity",
+          "score": 55.0,
+          "rationale": "Placeholder scoring for Market Opportunity dimension."
+        },
+        {
+          "dimension": "product_strength",
+          "score": 55.0,
+          "rationale": "Placeholder scoring for Product Strength dimension."
+        },
+        {
+          "dimension": "founder_quality",
+          "score": 55.0,
+          "rationale": "Placeholder scoring for Founder Quality dimension."
+        },
+        {
+          "dimension": "traction_signals",
+          "score": 55.0,
+          "rationale": "Placeholder scoring for Traction Signals dimension."
+        },
+        {
+          "dimension": "business_model_viability",
+          "score": 55.0,
+          "rationale": "Placeholder scoring for Business Model Viability dimension."
+        },
+        {
+          "dimension": "competitive_position",
+          "score": 55.0,
+          "rationale": "Placeholder scoring for Competitive Position dimension."
+        },
+        {
+          "dimension": "team_execution",
+          "score": 55.0,
+          "rationale": "Placeholder scoring for Team & Execution dimension."
+        }
+      ],
+      "overall_score": 55.0,
+      "recommendations": [
+        {
+          "category": "opportunity",
+          "action": "Conduct detailed market sizing analysis.",
+          "priority": "medium",
+          "title": "Deep-Dive Market Analysis",
+          "confidence": 0.95
+        },
+        {
+          "category": "follow_up",
+          "action": "Explore founder background and domain expertise depth.",
+          "priority": "low",
+          "title": "Assess Domain Expertise Depth",
+          "confidence": 0.4
+        },
+        {
+          "category": "due_diligence",
+          "action": "Request technology stack details.",
+          "priority": "medium",
+          "title": "Identify Technology Stack",
+          "confidence": 0.4
+        },
+        {
+          "category": "due_diligence",
+          "action": "Request the pitch deck for product analysis.",
+          "priority": "high",
+          "title": "Obtain Pitch Deck",
+          "confidence": 0.6
+        },
+        {
+          "category": "opportunity",
+          "action": "Analyze unit economics and scalability.",
+          "priority": "medium",
+          "title": "Unit Economics Deep-Dive",
+          "confidence": 0.8
+        },
+        {
+          "category": "due_diligence",
+          "action": "Clarify current funding stage and capital requirements.",
+          "priority": "medium",
+          "title": "Identify Funding Stage",
+          "confidence": 0.3
+        }
+      ],
+      "confidence": [
+        {
+          "dimension": "market_opportunity",
+          "confidence": 0.9,
+          "data_completeness": 0.75
+        },
+        {
+          "dimension": "product_strength",
+          "confidence": 0.875,
+          "data_completeness": 0.75
+        },
+        {
+          "dimension": "founder_quality",
+          "confidence": 0.7242,
+          "data_completeness": 0.75
+        },
+        {
+          "dimension": "traction_signals",
+          "confidence": 0.425,
+          "data_completeness": 0.75
+        },
+        {
+          "dimension": "business_model_viability",
+          "confidence": 0.825,
+          "data_completeness": 0.75
+        },
+        {
+          "dimension": "competitive_position",
+          "confidence": 0.425,
+          "data_completeness": 0.75
+        },
+        {
+          "dimension": "team_execution",
+          "confidence": 0.6917,
+          "data_completeness": 0.75
+        }
+      ],
+      "overall_confidence": 0.6951,
+      "stage_timings": {
+        "normalize": 0.03,
+        "collect": 0.07,
+        "extract": 6.08,
+        "evidence": 0.1,
+        "reasoning": 0.14,
+        "evaluation": 0.15,
+        "scoring": 0.06,
+        "recommendations": 0.09,
+        "confidence": 0.07,
+        "report_builder": 0.04,
+        "total": 6.83
+      }
+    },
+    {
+      "case_id": "marketplace",
+      "case_label": "Marketplace \u2014 B2B industrial supplies",
+      "success": true,
+      "processing_time_ms": 6.16,
+      "engine_version": "0.6.5",
+      "extracted_features": {
+        "industry": "marketplace",
+        "sub_industry": null,
+        "business_model": "marketplace",
+        "funding_stage": "series_a",
+        "geography": "north_america",
+        "customer_type": "b2b2c",
+        "technology_stack": [],
+        "team_size_indicator": "51-200",
+        "founded_year": 2020,
+        "has_revenue": true,
+        "key_keywords": [
+          "supplyhub",
+          "operates",
+          "sided",
+          "marketplace",
+          "connecting",
+          "industrial",
+          "equipment",
+          "manufacturers",
+          "small",
+          "size",
+          "manufacturing",
+          "facilities",
+          "platform",
+          "handles",
+          "quoting",
+          "procurement",
+          "logistics",
+          "supplies",
+          "across",
+          "north"
+        ],
+        "has_pitch_deck": true,
+        "founder_profile_count": 1,
+        "data_completeness": 0.88,
+        "founder_team_type": "business",
+        "domain_expertise_signals": [],
+        "serial_founder_indicators": [
+          "...LTV/CAC of 4.2x. Raised $30M Series A. Founded in 2020, team of 65 based in Chicago."
+        ],
+        "leadership_roles": [
+          "CEO"
+        ],
+        "hiring_signals": [
+          "...0M Series A. Founded in 2020, team of 65 based in Chicago."
+        ],
+        "advisor_mentions": [],
+        "engineering_strength": null,
+        "product_strength": "moderate",
+        "founder_market_fit_signals": [],
+        "execution_signals": [
+          "revenue_mention: ...stings and 8,500 active buyer accounts. Revenue of $21.6M with unit economics showing L...",
+          "ltv_cac: ...e of $21.6M with unit economics showing LTV/CAC of 4.2x. Raised $30M Series A. Founded...",
+          "funding_raised: ...unit economics showing LTV/CAC of 4.2x. Raised $30M Series A. Founded in 2020, team of 65 b...",
+          "deployed_scale: ...ally with 2,400 supplier listings and 8,500 active buyer accounts. Revenue of $21.6M with...",
+          "founding_year: ...LTV/CAC of 4.2x. Raised $30M Series A. Founded in 2020, team of 65 based in Chicago."
+        ],
+        "founder_confidence": 0.43,
+        "product_category": "marketplace",
+        "product_type": "platform",
+        "saas_model": "marketplace",
+        "ai_orientation": "unknown",
+        "primary_capabilities": [],
+        "feature_signals": [],
+        "integration_ecosystem": [],
+        "deployment_model": null,
+        "target_workflow": "procurement",
+        "automation_level": null,
+        "product_maturity": null,
+        "differentiation_signals": [],
+        "defensibility_signals": [
+          "network_effects"
+        ],
+        "technical_complexity": "moderate",
+        "scalability_indicators": [],
+        "innovation_signals": [],
+        "product_keywords": [
+          "platform",
+          "marketplace"
+        ],
+        "product_confidence": 0.7
+      },
+      "evidence": [
+        {
+          "domain": "industry",
+          "category": "competition",
+          "statement": "Marketplaces face chicken-and-egg cold start problems.",
+          "source": "knowledge/taxonomies.py:marketplace",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "industry",
+          "category": "unit_economics",
+          "statement": "Marketplace take rates vary significantly by vertical.",
+          "source": "knowledge/taxonomies.py:marketplace",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "industry",
+          "category": "network_effects",
+          "statement": "Successful marketplaces benefit from strong network effects.",
+          "source": "knowledge/taxonomies.py:marketplace",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "business_model",
+          "category": "unit_economics",
+          "statement": "Marketplace take rates vary from 5-30% depending on vertical.",
+          "source": "knowledge/taxonomies.py:marketplace",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "business_model",
+          "category": "competition",
+          "statement": "Marketplace businesses benefit from strong network effects.",
+          "source": "knowledge/taxonomies.py:marketplace",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "business_model",
+          "category": "growth",
+          "statement": "Two-sided marketplaces face chicken-and-egg cold start challenges.",
+          "source": "knowledge/taxonomies.py:marketplace",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "funding_stage",
+          "category": "expectations",
+          "statement": "Series A companies have early product-market fit.",
+          "source": "knowledge/stages.py:Series A",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "funding_stage",
+          "category": "metrics",
+          "statement": "Revenue growth and unit economics become important.",
+          "source": "knowledge/stages.py:Series A",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "funding_stage",
+          "category": "diligence",
+          "statement": "Go-to-market scalability is the primary focus.",
+          "source": "knowledge/stages.py:Series A",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "funding_stage",
+          "category": "context",
+          "statement": "Product-market fit emerging, scaling initial traction.",
+          "source": "knowledge/stages.py:Series A",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "market_size",
+          "statement": "North America has the largest venture capital market globally.",
+          "source": "knowledge/geography:north_america",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "competition",
+          "statement": "North American markets are highly competitive with many well-funded competitors.",
+          "source": "knowledge/geography:north_america",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "talent",
+          "statement": "North America has deep talent pools in technology and business.",
+          "source": "knowledge/geography:north_america",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "regulatory",
+          "statement": "Regulatory environment varies by state and federal jurisdiction.",
+          "source": "knowledge/geography:north_america",
+          "relevance_score": 1.0
+        }
+      ],
+      "observations": [
+        {
+          "dimension": "market_opportunity",
+          "category": "market_context",
+          "statement": "The marketplace market presents domain-specific factors including competition, network_effects, unit_economics.",
+          "confidence": 0.8,
+          "importance": 0.8,
+          "source_rule": "MarketContextRule"
+        },
+        {
+          "dimension": "market_opportunity",
+          "category": "market_context",
+          "statement": "The north_america geographic market has 4 documented domain factors.",
+          "confidence": 0.9,
+          "importance": 0.6,
+          "source_rule": "MarketContextRule"
+        },
+        {
+          "dimension": "business_model_viability",
+          "category": "business_model_assessment",
+          "statement": "The startup follows a marketplace model within the marketplace industry. Domain knowledge covers 3 factors including competition, growth, unit_economics.",
+          "confidence": 0.8,
+          "importance": 0.7,
+          "source_rule": "BusinessModelContextRule"
+        },
+        {
+          "dimension": "traction_signals",
+          "category": "stage_assessment",
+          "statement": "At the series_a stage, evaluation should consider context, diligence, expectations.",
+          "confidence": 0.9,
+          "importance": 0.7,
+          "source_rule": "StageExpectationRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "team_assessment",
+          "statement": "Identified 1 founder profile(s) associated with this startup.",
+          "confidence": 0.55,
+          "importance": 0.6,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "team_assessment",
+          "statement": "Team size indicator suggests a 51-200 team.",
+          "confidence": 0.5,
+          "importance": 0.5,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "team_composition",
+          "statement": "Founding team composition leans business.",
+          "confidence": 0.55,
+          "importance": 0.55,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "serial_founder",
+          "statement": "Detected 1 serial founder indicator(s) suggesting prior startup experience.",
+          "confidence": 0.55,
+          "importance": 0.6,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "leadership_roles",
+          "statement": "Detected leadership roles: CEO.",
+          "confidence": 0.6,
+          "importance": 0.55,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "product_strength",
+          "statement": "Product strength assessed as moderate.",
+          "confidence": 0.55,
+          "importance": 0.55,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "execution_signals",
+          "statement": "Detected 5 execution and traction signal(s) indicating operational progress.",
+          "confidence": 0.65,
+          "importance": 0.65,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "hiring_signals",
+          "statement": "Detected 1 hiring and team growth signal(s).",
+          "confidence": 0.5,
+          "importance": 0.4,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "founder_confidence",
+          "statement": "Composite founder confidence score: 0.43.",
+          "confidence": 0.43,
+          "importance": 0.7,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "data_quality",
+          "category": "data_assessment",
+          "statement": "High data completeness \u2014 analysis is well-supported.",
+          "confidence": 1.0,
+          "importance": 0.4,
+          "source_rule": "DataQualityRule"
+        }
+      ],
+      "dimension_assessments": [
+        {
+          "dimension": "market_opportunity",
+          "summary": "Assessed market_opportunity based on 2 observations and 3 evidence items (average confidence: 0.85).",
+          "rationale": "Key findings: The marketplace market presents domain-specific factors including competition, network_effects, unit_economics.; The north_america geographic market has 4 documented domain factors.. Supported by evidence categories: competition, network_effects, unit_economics.",
+          "confidence": 0.8500000000000001,
+          "score": null
+        },
+        {
+          "dimension": "founder_quality",
+          "summary": "Assessed founder_quality based on 5 observations and 0 evidence items (average confidence: 0.54).",
+          "rationale": "Key findings: Identified 1 founder profile(s) associated with this startup.; Founding team composition leans business.; Detected 1 serial founder indicator(s) suggesting prior startup experience..",
+          "confidence": 0.536,
+          "score": null
+        },
+        {
+          "dimension": "product_strength",
+          "summary": "No observations available for product_strength.",
+          "rationale": "Insufficient data to assess product_strength.",
+          "confidence": 0.0,
+          "score": null
+        },
+        {
+          "dimension": "traction_signals",
+          "summary": "Assessed traction_signals based on 1 observations and 0 evidence items (average confidence: 0.90).",
+          "rationale": "Key findings: At the series_a stage, evaluation should consider context, diligence, expectations..",
+          "confidence": 0.9,
+          "score": null
+        },
+        {
+          "dimension": "business_model_viability",
+          "summary": "Assessed business_model_viability based on 1 observations and 3 evidence items (average confidence: 0.80).",
+          "rationale": "Key findings: The startup follows a marketplace model within the marketplace industry. Domain knowledge covers 3 factors including competition, growth, unit_economics.. Supported by evidence categories: competition, growth, unit_economics.",
+          "confidence": 0.8,
+          "score": null
+        },
+        {
+          "dimension": "competitive_position",
+          "summary": "No observations available for competitive_position.",
+          "rationale": "Insufficient data to assess competitive_position.",
+          "confidence": 0.0,
+          "score": null
+        },
+        {
+          "dimension": "team_execution",
+          "summary": "Assessed team_execution based on 4 observations and 0 evidence items (average confidence: 0.55).",
+          "rationale": "Key findings: Team size indicator suggests a 51-200 team.; Product strength assessed as moderate.; Detected 5 execution and traction signal(s) indicating operational progress..",
+          "confidence": 0.55,
+          "score": null
+        }
+      ],
+      "scores": [
+        {
+          "dimension": "market_opportunity",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Market Opportunity dimension."
+        },
+        {
+          "dimension": "product_strength",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Product Strength dimension."
+        },
+        {
+          "dimension": "founder_quality",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Founder Quality dimension."
+        },
+        {
+          "dimension": "traction_signals",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Traction Signals dimension."
+        },
+        {
+          "dimension": "business_model_viability",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Business Model Viability dimension."
+        },
+        {
+          "dimension": "competitive_position",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Competitive Position dimension."
+        },
+        {
+          "dimension": "team_execution",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Team & Execution dimension."
+        }
+      ],
+      "overall_score": 60.0,
+      "recommendations": [
+        {
+          "category": "opportunity",
+          "action": "Conduct detailed market sizing analysis.",
+          "priority": "medium",
+          "title": "Deep-Dive Market Analysis",
+          "confidence": 0.8500000000000001
+        },
+        {
+          "category": "follow_up",
+          "action": "Inquire about the full founding team composition.",
+          "priority": "medium",
+          "title": "Expand Team Visibility",
+          "confidence": 0.4
+        },
+        {
+          "category": "due_diligence",
+          "action": "Request technology stack details.",
+          "priority": "medium",
+          "title": "Identify Technology Stack",
+          "confidence": 0.4
+        },
+        {
+          "category": "opportunity",
+          "action": "Analyze unit economics and scalability.",
+          "priority": "medium",
+          "title": "Unit Economics Deep-Dive",
+          "confidence": 0.8
+        },
+        {
+          "category": "opportunity",
+          "action": "Validate traction metrics with supporting data.",
+          "priority": "medium",
+          "title": "Traction Validation",
+          "confidence": 0.9
+        },
+        {
+          "category": "follow_up",
+          "action": "Validate series_a stage benchmarks.",
+          "priority": "medium",
+          "title": "Stage Benchmark Validation (series_a)",
+          "confidence": 0.9
+        }
+      ],
+      "confidence": [
+        {
+          "dimension": "market_opportunity",
+          "confidence": 0.889,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "product_strength",
+          "confidence": 0.464,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "founder_quality",
+          "confidence": 0.732,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "traction_signals",
+          "confidence": 0.914,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "business_model_viability",
+          "confidence": 0.864,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "competitive_position",
+          "confidence": 0.464,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "team_execution",
+          "confidence": 0.739,
+          "data_completeness": 0.88
+        }
+      ],
+      "overall_confidence": 0.7237,
+      "stage_timings": {
+        "normalize": 0.03,
+        "collect": 0.07,
+        "extract": 5.45,
+        "evidence": 0.08,
+        "reasoning": 0.12,
+        "evaluation": 0.14,
+        "scoring": 0.05,
+        "recommendations": 0.1,
+        "confidence": 0.06,
+        "report_builder": 0.03,
+        "total": 6.16
+      }
+    },
+    {
+      "case_id": "consumer_app",
+      "case_label": "Consumer App \u2014 Fitness social network",
+      "success": true,
+      "processing_time_ms": 5.68,
+      "engine_version": "0.6.5",
+      "extracted_features": {
+        "industry": "consumer_tech",
+        "sub_industry": "social",
+        "business_model": "saas",
+        "funding_stage": "pre_seed",
+        "geography": "north_america",
+        "customer_type": "b2c",
+        "technology_stack": [],
+        "team_size_indicator": "11-50",
+        "founded_year": 2022,
+        "has_revenue": null,
+        "key_keywords": [
+          "fitsocial",
+          "consumer",
+          "mobile",
+          "application",
+          "combines",
+          "fitness",
+          "tracking",
+          "social",
+          "networking",
+          "users",
+          "workouts",
+          "share",
+          "progress",
+          "participate",
+          "community",
+          "challenges",
+          "monetization",
+          "through",
+          "freemium",
+          "model"
+        ],
+        "has_pitch_deck": false,
+        "founder_profile_count": 0,
+        "data_completeness": 0.62,
+        "founder_team_type": "business",
+        "domain_expertise_signals": [],
+        "serial_founder_indicators": [
+          "...0 is 42%. Available on iOS and Android. Founded in 2022, team of 18, based in Los Angel..."
+        ],
+        "leadership_roles": [],
+        "hiring_signals": [
+          "...and Android. Founded in 2022, team of 18, based in Los Angeles. Pre-se..."
+        ],
+        "advisor_mentions": [],
+        "engineering_strength": null,
+        "product_strength": null,
+        "founder_market_fit_signals": [],
+        "execution_signals": [
+          "funding_stage: ...2022, team of 18, based in Los Angeles. Pre-seed stage with $1.5M raised from angels.",
+          "founding_year: ...0 is 42%. Available on iOS and Android. Founded in 2022, team of 18, based in Los Angeles. Pre-..."
+        ],
+        "founder_confidence": 0.16,
+        "product_category": "fitness_social",
+        "product_type": "application",
+        "saas_model": "saas",
+        "ai_orientation": "unknown",
+        "primary_capabilities": [
+          "monitoring"
+        ],
+        "feature_signals": [
+          "freemium",
+          "mobile",
+          "ios",
+          "android"
+        ],
+        "integration_ecosystem": [],
+        "deployment_model": "saas",
+        "target_workflow": "fitness_tracking",
+        "automation_level": null,
+        "product_maturity": null,
+        "differentiation_signals": [],
+        "defensibility_signals": [],
+        "technical_complexity": "low",
+        "scalability_indicators": [],
+        "innovation_signals": [],
+        "product_keywords": [
+          "subscription",
+          "freemium"
+        ],
+        "product_confidence": 0.9
+      },
+      "evidence": [
+        {
+          "domain": "industry",
+          "category": "adoption",
+          "statement": "Consumer adoption is driven by network effects and virality.",
+          "source": "knowledge/taxonomies.py:consumer_tech",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "industry",
+          "category": "market_size",
+          "statement": "Consumer tech market is vast but highly competitive.",
+          "source": "knowledge/taxonomies.py:consumer_tech",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "industry",
+          "category": "competition",
+          "statement": "Consumer markets have low switching costs and high churn risk.",
+          "source": "knowledge/taxonomies.py:consumer_tech",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "industry",
+          "category": "monetization",
+          "statement": "Consumer monetization typically requires large user bases.",
+          "source": "knowledge/taxonomies.py:consumer_tech",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "business_model",
+          "category": "unit_economics",
+          "statement": "SaaS businesses typically achieve 70-90% gross margins.",
+          "source": "knowledge/taxonomies.py:saas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "business_model",
+          "category": "revenue_model",
+          "statement": "Subscription revenue provides predictable recurring cash flows.",
+          "source": "knowledge/taxonomies.py:saas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "business_model",
+          "category": "retention",
+          "statement": "Net revenue retention above 100% indicates strong product stickiness.",
+          "source": "knowledge/taxonomies.py:saas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "business_model",
+          "category": "competition",
+          "statement": "SaaS markets consolidate rapidly around category leaders.",
+          "source": "knowledge/taxonomies.py:saas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "funding_stage",
+          "category": "expectations",
+          "statement": "Pre-seed companies are typically pre-product.",
+          "source": "knowledge/stages.py:Pre-Seed",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "funding_stage",
+          "category": "risk",
+          "statement": "Pre-seed investments carry the highest risk.",
+          "source": "knowledge/stages.py:Pre-Seed",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "funding_stage",
+          "category": "diligence",
+          "statement": "Founding team quality is the primary criterion.",
+          "source": "knowledge/stages.py:Pre-Seed",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "funding_stage",
+          "category": "context",
+          "statement": "Earliest stage, typically pre-product or early prototype.",
+          "source": "knowledge/stages.py:Pre-Seed",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "market_size",
+          "statement": "North America has the largest venture capital market globally.",
+          "source": "knowledge/geography:north_america",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "competition",
+          "statement": "North American markets are highly competitive with many well-funded competitors.",
+          "source": "knowledge/geography:north_america",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "talent",
+          "statement": "North America has deep talent pools in technology and business.",
+          "source": "knowledge/geography:north_america",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "regulatory",
+          "statement": "Regulatory environment varies by state and federal jurisdiction.",
+          "source": "knowledge/geography:north_america",
+          "relevance_score": 1.0
+        }
+      ],
+      "observations": [
+        {
+          "dimension": "market_opportunity",
+          "category": "market_context",
+          "statement": "The consumer_tech market presents domain-specific factors including adoption, competition, market_size.",
+          "confidence": 0.9,
+          "importance": 0.8,
+          "source_rule": "MarketContextRule"
+        },
+        {
+          "dimension": "market_opportunity",
+          "category": "market_context",
+          "statement": "The north_america geographic market has 4 documented domain factors.",
+          "confidence": 0.9,
+          "importance": 0.6,
+          "source_rule": "MarketContextRule"
+        },
+        {
+          "dimension": "business_model_viability",
+          "category": "business_model_assessment",
+          "statement": "The startup follows a saas model within the consumer_tech industry. Domain knowledge covers 4 factors including competition, retention, revenue_model.",
+          "confidence": 0.9,
+          "importance": 0.7,
+          "source_rule": "BusinessModelContextRule"
+        },
+        {
+          "dimension": "traction_signals",
+          "category": "stage_assessment",
+          "statement": "At the pre_seed stage, evaluation should consider context, diligence, expectations.",
+          "confidence": 0.9,
+          "importance": 0.7,
+          "source_rule": "StageExpectationRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "team_assessment",
+          "statement": "Team size indicator suggests a 11-50 team.",
+          "confidence": 0.5,
+          "importance": 0.5,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "team_composition",
+          "statement": "Founding team composition leans business.",
+          "confidence": 0.55,
+          "importance": 0.55,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "serial_founder",
+          "statement": "Detected 1 serial founder indicator(s) suggesting prior startup experience.",
+          "confidence": 0.55,
+          "importance": 0.6,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "execution_signals",
+          "statement": "Detected 2 execution and traction signal(s) indicating operational progress.",
+          "confidence": 0.5,
+          "importance": 0.65,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "hiring_signals",
+          "statement": "Detected 1 hiring and team growth signal(s).",
+          "confidence": 0.5,
+          "importance": 0.4,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "founder_confidence",
+          "statement": "Composite founder confidence score: 0.16.",
+          "confidence": 0.16,
+          "importance": 0.7,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "data_quality",
+          "category": "data_assessment",
+          "statement": "Moderate data completeness \u2014 analysis has some gaps.",
+          "confidence": 0.8200000000000001,
+          "importance": 0.5,
+          "source_rule": "DataQualityRule"
+        },
+        {
+          "dimension": "product_strength",
+          "category": "risk_indicator",
+          "statement": "No pitch deck available for analysis.",
+          "confidence": 0.9,
+          "importance": 0.5,
+          "source_rule": "RiskIndicatorRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "risk_indicator",
+          "statement": "No founder profiles identified.",
+          "confidence": 0.9,
+          "importance": 0.6,
+          "source_rule": "RiskIndicatorRule"
+        }
+      ],
+      "dimension_assessments": [
+        {
+          "dimension": "market_opportunity",
+          "summary": "Assessed market_opportunity based on 2 observations and 4 evidence items (average confidence: 0.90).",
+          "rationale": "Key findings: The consumer_tech market presents domain-specific factors including adoption, competition, market_size.; The north_america geographic market has 4 documented domain factors.. Supported by evidence categories: adoption, competition, market_size, monetization.",
+          "confidence": 0.9,
+          "score": null
+        },
+        {
+          "dimension": "founder_quality",
+          "summary": "Assessed founder_quality based on 4 observations and 0 evidence items (average confidence: 0.54).",
+          "rationale": "Key findings: Founding team composition leans business.; Detected 1 serial founder indicator(s) suggesting prior startup experience.; Composite founder confidence score: 0.16..",
+          "confidence": 0.54,
+          "score": null
+        },
+        {
+          "dimension": "product_strength",
+          "summary": "Assessed product_strength based on 1 observations and 0 evidence items (average confidence: 0.90).",
+          "rationale": "Key findings: No pitch deck available for analysis..",
+          "confidence": 0.9,
+          "score": null
+        },
+        {
+          "dimension": "traction_signals",
+          "summary": "Assessed traction_signals based on 1 observations and 0 evidence items (average confidence: 0.90).",
+          "rationale": "Key findings: At the pre_seed stage, evaluation should consider context, diligence, expectations..",
+          "confidence": 0.9,
+          "score": null
+        },
+        {
+          "dimension": "business_model_viability",
+          "summary": "Assessed business_model_viability based on 1 observations and 4 evidence items (average confidence: 0.90).",
+          "rationale": "Key findings: The startup follows a saas model within the consumer_tech industry. Domain knowledge covers 4 factors including competition, retention, revenue_model.. Supported by evidence categories: competition, retention, revenue_model, unit_economics.",
+          "confidence": 0.9,
+          "score": null
+        },
+        {
+          "dimension": "competitive_position",
+          "summary": "No observations available for competitive_position.",
+          "rationale": "Insufficient data to assess competitive_position.",
+          "confidence": 0.0,
+          "score": null
+        },
+        {
+          "dimension": "team_execution",
+          "summary": "Assessed team_execution based on 3 observations and 0 evidence items (average confidence: 0.50).",
+          "rationale": "Key findings: Team size indicator suggests a 11-50 team.; Detected 2 execution and traction signal(s) indicating operational progress.; Detected 1 hiring and team growth signal(s)..",
+          "confidence": 0.5,
+          "score": null
+        }
+      ],
+      "scores": [
+        {
+          "dimension": "market_opportunity",
+          "score": 52.0,
+          "rationale": "Placeholder scoring for Market Opportunity dimension."
+        },
+        {
+          "dimension": "product_strength",
+          "score": 52.0,
+          "rationale": "Placeholder scoring for Product Strength dimension."
+        },
+        {
+          "dimension": "founder_quality",
+          "score": 52.0,
+          "rationale": "Placeholder scoring for Founder Quality dimension."
+        },
+        {
+          "dimension": "traction_signals",
+          "score": 52.0,
+          "rationale": "Placeholder scoring for Traction Signals dimension."
+        },
+        {
+          "dimension": "business_model_viability",
+          "score": 52.0,
+          "rationale": "Placeholder scoring for Business Model Viability dimension."
+        },
+        {
+          "dimension": "competitive_position",
+          "score": 52.0,
+          "rationale": "Placeholder scoring for Competitive Position dimension."
+        },
+        {
+          "dimension": "team_execution",
+          "score": 52.0,
+          "rationale": "Placeholder scoring for Team & Execution dimension."
+        }
+      ],
+      "overall_score": 52.0,
+      "recommendations": [
+        {
+          "category": "opportunity",
+          "action": "Conduct detailed market sizing analysis.",
+          "priority": "medium",
+          "title": "Deep-Dive Market Analysis",
+          "confidence": 0.9
+        },
+        {
+          "category": "due_diligence",
+          "action": "Request founder profiles and background information.",
+          "priority": "high",
+          "title": "Obtain Founder Information",
+          "confidence": 0.5
+        },
+        {
+          "category": "due_diligence",
+          "action": "Request technology stack details.",
+          "priority": "medium",
+          "title": "Identify Technology Stack",
+          "confidence": 0.4
+        },
+        {
+          "category": "due_diligence",
+          "action": "Request the pitch deck for product analysis.",
+          "priority": "high",
+          "title": "Obtain Pitch Deck",
+          "confidence": 0.6
+        },
+        {
+          "category": "follow_up",
+          "action": "Request revenue and traction metrics.",
+          "priority": "medium",
+          "title": "Validate Revenue Status",
+          "confidence": 0.3
+        },
+        {
+          "category": "risk_mitigation",
+          "action": "Investigate revenue generation status for mature company.",
+          "priority": "high",
+          "title": "Revenue Validation for Mature Startup",
+          "confidence": 0.5
+        },
+        {
+          "category": "follow_up",
+          "action": "Validate pre_seed stage benchmarks.",
+          "priority": "medium",
+          "title": "Stage Benchmark Validation (pre_seed)",
+          "confidence": 0.9
+        }
+      ],
+      "confidence": [
+        {
+          "dimension": "market_opportunity",
+          "confidence": 0.836,
+          "data_completeness": 0.62
+        },
+        {
+          "dimension": "product_strength",
+          "confidence": 0.836,
+          "data_completeness": 0.62
+        },
+        {
+          "dimension": "founder_quality",
+          "confidence": 0.656,
+          "data_completeness": 0.62
+        },
+        {
+          "dimension": "traction_signals",
+          "confidence": 0.836,
+          "data_completeness": 0.62
+        },
+        {
+          "dimension": "business_model_viability",
+          "confidence": 0.836,
+          "data_completeness": 0.62
+        },
+        {
+          "dimension": "competitive_position",
+          "confidence": 0.386,
+          "data_completeness": 0.62
+        },
+        {
+          "dimension": "team_execution",
+          "confidence": 0.636,
+          "data_completeness": 0.62
+        }
+      ],
+      "overall_confidence": 0.7174,
+      "stage_timings": {
+        "normalize": 0.02,
+        "collect": 0.07,
+        "extract": 4.98,
+        "evidence": 0.08,
+        "reasoning": 0.12,
+        "evaluation": 0.15,
+        "scoring": 0.06,
+        "recommendations": 0.1,
+        "confidence": 0.06,
+        "report_builder": 0.03,
+        "total": 5.68
+      }
+    },
+    {
+      "case_id": "climate_tech",
+      "case_label": "Climate Tech \u2014 Carbon measurement",
+      "success": true,
+      "processing_time_ms": 7.37,
+      "engine_version": "0.6.5",
+      "extracted_features": {
+        "industry": "climate_tech",
+        "sub_industry": "carbon_accounting",
+        "business_model": "paas",
+        "funding_stage": "seed",
+        "geography": "europe",
+        "customer_type": "b2b",
+        "technology_stack": [],
+        "team_size_indicator": "11-50",
+        "founded_year": 2022,
+        "has_revenue": true,
+        "key_keywords": [
+          "carbonlens",
+          "provides",
+          "enterprise",
+          "grade",
+          "carbon",
+          "accounting",
+          "emissions",
+          "tracking",
+          "software",
+          "scope",
+          "platform",
+          "integrates",
+          "systems",
+          "supply",
+          "chain",
+          "tools",
+          "sensors",
+          "automate",
+          "data",
+          "collection"
+        ],
+        "has_pitch_deck": true,
+        "founder_profile_count": 2,
+        "data_completeness": 0.88,
+        "founder_team_type": "technical",
+        "domain_expertise_signals": [],
+        "serial_founder_indicators": [
+          "...ised $8M seed from climate-focused VCs. Founded in 2022, team of 28, headquartered in B..."
+        ],
+        "leadership_roles": [
+          "CEO",
+          "CTO"
+        ],
+        "hiring_signals": [
+          "...focused VCs. Founded in 2022, team of 28, headquartered in Berlin with..."
+        ],
+        "advisor_mentions": [],
+        "engineering_strength": null,
+        "product_strength": "moderate",
+        "founder_market_fit_signals": [],
+        "execution_signals": [
+          "customer_count: ...limate disclosure requirements. Serving 60 enterprise clients across manufacturing, logistics, and en...",
+          "funding_raised: ...ARR of $3.5M with 95% gross retention. Raised $8M seed from climate-focused VCs. Founded...",
+          "funding_stage: ...5M with 95% gross retention. Raised $8M seed from climate-focused VCs. Founded in 202...",
+          "arr_figure: ...cturing, logistics, and energy sectors. ARR of $3.5M with 95% gross retention. Raised $8M se...",
+          "founding_year: ...ised $8M seed from climate-focused VCs. Founded in 2022, team of 28, headquartered in Berlin wi..."
+        ],
+        "founder_confidence": 0.54,
+        "product_category": "carbon_accounting",
+        "product_type": "tool",
+        "saas_model": "saas",
+        "ai_orientation": "unknown",
+        "primary_capabilities": [
+          "analytics_and_reporting",
+          "data_processing",
+          "monitoring",
+          "integration"
+        ],
+        "feature_signals": [],
+        "integration_ecosystem": [
+          "erp_integration",
+          "supply_chain_tools",
+          "iot_sensors"
+        ],
+        "deployment_model": null,
+        "target_workflow": "carbon_reporting",
+        "automation_level": "high",
+        "product_maturity": null,
+        "differentiation_signals": [
+          "regulatory_compliance"
+        ],
+        "defensibility_signals": [],
+        "technical_complexity": "moderate",
+        "scalability_indicators": [],
+        "innovation_signals": [],
+        "product_keywords": [
+          "platform",
+          "enterprise",
+          "automation",
+          "integration",
+          "carbon_accounting"
+        ],
+        "product_confidence": 0.85
+      },
+      "evidence": [
+        {
+          "domain": "industry",
+          "category": "market_size",
+          "statement": "Climate tech investment exceeds $100 billion annually.",
+          "source": "knowledge/taxonomies.py:climate_tech",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "industry",
+          "category": "regulatory",
+          "statement": "Government incentives and carbon policies drive adoption.",
+          "source": "knowledge/taxonomies.py:climate_tech",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "industry",
+          "category": "capital_intensity",
+          "statement": "Climate tech solutions require significant capital.",
+          "source": "knowledge/taxonomies.py:climate_tech",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "industry",
+          "category": "sales_cycle",
+          "statement": "Energy projects have multi-year development timelines.",
+          "source": "knowledge/taxonomies.py:climate_tech",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "business_model",
+          "category": "unit_economics",
+          "statement": "Platform businesses benefit from usage-based scaling.",
+          "source": "knowledge/taxonomies.py:paas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "business_model",
+          "category": "switching_costs",
+          "statement": "Developer platform adoption creates deep integration lock-in.",
+          "source": "knowledge/taxonomies.py:paas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "business_model",
+          "category": "competition",
+          "statement": "Platform markets tend toward monopoly or duopoly outcomes.",
+          "source": "knowledge/taxonomies.py:paas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "funding_stage",
+          "category": "expectations",
+          "statement": "Seed companies are building MVP and initial customers.",
+          "source": "knowledge/stages.py:Seed",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "funding_stage",
+          "category": "risk",
+          "statement": "Seed investments have high failure rates but high upside.",
+          "source": "knowledge/stages.py:Seed",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "funding_stage",
+          "category": "diligence",
+          "statement": "Product-market fit signals are the key diligence focus.",
+          "source": "knowledge/stages.py:Seed",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "funding_stage",
+          "category": "context",
+          "statement": "Early product development and initial market testing.",
+          "source": "knowledge/stages.py:Seed",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "market_size",
+          "statement": "European tech market is growing but remains fragmented across countries.",
+          "source": "knowledge/geography:europe",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "regulatory",
+          "statement": "GDPR and EU regulations impose strict data privacy requirements.",
+          "source": "knowledge/geography:europe",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "competition",
+          "statement": "European markets have fewer mega-rounds but strong deep-tech ecosystems.",
+          "source": "knowledge/geography:europe",
+          "relevance_score": 1.0
+        }
+      ],
+      "observations": [
+        {
+          "dimension": "market_opportunity",
+          "category": "market_context",
+          "statement": "The climate_tech market presents domain-specific factors including capital_intensity, market_size, regulatory.",
+          "confidence": 0.9,
+          "importance": 0.8,
+          "source_rule": "MarketContextRule"
+        },
+        {
+          "dimension": "market_opportunity",
+          "category": "market_context",
+          "statement": "The europe geographic market has 3 documented domain factors.",
+          "confidence": 0.8,
+          "importance": 0.6,
+          "source_rule": "MarketContextRule"
+        },
+        {
+          "dimension": "business_model_viability",
+          "category": "business_model_assessment",
+          "statement": "The startup follows a paas model within the climate_tech industry. Domain knowledge covers 3 factors including competition, switching_costs, unit_economics.",
+          "confidence": 0.8,
+          "importance": 0.7,
+          "source_rule": "BusinessModelContextRule"
+        },
+        {
+          "dimension": "traction_signals",
+          "category": "stage_assessment",
+          "statement": "At the seed stage, evaluation should consider context, diligence, expectations.",
+          "confidence": 0.9,
+          "importance": 0.7,
+          "source_rule": "StageExpectationRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "team_assessment",
+          "statement": "Identified 2 founder profile(s) associated with this startup.",
+          "confidence": 0.7,
+          "importance": 0.6,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "team_assessment",
+          "statement": "Team size indicator suggests a 11-50 team.",
+          "confidence": 0.5,
+          "importance": 0.5,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "team_composition",
+          "statement": "Founding team composition leans technical.",
+          "confidence": 0.55,
+          "importance": 0.55,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "serial_founder",
+          "statement": "Detected 1 serial founder indicator(s) suggesting prior startup experience.",
+          "confidence": 0.55,
+          "importance": 0.6,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "leadership_roles",
+          "statement": "Detected leadership roles: CEO, CTO.",
+          "confidence": 0.6,
+          "importance": 0.55,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "product_strength",
+          "statement": "Product strength assessed as moderate.",
+          "confidence": 0.55,
+          "importance": 0.55,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "execution_signals",
+          "statement": "Detected 5 execution and traction signal(s) indicating operational progress.",
+          "confidence": 0.65,
+          "importance": 0.65,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "hiring_signals",
+          "statement": "Detected 1 hiring and team growth signal(s).",
+          "confidence": 0.5,
+          "importance": 0.4,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "founder_confidence",
+          "statement": "Composite founder confidence score: 0.54.",
+          "confidence": 0.54,
+          "importance": 0.7,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "data_quality",
+          "category": "data_assessment",
+          "statement": "High data completeness \u2014 analysis is well-supported.",
+          "confidence": 1.0,
+          "importance": 0.4,
+          "source_rule": "DataQualityRule"
+        }
+      ],
+      "dimension_assessments": [
+        {
+          "dimension": "market_opportunity",
+          "summary": "Assessed market_opportunity based on 2 observations and 4 evidence items (average confidence: 0.85).",
+          "rationale": "Key findings: The climate_tech market presents domain-specific factors including capital_intensity, market_size, regulatory.; The europe geographic market has 3 documented domain factors.. Supported by evidence categories: capital_intensity, market_size, regulatory, sales_cycle.",
+          "confidence": 0.8500000000000001,
+          "score": null
+        },
+        {
+          "dimension": "founder_quality",
+          "summary": "Assessed founder_quality based on 5 observations and 0 evidence items (average confidence: 0.59).",
+          "rationale": "Key findings: Identified 2 founder profile(s) associated with this startup.; Founding team composition leans technical.; Detected 1 serial founder indicator(s) suggesting prior startup experience..",
+          "confidence": 0.588,
+          "score": null
+        },
+        {
+          "dimension": "product_strength",
+          "summary": "No observations available for product_strength.",
+          "rationale": "Insufficient data to assess product_strength.",
+          "confidence": 0.0,
+          "score": null
+        },
+        {
+          "dimension": "traction_signals",
+          "summary": "Assessed traction_signals based on 1 observations and 0 evidence items (average confidence: 0.90).",
+          "rationale": "Key findings: At the seed stage, evaluation should consider context, diligence, expectations..",
+          "confidence": 0.9,
+          "score": null
+        },
+        {
+          "dimension": "business_model_viability",
+          "summary": "Assessed business_model_viability based on 1 observations and 3 evidence items (average confidence: 0.80).",
+          "rationale": "Key findings: The startup follows a paas model within the climate_tech industry. Domain knowledge covers 3 factors including competition, switching_costs, unit_economics.. Supported by evidence categories: competition, switching_costs, unit_economics.",
+          "confidence": 0.8,
+          "score": null
+        },
+        {
+          "dimension": "competitive_position",
+          "summary": "No observations available for competitive_position.",
+          "rationale": "Insufficient data to assess competitive_position.",
+          "confidence": 0.0,
+          "score": null
+        },
+        {
+          "dimension": "team_execution",
+          "summary": "Assessed team_execution based on 4 observations and 0 evidence items (average confidence: 0.55).",
+          "rationale": "Key findings: Team size indicator suggests a 11-50 team.; Product strength assessed as moderate.; Detected 5 execution and traction signal(s) indicating operational progress..",
+          "confidence": 0.55,
+          "score": null
+        }
+      ],
+      "scores": [
+        {
+          "dimension": "market_opportunity",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Market Opportunity dimension."
+        },
+        {
+          "dimension": "product_strength",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Product Strength dimension."
+        },
+        {
+          "dimension": "founder_quality",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Founder Quality dimension."
+        },
+        {
+          "dimension": "traction_signals",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Traction Signals dimension."
+        },
+        {
+          "dimension": "business_model_viability",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Business Model Viability dimension."
+        },
+        {
+          "dimension": "competitive_position",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Competitive Position dimension."
+        },
+        {
+          "dimension": "team_execution",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Team & Execution dimension."
+        }
+      ],
+      "overall_score": 60.0,
+      "recommendations": [
+        {
+          "category": "opportunity",
+          "action": "Conduct detailed market sizing analysis.",
+          "priority": "medium",
+          "title": "Deep-Dive Market Analysis",
+          "confidence": 0.8500000000000001
+        },
+        {
+          "category": "follow_up",
+          "action": "Explore founder background and domain expertise depth.",
+          "priority": "low",
+          "title": "Assess Domain Expertise Depth",
+          "confidence": 0.4
+        },
+        {
+          "category": "due_diligence",
+          "action": "Request technology stack details.",
+          "priority": "medium",
+          "title": "Identify Technology Stack",
+          "confidence": 0.4
+        },
+        {
+          "category": "opportunity",
+          "action": "Analyze unit economics and scalability.",
+          "priority": "medium",
+          "title": "Unit Economics Deep-Dive",
+          "confidence": 0.8
+        },
+        {
+          "category": "opportunity",
+          "action": "Validate traction metrics with supporting data.",
+          "priority": "medium",
+          "title": "Traction Validation",
+          "confidence": 0.9
+        },
+        {
+          "category": "follow_up",
+          "action": "Validate seed stage benchmarks.",
+          "priority": "medium",
+          "title": "Stage Benchmark Validation (seed)",
+          "confidence": 0.9
+        }
+      ],
+      "confidence": [
+        {
+          "dimension": "market_opportunity",
+          "confidence": 0.889,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "product_strength",
+          "confidence": 0.464,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "founder_quality",
+          "confidence": 0.758,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "traction_signals",
+          "confidence": 0.914,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "business_model_viability",
+          "confidence": 0.864,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "competitive_position",
+          "confidence": 0.464,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "team_execution",
+          "confidence": 0.739,
+          "data_completeness": 0.88
+        }
+      ],
+      "overall_confidence": 0.7274,
+      "stage_timings": {
+        "normalize": 0.03,
+        "collect": 0.07,
+        "extract": 6.18,
+        "evidence": 0.25,
+        "reasoning": 0.25,
+        "evaluation": 0.23,
+        "scoring": 0.07,
+        "recommendations": 0.15,
+        "confidence": 0.07,
+        "report_builder": 0.05,
+        "total": 7.37
+      }
+    },
+    {
+      "case_id": "robotics",
+      "case_label": "Robotics \u2014 Warehouse automation",
+      "success": true,
+      "processing_time_ms": 6.52,
+      "engine_version": "0.6.5",
+      "extracted_features": {
+        "industry": "hardware",
+        "sub_industry": "robotics",
+        "business_model": "hardware_plus_software",
+        "funding_stage": "series_b",
+        "geography": "europe",
+        "customer_type": "b2b",
+        "technology_stack": [],
+        "team_size_indicator": "51-200",
+        "founded_year": 2019,
+        "has_revenue": true,
+        "key_keywords": [
+          "autoware",
+          "robotics",
+          "builds",
+          "autonomous",
+          "mobile",
+          "robots",
+          "warehouse",
+          "fulfillment",
+          "center",
+          "operations",
+          "lidar",
+          "based",
+          "slam",
+          "navigation",
+          "handle",
+          "goods",
+          "person",
+          "picking",
+          "inventory",
+          "scanning"
+        ],
+        "has_pitch_deck": true,
+        "founder_profile_count": 3,
+        "data_completeness": 0.88,
+        "founder_team_type": "technical",
+        "domain_expertise_signals": [],
+        "serial_founder_indicators": [
+          "...in total funding including a Series B. Founded in 2019, team of 110 in Munich and Detr..."
+        ],
+        "leadership_roles": [
+          "CEO",
+          "CTO",
+          "VP-Engineering"
+        ],
+        "hiring_signals": [
+          "...a Series B. Founded in 2019, team of 110 in Munich and Detroit."
+        ],
+        "advisor_mentions": [],
+        "engineering_strength": null,
+        "product_strength": null,
+        "founder_market_fit_signals": [],
+        "execution_signals": [
+          "arr_revenue: ...mer facilities. Revenue model generates $6.4M ARR from RaaS contracts. Hardware costs fun...",
+          "revenue_mention: ...d robots across 15 customer facilities. Revenue model generates $6.4M ARR from RaaS con...",
+          "customer_count: ...ent fleet of 800 deployed robots across 15 customer facilities. Revenue model generates $6....",
+          "deployed_scale: ...and software updates. Current fleet of 800 deployed robots across 15 customer facilities. R...",
+          "founding_year: ...in total funding including a Series B. Founded in 2019, team of 110 in Munich and Detroit."
+        ],
+        "founder_confidence": 0.52,
+        "product_category": "robotics",
+        "product_type": null,
+        "saas_model": "paas",
+        "ai_orientation": "ai_enabled",
+        "primary_capabilities": [
+          "navigation_and_movement"
+        ],
+        "feature_signals": [
+          "mobile"
+        ],
+        "integration_ecosystem": [],
+        "deployment_model": "ras",
+        "target_workflow": "warehouse_operations",
+        "automation_level": null,
+        "product_maturity": null,
+        "differentiation_signals": [],
+        "defensibility_signals": [],
+        "technical_complexity": "high",
+        "scalability_indicators": [
+          "fleet_scaling"
+        ],
+        "innovation_signals": [
+          "novel_business_model"
+        ],
+        "product_keywords": [
+          "robotics"
+        ],
+        "product_confidence": 0.69
+      },
+      "evidence": [
+        {
+          "domain": "industry",
+          "category": "capital_intensity",
+          "statement": "Hardware requires significant manufacturing investment.",
+          "source": "knowledge/taxonomies.py:hardware",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "industry",
+          "category": "competition",
+          "statement": "Hardware margins are typically lower than software.",
+          "source": "knowledge/taxonomies.py:hardware",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "industry",
+          "category": "supply_chain",
+          "statement": "Global supply chain dependencies create operational risk.",
+          "source": "knowledge/taxonomies.py:hardware",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "business_model",
+          "category": "unit_economics",
+          "statement": "Hardware margins are typically lower than software-only businesses.",
+          "source": "knowledge/taxonomies.py:hardware_plus_software",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "business_model",
+          "category": "operations",
+          "statement": "Hardware production requires supply chain and manufacturing management.",
+          "source": "knowledge/taxonomies.py:hardware_plus_software",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "business_model",
+          "category": "switching_costs",
+          "statement": "Hardware-software integration creates strong ecosystem lock-in.",
+          "source": "knowledge/taxonomies.py:hardware_plus_software",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "funding_stage",
+          "category": "expectations",
+          "statement": "Series B companies have a proven model.",
+          "source": "knowledge/stages.py:Series B",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "funding_stage",
+          "category": "metrics",
+          "statement": "Revenue growth and retention are key metrics.",
+          "source": "knowledge/stages.py:Series B",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "funding_stage",
+          "category": "diligence",
+          "statement": "Path to profitability and positioning are priorities.",
+          "source": "knowledge/stages.py:Series B",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "funding_stage",
+          "category": "context",
+          "statement": "Proven model, scaling operations and market expansion.",
+          "source": "knowledge/stages.py:Series B",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "market_size",
+          "statement": "European tech market is growing but remains fragmented across countries.",
+          "source": "knowledge/geography:europe",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "regulatory",
+          "statement": "GDPR and EU regulations impose strict data privacy requirements.",
+          "source": "knowledge/geography:europe",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "competition",
+          "statement": "European markets have fewer mega-rounds but strong deep-tech ecosystems.",
+          "source": "knowledge/geography:europe",
+          "relevance_score": 1.0
+        }
+      ],
+      "observations": [
+        {
+          "dimension": "market_opportunity",
+          "category": "market_context",
+          "statement": "The hardware market presents domain-specific factors including capital_intensity, competition, supply_chain.",
+          "confidence": 0.8,
+          "importance": 0.8,
+          "source_rule": "MarketContextRule"
+        },
+        {
+          "dimension": "market_opportunity",
+          "category": "market_context",
+          "statement": "The europe geographic market has 3 documented domain factors.",
+          "confidence": 0.8,
+          "importance": 0.6,
+          "source_rule": "MarketContextRule"
+        },
+        {
+          "dimension": "business_model_viability",
+          "category": "business_model_assessment",
+          "statement": "The startup follows a hardware_plus_software model within the hardware industry. Domain knowledge covers 3 factors including operations, switching_costs, unit_economics.",
+          "confidence": 0.8,
+          "importance": 0.7,
+          "source_rule": "BusinessModelContextRule"
+        },
+        {
+          "dimension": "traction_signals",
+          "category": "stage_assessment",
+          "statement": "At the series_b stage, evaluation should consider context, diligence, expectations.",
+          "confidence": 0.9,
+          "importance": 0.7,
+          "source_rule": "StageExpectationRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "team_assessment",
+          "statement": "Identified 3 founder profile(s) associated with this startup.",
+          "confidence": 0.85,
+          "importance": 0.6,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "team_assessment",
+          "statement": "Team size indicator suggests a 51-200 team.",
+          "confidence": 0.5,
+          "importance": 0.5,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "team_composition",
+          "statement": "Founding team composition leans technical.",
+          "confidence": 0.55,
+          "importance": 0.55,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "serial_founder",
+          "statement": "Detected 1 serial founder indicator(s) suggesting prior startup experience.",
+          "confidence": 0.55,
+          "importance": 0.6,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "leadership_roles",
+          "statement": "Detected leadership roles: CEO, CTO, VP-Engineering.",
+          "confidence": 0.6,
+          "importance": 0.55,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "execution_signals",
+          "statement": "Detected 5 execution and traction signal(s) indicating operational progress.",
+          "confidence": 0.65,
+          "importance": 0.65,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "hiring_signals",
+          "statement": "Detected 1 hiring and team growth signal(s).",
+          "confidence": 0.5,
+          "importance": 0.4,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "founder_confidence",
+          "statement": "Composite founder confidence score: 0.52.",
+          "confidence": 0.52,
+          "importance": 0.7,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "data_quality",
+          "category": "data_assessment",
+          "statement": "High data completeness \u2014 analysis is well-supported.",
+          "confidence": 1.0,
+          "importance": 0.4,
+          "source_rule": "DataQualityRule"
+        }
+      ],
+      "dimension_assessments": [
+        {
+          "dimension": "market_opportunity",
+          "summary": "Assessed market_opportunity based on 2 observations and 3 evidence items (average confidence: 0.80).",
+          "rationale": "Key findings: The hardware market presents domain-specific factors including capital_intensity, competition, supply_chain.; The europe geographic market has 3 documented domain factors.. Supported by evidence categories: capital_intensity, competition, supply_chain.",
+          "confidence": 0.8,
+          "score": null
+        },
+        {
+          "dimension": "founder_quality",
+          "summary": "Assessed founder_quality based on 5 observations and 0 evidence items (average confidence: 0.61).",
+          "rationale": "Key findings: Identified 3 founder profile(s) associated with this startup.; Founding team composition leans technical.; Detected 1 serial founder indicator(s) suggesting prior startup experience..",
+          "confidence": 0.6140000000000001,
+          "score": null
+        },
+        {
+          "dimension": "product_strength",
+          "summary": "No observations available for product_strength.",
+          "rationale": "Insufficient data to assess product_strength.",
+          "confidence": 0.0,
+          "score": null
+        },
+        {
+          "dimension": "traction_signals",
+          "summary": "Assessed traction_signals based on 1 observations and 0 evidence items (average confidence: 0.90).",
+          "rationale": "Key findings: At the series_b stage, evaluation should consider context, diligence, expectations..",
+          "confidence": 0.9,
+          "score": null
+        },
+        {
+          "dimension": "business_model_viability",
+          "summary": "Assessed business_model_viability based on 1 observations and 3 evidence items (average confidence: 0.80).",
+          "rationale": "Key findings: The startup follows a hardware_plus_software model within the hardware industry. Domain knowledge covers 3 factors including operations, switching_costs, unit_economics.. Supported by evidence categories: operations, switching_costs, unit_economics.",
+          "confidence": 0.8,
+          "score": null
+        },
+        {
+          "dimension": "competitive_position",
+          "summary": "No observations available for competitive_position.",
+          "rationale": "Insufficient data to assess competitive_position.",
+          "confidence": 0.0,
+          "score": null
+        },
+        {
+          "dimension": "team_execution",
+          "summary": "Assessed team_execution based on 3 observations and 0 evidence items (average confidence: 0.55).",
+          "rationale": "Key findings: Team size indicator suggests a 51-200 team.; Detected 5 execution and traction signal(s) indicating operational progress.; Detected 1 hiring and team growth signal(s)..",
+          "confidence": 0.5499999999999999,
+          "score": null
+        }
+      ],
+      "scores": [
+        {
+          "dimension": "market_opportunity",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Market Opportunity dimension."
+        },
+        {
+          "dimension": "product_strength",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Product Strength dimension."
+        },
+        {
+          "dimension": "founder_quality",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Founder Quality dimension."
+        },
+        {
+          "dimension": "traction_signals",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Traction Signals dimension."
+        },
+        {
+          "dimension": "business_model_viability",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Business Model Viability dimension."
+        },
+        {
+          "dimension": "competitive_position",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Competitive Position dimension."
+        },
+        {
+          "dimension": "team_execution",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Team & Execution dimension."
+        }
+      ],
+      "overall_score": 60.0,
+      "recommendations": [
+        {
+          "category": "opportunity",
+          "action": "Conduct detailed market sizing analysis.",
+          "priority": "medium",
+          "title": "Deep-Dive Market Analysis",
+          "confidence": 0.8
+        },
+        {
+          "category": "follow_up",
+          "action": "Explore founder background and domain expertise depth.",
+          "priority": "low",
+          "title": "Assess Domain Expertise Depth",
+          "confidence": 0.4
+        },
+        {
+          "category": "due_diligence",
+          "action": "Request technology stack details.",
+          "priority": "medium",
+          "title": "Identify Technology Stack",
+          "confidence": 0.4
+        },
+        {
+          "category": "opportunity",
+          "action": "Analyze unit economics and scalability.",
+          "priority": "medium",
+          "title": "Unit Economics Deep-Dive",
+          "confidence": 0.8
+        },
+        {
+          "category": "opportunity",
+          "action": "Validate traction metrics with supporting data.",
+          "priority": "medium",
+          "title": "Traction Validation",
+          "confidence": 0.9
+        },
+        {
+          "category": "follow_up",
+          "action": "Validate series_b stage benchmarks.",
+          "priority": "medium",
+          "title": "Stage Benchmark Validation (series_b)",
+          "confidence": 0.9
+        }
+      ],
+      "confidence": [
+        {
+          "dimension": "market_opportunity",
+          "confidence": 0.864,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "product_strength",
+          "confidence": 0.464,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "founder_quality",
+          "confidence": 0.771,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "traction_signals",
+          "confidence": 0.914,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "business_model_viability",
+          "confidence": 0.864,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "competitive_position",
+          "confidence": 0.464,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "team_execution",
+          "confidence": 0.739,
+          "data_completeness": 0.88
+        }
+      ],
+      "overall_confidence": 0.7257,
+      "stage_timings": {
+        "normalize": 0.04,
+        "collect": 0.08,
+        "extract": 5.78,
+        "evidence": 0.08,
+        "reasoning": 0.12,
+        "evaluation": 0.13,
+        "scoring": 0.07,
+        "recommendations": 0.1,
+        "confidence": 0.06,
+        "report_builder": 0.03,
+        "total": 6.52
+      }
+    },
+    {
+      "case_id": "enterprise_software",
+      "case_label": "Enterprise Software \u2014 Compliance platform",
+      "success": true,
+      "processing_time_ms": 6.15,
+      "engine_version": "0.6.5",
+      "extracted_features": {
+        "industry": "enterprise_saas",
+        "sub_industry": "compliance",
+        "business_model": "paas",
+        "funding_stage": "series_c",
+        "geography": "north_america",
+        "customer_type": "b2b",
+        "technology_stack": [],
+        "team_size_indicator": "51-200",
+        "founded_year": 2018,
+        "has_revenue": null,
+        "key_keywords": [
+          "complianceos",
+          "enterprise",
+          "compliance",
+          "management",
+          "platform",
+          "automates",
+          "regulatory",
+          "tracking",
+          "policy",
+          "audit",
+          "preparation",
+          "financial",
+          "services",
+          "companies",
+          "covers",
+          "gdpr",
+          "ccpa",
+          "workflows",
+          "automated",
+          "evidence"
+        ],
+        "has_pitch_deck": true,
+        "founder_profile_count": 1,
+        "data_completeness": 0.88,
+        "founder_team_type": "business",
+        "domain_expertise_signals": [],
+        "serial_founder_indicators": [
+          "...across New York, Charlotte, and remote. Founded in 2018."
+        ],
+        "leadership_roles": [
+          "CEO"
+        ],
+        "hiring_signals": [
+          "...ies C stage with $85M raised. Team of 200 across New York, Charlotte, a..."
+        ],
+        "advisor_mentions": [],
+        "engineering_strength": null,
+        "product_strength": "moderate",
+        "founder_market_fit_signals": [],
+        "execution_signals": [
+          "funding_stage: ...V of $120,000 with 98% gross retention. Series C stage with $85M raised. Team of 200 across Ne...",
+          "founding_year: ...across New York, Charlotte, and remote. Founded in 2018."
+        ],
+        "founder_confidence": 0.34,
+        "product_category": "compliance",
+        "product_type": "platform",
+        "saas_model": "saas",
+        "ai_orientation": "ai_enabled",
+        "primary_capabilities": [
+          "automation",
+          "monitoring",
+          "compliance"
+        ],
+        "feature_signals": [],
+        "integration_ecosystem": [],
+        "deployment_model": null,
+        "target_workflow": "regulatory_compliance",
+        "automation_level": "high",
+        "product_maturity": null,
+        "differentiation_signals": [
+          "regulatory_compliance"
+        ],
+        "defensibility_signals": [
+          "regulatory_moat",
+          "brand_recognition"
+        ],
+        "technical_complexity": "moderate",
+        "scalability_indicators": [],
+        "innovation_signals": [],
+        "product_keywords": [
+          "platform",
+          "enterprise",
+          "automation",
+          "compliance"
+        ],
+        "product_confidence": 0.85
+      },
+      "evidence": [
+        {
+          "domain": "industry",
+          "category": "sales_cycle",
+          "statement": "Enterprise SaaS sales cycles range from 3 to 12 months.",
+          "source": "knowledge/taxonomies.py:enterprise_saas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "industry",
+          "category": "switching_costs",
+          "statement": "Enterprise integrations create meaningful switching costs.",
+          "source": "knowledge/taxonomies.py:enterprise_saas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "industry",
+          "category": "market_size",
+          "statement": "Global enterprise software market exceeds $500 billion.",
+          "source": "knowledge/taxonomies.py:enterprise_saas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "industry",
+          "category": "unit_economics",
+          "statement": "SaaS benefits from recurring revenue and high gross margins.",
+          "source": "knowledge/taxonomies.py:enterprise_saas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "industry",
+          "category": "competition",
+          "statement": "Enterprise SaaS markets tend toward winner-take-most dynamics.",
+          "source": "knowledge/taxonomies.py:enterprise_saas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "business_model",
+          "category": "unit_economics",
+          "statement": "Platform businesses benefit from usage-based scaling.",
+          "source": "knowledge/taxonomies.py:paas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "business_model",
+          "category": "switching_costs",
+          "statement": "Developer platform adoption creates deep integration lock-in.",
+          "source": "knowledge/taxonomies.py:paas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "business_model",
+          "category": "competition",
+          "statement": "Platform markets tend toward monopoly or duopoly outcomes.",
+          "source": "knowledge/taxonomies.py:paas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "funding_stage",
+          "category": "expectations",
+          "statement": "Series C companies are accelerating growth.",
+          "source": "knowledge/stages.py:Series C",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "funding_stage",
+          "category": "metrics",
+          "statement": "Revenue scale and margin trajectory are key.",
+          "source": "knowledge/stages.py:Series C",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "funding_stage",
+          "category": "diligence",
+          "statement": "International expansion and M&A are topics.",
+          "source": "knowledge/stages.py:Series C",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "funding_stage",
+          "category": "context",
+          "statement": "Established business accelerating growth.",
+          "source": "knowledge/stages.py:Series C",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "market_size",
+          "statement": "North America has the largest venture capital market globally.",
+          "source": "knowledge/geography:north_america",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "competition",
+          "statement": "North American markets are highly competitive with many well-funded competitors.",
+          "source": "knowledge/geography:north_america",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "talent",
+          "statement": "North America has deep talent pools in technology and business.",
+          "source": "knowledge/geography:north_america",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "regulatory",
+          "statement": "Regulatory environment varies by state and federal jurisdiction.",
+          "source": "knowledge/geography:north_america",
+          "relevance_score": 1.0
+        }
+      ],
+      "observations": [
+        {
+          "dimension": "market_opportunity",
+          "category": "market_context",
+          "statement": "The enterprise_saas market presents domain-specific factors including competition, market_size, sales_cycle.",
+          "confidence": 1.0,
+          "importance": 0.8,
+          "source_rule": "MarketContextRule"
+        },
+        {
+          "dimension": "market_opportunity",
+          "category": "market_context",
+          "statement": "The north_america geographic market has 4 documented domain factors.",
+          "confidence": 0.9,
+          "importance": 0.6,
+          "source_rule": "MarketContextRule"
+        },
+        {
+          "dimension": "business_model_viability",
+          "category": "business_model_assessment",
+          "statement": "The startup follows a paas model within the enterprise_saas industry. Domain knowledge covers 3 factors including competition, switching_costs, unit_economics.",
+          "confidence": 0.8,
+          "importance": 0.7,
+          "source_rule": "BusinessModelContextRule"
+        },
+        {
+          "dimension": "traction_signals",
+          "category": "stage_assessment",
+          "statement": "At the series_c stage, evaluation should consider context, diligence, expectations.",
+          "confidence": 0.9,
+          "importance": 0.7,
+          "source_rule": "StageExpectationRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "team_assessment",
+          "statement": "Identified 1 founder profile(s) associated with this startup.",
+          "confidence": 0.55,
+          "importance": 0.6,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "team_assessment",
+          "statement": "Team size indicator suggests a 51-200 team.",
+          "confidence": 0.5,
+          "importance": 0.5,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "team_composition",
+          "statement": "Founding team composition leans business.",
+          "confidence": 0.55,
+          "importance": 0.55,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "serial_founder",
+          "statement": "Detected 1 serial founder indicator(s) suggesting prior startup experience.",
+          "confidence": 0.55,
+          "importance": 0.6,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "leadership_roles",
+          "statement": "Detected leadership roles: CEO.",
+          "confidence": 0.6,
+          "importance": 0.55,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "product_strength",
+          "statement": "Product strength assessed as moderate.",
+          "confidence": 0.55,
+          "importance": 0.55,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "execution_signals",
+          "statement": "Detected 2 execution and traction signal(s) indicating operational progress.",
+          "confidence": 0.5,
+          "importance": 0.65,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "hiring_signals",
+          "statement": "Detected 1 hiring and team growth signal(s).",
+          "confidence": 0.5,
+          "importance": 0.4,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "founder_confidence",
+          "statement": "Composite founder confidence score: 0.34.",
+          "confidence": 0.34,
+          "importance": 0.7,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "data_quality",
+          "category": "data_assessment",
+          "statement": "High data completeness \u2014 analysis is well-supported.",
+          "confidence": 1.0,
+          "importance": 0.4,
+          "source_rule": "DataQualityRule"
+        }
+      ],
+      "dimension_assessments": [
+        {
+          "dimension": "market_opportunity",
+          "summary": "Assessed market_opportunity based on 2 observations and 5 evidence items (average confidence: 0.95).",
+          "rationale": "Key findings: The enterprise_saas market presents domain-specific factors including competition, market_size, sales_cycle.; The north_america geographic market has 4 documented domain factors.. Supported by evidence categories: competition, market_size, sales_cycle, switching_costs, unit_economics.",
+          "confidence": 0.95,
+          "score": null
+        },
+        {
+          "dimension": "founder_quality",
+          "summary": "Assessed founder_quality based on 5 observations and 0 evidence items (average confidence: 0.52).",
+          "rationale": "Key findings: Identified 1 founder profile(s) associated with this startup.; Founding team composition leans business.; Detected 1 serial founder indicator(s) suggesting prior startup experience..",
+          "confidence": 0.518,
+          "score": null
+        },
+        {
+          "dimension": "product_strength",
+          "summary": "No observations available for product_strength.",
+          "rationale": "Insufficient data to assess product_strength.",
+          "confidence": 0.0,
+          "score": null
+        },
+        {
+          "dimension": "traction_signals",
+          "summary": "Assessed traction_signals based on 1 observations and 0 evidence items (average confidence: 0.90).",
+          "rationale": "Key findings: At the series_c stage, evaluation should consider context, diligence, expectations..",
+          "confidence": 0.9,
+          "score": null
+        },
+        {
+          "dimension": "business_model_viability",
+          "summary": "Assessed business_model_viability based on 1 observations and 3 evidence items (average confidence: 0.80).",
+          "rationale": "Key findings: The startup follows a paas model within the enterprise_saas industry. Domain knowledge covers 3 factors including competition, switching_costs, unit_economics.. Supported by evidence categories: competition, switching_costs, unit_economics.",
+          "confidence": 0.8,
+          "score": null
+        },
+        {
+          "dimension": "competitive_position",
+          "summary": "No observations available for competitive_position.",
+          "rationale": "Insufficient data to assess competitive_position.",
+          "confidence": 0.0,
+          "score": null
+        },
+        {
+          "dimension": "team_execution",
+          "summary": "Assessed team_execution based on 4 observations and 0 evidence items (average confidence: 0.51).",
+          "rationale": "Key findings: Team size indicator suggests a 51-200 team.; Product strength assessed as moderate.; Detected 2 execution and traction signal(s) indicating operational progress..",
+          "confidence": 0.5125,
+          "score": null
+        }
+      ],
+      "scores": [
+        {
+          "dimension": "market_opportunity",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Market Opportunity dimension."
+        },
+        {
+          "dimension": "product_strength",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Product Strength dimension."
+        },
+        {
+          "dimension": "founder_quality",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Founder Quality dimension."
+        },
+        {
+          "dimension": "traction_signals",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Traction Signals dimension."
+        },
+        {
+          "dimension": "business_model_viability",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Business Model Viability dimension."
+        },
+        {
+          "dimension": "competitive_position",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Competitive Position dimension."
+        },
+        {
+          "dimension": "team_execution",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Team & Execution dimension."
+        }
+      ],
+      "overall_score": 60.0,
+      "recommendations": [
+        {
+          "category": "opportunity",
+          "action": "Conduct detailed market sizing analysis.",
+          "priority": "medium",
+          "title": "Deep-Dive Market Analysis",
+          "confidence": 0.95
+        },
+        {
+          "category": "follow_up",
+          "action": "Inquire about the full founding team composition.",
+          "priority": "medium",
+          "title": "Expand Team Visibility",
+          "confidence": 0.4
+        },
+        {
+          "category": "due_diligence",
+          "action": "Request technology stack details.",
+          "priority": "medium",
+          "title": "Identify Technology Stack",
+          "confidence": 0.4
+        },
+        {
+          "category": "follow_up",
+          "action": "Request revenue and traction metrics.",
+          "priority": "medium",
+          "title": "Validate Revenue Status",
+          "confidence": 0.3
+        },
+        {
+          "category": "risk_mitigation",
+          "action": "Investigate revenue generation status for mature company.",
+          "priority": "high",
+          "title": "Revenue Validation for Mature Startup",
+          "confidence": 0.5
+        },
+        {
+          "category": "follow_up",
+          "action": "Validate series_c stage benchmarks.",
+          "priority": "medium",
+          "title": "Stage Benchmark Validation (series_c)",
+          "confidence": 0.9
+        }
+      ],
+      "confidence": [
+        {
+          "dimension": "market_opportunity",
+          "confidence": 0.939,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "product_strength",
+          "confidence": 0.464,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "founder_quality",
+          "confidence": 0.723,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "traction_signals",
+          "confidence": 0.914,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "business_model_viability",
+          "confidence": 0.864,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "competitive_position",
+          "confidence": 0.464,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "team_execution",
+          "confidence": 0.7203,
+          "data_completeness": 0.88
+        }
+      ],
+      "overall_confidence": 0.7269,
+      "stage_timings": {
+        "normalize": 0.03,
+        "collect": 0.07,
+        "extract": 5.34,
+        "evidence": 0.12,
+        "reasoning": 0.14,
+        "evaluation": 0.15,
+        "scoring": 0.06,
+        "recommendations": 0.13,
+        "confidence": 0.06,
+        "report_builder": 0.04,
+        "total": 6.15
+      }
+    },
+    {
+      "case_id": "ai_infrastructure",
+      "case_label": "AI Infrastructure \u2014 Model serving platform",
+      "success": true,
+      "processing_time_ms": 7.14,
+      "engine_version": "0.6.5",
+      "extracted_features": {
+        "industry": "ai_ml",
+        "sub_industry": "ai_infrastructure",
+        "business_model": "paas",
+        "funding_stage": "series_a",
+        "geography": "north_america",
+        "customer_type": "b2b",
+        "technology_stack": [
+          "tensorflow",
+          "pytorch"
+        ],
+        "team_size_indicator": "51-200",
+        "founded_year": 2023,
+        "has_revenue": null,
+        "key_keywords": [
+          "inference",
+          "labs",
+          "provides",
+          "optimized",
+          "model",
+          "serving",
+          "infrastructure",
+          "teams",
+          "deploying",
+          "large",
+          "language",
+          "models",
+          "production",
+          "platform",
+          "handles",
+          "auto",
+          "scaling",
+          "versioning",
+          "testing",
+          "cost"
+        ],
+        "has_pitch_deck": true,
+        "founder_profile_count": 2,
+        "data_completeness": 0.88,
+        "founder_team_type": "technical",
+        "domain_expertise_signals": [],
+        "serial_founder_indicators": [
+          "...of $18,000/month. Raised $65M Series A. Founded in 2023 by former infrastructure leads..."
+        ],
+        "leadership_roles": [
+          "CEO",
+          "CTO"
+        ],
+        "hiring_signals": [
+          "...ure leads from major AI labs. Team of 75 in San Francisco and Toronto."
+        ],
+        "advisor_mentions": [],
+        "engineering_strength": null,
+        "product_strength": "strong",
+        "founder_market_fit_signals": [
+          ".... Raised $65M Series A. Founded in 2023 by former infrastructure leads from major AI labs. Team of 75 in San Francisco and Toronto....",
+          "...A. Founded in 2023 by former infrastructure leads from major AI labs. Team of 75 in San Francisco and Toronto. https:/..."
+        ],
+        "execution_signals": [
+          "customer_count: ...2 billion inference requests daily for 150 enterprise customers. Usage-based pricing with average custo...",
+          "funding_raised: ...verage customer spend of $18,000/month. Raised $65M Series A. Founded in 2023 by former inf...",
+          "founding_year: ...of $18,000/month. Raised $65M Series A. Founded in 2023 by former infrastructure leads from maj..."
+        ],
+        "founder_confidence": 0.63,
+        "product_category": "model_serving",
+        "product_type": "infrastructure",
+        "saas_model": "infrastructure",
+        "ai_orientation": "ai_native",
+        "primary_capabilities": [
+          "automation",
+          "model_management"
+        ],
+        "feature_signals": [
+          "multi_cloud",
+          "auto_scaling",
+          "a_b_testing"
+        ],
+        "integration_ecosystem": [
+          "cloud_platforms"
+        ],
+        "deployment_model": "cloud",
+        "target_workflow": "ml_model_operations",
+        "automation_level": "high",
+        "product_maturity": "growth",
+        "differentiation_signals": [],
+        "defensibility_signals": [],
+        "technical_complexity": "high",
+        "scalability_indicators": [
+          "auto_scaling",
+          "multi_cloud"
+        ],
+        "innovation_signals": [
+          "gpu_optimization"
+        ],
+        "product_keywords": [
+          "platform",
+          "enterprise",
+          "infrastructure",
+          "model_serving",
+          "inference",
+          "gpu_cluster"
+        ],
+        "product_confidence": 0.91
+      },
+      "evidence": [
+        {
+          "domain": "industry",
+          "category": "competition",
+          "statement": "AI/ML talent is scarce and expensive to recruit.",
+          "source": "knowledge/taxonomies.py:ai_ml",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "industry",
+          "category": "market_size",
+          "statement": "AI market is projected to exceed $2 trillion by 2030.",
+          "source": "knowledge/taxonomies.py:ai_ml",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "industry",
+          "category": "moat",
+          "statement": "Proprietary data and model performance create defensible moats.",
+          "source": "knowledge/taxonomies.py:ai_ml",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "industry",
+          "category": "regulatory",
+          "statement": "AI regulation is evolving with new compliance requirements.",
+          "source": "knowledge/taxonomies.py:ai_ml",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "business_model",
+          "category": "unit_economics",
+          "statement": "Platform businesses benefit from usage-based scaling.",
+          "source": "knowledge/taxonomies.py:paas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "business_model",
+          "category": "switching_costs",
+          "statement": "Developer platform adoption creates deep integration lock-in.",
+          "source": "knowledge/taxonomies.py:paas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "business_model",
+          "category": "competition",
+          "statement": "Platform markets tend toward monopoly or duopoly outcomes.",
+          "source": "knowledge/taxonomies.py:paas",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "funding_stage",
+          "category": "expectations",
+          "statement": "Series A companies have early product-market fit.",
+          "source": "knowledge/stages.py:Series A",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "funding_stage",
+          "category": "metrics",
+          "statement": "Revenue growth and unit economics become important.",
+          "source": "knowledge/stages.py:Series A",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "funding_stage",
+          "category": "diligence",
+          "statement": "Go-to-market scalability is the primary focus.",
+          "source": "knowledge/stages.py:Series A",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "funding_stage",
+          "category": "context",
+          "statement": "Product-market fit emerging, scaling initial traction.",
+          "source": "knowledge/stages.py:Series A",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "technology",
+          "category": "ecosystem",
+          "statement": "TensorFlow is a mature ML framework with deployment tools.",
+          "source": "knowledge/tech:tensorflow",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "technology",
+          "category": "competition",
+          "statement": "TensorFlow competes with PyTorch for deep learning adoption.",
+          "source": "knowledge/tech:tensorflow",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "technology",
+          "category": "ecosystem",
+          "statement": "PyTorch is the dominant framework for ML research.",
+          "source": "knowledge/tech:pytorch",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "technology",
+          "category": "talent",
+          "statement": "PyTorch expertise is common among ML engineers.",
+          "source": "knowledge/tech:pytorch",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "market_size",
+          "statement": "North America has the largest venture capital market globally.",
+          "source": "knowledge/geography:north_america",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "competition",
+          "statement": "North American markets are highly competitive with many well-funded competitors.",
+          "source": "knowledge/geography:north_america",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "talent",
+          "statement": "North America has deep talent pools in technology and business.",
+          "source": "knowledge/geography:north_america",
+          "relevance_score": 1.0
+        },
+        {
+          "domain": "geography",
+          "category": "regulatory",
+          "statement": "Regulatory environment varies by state and federal jurisdiction.",
+          "source": "knowledge/geography:north_america",
+          "relevance_score": 1.0
+        }
+      ],
+      "observations": [
+        {
+          "dimension": "market_opportunity",
+          "category": "market_context",
+          "statement": "The ai_ml market presents domain-specific factors including competition, market_size, moat.",
+          "confidence": 0.9,
+          "importance": 0.8,
+          "source_rule": "MarketContextRule"
+        },
+        {
+          "dimension": "market_opportunity",
+          "category": "market_context",
+          "statement": "The north_america geographic market has 4 documented domain factors.",
+          "confidence": 0.9,
+          "importance": 0.6,
+          "source_rule": "MarketContextRule"
+        },
+        {
+          "dimension": "business_model_viability",
+          "category": "business_model_assessment",
+          "statement": "The startup follows a paas model within the ai_ml industry. Domain knowledge covers 3 factors including competition, switching_costs, unit_economics.",
+          "confidence": 0.8,
+          "importance": 0.7,
+          "source_rule": "BusinessModelContextRule"
+        },
+        {
+          "dimension": "traction_signals",
+          "category": "stage_assessment",
+          "statement": "At the series_a stage, evaluation should consider context, diligence, expectations.",
+          "confidence": 0.9,
+          "importance": 0.7,
+          "source_rule": "StageExpectationRule"
+        },
+        {
+          "dimension": "product_strength",
+          "category": "technology_assessment",
+          "statement": "The technology stack includes 2 identified technologies with 4 documented domain factors.",
+          "confidence": 0.7,
+          "importance": 0.6,
+          "source_rule": "TechnologyContextRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "team_assessment",
+          "statement": "Identified 2 founder profile(s) associated with this startup.",
+          "confidence": 0.7,
+          "importance": 0.6,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "team_assessment",
+          "statement": "Team size indicator suggests a 51-200 team.",
+          "confidence": 0.5,
+          "importance": 0.5,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "team_composition",
+          "statement": "Founding team composition leans technical.",
+          "confidence": 0.55,
+          "importance": 0.55,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "serial_founder",
+          "statement": "Detected 1 serial founder indicator(s) suggesting prior startup experience.",
+          "confidence": 0.55,
+          "importance": 0.6,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "leadership_roles",
+          "statement": "Detected leadership roles: CEO, CTO.",
+          "confidence": 0.6,
+          "importance": 0.55,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "product_strength",
+          "statement": "Product strength assessed as strong.",
+          "confidence": 0.55,
+          "importance": 0.55,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "founder_market_fit",
+          "statement": "Detected 2 founder-market fit signal(s) indicating relevant background and domain alignment.",
+          "confidence": 0.6,
+          "importance": 0.7,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "execution_signals",
+          "statement": "Detected 3 execution and traction signal(s) indicating operational progress.",
+          "confidence": 0.55,
+          "importance": 0.65,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "team_execution",
+          "category": "hiring_signals",
+          "statement": "Detected 1 hiring and team growth signal(s).",
+          "confidence": 0.5,
+          "importance": 0.4,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "founder_quality",
+          "category": "founder_confidence",
+          "statement": "Composite founder confidence score: 0.63.",
+          "confidence": 0.63,
+          "importance": 0.7,
+          "source_rule": "TeamAssessmentRule"
+        },
+        {
+          "dimension": "data_quality",
+          "category": "data_assessment",
+          "statement": "High data completeness \u2014 analysis is well-supported.",
+          "confidence": 1.0,
+          "importance": 0.4,
+          "source_rule": "DataQualityRule"
+        }
+      ],
+      "dimension_assessments": [
+        {
+          "dimension": "market_opportunity",
+          "summary": "Assessed market_opportunity based on 2 observations and 4 evidence items (average confidence: 0.90).",
+          "rationale": "Key findings: The ai_ml market presents domain-specific factors including competition, market_size, moat.; The north_america geographic market has 4 documented domain factors.. Supported by evidence categories: competition, market_size, moat, regulatory.",
+          "confidence": 0.9,
+          "score": null
+        },
+        {
+          "dimension": "founder_quality",
+          "summary": "Assessed founder_quality based on 6 observations and 0 evidence items (average confidence: 0.60).",
+          "rationale": "Key findings: Identified 2 founder profile(s) associated with this startup.; Founding team composition leans technical.; Detected 1 serial founder indicator(s) suggesting prior startup experience..",
+          "confidence": 0.605,
+          "score": null
+        },
+        {
+          "dimension": "product_strength",
+          "summary": "Assessed product_strength based on 1 observations and 4 evidence items (average confidence: 0.70).",
+          "rationale": "Key findings: The technology stack includes 2 identified technologies with 4 documented domain factors.. Supported by evidence categories: competition, ecosystem, talent.",
+          "confidence": 0.7,
+          "score": null
+        },
+        {
+          "dimension": "traction_signals",
+          "summary": "Assessed traction_signals based on 1 observations and 0 evidence items (average confidence: 0.90).",
+          "rationale": "Key findings: At the series_a stage, evaluation should consider context, diligence, expectations..",
+          "confidence": 0.9,
+          "score": null
+        },
+        {
+          "dimension": "business_model_viability",
+          "summary": "Assessed business_model_viability based on 1 observations and 3 evidence items (average confidence: 0.80).",
+          "rationale": "Key findings: The startup follows a paas model within the ai_ml industry. Domain knowledge covers 3 factors including competition, switching_costs, unit_economics.. Supported by evidence categories: competition, switching_costs, unit_economics.",
+          "confidence": 0.8,
+          "score": null
+        },
+        {
+          "dimension": "competitive_position",
+          "summary": "No observations available for competitive_position.",
+          "rationale": "Insufficient data to assess competitive_position.",
+          "confidence": 0.0,
+          "score": null
+        },
+        {
+          "dimension": "team_execution",
+          "summary": "Assessed team_execution based on 4 observations and 0 evidence items (average confidence: 0.53).",
+          "rationale": "Key findings: Team size indicator suggests a 51-200 team.; Product strength assessed as strong.; Detected 3 execution and traction signal(s) indicating operational progress..",
+          "confidence": 0.525,
+          "score": null
+        }
+      ],
+      "scores": [
+        {
+          "dimension": "market_opportunity",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Market Opportunity dimension."
+        },
+        {
+          "dimension": "product_strength",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Product Strength dimension."
+        },
+        {
+          "dimension": "founder_quality",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Founder Quality dimension."
+        },
+        {
+          "dimension": "traction_signals",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Traction Signals dimension."
+        },
+        {
+          "dimension": "business_model_viability",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Business Model Viability dimension."
+        },
+        {
+          "dimension": "competitive_position",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Competitive Position dimension."
+        },
+        {
+          "dimension": "team_execution",
+          "score": 60.0,
+          "rationale": "Placeholder scoring for Team & Execution dimension."
+        }
+      ],
+      "overall_score": 60.0,
+      "recommendations": [
+        {
+          "category": "opportunity",
+          "action": "Conduct detailed market sizing analysis.",
+          "priority": "medium",
+          "title": "Deep-Dive Market Analysis",
+          "confidence": 0.9
+        },
+        {
+          "category": "follow_up",
+          "action": "Explore founder background and domain expertise depth.",
+          "priority": "low",
+          "title": "Assess Domain Expertise Depth",
+          "confidence": 0.4
+        },
+        {
+          "category": "opportunity",
+          "action": "Evaluate technical differentiation and moat.",
+          "priority": "medium",
+          "title": "Assess Technical Differentiation",
+          "confidence": 0.7
+        },
+        {
+          "category": "follow_up",
+          "action": "Request revenue and traction metrics.",
+          "priority": "medium",
+          "title": "Validate Revenue Status",
+          "confidence": 0.3
+        },
+        {
+          "category": "opportunity",
+          "action": "Validate traction metrics with supporting data.",
+          "priority": "medium",
+          "title": "Traction Validation",
+          "confidence": 0.9
+        },
+        {
+          "category": "follow_up",
+          "action": "Validate series_a stage benchmarks.",
+          "priority": "medium",
+          "title": "Stage Benchmark Validation (series_a)",
+          "confidence": 0.9
+        },
+        {
+          "category": "opportunity",
+          "action": "Consider scheduling an investment deep-dive.",
+          "priority": "medium",
+          "title": "Investment Deep-Dive Readiness",
+          "confidence": 0.8
+        }
+      ],
+      "confidence": [
+        {
+          "dimension": "market_opportunity",
+          "confidence": 0.914,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "product_strength",
+          "confidence": 0.814,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "founder_quality",
+          "confidence": 0.7665,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "traction_signals",
+          "confidence": 0.914,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "business_model_viability",
+          "confidence": 0.864,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "competitive_position",
+          "confidence": 0.464,
+          "data_completeness": 0.88
+        },
+        {
+          "dimension": "team_execution",
+          "confidence": 0.7265,
+          "data_completeness": 0.88
+        }
+      ],
+      "overall_confidence": 0.7804,
+      "stage_timings": {
+        "normalize": 0.04,
+        "collect": 0.08,
+        "extract": 6.01,
+        "evidence": 0.11,
+        "reasoning": 0.16,
+        "evaluation": 0.43,
+        "scoring": 0.06,
+        "recommendations": 0.12,
+        "confidence": 0.07,
+        "report_builder": 0.04,
+        "total": 7.14
+      }
+    }
+  ]
+}

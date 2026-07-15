@@ -45,7 +45,7 @@ from predictron_engine.scoring.scoring_engine import DefaultScoringEngine
 
 logger = logging.getLogger(__name__)
 
-ENGINE_VERSION = "0.6.5"
+ENGINE_VERSION = "0.8.0"
 
 
 class PredictronEngine:
