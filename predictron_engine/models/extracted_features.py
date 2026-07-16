@@ -605,3 +605,84 @@ class ExtractedFeatures(BaseModel):
         le=1.0,
         description="Composite confidence in competition extraction accuracy (0.0-1.0)",
     )
+
+    # --- Risk Intelligence fields (Sprint 9) ---
+
+    market_risk: list[str] = Field(
+        default_factory=list,
+        description="Detected market-related risk signals",
+    )
+    founder_risk: list[str] = Field(
+        default_factory=list,
+        description="Detected founder and team risk signals",
+    )
+    execution_risk: list[str] = Field(
+        default_factory=list,
+        description="Detected execution and delivery risk signals",
+    )
+    product_risk: list[str] = Field(
+        default_factory=list,
+        description="Detected product-related risk signals",
+    )
+    technology_risk: list[str] = Field(
+        default_factory=list,
+        description="Detected technology and technical risk signals",
+    )
+    business_model_risk: list[str] = Field(
+        default_factory=list,
+        description="Detected business model risk signals",
+    )
+    traction_risk: list[str] = Field(
+        default_factory=list,
+        description="Detected traction and growth risk signals",
+    )
+    competitive_risk: list[str] = Field(
+        default_factory=list,
+        description="Detected competitive landscape risk signals",
+    )
+    regulatory_risk: list[str] = Field(
+        default_factory=list,
+        description="Detected regulatory and legal risk signals",
+    )
+    operational_risk: list[str] = Field(
+        default_factory=list,
+        description="Detected operational risk signals",
+    )
+    platform_dependency_risk: list[str] = Field(
+        default_factory=list,
+        description="Detected platform dependency risk signals",
+    )
+    customer_concentration_risk: list[str] = Field(
+        default_factory=list,
+        description="Detected customer concentration risk signals",
+    )
+    hiring_risk: list[str] = Field(
+        default_factory=list,
+        description="Detected hiring and talent risk signals",
+    )
+    funding_risk: list[str] = Field(
+        default_factory=list,
+        description="Detected funding and financial risk signals",
+    )
+    scaling_risk: list[str] = Field(
+        default_factory=list,
+        description="Detected scaling and growth risk signals",
+    )
+    security_risk: list[str] = Field(
+        default_factory=list,
+        description="Detected security risk signals",
+    )
+    compliance_risk: list[str] = Field(
+        default_factory=list,
+        description="Detected compliance risk signals",
+    )
+    risk_keywords: list[str] = Field(
+        default_factory=list,
+        description="Domain-specific risk terms extracted from description",
+    )
+    risk_confidence: float = Field(
+        default=0.0,
+        ge=0.0,
+        le=1.0,
+        description="Composite confidence in risk extraction accuracy (0.0-1.0)",
+    )
