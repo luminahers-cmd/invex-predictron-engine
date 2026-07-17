@@ -92,10 +92,21 @@ def compute_investment_readiness(
     conflicts = [o for o in cross_obs if o.category == "signal_conflict"]
 
     if reinforcing:
-        reinforcement_bonus = min(len(reinforcing) * 1.5, 6.0)
+        avg_reinforcing_conf = (
+            sum(o.confidence for o in reinforcing) / len(reinforcing)
+        )
+        reinforcement_bonus = min(
+            len(reinforcing) * 1.5 * avg_reinforcing_conf, 6.0
+        )
         readiness_score += reinforcement_bonus
+
     if conflicts:
-        conflict_penalty = min(len(conflicts) * 2.0, 8.0)
+        avg_conflict_importance = (
+            sum(o.importance for o in conflicts) / len(conflicts)
+        )
+        conflict_penalty = min(
+            len(conflicts) * 2.0 * avg_conflict_importance, 8.0
+        )
         readiness_score -= conflict_penalty
 
     readiness_score = max(0.0, min(100.0, readiness_score))

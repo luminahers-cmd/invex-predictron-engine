@@ -52,6 +52,50 @@ class StageExplanation(BaseModel):
     )
 
 
+class ConclusionTrace(BaseModel):
+    """Traces a specific conclusion back to its supporting evidence.
+
+    This provides end-to-end explainability from a conclusion
+    (recommendation, score, or assessment) back to the original
+    features and evidence that support it.
+    """
+
+    conclusion_type: str = Field(
+        ..., description="Type of conclusion (recommendation, score, assessment)"
+    )
+    conclusion_text: str = Field(
+        ..., description="The conclusion statement"
+    )
+    confidence: float = Field(
+        default=0.0,
+        ge=0.0,
+        le=1.0,
+        description="Confidence in this conclusion",
+    )
+    supporting_observations: list[str] = Field(
+        default_factory=list,
+        description="Observations that support this conclusion",
+    )
+    supporting_evidence: list[str] = Field(
+        default_factory=list,
+        description="Evidence items that support this conclusion",
+    )
+    feature_references: list[str] = Field(
+        default_factory=list,
+        description="Feature references that contributed to this conclusion",
+    )
+    reasoning_chain: list[str] = Field(
+        default_factory=list,
+        description="Step-by-step reasoning from evidence to conclusion",
+    )
+    data_completeness: float = Field(
+        default=0.0,
+        ge=0.0,
+        le=1.0,
+        description="Data completeness at the time of this conclusion",
+    )
+
+
 class ExplanationBuilder:
     """Builds structured explanations for pipeline stage outputs."""
 
@@ -305,3 +349,118 @@ class ExplanationBuilder:
                 for d in low_conf
             ] if low_conf else [],
         )
+
+    def trace_recommendation(
+        self,
+        recommendation: Recommendation,
+        observations: list[Observation],
+        evidence: list[EvidenceItem],
+        features: object,
+    ) -> ConclusionTrace:
+        """Trace a recommendation back to its supporting evidence.
+
+        Provides end-to-end explainability by connecting a recommendation
+        to the observations, evidence, and features that support it.
+        """
+        completeness = getattr(features, "data_completeness", 0.0)
+
+        supporting_obs_statements = [
+            o.statement for o in recommendation.supporting_observations
+        ]
+
+        supporting_evidence_statements = [
+            e.statement for e in recommendation.supporting_evidence
+        ]
+
+        feature_refs = []
+        for obs in recommendation.supporting_observations:
+            feature_refs.extend(obs.evidence)
+
+        reasoning_chain = self._build_reasoning_chain(
+            recommendation, observations, evidence
+        )
+
+        return ConclusionTrace(
+            conclusion_type="recommendation",
+            conclusion_text=recommendation.action,
+            confidence=recommendation.confidence,
+            supporting_observations=supporting_obs_statements,
+            supporting_evidence=supporting_evidence_statements,
+            feature_references=feature_refs,
+            reasoning_chain=reasoning_chain,
+            data_completeness=completeness,
+        )
+
+    def trace_assessment(
+        self,
+        assessment: DimensionAssessment,
+        observations: list[Observation],
+        evidence: list[EvidenceItem],
+        features: object,
+    ) -> ConclusionTrace:
+        """Trace a dimension assessment back to its supporting evidence."""
+        completeness = getattr(features, "data_completeness", 0.0)
+
+        supporting_obs_statements = [
+            o.statement for o in assessment.supporting_observations
+        ]
+
+        supporting_evidence_statements = [
+            e.statement for e in assessment.supporting_evidence
+        ]
+
+        feature_refs = []
+        for obs in assessment.supporting_observations:
+            feature_refs.extend(obs.evidence)
+
+        reasoning_chain = [
+            f"Dimension '{assessment.dimension}' assessed with "
+            f"{len(assessment.supporting_observations)} observations "
+            f"and {len(assessment.supporting_evidence)} evidence items.",
+            f"Rationale: {assessment.rationale[:200]}..."
+            if len(assessment.rationale) > 200
+            else f"Rationale: {assessment.rationale}",
+        ]
+
+        return ConclusionTrace(
+            conclusion_type="assessment",
+            conclusion_text=assessment.summary,
+            confidence=assessment.confidence,
+            supporting_observations=supporting_obs_statements,
+            supporting_evidence=supporting_evidence_statements,
+            feature_references=feature_refs,
+            reasoning_chain=reasoning_chain,
+            data_completeness=completeness,
+        )
+
+    @staticmethod
+    def _build_reasoning_chain(
+        recommendation: Recommendation,
+        observations: list[Observation],
+        evidence: list[EvidenceItem],
+    ) -> list[str]:
+        """Build a step-by-step reasoning chain for a recommendation."""
+        chain: list[str] = []
+
+        chain.append(
+            f"Recommendation: {recommendation.action}"
+        )
+
+        if recommendation.supporting_observations:
+            obs_summary = (
+                f"Based on {len(recommendation.supporting_observations)} "
+                f"observation(s)"
+            )
+            chain.append(obs_summary)
+
+        if recommendation.supporting_evidence:
+            evidence_summary = (
+                f"Supported by {len(recommendation.supporting_evidence)} "
+                f"evidence item(s)"
+            )
+            chain.append(evidence_summary)
+
+        if recommendation.rationale:
+            chain.append(f"Rationale: {recommendation.rationale}")
+
+        return chain

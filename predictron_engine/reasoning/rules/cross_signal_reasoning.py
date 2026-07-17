@@ -772,4 +772,95 @@ class CrossSignalReasoningRule:
                 )
             )
 
+        if (features.business_model == "marketplace"
+                and features.customer_type == "b2b"
+                and not features.platform_characteristics
+                and not features.network_effects_signals):
+            observations.append(
+                Obs(
+                    dimension=DIMENSION,
+                    category="signal_conflict",
+                    statement=(
+                        "Conflict: Marketplace model detected but no platform or "
+                        "network effects evidence. Marketplace viability is unclear."
+                    ),
+                    evidence=[
+                        feature_ref("business_model", features.business_model),
+                        feature_ref("customer_type", features.customer_type),
+                    ],
+                    confidence=0.55,
+                    importance=0.65,
+                    source_rule="CrossSignalReasoningRule",
+                )
+            )
+
+        if (features.revenue_model == "subscription"
+                and features.recurring_revenue_signal == "one_time"
+                and features.customer_type == "b2b"):
+            observations.append(
+                Obs(
+                    dimension=DIMENSION,
+                    category="signal_conflict",
+                    statement=(
+                        "Conflict: Subscription revenue model conflicts with "
+                        "one-time revenue signals. Revenue model consistency "
+                        "needs verification."
+                    ),
+                    evidence=[
+                        feature_ref("revenue_model", features.revenue_model),
+                        feature_ref("recurring_revenue_signal", features.recurring_revenue_signal),
+                    ],
+                    confidence=0.6,
+                    importance=0.7,
+                    source_rule="CrossSignalReasoningRule",
+                )
+            )
+
+        if (features.founder_profile_count >= 2
+                and not features.domain_expertise_signals
+                and not features.founder_market_fit_signals
+                and features.funding_stage in ("series_a", "series_b", "growth")):
+            observations.append(
+                Obs(
+                    dimension=DIMENSION,
+                    category="signal_conflict",
+                    statement=(
+                        "Conflict: Multiple founders detected but no domain "
+                        "expertise or market fit signals at advanced funding "
+                        "stage. Team-market alignment is uncertain."
+                    ),
+                    evidence=[
+                        feature_ref("founder_profile_count", features.founder_profile_count),
+                        feature_ref("funding_stage", features.funding_stage),
+                    ],
+                    confidence=0.5,
+                    importance=0.6,
+                    source_rule="CrossSignalReasoningRule",
+                )
+            )
+
+        if (features.scalability_indicators
+                and features.growth_signals
+                and not features.customer_count_signals
+                and not features.revenue_amount_signals
+                and not features.arr_mrr_signals):
+            observations.append(
+                Obs(
+                    dimension=DIMENSION,
+                    category="signal_conflict",
+                    statement=(
+                        "Conflict: Scalability and growth signals detected but "
+                        "no customer or revenue evidence. Growth claims may be "
+                        "premature or unsubstantiated."
+                    ),
+                    evidence=[
+                        feature_ref("scalability_indicators", features.scalability_indicators),
+                        feature_ref("growth_signals", features.growth_signals),
+                    ],
+                    confidence=0.55,
+                    importance=0.7,
+                    source_rule="CrossSignalReasoningRule",
+                )
+            )
+
         return observations

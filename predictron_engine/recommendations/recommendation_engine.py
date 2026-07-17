@@ -8,6 +8,8 @@ Key principles:
   - All recommendations must be actionable
   - Each recommendation must have a clear rationale
   - Strategies are injectable and independently testable
+  - Duplicate recommendations are merged or eliminated
+  - Recommendations are prioritized by importance and confidence
   - Default implementation produces placeholder recommendations
   - Real recommendation logic will be developed as separate strategies
 
@@ -26,6 +28,12 @@ from predictron_engine.models.extracted_features import ExtractedFeatures
 from predictron_engine.models.report import Observation, Recommendation, ScoreResult
 
 logger = logging.getLogger(__name__)
+
+_PRIORITY_ORDER: dict[str, int] = {
+    Priority.HIGH.value: 3,
+    Priority.MEDIUM.value: 2,
+    Priority.LOW.value: 1,
+}
 
 
 @runtime_checkable
@@ -101,11 +109,69 @@ def _build_default_strategies() -> list[RecommendationStrategy]:
     return [DefaultRecommendationStrategy()]
 
 
+def _deduplicate_recommendations(
+    recommendations: list[Recommendation],
+) -> list[Recommendation]:
+    """Remove duplicate or near-duplicate recommendations.
+
+    When multiple strategies produce similar recommendations,
+    this keeps the one with the highest priority and confidence.
+    """
+    if not recommendations:
+        return []
+
+    seen: dict[str, Recommendation] = {}
+    for rec in recommendations:
+        key = _recommendation_fingerprint(rec)
+        if key in seen:
+            existing = seen[key]
+            if _recommendation_rank(rec) > _recommendation_rank(existing):
+                seen[key] = rec
+        else:
+            seen[key] = rec
+
+    return list(seen.values())
+
+
+def _recommendation_fingerprint(rec: Recommendation) -> str:
+    """Create a deduplication key for a recommendation.
+
+    Uses the action text (lowercased, stripped) as the primary key
+    since the action is the most semantically meaningful field.
+    """
+    return rec.action.strip().lower()
+
+
+def _recommendation_rank(rec: Recommendation) -> int:
+    """Compute a numeric rank for prioritization.
+
+    Higher rank means higher priority.
+    """
+    priority_rank = _PRIORITY_ORDER.get(rec.priority, 0)
+    confidence_bonus = 1 if rec.confidence > 0.5 else 0
+    return priority_rank * 10 + confidence_bonus
+
+
+def _prioritize_recommendations(
+    recommendations: list[Recommendation],
+) -> list[Recommendation]:
+    """Sort recommendations by priority and confidence.
+
+    High-priority, high-confidence recommendations appear first.
+    """
+    return sorted(
+        recommendations,
+        key=lambda r: (_recommendation_rank(r), r.confidence),
+        reverse=True,
+    )
+
+
 class DefaultRecommendationEngine:
     """Standard implementation of the RecommendationEngine protocol.
 
     Delegates recommendation generation to a set of injectable
-    RecommendationStrategy components.
+    RecommendationStrategy components. Deduplicates and prioritizes
+    the combined output.
     """
 
     def __init__(
@@ -148,5 +214,12 @@ class DefaultRecommendationEngine:
                     "Strategy %s failed, skipping", type(strategy).__name__
                 )
 
-        logger.info("Generated %d recommendations", len(recommendations))
-        return recommendations
+        deduplicated = _deduplicate_recommendations(recommendations)
+        prioritized = _prioritize_recommendations(deduplicated)
+
+        logger.info(
+            "Generated %d recommendations (%d after dedup)",
+            len(recommendations),
+            len(prioritized),
+        )
+        return prioritized
