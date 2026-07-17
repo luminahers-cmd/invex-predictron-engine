@@ -413,7 +413,7 @@ def save_snapshot(results: list[CaseResult], version: str | None = None) -> Path
 
     snapshot = {
         "engine_version": version,
-        "benchmark_version": "1.0.0",
+        "benchmark_version": "2.0.0",
         "total_cases": len(results),
         "successful_cases": sum(1 for r in results if r.success),
         "failed_cases": sum(1 for r in results if not r.success),
@@ -444,10 +444,22 @@ def load_snapshot(version: str) -> dict[str, Any] | None:
     return json.loads(snapshot_path.read_text(encoding="utf-8"))
 
 
+def _get_case_metadata(case_id: str) -> tuple[str, str] | tuple[None, None]:
+    """Look up industry category and stage for a case."""
+    for case in BENCHMARK_CASES:
+        if case["id"] == case_id:
+            meta = case.get("metadata")
+            if meta is not None:
+                return (meta.industry_category, meta.company_stage)
+    return (None, None)
+
+
 def _print_case_summary(result: CaseResult) -> None:
     """Print a concise summary for a single case result."""
     status = "PASS" if result.success else "FAIL"
-    print(f"\n  [{status}] {result.case_id}: {result.case_label}")
+    cat, stage = _get_case_metadata(result.case_id)
+    meta_str = f" | {cat}/{stage}" if cat and stage else ""
+    print(f"\n  [{status}] {result.case_id}: {result.case_label}{meta_str}")
 
     if not result.success:
         print(f"    Error: {result.error}")
@@ -514,8 +526,13 @@ def main() -> None:
 
     if args.list_cases:
         print("Available benchmark cases:\n")
+        print(f"  {'ID':<25} {'Category':<15} {'Stage':<12} {'Label'}")
+        print(f"  {'-'*25} {'-'*15} {'-'*12} {'-'*30}")
         for case in BENCHMARK_CASES:
-            print(f"  {case['id']:25s} {case['label']}")
+            meta = case.get("metadata")
+            cat = meta.industry_category if meta else "?"
+            stage = meta.company_stage if meta else "?"
+            print(f"  {case['id']:<25} {cat:<15} {stage:<12} {case['label']}")
         print(f"\nTotal: {len(BENCHMARK_CASES)} cases")
         return
 

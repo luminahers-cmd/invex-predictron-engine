@@ -4,11 +4,19 @@ Produces human-readable and machine-readable reports from benchmark
 results. Supports cross-version regression comparison by diffing
 snapshots from different engine versions.
 
+v0.11.0 enhancements:
+  - Integrated benchmark metrics (score stats, confidence calibration, etc.)
+  - Validation findings per case
+  - Improved diff formatting with severity indicators
+  - Coverage analysis by industry and stage
+  - Most-affected cases highlight
+
 Usage:
     python -m benchmarks.benchmark_report
     python -m benchmarks.benchmark_report --version 0.6.5
     python -m benchmarks.benchmark_report --diff 0.6.5 0.7.0
     python -m benchmarks.benchmark_report --output report.md
+    python -m benchmarks.benchmark_report --metrics-only
 """
 
 from __future__ import annotations
@@ -19,6 +27,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from benchmarks.benchmark_metrics import BenchmarkMetrics
 from benchmarks.benchmark_runner import (
     EXPECTED_OUTPUTS_DIR,
     CaseResult,
@@ -26,7 +35,12 @@ from benchmarks.benchmark_runner import (
     run_benchmark,
     save_snapshot,
 )
-from benchmarks.startup_cases.cases import BENCHMARK_CASES
+from benchmarks.benchmark_validator import BenchmarkValidator
+from benchmarks.startup_cases.cases import (
+    BENCHMARK_CASES,
+    get_industry_coverage,
+    get_stage_coverage,
+)
 from predictron_engine.engine import ENGINE_VERSION
 
 
@@ -57,6 +71,20 @@ class VersionDiff:
             or self.recommendation_count_delta != 0
         )
 
+    @property
+    def severity(self) -> str:
+        """Classify the change severity."""
+        if not self.has_changes:
+            return "unchanged"
+        score_impact = abs(self.overall_score_delta)
+        if score_impact > 10.0:
+            return "major"
+        if score_impact > 3.0:
+            return "moderate"
+        if score_impact > 0.5:
+            return "minor"
+        return "negligible"
+
 
 def generate_text_report(results: list[CaseResult]) -> str:
     """Generate a human-readable text report from benchmark results."""
@@ -85,12 +113,32 @@ def generate_text_report(results: list[CaseResult]) -> str:
             lines.append(f"  Avg Processing Time: {avg_time:.1f}ms")
 
     lines.append(f"\n{'-' * 70}")
+    lines.append("COVERAGE ANALYSIS")
+    lines.append(f"{'-' * 70}")
+
+    industry_cov = get_industry_coverage()
+    lines.append("\n  By Industry:")
+    for cat, count in sorted(industry_cov.items()):
+        lines.append(f"    {cat:<20} {count} case(s)")
+
+    stage_cov = get_stage_coverage()
+    lines.append("\n  By Stage:")
+    for stage, count in sorted(stage_cov.items()):
+        lines.append(f"    {stage:<20} {count} case(s)")
+
+    lines.append(f"\n{'-' * 70}")
     lines.append("PER-CASE RESULTS")
     lines.append(f"{'-' * 70}")
 
     for result in results:
+        case_meta = _get_case_metadata(result.case_id)
         lines.append(f"\n  Case: {result.case_id}")
         lines.append(f"  Label: {result.case_label}")
+        if case_meta:
+            lines.append(
+                f"  Category: {case_meta['industry_category']} | "
+                f"Stage: {case_meta['company_stage']}"
+            )
         lines.append(f"  Status: {'PASS' if result.success else 'FAIL'}")
 
         if not result.success:
@@ -172,6 +220,89 @@ def generate_text_report(results: list[CaseResult]) -> str:
 
     lines.append(f"\n{'=' * 70}")
     lines.append("END OF REPORT")
+    lines.append(f"{'=' * 70}")
+
+    return "\n".join(lines)
+
+
+def generate_metrics_report(results: list[CaseResult]) -> str:
+    """Generate a metrics-focused report from benchmark results."""
+    metrics_engine = BenchmarkMetrics()
+    report = metrics_engine.compute(results)
+
+    lines: list[str] = []
+    lines.append("=" * 70)
+    lines.append("PREDICTRON ENGINE BENCHMARK METRICS REPORT")
+    lines.append(f"Engine Version: {ENGINE_VERSION}")
+    lines.append(f"Cases: {report.successful_cases}/{report.total_cases} successful")
+    lines.append("=" * 70)
+
+    for metric in report.metrics:
+        lines.append(f"\n  {metric.name}")
+        lines.append(f"    Value: {metric.value}")
+        lines.append(f"    {metric.description}")
+        if metric.details:
+            for key, val in metric.details.items():
+                lines.append(f"    {key}: {val}")
+
+    lines.append(f"\n{'=' * 70}")
+    lines.append("END OF METRICS REPORT")
+    lines.append(f"{'=' * 70}")
+
+    return "\n".join(lines)
+
+
+def generate_validation_report(results: list[CaseResult]) -> str:
+    """Generate a validation-focused report from benchmark results."""
+    validator = BenchmarkValidator()
+    validations = validator.validate_all(BENCHMARK_CASES, results)
+
+    lines: list[str] = []
+    lines.append("=" * 70)
+    lines.append("PREDICTRON ENGINE BENCHMARK VALIDATION REPORT")
+    lines.append(f"Engine Version: {ENGINE_VERSION}")
+    lines.append(f"Cases Validated: {len(validations)}")
+    lines.append("=" * 70)
+
+    total_pass = sum(1 for v in validations if v.passed)
+    total_fail = len(validations) - total_pass
+    total_findings = sum(
+        v.pass_count + v.warn_count + v.fail_count + v.info_count
+        for v in validations
+    )
+    total_warnings = sum(v.warn_count for v in validations)
+    total_errors = sum(v.fail_count for v in validations)
+
+    lines.append("\nSUMMARY")
+    lines.append(f"  Passed: {total_pass}/{len(validations)}")
+    lines.append(f"  Failed: {total_fail}/{len(validations)}")
+    lines.append(f"  Total Findings: {total_findings}")
+    lines.append(f"  Warnings: {total_warnings}")
+    lines.append(f"  Errors: {total_errors}")
+
+    lines.append(f"\n{'-' * 70}")
+    lines.append("PER-CASE VALIDATION")
+    lines.append(f"{'-' * 70}")
+
+    for v in validations:
+        status = "PASS" if v.passed else "FAIL"
+        lines.append(f"\n  [{status}] {v.case_id} ({v.case_label})")
+        lines.append(
+            f"    Pass: {v.pass_count} | Warn: {v.warn_count} | "
+            f"Fail: {v.fail_count} | Info: {v.info_count}"
+        )
+
+        for finding in v.findings:
+            icon = {
+                "pass": "+",
+                "warn": "!",
+                "fail": "X",
+                "info": "i",
+            }.get(finding.severity.value, "?")
+            lines.append(f"    [{icon}] {finding.field_name}: {finding.message or 'OK'}")
+
+    lines.append(f"\n{'=' * 70}")
+    lines.append("END OF VALIDATION REPORT")
     lines.append(f"{'=' * 70}")
 
     return "\n".join(lines)
@@ -279,18 +410,30 @@ def format_regression_diff(diffs: list[VersionDiff]) -> str:
 
     if improved:
         lines.append("\n  Improved cases:")
-        for d in improved:
+        for d in sorted(improved, key=lambda x: x.overall_score_delta, reverse=True):
             lines.append(
-                f"    {d.case_id}: score {d.overall_score_delta:+.1f}, "
+                f"    [+] {d.case_id}: score {d.overall_score_delta:+.1f}, "
                 f"confidence {d.overall_confidence_delta:+.4f}"
             )
 
     if regressed:
         lines.append("\n  Regressed cases:")
-        for d in regressed:
+        for d in sorted(regressed, key=lambda x: x.overall_score_delta):
             lines.append(
-                f"    {d.case_id}: score {d.overall_score_delta:+.1f}, "
+                f"    [-] {d.case_id}: score {d.overall_score_delta:+.1f}, "
                 f"confidence {d.overall_confidence_delta:+.4f}"
+            )
+
+    most_affected = sorted(
+        [d for d in diffs if d.has_changes],
+        key=lambda d: abs(d.overall_score_delta),
+        reverse=True,
+    )
+    if most_affected:
+        lines.append("\n  Most affected cases (by score delta):")
+        for d in most_affected[:5]:
+            lines.append(
+                f"    {d.case_id}: {d.overall_score_delta:+.1f} ({d.severity})"
             )
 
     lines.append(f"\n{'-' * 70}")
@@ -301,7 +444,17 @@ def format_regression_diff(diffs: list[VersionDiff]) -> str:
         if not diff.has_changes:
             continue
 
-        lines.append(f"\n  Case: {diff.case_id} ({diff.case_label})")
+        severity_marker = {
+            "major": "!!!",
+            "moderate": "!! ",
+            "minor": "!  ",
+            "negligible": ".  ",
+            "unchanged": "   ",
+        }.get(diff.severity, "   ")
+
+        lines.append(
+            f"\n  [{severity_marker}] {diff.case_id} ({diff.case_label})"
+        )
 
         if diff.overall_score_delta != 0:
             direction = "+" if diff.overall_score_delta > 0 else "-"
@@ -339,6 +492,52 @@ def format_regression_diff(diffs: list[VersionDiff]) -> str:
     return "\n".join(lines)
 
 
+def generate_regression_diff_summary(
+    snapshot_a: dict[str, Any],
+    snapshot_b: dict[str, Any],
+) -> str:
+    """Generate a concise regression diff summary."""
+    diffs = generate_regression_diff(snapshot_a, snapshot_b)
+    if not diffs:
+        return "No diff data available."
+
+    improved = [d for d in diffs if d.overall_score_delta > 0.01]
+    regressed = [d for d in diffs if d.overall_score_delta < -0.01]
+    unchanged = [d for d in diffs if abs(d.overall_score_delta) <= 0.01]
+
+    total_delta = sum(d.overall_score_delta for d in diffs)
+    avg_delta = total_delta / len(diffs) if diffs else 0.0
+
+    lines: list[str] = []
+    ver_a = snapshot_a.get("engine_version", "?")
+    ver_b = snapshot_b.get("engine_version", "?")
+    lines.append(f"v{ver_a} -> v{ver_b}")
+    lines.append(
+        f"Improved: {len(improved)} | Regressed: {len(regressed)} | "
+        f"Unchanged: {len(unchanged)} | Avg delta: {avg_delta:+.2f}"
+    )
+
+    if regressed:
+        worst = min(regressed, key=lambda d: d.overall_score_delta)
+        lines.append(f"Worst regression: {worst.case_id} ({worst.overall_score_delta:+.1f})")
+
+    return "\n".join(lines)
+
+
+def _get_case_metadata(case_id: str) -> dict[str, Any] | None:
+    """Look up metadata for a benchmark case."""
+    for case in BENCHMARK_CASES:
+        if case["id"] == case_id:
+            meta = case.get("metadata")
+            if meta is not None:
+                return {
+                    "industry_category": meta.industry_category,
+                    "company_stage": meta.company_stage,
+                    "coverage_tags": meta.coverage_tags,
+                }
+    return None
+
+
 def main() -> None:
     """CLI entry point for the benchmark report generator."""
     parser = argparse.ArgumentParser(
@@ -350,6 +549,8 @@ def main() -> None:
             "  python -m benchmarks.benchmark_report --version 0.6.5\n"
             "  python -m benchmarks.benchmark_report --diff 0.6.5 0.7.0\n"
             "  python -m benchmarks.benchmark_report --output report.md\n"
+            "  python -m benchmarks.benchmark_report --metrics-only\n"
+            "  python -m benchmarks.benchmark_report --validate-only\n"
         ),
     )
     parser.add_argument(
@@ -372,6 +573,16 @@ def main() -> None:
         "--case",
         nargs="*",
         help="Specific case IDs to include in report",
+    )
+    parser.add_argument(
+        "--metrics-only",
+        action="store_true",
+        help="Only generate the metrics report",
+    )
+    parser.add_argument(
+        "--validate-only",
+        action="store_true",
+        help="Only generate the validation report",
     )
 
     args = parser.parse_args()
@@ -405,7 +616,12 @@ def main() -> None:
     case_ids = args.case if args.case else None
     results = run_benchmark(case_ids=case_ids)
 
-    report_text = generate_text_report(results)
+    if args.metrics_only:
+        report_text = generate_metrics_report(results)
+    elif args.validate_only:
+        report_text = generate_validation_report(results)
+    else:
+        report_text = generate_text_report(results)
 
     if args.output:
         Path(args.output).write_text(report_text, encoding="utf-8")
@@ -413,8 +629,9 @@ def main() -> None:
     else:
         print(report_text)
 
-    save_snapshot(results, version=args.version)
-    print(f"\nSnapshot saved for v{args.version or ENGINE_VERSION}")
+    if not args.metrics_only and not args.validate_only:
+        save_snapshot(results, version=args.version)
+        print(f"\nSnapshot saved for v{args.version or ENGINE_VERSION}")
 
 
 if __name__ == "__main__":

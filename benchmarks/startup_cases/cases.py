@@ -9,8 +9,16 @@ Design principles:
   - No proprietary heuristics
   - Input data is deterministic and reproducible
   - Each case tests specific feature extraction and reasoning capabilities
+
+Benchmark metadata:
+  - industry_category: High-level industry grouping for coverage analysis
+  - company_stage: Funding/company maturity stage
+  - coverage_tags: Tags indicating which engine capabilities this case exercises
 """
 
+from __future__ import annotations
+
+from dataclasses import dataclass, field
 from typing import Any
 
 CASE_ID_B2B_SAAS = "b2b_saas"
@@ -23,12 +31,80 @@ CASE_ID_CLIMATE_TECH = "climate_tech"
 CASE_ID_ROBOTICS = "robotics"
 CASE_ID_ENTERPRISE_SOFTWARE = "enterprise_software"
 CASE_ID_AI_INFRASTRUCTURE = "ai_infrastructure"
+CASE_ID_DEEP_TECH = "deep_tech"
+CASE_ID_EDTECH = "edtech"
+CASE_ID_HEALTHTECH_DEVICE = "healthtech_device"
+
+
+INDUSTRY_CATEGORIES = [
+    "AI",
+    "SaaS",
+    "FinTech",
+    "Consumer",
+    "Deep Tech",
+    "Healthcare",
+    "Robotics",
+    "Marketplace",
+    "Climate",
+    "EdTech",
+    "Enterprise",
+    "Infrastructure",
+]
+
+COMPANY_STAGES = [
+    "Idea",
+    "Pre-Seed",
+    "Seed",
+    "Series A",
+    "Series B",
+    "Series C",
+    "Growth",
+]
+
+
+@dataclass
+class BenchmarkCaseMetadata:
+    """Structural metadata for a benchmark case."""
+
+    industry_category: str
+    company_stage: str
+    coverage_tags: list[str] = field(default_factory=list)
+
+
+@dataclass
+class ExpectedOutcomes:
+    """Rich expected outcome specification for benchmark validation."""
+
+    expected_industry: str | None = None
+    expected_business_model: str | None = None
+    expected_customer_type: str | None = None
+    expected_has_revenue: bool | None = None
+    expected_min_score: float = 0.0
+    expected_max_score: float = 100.0
+    expected_min_confidence: float = 0.0
+    expected_max_confidence: float = 1.0
+    expected_min_observations: int = 0
+    expected_min_recommendations: int = 0
+    expected_min_evidence: int = 0
+    expected_score_dimensions: list[str] = field(default_factory=list)
+    expected_recommendation_categories: list[str] = field(default_factory=list)
+    expected_strength_signals: list[str] = field(default_factory=list)
+    expected_weakness_signals: list[str] = field(default_factory=list)
+    expected_risk_dimensions: list[str] = field(default_factory=list)
 
 
 BENCHMARK_CASES: list[dict[str, Any]] = [
     {
         "id": CASE_ID_B2B_SAAS,
         "label": "B2B SaaS — Cloud analytics platform",
+        "metadata": BenchmarkCaseMetadata(
+            industry_category="SaaS",
+            company_stage="Series A",
+            coverage_tags=[
+                "revenue_metrics", "nrr", "enterprise", "subscription",
+                "founder_profiles", "pitch_deck",
+            ],
+        ),
         "request": {
             "startup_name": "Analytix Cloud",
             "website": "https://analytixcloud.example.com",
@@ -58,10 +134,44 @@ BENCHMARK_CASES: list[dict[str, Any]] = [
             "has_pitch_deck": True,
             "founder_profile_count": 2,
         },
+        "expected_outcomes": ExpectedOutcomes(
+            expected_industry="enterprise_saas",
+            expected_business_model="saas",
+            expected_customer_type="b2b",
+            expected_has_revenue=True,
+            expected_min_score=30.0,
+            expected_max_score=90.0,
+            expected_min_confidence=0.4,
+            expected_max_confidence=1.0,
+            expected_min_observations=3,
+            expected_min_recommendations=2,
+            expected_min_evidence=1,
+            expected_score_dimensions=[
+                "market_opportunity",
+                "product_strength",
+                "founder_quality",
+                "traction_signals",
+                "business_model_viability",
+            ],
+            expected_strength_signals=[
+                "arr_revenue",
+                "retention_metric",
+                "enterprise_clients",
+            ],
+            expected_risk_dimensions=["competitive_position"],
+        ),
     },
     {
         "id": CASE_ID_HEALTHCARE_AI,
         "label": "Healthcare AI — Diagnostic imaging",
+        "metadata": BenchmarkCaseMetadata(
+            industry_category="Healthcare",
+            company_stage="Series A",
+            coverage_tags=[
+                "regulatory", "patents", "clinical_trials", "ai_ml",
+                "licensing_model", "healthcare",
+            ],
+        ),
         "request": {
             "startup_name": "MedVision AI",
             "website": "https://medvisionai.example.com",
@@ -90,10 +200,41 @@ BENCHMARK_CASES: list[dict[str, Any]] = [
             "has_pitch_deck": True,
             "founder_profile_count": 1,
         },
+        "expected_outcomes": ExpectedOutcomes(
+            expected_industry="healthtech",
+            expected_customer_type="b2b",
+            expected_has_revenue=True,
+            expected_min_score=25.0,
+            expected_max_score=85.0,
+            expected_min_confidence=0.3,
+            expected_max_confidence=1.0,
+            expected_min_observations=3,
+            expected_min_recommendations=2,
+            expected_min_evidence=1,
+            expected_score_dimensions=[
+                "market_opportunity",
+                "product_strength",
+                "founder_quality",
+                "traction_signals",
+            ],
+            expected_strength_signals=[
+                "regulatory_approval",
+                "patents",
+            ],
+            expected_risk_dimensions=["regulatory"],
+        ),
     },
     {
         "id": CASE_ID_FINTECH,
         "label": "FinTech — Embedded payments",
+        "metadata": BenchmarkCaseMetadata(
+            industry_category="FinTech",
+            company_stage="Series B",
+            coverage_tags=[
+                "transactional", "global_scale", "multi_currency",
+                "enterprise_clients", "marketplace_payments",
+            ],
+        ),
         "request": {
             "startup_name": "PayBridge",
             "website": "https://paybridge.example.com",
@@ -122,10 +263,40 @@ BENCHMARK_CASES: list[dict[str, Any]] = [
             "has_pitch_deck": True,
             "founder_profile_count": 3,
         },
+        "expected_outcomes": ExpectedOutcomes(
+            expected_industry="fintech",
+            expected_customer_type="b2b",
+            expected_has_revenue=True,
+            expected_min_score=35.0,
+            expected_max_score=95.0,
+            expected_min_confidence=0.4,
+            expected_max_confidence=1.0,
+            expected_min_observations=3,
+            expected_min_recommendations=2,
+            expected_min_evidence=1,
+            expected_score_dimensions=[
+                "market_opportunity",
+                "business_model_viability",
+                "traction_signals",
+            ],
+            expected_strength_signals=[
+                "transaction_volume",
+                "enterprise_clients",
+            ],
+            expected_risk_dimensions=["regulatory"],
+        ),
     },
     {
         "id": CASE_ID_DEVTOOLS,
         "label": "DevTools — CI/CD platform",
+        "metadata": BenchmarkCaseMetadata(
+            industry_category="SaaS",
+            company_stage="Pre-Seed",
+            coverage_tags=[
+                "open_source", "pre_revenue", "developer_community",
+                "monetization_path", "no_pitch_deck",
+            ],
+        ),
         "request": {
             "startup_name": "ShipKit",
             "website": "https://shipkit.dev",
@@ -155,10 +326,43 @@ BENCHMARK_CASES: list[dict[str, Any]] = [
             "has_pitch_deck": False,
             "founder_profile_count": 2,
         },
+        "expected_outcomes": ExpectedOutcomes(
+            expected_industry="enterprise_saas",
+            expected_customer_type="b2b",
+            expected_has_revenue=False,
+            expected_min_score=15.0,
+            expected_max_score=75.0,
+            expected_min_confidence=0.2,
+            expected_max_confidence=0.9,
+            expected_min_observations=2,
+            expected_min_recommendations=2,
+            expected_min_evidence=1,
+            expected_score_dimensions=[
+                "product_strength",
+                "founder_quality",
+                "market_opportunity",
+            ],
+            expected_strength_signals=[
+                "open_source_community",
+                "founder_experience",
+            ],
+            expected_weakness_signals=[
+                "pre_revenue",
+            ],
+            expected_risk_dimensions=["business_model_viability"],
+        ),
     },
     {
         "id": CASE_ID_MARKETPLACE,
         "label": "Marketplace — B2B industrial supplies",
+        "metadata": BenchmarkCaseMetadata(
+            industry_category="Marketplace",
+            company_stage="Series A",
+            coverage_tags=[
+                "two_sided", "gmv", "take_rate", "unit_economics",
+                "ltv_cac", "b2b_marketplace",
+            ],
+        ),
         "request": {
             "startup_name": "SupplyHub",
             "website": "https://supplyhub.example.com",
@@ -187,10 +391,41 @@ BENCHMARK_CASES: list[dict[str, Any]] = [
             "has_pitch_deck": True,
             "founder_profile_count": 1,
         },
+        "expected_outcomes": ExpectedOutcomes(
+            expected_industry="marketplace",
+            expected_business_model="marketplace",
+            expected_customer_type="b2b",
+            expected_has_revenue=True,
+            expected_min_score=30.0,
+            expected_max_score=90.0,
+            expected_min_confidence=0.4,
+            expected_max_confidence=1.0,
+            expected_min_observations=3,
+            expected_min_recommendations=2,
+            expected_min_evidence=1,
+            expected_score_dimensions=[
+                "market_opportunity",
+                "business_model_viability",
+                "traction_signals",
+            ],
+            expected_strength_signals=[
+                "gmv",
+                "unit_economics",
+                "two_sided_marketplace",
+            ],
+        ),
     },
     {
         "id": CASE_ID_CONSUMER_APP,
         "label": "Consumer App — Fitness social network",
+        "metadata": BenchmarkCaseMetadata(
+            industry_category="Consumer",
+            company_stage="Pre-Seed",
+            coverage_tags=[
+                "b2c", "freemium", "mobile", "retention",
+                "no_pitch_deck", "no_founders", "pre_seed",
+            ],
+        ),
         "request": {
             "startup_name": "FitSocial",
             "website": "https://fitsocial.example.com",
@@ -216,10 +451,36 @@ BENCHMARK_CASES: list[dict[str, Any]] = [
             "has_pitch_deck": False,
             "founder_profile_count": 0,
         },
+        "expected_outcomes": ExpectedOutcomes(
+            expected_customer_type="b2c",
+            expected_has_revenue=True,
+            expected_min_score=15.0,
+            expected_max_score=70.0,
+            expected_min_confidence=0.2,
+            expected_max_confidence=0.9,
+            expected_min_observations=2,
+            expected_min_recommendations=1,
+            expected_min_evidence=0,
+            expected_score_dimensions=[
+                "product_strength",
+                "traction_signals",
+            ],
+            expected_weakness_signals=[
+                "no_founder_data",
+            ],
+        ),
     },
     {
         "id": CASE_ID_CLIMATE_TECH,
         "label": "Climate Tech — Carbon measurement",
+        "metadata": BenchmarkCaseMetadata(
+            industry_category="Climate",
+            company_stage="Seed",
+            coverage_tags=[
+                "regulatory_alignment", "enterprise", "saas",
+                "esg", "ghg_protocol", "erp_integration",
+            ],
+        ),
         "request": {
             "startup_name": "CarbonLens",
             "website": "https://carbonlens.example.com",
@@ -249,10 +510,40 @@ BENCHMARK_CASES: list[dict[str, Any]] = [
             "has_pitch_deck": True,
             "founder_profile_count": 2,
         },
+        "expected_outcomes": ExpectedOutcomes(
+            expected_industry="climate_tech",
+            expected_customer_type="b2b",
+            expected_has_revenue=True,
+            expected_min_score=30.0,
+            expected_max_score=85.0,
+            expected_min_confidence=0.3,
+            expected_max_confidence=1.0,
+            expected_min_observations=3,
+            expected_min_recommendations=2,
+            expected_min_evidence=1,
+            expected_score_dimensions=[
+                "market_opportunity",
+                "product_strength",
+                "traction_signals",
+                "business_model_viability",
+            ],
+            expected_strength_signals=[
+                "regulatory_alignment",
+                "retention_metric",
+            ],
+        ),
     },
     {
         "id": CASE_ID_ROBOTICS,
         "label": "Robotics — Warehouse automation",
+        "metadata": BenchmarkCaseMetadata(
+            industry_category="Robotics",
+            company_stage="Series B",
+            coverage_tags=[
+                "hardware", "raas", "fleet", "capital_intensive",
+                "multi_site", "founder_profiles",
+            ],
+        ),
         "request": {
             "startup_name": "AutoWare Robotics",
             "website": "https://autoware.example.com",
@@ -283,10 +574,40 @@ BENCHMARK_CASES: list[dict[str, Any]] = [
             "has_pitch_deck": True,
             "founder_profile_count": 3,
         },
+        "expected_outcomes": ExpectedOutcomes(
+            expected_customer_type="b2b",
+            expected_has_revenue=True,
+            expected_min_score=30.0,
+            expected_max_score=85.0,
+            expected_min_confidence=0.3,
+            expected_max_confidence=1.0,
+            expected_min_observations=3,
+            expected_min_recommendations=2,
+            expected_min_evidence=1,
+            expected_score_dimensions=[
+                "product_strength",
+                "market_opportunity",
+                "founder_quality",
+                "traction_signals",
+            ],
+            expected_strength_signals=[
+                "fleet_deployment",
+                "arr_revenue",
+            ],
+            expected_risk_dimensions=["business_model_viability"],
+        ),
     },
     {
         "id": CASE_ID_ENTERPRISE_SOFTWARE,
         "label": "Enterprise Software — Compliance platform",
+        "metadata": BenchmarkCaseMetadata(
+            industry_category="Enterprise",
+            company_stage="Series C",
+            coverage_tags=[
+                "enterprise", "compliance", "financial_services",
+                "high_acv", "retention", "mature_startup",
+            ],
+        ),
         "request": {
             "startup_name": "ComplianceOS",
             "website": "https://complianceos.example.com",
@@ -314,10 +635,40 @@ BENCHMARK_CASES: list[dict[str, Any]] = [
             "has_pitch_deck": True,
             "founder_profile_count": 1,
         },
+        "expected_outcomes": ExpectedOutcomes(
+            expected_industry="enterprise_saas",
+            expected_customer_type="b2b",
+            expected_has_revenue=True,
+            expected_min_score=35.0,
+            expected_max_score=90.0,
+            expected_min_confidence=0.4,
+            expected_max_confidence=1.0,
+            expected_min_observations=3,
+            expected_min_recommendations=2,
+            expected_min_evidence=1,
+            expected_score_dimensions=[
+                "market_opportunity",
+                "traction_signals",
+                "business_model_viability",
+            ],
+            expected_strength_signals=[
+                "enterprise_clients",
+                "retention_metric",
+                "high_acv",
+            ],
+        ),
     },
     {
         "id": CASE_ID_AI_INFRASTRUCTURE,
         "label": "AI Infrastructure — Model serving platform",
+        "metadata": BenchmarkCaseMetadata(
+            industry_category="Infrastructure",
+            company_stage="Series A",
+            coverage_tags=[
+                "gpu", "ml_infrastructure", "usage_based",
+                "enterprise", "high_growth", "ai_ml",
+            ],
+        ),
         "request": {
             "startup_name": "Inference Labs",
             "website": "https://inferencelabs.example.com",
@@ -347,6 +698,220 @@ BENCHMARK_CASES: list[dict[str, Any]] = [
             "has_pitch_deck": True,
             "founder_profile_count": 2,
         },
+        "expected_outcomes": ExpectedOutcomes(
+            expected_industry="ai_ml",
+            expected_customer_type="b2b",
+            expected_has_revenue=True,
+            expected_min_score=35.0,
+            expected_max_score=90.0,
+            expected_min_confidence=0.4,
+            expected_max_confidence=1.0,
+            expected_min_observations=3,
+            expected_min_recommendations=2,
+            expected_min_evidence=1,
+            expected_score_dimensions=[
+                "market_opportunity",
+                "product_strength",
+                "founder_quality",
+                "traction_signals",
+            ],
+            expected_strength_signals=[
+                "enterprise_clients",
+                "usage_volume",
+            ],
+            expected_risk_dimensions=["competitive_position"],
+        ),
+    },
+    {
+        "id": CASE_ID_DEEP_TECH,
+        "label": "Deep Tech — Quantum error correction",
+        "metadata": BenchmarkCaseMetadata(
+            industry_category="Deep Tech",
+            company_stage="Seed",
+            coverage_tags=[
+                "deep_tech", "research", "long_horizon",
+                "high_uncertainty", "limited_revenue", "academic_founders",
+            ],
+        ),
+        "request": {
+            "startup_name": "QubitShield",
+            "website": "https://qubitshield.example.com",
+            "description": (
+                "QubitShield develops quantum error correction software for "
+                "superconducting quantum processors. The proprietary decoder "
+                "algorithm achieves a 40% improvement in logical qubit fidelity "
+                "compared to baseline surface codes. The company licenses "
+                "software to quantum computing hardware manufacturers and "
+                "cloud quantum providers. 3 peer-reviewed publications in Nature "
+                "Physics and PRX Quantum. Pre-revenue, currently running pilot "
+                "evaluations with 2 quantum hardware companies. Seed stage "
+                "with $5M raised from deep-tech focused VCs. Founded in 2023 "
+                "by a team of 3 quantum physicists from MIT. Based in Boston, "
+                "team of 12."
+            ),
+            "pitch_deck_url": "https://qubitshield.example.com/seed.pdf",
+            "founder_linkedin_urls": [
+                "https://linkedin.com/in/qubitshield-ceo",
+                "https://linkedin.com/in/qubitshield-cto",
+                "https://linkedin.com/in/qubitshield-scientist",
+            ],
+        },
+        "expected_features": {
+            "industry": "deep_tech",
+            "business_model": "licensing",
+            "customer_type": "b2b",
+            "has_revenue": False,
+            "has_pitch_deck": True,
+            "founder_profile_count": 3,
+        },
+        "expected_outcomes": ExpectedOutcomes(
+            expected_customer_type="b2b",
+            expected_has_revenue=False,
+            expected_min_score=15.0,
+            expected_max_score=70.0,
+            expected_min_confidence=0.15,
+            expected_max_confidence=0.85,
+            expected_min_observations=2,
+            expected_min_recommendations=2,
+            expected_min_evidence=0,
+            expected_score_dimensions=[
+                "product_strength",
+                "founder_quality",
+                "market_opportunity",
+            ],
+            expected_strength_signals=[
+                "research_publications",
+                "founder_expertise",
+            ],
+            expected_weakness_signals=[
+                "pre_revenue",
+                "long_commercialization_horizon",
+            ],
+            expected_risk_dimensions=["business_model_viability", "market_opportunity"],
+        ),
+    },
+    {
+        "id": CASE_ID_EDTECH,
+        "label": "EdTech — Corporate training platform",
+        "metadata": BenchmarkCaseMetadata(
+            industry_category="EdTech",
+            company_stage="Seed",
+            coverage_tags=[
+                "b2b_edtech", "enterprise_training", "saas",
+                "retention", "content_platform",
+            ],
+        ),
+        "request": {
+            "startup_name": "SkillForge",
+            "website": "https://skillforge.example.com",
+            "description": (
+                "SkillForge is a B2B EdTech platform providing AI-personalized "
+                "corporate training programs for technology skills. The platform "
+                "generates adaptive learning paths based on role requirements "
+                "and individual skill gaps. Content library covers 200+ "
+                "technology topics with hands-on labs. Serving 45 enterprise "
+                "clients with 12,000 active learners. ACV of $35,000 with "
+                "90% gross retention. Raised $6M seed round. Founded in 2022, "
+                "team of 22 based in New York. Previously operated as a "
+                "consulting firm for 3 years before pivoting to SaaS."
+            ),
+            "pitch_deck_url": "https://skillforge.example.com/seed.pdf",
+            "founder_linkedin_urls": [
+                "https://linkedin.com/in/skillforge-ceo",
+            ],
+        },
+        "expected_features": {
+            "industry": "edtech",
+            "business_model": "saas",
+            "customer_type": "b2b",
+            "has_revenue": True,
+            "has_pitch_deck": True,
+            "founder_profile_count": 1,
+        },
+        "expected_outcomes": ExpectedOutcomes(
+            expected_customer_type="b2b",
+            expected_has_revenue=True,
+            expected_min_score=25.0,
+            expected_max_score=80.0,
+            expected_min_confidence=0.3,
+            expected_max_confidence=0.95,
+            expected_min_observations=2,
+            expected_min_recommendations=2,
+            expected_min_evidence=1,
+            expected_score_dimensions=[
+                "market_opportunity",
+                "business_model_viability",
+                "traction_signals",
+            ],
+            expected_strength_signals=[
+                "retention_metric",
+                "enterprise_clients",
+            ],
+            expected_risk_dimensions=["competitive_position"],
+        ),
+    },
+    {
+        "id": CASE_ID_HEALTHTECH_DEVICE,
+        "label": "HealthTech Device — Wearable glucose monitor",
+        "metadata": BenchmarkCaseMetadata(
+            industry_category="Healthcare",
+            company_stage="Series A",
+            coverage_tags=[
+                "hardware", "fda", "wearable", "dtc_plus_b2b",
+                "clinical_data", "healthcare_device",
+            ],
+        ),
+        "request": {
+            "startup_name": "GlucoPulse",
+            "website": "https://glucopulse.example.com",
+            "description": (
+                "GlucoPulse develops a non-invasive continuous glucose "
+                "monitoring wearable using photoplethysmography sensors. The "
+                "device provides real-time glucose trend data to a companion "
+                "mobile app with AI-powered dietary recommendations. FDA 510(k) "
+                "clearance obtained. Direct-to-consumer pricing at $299 device "
+                "plus $19/month subscription. 8,000 units shipped in first "
+                "quarter since launch. Raised $18M Series A from digital "
+                "health investors. Based in San Diego, team of 45 including "
+                "hardware engineers, clinical specialists, and data scientists. "
+                "Founded in 2021."
+            ),
+            "pitch_deck_url": "https://glucopulse.example.com/series-a.pdf",
+            "founder_linkedin_urls": [
+                "https://linkedin.com/in/glucopulse-ceo",
+                "https://linkedin.com/in/glucopulse-vp-eng",
+            ],
+        },
+        "expected_features": {
+            "industry": "healthtech",
+            "business_model": "saas",
+            "customer_type": "b2c",
+            "has_revenue": True,
+            "has_pitch_deck": True,
+            "founder_profile_count": 2,
+        },
+        "expected_outcomes": ExpectedOutcomes(
+            expected_industry="healthtech",
+            expected_customer_type="b2c",
+            expected_has_revenue=True,
+            expected_min_score=25.0,
+            expected_max_score=85.0,
+            expected_min_confidence=0.3,
+            expected_max_confidence=0.95,
+            expected_min_observations=3,
+            expected_min_recommendations=2,
+            expected_min_evidence=1,
+            expected_score_dimensions=[
+                "product_strength",
+                "market_opportunity",
+                "traction_signals",
+            ],
+            expected_strength_signals=[
+                "regulatory_approval",
+                "units_shipped",
+            ],
+            expected_risk_dimensions=["regulatory", "competitive_position"],
+        ),
     },
 ]
 
@@ -367,3 +932,37 @@ def get_all_case_ids() -> list[str]:
 def get_case_labels() -> dict[str, str]:
     """Return a mapping of case ID to human-readable label."""
     return {case["id"]: case["label"] for case in BENCHMARK_CASES}
+
+
+def get_cases_by_industry(category: str) -> list[dict[str, Any]]:
+    """Return all benchmark cases matching an industry category."""
+    return [
+        case for case in BENCHMARK_CASES
+        if case["metadata"].industry_category == category
+    ]
+
+
+def get_cases_by_stage(stage: str) -> list[dict[str, Any]]:
+    """Return all benchmark cases matching a company stage."""
+    return [
+        case for case in BENCHMARK_CASES
+        if case["metadata"].company_stage == stage
+    ]
+
+
+def get_industry_coverage() -> dict[str, int]:
+    """Return a count of cases per industry category."""
+    coverage: dict[str, int] = {}
+    for case in BENCHMARK_CASES:
+        cat = case["metadata"].industry_category
+        coverage[cat] = coverage.get(cat, 0) + 1
+    return coverage
+
+
+def get_stage_coverage() -> dict[str, int]:
+    """Return a count of cases per company stage."""
+    coverage: dict[str, int] = {}
+    for case in BENCHMARK_CASES:
+        stage = case["metadata"].company_stage
+        coverage[stage] = coverage.get(stage, 0) + 1
+    return coverage
