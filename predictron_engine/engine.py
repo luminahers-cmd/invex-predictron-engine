@@ -5,7 +5,7 @@ pipeline stages into a cohesive analysis flow.
 
 Pipeline:
   normalize -> collect -> extract -> evidence -> reason ->
-  evaluate -> score -> recommend -> confidence -> build_report
+  evaluate -> score -> recommend -> confidence -> decide -> build_report
 
 All dependencies are injected via the constructor. Every stage can be
 replaced independently without modifying the engine or any other stage.
@@ -31,7 +31,11 @@ import time
 from app.schemas.analysis import StartupAnalysisRequest
 from predictron_engine.collection.collector import DefaultDataCollector
 from predictron_engine.confidence.confidence_engine import DefaultConfidenceEngine
+from predictron_engine.decision.decision_engine import DefaultDecisionEngine
 from predictron_engine.evaluation.composite import CompositeEvaluator
+from predictron_engine.evaluation.investment_readiness import (
+    compute_investment_readiness,
+)
 from predictron_engine.evidence.evidence_engine import DefaultEvidenceEngine
 from predictron_engine.extraction.composite import CompositeExtractor
 from predictron_engine.ingest.normalizer import DefaultNormalizer
@@ -69,6 +73,7 @@ class PredictronEngine:
         scoring: DefaultScoringEngine | None = None,
         recommendations: CompositeRecommendationEngine | None = None,
         confidence: DefaultConfidenceEngine | None = None,
+        decision: DefaultDecisionEngine | None = None,
         report_builder: DefaultReportBuilder | None = None,
     ) -> None:
         self._normalizer = normalizer or DefaultNormalizer()
@@ -80,6 +85,7 @@ class PredictronEngine:
         self._scoring = scoring or DefaultScoringEngine()
         self._recommendations = recommendations or CompositeRecommendationEngine()
         self._confidence = confidence or DefaultConfidenceEngine()
+        self._decision = decision or DefaultDecisionEngine()
         self._report_builder = report_builder or DefaultReportBuilder()
         logger.info("PredictronEngine initialized")
 
@@ -115,17 +121,33 @@ class PredictronEngine:
         # Stage 7: Score
         scores = self._scoring.score(features, observations)
 
+        # Stage 7b: Compute investment readiness
+        assessments = evaluation_result.assessments
+        investment_readiness = compute_investment_readiness(
+            features, observations, scores, assessments,
+        )
+
         # Stage 8: Recommend
         recs = self._recommendations.recommend(
-            features, observations, scores, evaluation_result.assessments
+            features, observations, scores, assessments
         )
 
         # Stage 9: Assess confidence
         conf = self._confidence.assess(
-            features, observations, scores, evaluation_result.assessments
+            features, observations, scores, assessments
         )
 
-        # Stage 10: Build report
+        # Stage 10: Decide
+        decision = self._decision.decide(
+            features,
+            observations,
+            scores,
+            conf,
+            assessments,
+            investment_readiness.signal_relationships,
+        )
+
+        # Stage 11: Build report
         report = self._report_builder.build(
             startup,
             features,
@@ -134,7 +156,9 @@ class PredictronEngine:
             scores,
             recs,
             conf,
-            evaluation_result.assessments,
+            assessments,
+            decision,
+            investment_readiness,
         )
 
         elapsed_ms = (time.perf_counter() - start_time) * 1000

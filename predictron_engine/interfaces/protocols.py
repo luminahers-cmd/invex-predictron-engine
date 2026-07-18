@@ -19,10 +19,13 @@ from predictron_engine.models.extracted_features import ExtractedFeatures
 from predictron_engine.models.report import (
     ConfidenceAssessment,
     EvidenceItem,
+    InvestmentDecision,
+    InvestmentReadiness,
     Observation,
     Recommendation,
     Report,
     ScoreResult,
+    SignalRelationship,
 )
 from predictron_engine.models.startup import Startup
 
@@ -113,7 +116,24 @@ class ReportBuilder(Protocol):
         recommendations: list[Recommendation],
         confidence: list[ConfidenceAssessment],
         dimension_assessments: list[DimensionAssessment] | None = ...,
+        decision: InvestmentDecision | None = ...,
+        investment_readiness: InvestmentReadiness | None = ...,
     ) -> Report: ...
+
+
+@runtime_checkable
+class DecisionEngine(Protocol):
+    """Synthesizes all pipeline signals into an investment decision."""
+
+    def decide(
+        self,
+        features: ExtractedFeatures,
+        observations: list[Observation],
+        scores: list[ScoreResult],
+        confidence: list[ConfidenceAssessment],
+        assessments: list[DimensionAssessment] | None = ...,
+        signal_relationships: list[SignalRelationship] | None = ...,
+    ) -> InvestmentDecision: ...
 
 
 @runtime_checkable

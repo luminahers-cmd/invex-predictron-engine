@@ -3,11 +3,42 @@
 from __future__ import annotations
 
 from datetime import UTC, datetime
+from enum import Enum
 
 from pydantic import BaseModel, Field
 
 from predictron_engine.models.extracted_features import ExtractedFeatures
 from predictron_engine.models.startup import Startup
+
+
+class DecisionCategory(str, Enum):
+    """Deterministic investment decision categories.
+
+    Categories are ordered from most positive to most negative.
+    Each category maps to a deterministic score range derived from
+    the composite investment score.
+    """
+
+    STRONG_INVEST = "strong_invest"
+    INVEST = "invest"
+    WATCH = "watch"
+    INVESTIGATE_FURTHER = "investigate_further"
+    PASS = "pass"
+
+
+class ConvictionLevel(str, Enum):
+    """Investment conviction levels.
+
+    Conviction measures investment attractiveness independently of
+    evidence confidence. A startup can have high confidence (reliable
+    data) but low conviction (unattractive opportunity), or vice versa.
+    """
+
+    VERY_HIGH = "very_high"
+    HIGH = "high"
+    MODERATE = "moderate"
+    LOW = "low"
+    VERY_LOW = "very_low"
 
 
 class EvidenceItem(BaseModel):
@@ -354,6 +385,110 @@ class AnalysisMetadata(BaseModel):
     )
 
 
+class DecisionRationale(BaseModel):
+    """Structured rationale explaining an investment decision.
+
+    Every statement must be traceable to evidence from the analysis
+    pipeline. The rationale answers:
+      - Why this decision?
+      - Why not the next higher category?
+      - What evidence most influenced the outcome?
+      - What additional information could change the decision?
+    """
+
+    primary_reasons_for: list[str] = Field(
+        default_factory=list,
+        description="Primary reasons supporting the decision",
+    )
+    primary_reasons_against: list[str] = Field(
+        default_factory=list,
+        description="Primary reasons reducing conviction",
+    )
+    highest_impact_positive: list[str] = Field(
+        default_factory=list,
+        description="Highest-impact positive signals",
+    )
+    highest_impact_negative: list[str] = Field(
+        default_factory=list,
+        description="Highest-impact negative signals",
+    )
+    missing_information: list[str] = Field(
+        default_factory=list,
+        description="Missing information preventing stronger conviction",
+    )
+    confidence_explanation: str = Field(
+        default="",
+        description="Explanation of overall confidence in the decision",
+    )
+    why_not_higher: str = Field(
+        default="",
+        description="Why the decision is not the next higher category",
+    )
+    key_evidence_summary: str = Field(
+        default="",
+        description="Summary of evidence most influencing the outcome",
+    )
+    information_that_could_change_decision: list[str] = Field(
+        default_factory=list,
+        description="Specific information that could change the decision",
+    )
+
+
+class InvestmentDecision(BaseModel):
+    """Deterministic investment decision synthesizing all pipeline signals.
+
+    Combines dimension scores, confidence, risk, evidence quality,
+    cross-signal reasoning, and recommendations into a single
+    actionable decision with full explainability.
+
+    The decision is fully deterministic — the same inputs always
+    produce the same decision, category, conviction, and rationale.
+    """
+
+    category: DecisionCategory = Field(
+        ..., description="Investment decision category"
+    )
+    conviction: ConvictionLevel = Field(
+        ..., description="Investment conviction level"
+    )
+    composite_score: float = Field(
+        ...,
+        ge=0.0,
+        le=100.0,
+        description="Composite score used for decision threshold determination",
+    )
+    rationale: DecisionRationale = Field(
+        default_factory=DecisionRationale,
+        description="Structured rationale explaining the decision",
+    )
+    decision_factors: dict[str, float] = Field(
+        default_factory=dict,
+        description="Quantitative factors contributing to the decision",
+    )
+    next_category_threshold: float = Field(
+        default=0.0,
+        ge=0.0,
+        le=100.0,
+        description="Score threshold needed to reach the next higher category",
+    )
+    margin_to_next_category: float = Field(
+        default=0.0,
+        description="How far the composite score is from the next higher category",
+    )
+    data_quality_modifier: float = Field(
+        default=1.0,
+        ge=0.0,
+        le=1.0,
+        description="Data quality modifier applied to the composite score (0-1)",
+    )
+    risk_modifier: float = Field(
+        default=1.0,
+        ge=0.0,
+        le=2.0,
+        description="Risk modifier applied to the composite score (0-2)",
+    )
+
+
 class Report(BaseModel):
     """Complete analysis report assembled from all pipeline stages.
 
@@ -402,6 +537,10 @@ class Report(BaseModel):
     investment_readiness: InvestmentReadiness | None = Field(
         default=None,
         description="Investment readiness assessment (Sprint 8)",
+    )
+    investment_decision: InvestmentDecision | None = Field(
+        default=None,
+        description="Deterministic investment decision (Sprint 13)",
     )
     signal_relationships: list[SignalRelationship] = Field(
         default_factory=list,

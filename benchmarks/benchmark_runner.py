@@ -240,6 +240,17 @@ class CaseResult:
                 for c in r.confidence
             ],
             "overall_confidence": r.overall_confidence,
+            "investment_decision": (
+                {
+                    "category": r.investment_decision.category.value,
+                    "conviction": r.investment_decision.conviction.value,
+                    "composite_score": r.investment_decision.composite_score,
+                    "data_quality_modifier": r.investment_decision.data_quality_modifier,
+                    "risk_modifier": r.investment_decision.risk_modifier,
+                }
+                if r.investment_decision
+                else None
+            ),
             "stage_timings": self.stage_timings,
         }
 
@@ -300,16 +311,37 @@ def _run_with_stage_timings(
     timings["scoring"] = _elapsed(t)
 
     t = time.perf_counter()
+    from predictron_engine.evaluation.investment_readiness import (
+        compute_investment_readiness,
+    )
+    assessments = evaluation_result.assessments
+    investment_readiness = compute_investment_readiness(
+        features, observations, scores, assessments,
+    )
+    timings["investment_readiness"] = _elapsed(t)
+
+    t = time.perf_counter()
     recs = engine._recommendations.recommend(
-        features, observations, scores, evaluation_result.assessments
+        features, observations, scores, assessments
     )
     timings["recommendations"] = _elapsed(t)
 
     t = time.perf_counter()
     conf = engine._confidence.assess(
-        features, observations, scores, evaluation_result.assessments
+        features, observations, scores, assessments
     )
     timings["confidence"] = _elapsed(t)
+
+    t = time.perf_counter()
+    decision = engine._decision.decide(
+        features,
+        observations,
+        scores,
+        conf,
+        assessments,
+        investment_readiness.signal_relationships,
+    )
+    timings["decision"] = _elapsed(t)
 
     t = time.perf_counter()
     report = engine._report_builder.build(
@@ -320,7 +352,9 @@ def _run_with_stage_timings(
         scores,
         recs,
         conf,
-        evaluation_result.assessments,
+        assessments,
+        decision,
+        investment_readiness,
     )
     timings["report_builder"] = _elapsed(t)
 

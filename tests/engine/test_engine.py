@@ -56,8 +56,9 @@ class TestEnginePipeline:
         assert "score" in meta.pipeline_stages_completed
         assert "recommend" in meta.pipeline_stages_completed
         assert "confidence" in meta.pipeline_stages_completed
+        assert "decide" in meta.pipeline_stages_completed
         assert "build_report" in meta.pipeline_stages_completed
-        assert len(meta.pipeline_stages_completed) == 10
+        assert len(meta.pipeline_stages_completed) == 11
 
     def test_processing_time_positive(self, engine, full_request):
         report = engine.analyze(full_request)

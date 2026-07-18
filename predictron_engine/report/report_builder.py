@@ -10,6 +10,7 @@ Key principles:
   - Evidence is passed through without modification
   - Metadata is populated here (timing, version, completeness)
   - Investment readiness is computed from all available signals (Sprint 8)
+  - Investment decision is computed from all signals (Sprint 13)
   - The Report is the single output consumed by the adapter layer
 """
 
@@ -25,6 +26,8 @@ from predictron_engine.models.report import (
     AnalysisMetadata,
     ConfidenceAssessment,
     EvidenceItem,
+    InvestmentDecision,
+    InvestmentReadiness,
     Observation,
     Recommendation,
     Report,
@@ -54,6 +57,8 @@ class DefaultReportBuilder:
         recommendations: list[Recommendation],
         confidence: list[ConfidenceAssessment],
         dimension_assessments: list[DimensionAssessment] | None = None,
+        decision: InvestmentDecision | None = None,
+        investment_readiness: InvestmentReadiness | None = None,
     ) -> Report:
         """Assemble the final report from all pipeline outputs."""
         logger.info("Building analysis report")
@@ -62,11 +67,27 @@ class DefaultReportBuilder:
         overall_confidence = self._aggregate_confidence(confidence)
         assessments = dimension_assessments or []
 
-        investment_readiness = compute_investment_readiness(
-            features, observations, scores, assessments,
-        )
+        if investment_readiness is None:
+            investment_readiness = compute_investment_readiness(
+                features, observations, scores, assessments,
+            )
 
         signal_relationships = investment_readiness.signal_relationships
+
+        pipeline_stages = [
+            "normalize",
+            "collect",
+            "extract",
+            "evidence",
+            "reason",
+            "evaluate",
+            "score",
+            "recommend",
+            "confidence",
+        ]
+        if decision is not None:
+            pipeline_stages.append("decide")
+        pipeline_stages.append("build_report")
 
         return Report(
             startup=startup,
@@ -80,21 +101,11 @@ class DefaultReportBuilder:
             confidence=confidence,
             overall_confidence=overall_confidence,
             investment_readiness=investment_readiness,
+            investment_decision=decision,
             signal_relationships=signal_relationships,
             analysis_metadata=AnalysisMetadata(
                 engine_version=ENGINE_VERSION,
-                pipeline_stages_completed=[
-                    "normalize",
-                    "collect",
-                    "extract",
-                    "evidence",
-                    "reason",
-                    "evaluate",
-                    "score",
-                    "recommend",
-                    "confidence",
-                    "build_report",
-                ],
+                pipeline_stages_completed=pipeline_stages,
                 processing_time_ms=0.0,
                 timestamp=datetime.now(UTC),
                 data_completeness=features.data_completeness,
