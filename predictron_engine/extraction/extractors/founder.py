@@ -240,6 +240,7 @@ class FounderExtractor(BaseExtractor):
         founder_count = data.founder_count
 
         team_size = self._detect_team_size(desc)
+        team_size_numeric = self._detect_team_size_numeric(desc)
         team_type = self._classify_team_type(desc, linkedin_urls)
         domain_expertise = self._detect_domain_expertise(desc)
         serial_indicators = self._detect_serial_founder(desc)
@@ -265,6 +266,7 @@ class FounderExtractor(BaseExtractor):
         return ExtractedFeatures(
             founder_profile_count=founder_count,
             team_size_indicator=team_size,
+            team_size_numeric=team_size_numeric,
             founder_team_type=team_type,
             domain_expertise_signals=domain_expertise,
             serial_founder_indicators=serial_indicators,
@@ -293,6 +295,26 @@ class FounderExtractor(BaseExtractor):
             count = int(comp_match.group(1))
             if count >= 3:
                 return _label_for_count(count)
+
+        return None
+
+    def _detect_team_size_numeric(self, text: str) -> int | None:
+        """Extract team size as a numeric integer value."""
+        match = _TEAM_SIZE_PATTERN.search(text)
+        if match:
+            try:
+                return int(match.group(1))
+            except (ValueError, TypeError):
+                pass
+
+        comp_match = _TEAM_COMPOSITION_PATTERN.search(text)
+        if comp_match:
+            try:
+                count = int(comp_match.group(1))
+                if count >= 3:
+                    return count
+            except (ValueError, TypeError):
+                pass
 
         return None
 

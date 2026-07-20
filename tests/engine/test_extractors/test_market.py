@@ -534,3 +534,43 @@ class TestBenchmarkCases:
         assert result.industry == "ai_ml"
         assert result.sub_industry == "ai_infrastructure"
         assert result.customer_type == "b2b"
+
+
+# ---------------------------------------------------------------------------
+# Sprint 14 — Structured Quantitative Extraction Tests
+# ---------------------------------------------------------------------------
+
+
+class TestMarketQuantitativeExtraction:
+    def test_market_size_usd_tam(self, sample_collected_data):
+        startup = _make_startup(
+            "SaaS platform for enterprise compliance. TAM of $50 billion."
+        )
+        result = MarketExtractor().extract(startup, sample_collected_data)
+        assert result.market_size_usd == 50_000_000_000.0
+
+    def test_market_size_usd_billion(self, sample_collected_data):
+        startup = _make_startup(
+            "Climate tech carbon accounting. $5B addressable market."
+        )
+        result = MarketExtractor().extract(startup, sample_collected_data)
+        assert result.market_size_usd == 5_000_000_000.0
+
+    def test_market_size_usd_trillion(self, sample_collected_data):
+        startup = _make_startup(
+            "Global fintech payments platform. $1T market opportunity."
+        )
+        result = MarketExtractor().extract(startup, sample_collected_data)
+        assert result.market_size_usd == 1_000_000_000_000.0
+
+    def test_market_size_usd_sam(self, sample_collected_data):
+        startup = _make_startup(
+            "Healthtech diagnostic imaging. SAM of $2B."
+        )
+        result = MarketExtractor().extract(startup, sample_collected_data)
+        assert result.market_size_usd == 2_000_000_000.0
+
+    def test_market_size_usd_none(self, sample_collected_data):
+        startup = _make_startup("A SaaS platform with no market size info")
+        result = MarketExtractor().extract(startup, sample_collected_data)
+        assert result.market_size_usd is None

@@ -953,3 +953,125 @@ class TestTractionBenchmarkCases:
         assert len(result.engagement_signals) > 0
         assert len(result.funding_amount_signals) > 0
         assert len(result.customer_count_signals) > 0
+
+
+# ---------------------------------------------------------------------------
+# Sprint 14 — Structured Quantitative Extraction Tests
+# ---------------------------------------------------------------------------
+
+
+class TestTractionQuantitativeExtraction:
+    def test_funding_amount_usd(self, sample_collected_data):
+        startup = _make_startup("Raised $12M in a seed round")
+        result = TractionExtractor().extract(startup, sample_collected_data)
+        assert result.funding_amount_usd == 12_000_000.0
+
+    def test_funding_amount_usd_billions(self, sample_collected_data):
+        startup = _make_startup("Raised $1.2B Series C")
+        result = TractionExtractor().extract(startup, sample_collected_data)
+        assert result.funding_amount_usd == 1_200_000_000.0
+
+    def test_arr_usd(self, sample_collected_data):
+        startup = _make_startup("ARR of $4.2M with strong retention")
+        result = TractionExtractor().extract(startup, sample_collected_data)
+        assert result.arr_usd == 4_200_000.0
+
+    def test_arr_usd_suffix(self, sample_collected_data):
+        startup = _make_startup("$500K in ARR growing 20% MoM")
+        result = TractionExtractor().extract(startup, sample_collected_data)
+        assert result.arr_usd == 500_000.0
+
+    def test_mrr_usd(self, sample_collected_data):
+        startup = _make_startup("MRR of $50K with 500 paying customers")
+        result = TractionExtractor().extract(startup, sample_collected_data)
+        assert result.mrr_usd == 50_000.0
+
+    def test_mrr_usd_suffix(self, sample_collected_data):
+        startup = _make_startup("$120,000 MRR")
+        result = TractionExtractor().extract(startup, sample_collected_data)
+        assert result.mrr_usd == 120_000.0
+
+    def test_gmv_usd(self, sample_collected_data):
+        startup = _make_startup("$500M GMV on the marketplace")
+        result = TractionExtractor().extract(startup, sample_collected_data)
+        assert result.gmv_usd == 500_000_000.0
+
+    def test_customer_count(self, sample_collected_data):
+        startup = _make_startup("500 enterprise customers")
+        result = TractionExtractor().extract(startup, sample_collected_data)
+        assert result.customer_count == 500
+
+    def test_customer_count_comma(self, sample_collected_data):
+        startup = _make_startup("1,200 active clients")
+        result = TractionExtractor().extract(startup, sample_collected_data)
+        assert result.customer_count == 1_200
+
+    def test_active_user_count(self, sample_collected_data):
+        startup = _make_startup("10,000 monthly active users")
+        result = TractionExtractor().extract(startup, sample_collected_data)
+        assert result.active_user_count == 10_000
+
+    def test_active_user_count_k_suffix(self, sample_collected_data):
+        startup = _make_startup("500K monthly active users")
+        result = TractionExtractor().extract(startup, sample_collected_data)
+        assert result.active_user_count == 500_000
+
+    def test_growth_rate_pct_mom(self, sample_collected_data):
+        startup = _make_startup("150% MoM growth")
+        result = TractionExtractor().extract(startup, sample_collected_data)
+        assert result.growth_rate_pct == 150.0
+
+    def test_growth_rate_pct_yoy(self, sample_collected_data):
+        startup = _make_startup("30% YoY growth")
+        result = TractionExtractor().extract(startup, sample_collected_data)
+        assert result.growth_rate_pct == 30.0
+
+    def test_nrr_pct(self, sample_collected_data):
+        startup = _make_startup("NRR of 120%")
+        result = TractionExtractor().extract(startup, sample_collected_data)
+        assert result.nrr_pct == 120.0
+
+    def test_nrr_pct_net_retention(self, sample_collected_data):
+        startup = _make_startup("130% net revenue retention")
+        result = TractionExtractor().extract(startup, sample_collected_data)
+        assert result.nrr_pct == 130.0
+
+    def test_churn_rate_pct(self, sample_collected_data):
+        startup = _make_startup("churn rate at 5%")
+        result = TractionExtractor().extract(startup, sample_collected_data)
+        assert result.churn_rate_pct == 5.0
+
+    def test_no_quantitative_returns_none(self, sample_collected_data):
+        startup = _make_startup("A simple SaaS platform")
+        result = TractionExtractor().extract(startup, sample_collected_data)
+        assert result.funding_amount_usd is None
+        assert result.arr_usd is None
+        assert result.mrr_usd is None
+        assert result.gmv_usd is None
+        assert result.customer_count is None
+        assert result.active_user_count is None
+        assert result.growth_rate_pct is None
+        assert result.nrr_pct is None
+        assert result.churn_rate_pct is None
+
+    def test_empty_description_returns_none(self, sample_collected_data):
+        startup = _make_startup(".")
+        result = TractionExtractor().extract(startup, sample_collected_data)
+        assert result.funding_amount_usd is None
+        assert result.arr_usd is None
+        assert result.mrr_usd is None
+
+    def test_comprehensive_startup(self, sample_collected_data):
+        startup = _make_startup(
+            "AI platform with $4.2M ARR, 500 enterprise customers, "
+            "150% MoM growth, $12M raised in Series A, NRR of 125%, "
+            "churn rate at 3%, 50K monthly active users"
+        )
+        result = TractionExtractor().extract(startup, sample_collected_data)
+        assert result.funding_amount_usd == 12_000_000.0
+        assert result.arr_usd == 4_200_000.0
+        assert result.customer_count == 500
+        assert result.growth_rate_pct == 150.0
+        assert result.nrr_pct == 125.0
+        assert result.churn_rate_pct == 3.0
+        assert result.active_user_count == 50_000

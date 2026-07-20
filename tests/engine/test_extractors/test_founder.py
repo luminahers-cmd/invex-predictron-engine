@@ -498,3 +498,64 @@ class TestFounderExtractor:
         assert result.founder_confidence > 0.3
         assert result.engineering_strength in ("strong", "moderate")
         assert result.product_strength in ("strong", "moderate")
+
+
+# ---------------------------------------------------------------------------
+# Sprint 14 — Structured Quantitative Extraction Tests
+# ---------------------------------------------------------------------------
+
+
+class TestFounderQuantitativeExtraction:
+    def test_team_size_numeric_team_of(self, sample_collected_data):
+        startup = Startup(
+            name="TeamCo",
+            website="https://teamco.example.com",
+            description="Team of 42 engineers building AI",
+        )
+        result = FounderExtractor().extract(startup, sample_collected_data)
+        assert result.team_size_numeric == 42
+
+    def test_team_size_numeric_employees(self, sample_collected_data):
+        startup = Startup(
+            name="TeamCo",
+            website="https://teamco.example.com",
+            description="employees about 25 people",
+        )
+        result = FounderExtractor().extract(startup, sample_collected_data)
+        assert result.team_size_numeric == 25
+
+    def test_team_size_numeric_person_team(self, sample_collected_data):
+        startup = Startup(
+            name="TeamCo",
+            website="https://teamco.example.com",
+            description="10-person team",
+        )
+        result = FounderExtractor().extract(startup, sample_collected_data)
+        assert result.team_size_numeric == 10
+
+    def test_team_size_numeric_engineer_team(self, sample_collected_data):
+        startup = Startup(
+            name="TeamCo",
+            website="https://teamco.example.com",
+            description="5 engineer team",
+        )
+        result = FounderExtractor().extract(startup, sample_collected_data)
+        assert result.team_size_numeric == 5
+
+    def test_team_size_numeric_none(self, sample_collected_data):
+        startup = Startup(
+            name="TeamCo",
+            website="https://teamco.example.com",
+            description="A great product with no team info",
+        )
+        result = FounderExtractor().extract(startup, sample_collected_data)
+        assert result.team_size_numeric is None
+
+    def test_team_size_numeric_large(self, sample_collected_data):
+        startup = Startup(
+            name="TeamCo",
+            website="https://teamco.example.com",
+            description="team of 200 people across 3 offices",
+        )
+        result = FounderExtractor().extract(startup, sample_collected_data)
+        assert result.team_size_numeric == 200

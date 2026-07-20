@@ -32,6 +32,16 @@ import re
 from typing import Final
 
 from predictron_engine.extraction.extractors.base import BaseExtractor
+from predictron_engine.extraction.quantitative import (
+    parse_active_user_count,
+    parse_arr,
+    parse_customer_count,
+    parse_dollar_amount,
+    parse_funding_amount,
+    parse_gmv,
+    parse_growth_rate,
+    parse_mrr,
+)
 from predictron_engine.models.collected_data import CollectedData
 from predictron_engine.models.extracted_features import ExtractedFeatures
 from predictron_engine.models.startup import Startup
@@ -784,6 +794,20 @@ class TractionExtractor(BaseExtractor):
             traction_kws=traction_kws,
         )
 
+        # --- Structured quantitative extraction (Sprint 14) ---
+        funding_amount_usd = parse_funding_amount(desc)
+        arr_usd = parse_arr(desc)
+        mrr_usd = parse_mrr(desc)
+        gmv_usd = parse_gmv(desc)
+        customer_count_num = parse_customer_count(desc)
+        active_user_count = parse_active_user_count(desc)
+        growth_rate_pct = parse_growth_rate(desc)
+
+        # Parse NRR from retention signals
+        nrr_pct = self._parse_nrr(desc)
+        churn_rate_pct = self._parse_churn(desc)
+        valuation_usd = parse_dollar_amount(desc)
+
         return ExtractedFeatures(
             funding_stage=funding_stage,
             has_revenue=has_revenue,
@@ -810,6 +834,16 @@ class TractionExtractor(BaseExtractor):
             awards_recognition=awards,
             traction_keywords=traction_kws,
             traction_confidence=confidence,
+            funding_amount_usd=funding_amount_usd,
+            arr_usd=arr_usd,
+            mrr_usd=mrr_usd,
+            gmv_usd=gmv_usd,
+            customer_count=customer_count_num,
+            active_user_count=active_user_count,
+            growth_rate_pct=growth_rate_pct,
+            nrr_pct=nrr_pct,
+            churn_rate_pct=churn_rate_pct,
+            valuation_usd=valuation_usd,
         )
 
     # ------------------------------------------------------------------
@@ -1160,6 +1194,50 @@ class TractionExtractor(BaseExtractor):
                 snippet = _extract_snippet(text, match.start(), match.end(), 30)
                 signals.append(f"{label}: {snippet}")
         return signals
+
+    # ------------------------------------------------------------------
+    # NRR parsing (quantitative extraction)
+    # ------------------------------------------------------------------
+
+    def _parse_nrr(self, text: str) -> float | None:
+        """Extract Net Revenue Retention percentage from text."""
+        nrr_patterns = [
+            re.compile(r"\bnrr\s+(?:of\s+)?(\d{2,})%?\b", re.I),
+            re.compile(r"\b(\d{2,})%?\s*net\s+(?:revenue\s+)?retention\b", re.I),
+        ]
+        for pattern in nrr_patterns:
+            match = pattern.search(text)
+            if match:
+                try:
+                    return float(match.group(1))
+                except (ValueError, TypeError):
+                    continue
+        return None
+
+    # ------------------------------------------------------------------
+    # Churn rate parsing (quantitative extraction)
+    # ------------------------------------------------------------------
+
+    def _parse_churn(self, text: str) -> float | None:
+        """Extract churn rate percentage from text."""
+        churn_patterns = [
+            re.compile(
+                r"\b(?:churn|churned)\s+rate"
+                r"(?:\s+(?:at|of))?\s+(\d{1,2})%?",
+                re.I,
+            ),
+            re.compile(
+                r"\b(\d{1,2})%?\s*(?:monthly\s+)?churn(?:ed)?\s+rate\b", re.I,
+            ),
+        ]
+        for pattern in churn_patterns:
+            match = pattern.search(text)
+            if match:
+                try:
+                    return float(match.group(1))
+                except (ValueError, TypeError):
+                    continue
+        return None
 
     # ------------------------------------------------------------------
     # Traction keyword extraction

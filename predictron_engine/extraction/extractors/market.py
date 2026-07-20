@@ -25,6 +25,7 @@ from __future__ import annotations
 import re
 
 from predictron_engine.extraction.extractors.base import BaseExtractor
+from predictron_engine.extraction.quantitative import parse_market_size
 from predictron_engine.models.collected_data import CollectedData
 from predictron_engine.models.extracted_features import ExtractedFeatures
 from predictron_engine.models.startup import Startup
@@ -727,6 +728,9 @@ class MarketExtractor(BaseExtractor):
         market_signals = self._detect_market_signals(text)
         market_characteristics = self._detect_market_characteristics(text)
 
+        # --- Structured quantitative extraction (Sprint 14) ---
+        market_size_usd = parse_market_size(text)
+
         return ExtractedFeatures(
             industry=industry_result["primary"],
             sub_industry=sub_industry,
@@ -740,6 +744,7 @@ class MarketExtractor(BaseExtractor):
             market_characteristics=market_characteristics,
             enterprise_orientation=enterprise_orientation,
             industry_confidence=industry_result["confidence"],
+            market_size_usd=market_size_usd,
         )
 
     # ------------------------------------------------------------------

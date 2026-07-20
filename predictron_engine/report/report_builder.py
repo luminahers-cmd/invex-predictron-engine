@@ -37,7 +37,7 @@ from predictron_engine.models.startup import Startup
 
 logger = logging.getLogger(__name__)
 
-ENGINE_VERSION = "0.9.0"
+ENGINE_VERSION = "0.9.1"
 
 
 class DefaultReportBuilder:

@@ -421,7 +421,7 @@ def _make_mock_report() -> Any:
         ),
     ]
     report.analysis_metadata = AnalysisMetadata(
-        engine_version="0.9.0",
+        engine_version="0.9.1",
         processing_time_ms=15.0,
     )
     return report
@@ -544,6 +544,6 @@ def _make_mock_report_for_case(case: dict) -> Any:
         for d in dims
     ]
     report.analysis_metadata = AnalysisMetadata(
-        engine_version="0.9.0", processing_time_ms=12.0,
+        engine_version="0.9.1", processing_time_ms=12.0,
     )
     return report

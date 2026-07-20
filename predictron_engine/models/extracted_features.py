@@ -686,3 +686,70 @@ class ExtractedFeatures(BaseModel):
         le=1.0,
         description="Composite confidence in risk extraction accuracy (0.0-1.0)",
     )
+
+    # --- Structured Quantitative fields (Sprint 14) ---
+
+    funding_amount_usd: float | None = Field(
+        default=None,
+        description="Total funding amount in USD (e.g. 12000000.0 for $12M)",
+    )
+    arr_usd: float | None = Field(
+        default=None,
+        description="Annual Recurring Revenue in USD (e.g. 4200000.0 for $4.2M)",
+    )
+    mrr_usd: float | None = Field(
+        default=None,
+        description="Monthly Recurring Revenue in USD (e.g. 50000.0 for $50K)",
+    )
+    gmv_usd: float | None = Field(
+        default=None,
+        description="Gross Merchandise Volume in USD (e.g. 500000000.0 for $500M)",
+    )
+    team_size_numeric: int | None = Field(
+        default=None,
+        description="Estimated team size as integer (e.g. 42)",
+    )
+    customer_count: int | None = Field(
+        default=None,
+        description="Number of customers/clients (e.g. 500)",
+    )
+    active_user_count: int | None = Field(
+        default=None,
+        description="Monthly/daily active users (e.g. 10000)",
+    )
+    growth_rate_pct: float | None = Field(
+        default=None,
+        description="Growth rate percentage on 0-100 scale (e.g. 150.0 for 150% MoM)",
+    )
+    nrr_pct: float | None = Field(
+        default=None,
+        description="Net Revenue Retention percentage on 0-100+ scale (e.g. 120.0 for 120%)",
+    )
+    churn_rate_pct: float | None = Field(
+        default=None,
+        description="Churn rate percentage on 0-100 scale (e.g. 5.0 for 5%)",
+    )
+    market_size_usd: float | None = Field(
+        default=None,
+        description="Addressable market size in USD (TAM/SAM/SOM)",
+    )
+    burn_rate_usd: float | None = Field(
+        default=None,
+        description="Monthly burn rate in USD",
+    )
+    runway_months: int | None = Field(
+        default=None,
+        description="Runway in months (e.g. 18)",
+    )
+    cac_usd: float | None = Field(
+        default=None,
+        description="Customer Acquisition Cost in USD",
+    )
+    ltv_usd: float | None = Field(
+        default=None,
+        description="Customer Lifetime Value in USD",
+    )
+    valuation_usd: float | None = Field(
+        default=None,
+        description="Company valuation in USD (e.g. 100000000.0 for $100M)",
+    )
