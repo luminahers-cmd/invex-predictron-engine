@@ -19,6 +19,14 @@ Supported domain values:
   - parse_active_user_count: "10,000 MAU", "500K DAU" → int
   - parse_growth_rate: "150% MoM growth", "30% YoY growth" → float (0-100 scale)
   - parse_market_size: "$50 billion TAM", "$1T market" → float (USD)
+  - parse_valuation: "$220M valuation", "valued at $1.2B" → float (USD)
+  - parse_nrr: "NRR of 120%", "Net revenue retention is 115%" → float
+  - parse_churn: "churn is 5%", "monthly churn of 2%" → float (0-100 scale)
+  - parse_burn_rate: "$500K monthly burn" → float (USD)
+  - parse_runway: "18 months runway" → int (months)
+  - parse_cac: "CAC of $500" → float (USD)
+  - parse_ltv: "LTV of $5,000" → float (USD)
+  - parse_team_size: "team of 42", "200 employees" → int
 
 Normalization rules:
   - All dollar amounts normalized to raw USD (e.g. "$12M" → 12_000_000.0)
@@ -37,29 +45,45 @@ Limitations:
 from predictron_engine.extraction.quantitative.parsers import (
     parse_active_user_count,
     parse_arr,
+    parse_burn_rate,
+    parse_cac,
+    parse_churn,
     parse_customer_count,
     parse_dollar_amount,
     parse_funding_amount,
     parse_gmv,
     parse_growth_rate,
     parse_integer,
+    parse_ltv,
     parse_market_size,
     parse_mrr,
+    parse_nrr,
     parse_percentage,
+    parse_runway,
+    parse_team_size,
+    parse_valuation,
     parse_year,
 )
 
 __all__ = [
     "parse_active_user_count",
     "parse_arr",
+    "parse_burn_rate",
+    "parse_cac",
+    "parse_churn",
     "parse_customer_count",
     "parse_dollar_amount",
     "parse_funding_amount",
     "parse_gmv",
     "parse_growth_rate",
     "parse_integer",
+    "parse_ltv",
     "parse_market_size",
     "parse_mrr",
+    "parse_nrr",
     "parse_percentage",
+    "parse_runway",
+    "parse_team_size",
+    "parse_valuation",
     "parse_year",
 ]

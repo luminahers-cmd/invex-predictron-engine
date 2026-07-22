@@ -34,6 +34,11 @@ CASE_ID_AI_INFRASTRUCTURE = "ai_infrastructure"
 CASE_ID_DEEP_TECH = "deep_tech"
 CASE_ID_EDTECH = "edtech"
 CASE_ID_HEALTHTECH_DEVICE = "healthtech_device"
+CASE_ID_MRR_ONLY_DERIVATION = "mrr_only_derivation"
+CASE_ID_CASH_BURN_RUNWAY = "cash_burn_runway"
+CASE_ID_REVENUE_TEAM_EFFICIENCY = "revenue_team_efficiency"
+CASE_ID_UNIT_ECONOMICS = "unit_economics"
+CASE_ID_FUNDING_EFFICIENCY = "funding_efficiency"
 
 
 INDUSTRY_CATEGORIES = [
@@ -911,6 +916,293 @@ BENCHMARK_CASES: list[dict[str, Any]] = [
                 "units_shipped",
             ],
             expected_risk_dimensions=["regulatory", "competitive_position"],
+        ),
+    },
+    # --- Derived Metrics Benchmark Cases (Sprint 17) ---
+    {
+        "id": CASE_ID_MRR_ONLY_DERIVATION,
+        "label": "MRR-Only — ARR derivation from MRR",
+        "metadata": BenchmarkCaseMetadata(
+            industry_category="SaaS",
+            company_stage="Seed",
+            coverage_tags=[
+                "derived_metrics", "mrr_to_arr", "saas",
+                "subscription", "single_metric_derivation",
+            ],
+        ),
+        "request": {
+            "startup_name": "SubMetrics",
+            "website": "https://submetrics.example.com",
+            "description": (
+                "SubMetrics provides subscription analytics for B2B SaaS "
+                "companies. The platform tracks MRR, churn, and expansion "
+                "revenue across billing systems. Currently generating $85K MRR "
+                "from 120 subscription customers on a $499/month plan. "
+                "Founded in 2023, team of 8 based in Denver. Raised $2M seed "
+                "from angel investors. Pre-revenue on enterprise tier, "
+                "currently focused on product-market fit."
+            ),
+            "pitch_deck_url": None,
+            "founder_linkedin_urls": [
+                "https://linkedin.com/in/submetrics-ceo",
+            ],
+        },
+        "expected_features": {
+            "industry": "enterprise_saas",
+            "business_model": "saas",
+            "customer_type": "b2b",
+            "has_revenue": True,
+            "has_pitch_deck": False,
+            "founder_profile_count": 1,
+        },
+        "expected_outcomes": ExpectedOutcomes(
+            expected_industry="enterprise_saas",
+            expected_customer_type="b2b",
+            expected_has_revenue=True,
+            expected_min_score=20.0,
+            expected_max_score=75.0,
+            expected_min_confidence=0.3,
+            expected_max_confidence=0.9,
+            expected_min_observations=2,
+            expected_min_recommendations=1,
+            expected_min_evidence=0,
+            expected_score_dimensions=[
+                "traction_signals",
+                "product_strength",
+            ],
+        ),
+    },
+    {
+        "id": CASE_ID_CASH_BURN_RUNWAY,
+        "label": "Cash & Burn — Runway derivation",
+        "metadata": BenchmarkCaseMetadata(
+            industry_category="SaaS",
+            company_stage="Series A",
+            coverage_tags=[
+                "derived_metrics", "runway_derivation", "burn_rate",
+                "financial_health", "cash_management",
+            ],
+        ),
+        "request": {
+            "startup_name": "FlowState",
+            "website": "https://flowstate.example.com",
+            "description": (
+                "FlowState builds workflow automation for operations teams. "
+                "The platform integrates with Slack, Notion, and Jira to "
+                "eliminate manual status updates and reporting. Currently "
+                "burning $350K per month across engineering and go-to-market. "
+                "Company has $6M in total funding from a Series A round. "
+                "Revenue of $1.8M ARR from 45 enterprise customers. "
+                "Team of 25 based in Austin, founded in 2022. "
+                "Currently at 8 months of runway."
+            ),
+            "pitch_deck_url": "https://flowstate.example.com/deck.pdf",
+            "founder_linkedin_urls": [
+                "https://linkedin.com/in/flowstate-ceo",
+            ],
+        },
+        "expected_features": {
+            "industry": "enterprise_saas",
+            "business_model": "saas",
+            "customer_type": "b2b",
+            "has_revenue": True,
+            "has_pitch_deck": True,
+            "founder_profile_count": 1,
+        },
+        "expected_outcomes": ExpectedOutcomes(
+            expected_industry="enterprise_saas",
+            expected_customer_type="b2b",
+            expected_has_revenue=True,
+            expected_min_score=25.0,
+            expected_max_score=80.0,
+            expected_min_confidence=0.3,
+            expected_max_confidence=0.9,
+            expected_min_observations=2,
+            expected_min_recommendations=1,
+            expected_min_evidence=0,
+            expected_score_dimensions=[
+                "traction_signals",
+                "business_model_viability",
+            ],
+        ),
+    },
+    {
+        "id": CASE_ID_REVENUE_TEAM_EFFICIENCY,
+        "label": "Revenue per Employee — Team efficiency derivation",
+        "metadata": BenchmarkCaseMetadata(
+            industry_category="SaaS",
+            company_stage="Series A",
+            coverage_tags=[
+                "derived_metrics", "revenue_per_employee", "team_efficiency",
+                "capital_efficiency", "saas",
+            ],
+        ),
+        "request": {
+            "startup_name": "DataPipe",
+            "website": "https://datapipe.example.com",
+            "description": (
+                "DataPipe provides automated data pipeline orchestration "
+                "for analytics teams. The platform handles ETL, data "
+                "quality monitoring, and warehouse optimization. Currently "
+                "generating $6M ARR from 35 enterprise customers with "
+                "average contract value of $171,000. Team of 15 engineers "
+                "and 5 sales professionals based in New York. ARR per "
+                "employee is exceptionally high at $300K. Raised $15M "
+                "Series A. Founded in 2021."
+            ),
+            "pitch_deck_url": "https://datapipe.example.com/series-a.pdf",
+            "founder_linkedin_urls": [
+                "https://linkedin.com/in/datapipe-ceo",
+                "https://linkedin.com/in/datapipe-cto",
+            ],
+        },
+        "expected_features": {
+            "industry": "enterprise_saas",
+            "business_model": "saas",
+            "customer_type": "b2b",
+            "has_revenue": True,
+            "has_pitch_deck": True,
+            "founder_profile_count": 2,
+        },
+        "expected_outcomes": ExpectedOutcomes(
+            expected_industry="enterprise_saas",
+            expected_customer_type="b2b",
+            expected_has_revenue=True,
+            expected_min_score=30.0,
+            expected_max_score=85.0,
+            expected_min_confidence=0.4,
+            expected_max_confidence=0.95,
+            expected_min_observations=3,
+            expected_min_recommendations=2,
+            expected_min_evidence=1,
+            expected_score_dimensions=[
+                "traction_signals",
+                "product_strength",
+                "business_model_viability",
+            ],
+            expected_strength_signals=[
+                "arr_revenue",
+                "enterprise_clients",
+            ],
+        ),
+    },
+    {
+        "id": CASE_ID_UNIT_ECONOMICS,
+        "label": "Unit Economics — LTV/CAC ratio derivation",
+        "metadata": BenchmarkCaseMetadata(
+            industry_category="SaaS",
+            company_stage="Series A",
+            coverage_tags=[
+                "derived_metrics", "ltv_cac", "unit_economics",
+                "saas", "customer_economics",
+            ],
+        ),
+        "request": {
+            "startup_name": "RetentionAI",
+            "website": "https://retentionai.example.com",
+            "description": (
+                "RetentionAI provides AI-powered customer retention "
+                "analytics for subscription businesses. The platform "
+                "predicts churn risk and recommends intervention strategies. "
+                "CAC is $2,400 with LTV of $18,000. Currently serving "
+                "80 subscription businesses with $2.4M ARR. Monthly "
+                "burn rate of $200K with $4M in total funding. "
+                "Team of 18 based in Chicago. Founded in 2022. "
+                "Net revenue retention of 125%."
+            ),
+            "pitch_deck_url": "https://retentionai.example.com/deck.pdf",
+            "founder_linkedin_urls": [
+                "https://linkedin.com/in/retentionai-ceo",
+            ],
+        },
+        "expected_features": {
+            "industry": "enterprise_saas",
+            "business_model": "saas",
+            "customer_type": "b2b",
+            "has_revenue": True,
+            "has_pitch_deck": True,
+            "founder_profile_count": 1,
+        },
+        "expected_outcomes": ExpectedOutcomes(
+            expected_industry="enterprise_saas",
+            expected_customer_type="b2b",
+            expected_has_revenue=True,
+            expected_min_score=25.0,
+            expected_max_score=85.0,
+            expected_min_confidence=0.3,
+            expected_max_confidence=0.95,
+            expected_min_observations=3,
+            expected_min_recommendations=2,
+            expected_min_evidence=1,
+            expected_score_dimensions=[
+                "traction_signals",
+                "business_model_viability",
+            ],
+            expected_strength_signals=[
+                "retention_metric",
+                "unit_economics",
+            ],
+        ),
+    },
+    {
+        "id": CASE_ID_FUNDING_EFFICIENCY,
+        "label": "Funding Efficiency — ARR/Funding ratio derivation",
+        "metadata": BenchmarkCaseMetadata(
+            industry_category="SaaS",
+            company_stage="Seed",
+            coverage_tags=[
+                "derived_metrics", "funding_efficiency", "capital_efficiency",
+                "saas", "bootstrapped_to_seed",
+            ],
+        ),
+        "request": {
+            "startup_name": "LeanStack",
+            "website": "https://leanstack.example.com",
+            "description": (
+                "LeanStack provides serverless deployment tooling for "
+                "startup engineering teams. The CLI-based platform "
+                "automates infrastructure provisioning, CI/CD pipelines, "
+                "and cost optimization across AWS and GCP. Currently "
+                "generating $3.2M ARR from 200 developer teams paying "
+                "$1,333/month on average. Total funding of only $1.5M "
+                "from a seed round. Team of 12 based in Portland. "
+                "Founded in 2022 by two ex-AWS engineers. "
+                "Monthly burn rate of $150K."
+            ),
+            "pitch_deck_url": None,
+            "founder_linkedin_urls": [
+                "https://linkedin.com/in/leanstack-ceo",
+                "https://linkedin.com/in/leanstack-cto",
+            ],
+        },
+        "expected_features": {
+            "industry": "enterprise_saas",
+            "business_model": "saas",
+            "customer_type": "b2b",
+            "has_revenue": True,
+            "has_pitch_deck": False,
+            "founder_profile_count": 2,
+        },
+        "expected_outcomes": ExpectedOutcomes(
+            expected_industry="enterprise_saas",
+            expected_customer_type="b2b",
+            expected_has_revenue=True,
+            expected_min_score=25.0,
+            expected_max_score=85.0,
+            expected_min_confidence=0.3,
+            expected_max_confidence=0.9,
+            expected_min_observations=2,
+            expected_min_recommendations=1,
+            expected_min_evidence=0,
+            expected_score_dimensions=[
+                "traction_signals",
+                "product_strength",
+                "business_model_viability",
+            ],
+            expected_strength_signals=[
+                "arr_revenue",
+                "capital_efficiency",
+            ],
         ),
     },
 ]

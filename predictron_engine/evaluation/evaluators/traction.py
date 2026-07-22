@@ -1,7 +1,8 @@
 """Traction dimension evaluator.
 
 Translates observations and evidence about traction signals into a
-structured DimensionAssessment.
+structured DimensionAssessment. Augments qualitative observations with
+quantitative metric references where available.
 """
 
 from __future__ import annotations
@@ -25,11 +26,41 @@ if TYPE_CHECKING:
     from predictron_engine.models.report import Observation
 
 
+def _build_quantitative_context(features: ExtractedFeatures) -> str:
+    """Build a quantitative context string from structured metrics."""
+    parts: list[str] = []
+
+    if features.arr_usd is not None:
+        parts.append(f"ARR of ${features.arr_usd / 1_000_000:.1f}M")
+    if features.mrr_usd is not None:
+        parts.append(f"MRR of ${features.mrr_usd / 1_000:.0f}K")
+    if features.growth_rate_pct is not None:
+        parts.append(f"growth rate of {features.growth_rate_pct:.0f}%")
+    if features.nrr_pct is not None:
+        parts.append(f"NRR of {features.nrr_pct:.0f}%")
+    if features.churn_rate_pct is not None:
+        parts.append(f"churn of {features.churn_rate_pct:.1f}%")
+    if features.customer_count is not None:
+        parts.append(f"{features.customer_count:,} customers")
+    if features.runway_months is not None:
+        parts.append(f"{features.runway_months} months runway")
+    if features.burn_rate_usd is not None:
+        parts.append(f"burn rate of ${features.burn_rate_usd / 1_000:.0f}K/mo")
+    if features.cac_usd is not None and features.ltv_usd is not None:
+        ratio = features.ltv_usd / max(features.cac_usd, 1)
+        parts.append(f"LTV/CAC of {ratio:.1f}x")
+
+    if not parts:
+        return ""
+    return " Quantitative metrics: " + "; ".join(parts) + "."
+
+
 class TractionEvaluator:
     """Evaluates the traction dimension.
 
     Translates traction-related observations and evidence into a structured
-    assessment explaining market validation and growth signals.
+    assessment explaining market validation and growth signals. Incorporates
+    quantitative metric context where available.
     """
 
     @property
@@ -55,6 +86,29 @@ class TractionEvaluator:
         if cross_ctx:
             rationale += cross_ctx
 
+        quant_ctx = _build_quantitative_context(features)
+        if quant_ctx:
+            rationale += quant_ctx
+
+        metadata: dict[str, object] = {
+            "has_revenue": features.has_revenue or False,
+            "funding_stage": features.funding_stage or "unknown",
+            "weighted_confidence": round(weighted_conf, 4),
+            "cross_signal_available": bool(cross_ctx),
+        }
+        if features.arr_usd is not None:
+            metadata["arr_usd"] = features.arr_usd
+        if features.growth_rate_pct is not None:
+            metadata["growth_rate_pct"] = features.growth_rate_pct
+        if features.nrr_pct is not None:
+            metadata["nrr_pct"] = features.nrr_pct
+        if features.churn_rate_pct is not None:
+            metadata["churn_rate_pct"] = features.churn_rate_pct
+        if features.customer_count is not None:
+            metadata["customer_count"] = features.customer_count
+        if features.runway_months is not None:
+            metadata["runway_months"] = features.runway_months
+
         return DimensionAssessment(
             dimension=self.dimension,
             summary=summary,
@@ -62,10 +116,5 @@ class TractionEvaluator:
             confidence=confidence,
             supporting_observations=traction_obs,
             supporting_evidence=traction_evidence,
-            metadata={
-                "has_revenue": features.has_revenue or False,
-                "funding_stage": features.funding_stage or "unknown",
-                "weighted_confidence": round(weighted_conf, 4),
-                "cross_signal_available": bool(cross_ctx),
-            },
+            metadata=metadata,
         )

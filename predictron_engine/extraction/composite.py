@@ -20,6 +20,7 @@ from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 
+from predictron_engine.extraction.derived.engine import DerivedMetricsEngine
 from predictron_engine.extraction.extractors.business_model import BusinessModelExtractor
 from predictron_engine.extraction.extractors.company import CompanyExtractor
 from predictron_engine.extraction.extractors.competition import CompetitionExtractor
@@ -128,6 +129,10 @@ class CompositeExtractor:
     Each extractor is independent and replaces a single concern.
     The composite merges all outputs using a deterministic overlay strategy.
 
+    After extraction, a deterministic inference engine derives additional
+    metrics that are computable from extracted values but not explicitly
+    stated (e.g. ARR from MRR, revenue per employee, funding efficiency).
+
     Parameters
     ----------
     extractors:
@@ -135,17 +140,23 @@ class CompositeExtractor:
         earlier ones for the same scalar field (last-write-wins).
     nlp_service:
         Optional NLP service injected into all BaseExtractor subclasses.
+    derived_engine:
+        Optional DerivedMetricsEngine for deterministic inference.
+        If None, a default engine is created.
     """
 
     extractors: list[object] = field(default_factory=_default_extractors)
     nlp_service: NlpService | None = None
+    derived_engine: DerivedMetricsEngine = field(
+        default_factory=DerivedMetricsEngine,
+    )
 
     def __post_init__(self) -> None:
         if self.nlp_service is not None:
             self._inject_nlp()
 
     def extract(self, startup: Startup, data: CollectedData) -> ExtractedFeatures:
-        """Run all extractors and merge into a single ExtractedFeatures."""
+        """Run all extractors, merge, then apply deterministic inference."""
         logger.info(
             "CompositeExtractor: running %d extractors for %s",
             len(self.extractors),
@@ -157,6 +168,16 @@ class CompositeExtractor:
         for extractor in self.extractors:
             partial = extractor.extract(startup, data)
             merged = self._merge(merged, partial)
+
+        # Deterministic inference layer — derive additional metrics
+        merged, derivation_log = self.derived_engine.derive(merged)
+
+        logger.info(
+            "CompositeExtractor: extraction complete for %s "
+            "(%d derivations applied)",
+            startup.name,
+            len(derivation_log),
+        )
 
         return merged
 

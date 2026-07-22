@@ -204,6 +204,11 @@ def parse_funding_amount(text: str) -> float | None:
         ),
         re.compile(
             r"\$\s*([\d][\d,]*\.?\d*)\s*"
+            r"(k|m|b|t|thousand|million|billion|trillion)?\s+raised\b",
+            re.I,
+        ),
+        re.compile(
+            r"\$\s*([\d][\d,]*\.?\d*)\s*"
             r"(k|m|b|t|thousand|million|billion|trillion)?\s+"
             r"(?:raised\s+)?(?:in\s+)?"
             r"(?:series\s+[a-e]|seed|pre-seed|round)\b",
@@ -236,11 +241,19 @@ def parse_funding_amount(text: str) -> float | None:
 def parse_arr(text: str) -> float | None:
     """Extract ARR (Annual Recurring Revenue) from text.
 
-    Matches patterns like "$4.2M ARR", "ARR of $1.2B", "$500K in ARR".
+    Matches patterns like "$4.2M ARR", "ARR of $1.2B", "$500K in ARR",
+    "ARR has reached $5M", "ARR stands at $3M",
+    "Annual recurring revenue of $10M".
     """
     patterns = [
         re.compile(
-            r"\barr\s+(?:of\s+|at\s+|reaching\s+|exceeding\s+)?"
+            r"\barr\s+(?:has\s+)?(?:reached|surpassed|exceeded|grown\s+to)\s+"
+            r"\$\s*([\d][\d,]*\.?\d*)\s*"
+            r"(k|m|b|t|thousand|million|billion|trillion)?\b",
+            re.I,
+        ),
+        re.compile(
+            r"\barr\s+(?:of\s+|at\s+|stands\s+at\s+|reaching\s+|exceeding\s+)?"
             r"\$\s*([\d][\d,]*\.?\d*)\s*"
             r"(k|m|b|t|thousand|million|billion|trillion)?\b",
             re.I,
@@ -251,7 +264,9 @@ def parse_arr(text: str) -> float | None:
             re.I,
         ),
         re.compile(
-            r"\barr\s+(?:of\s+)?\$\s*([\d][\d,]*\.?\d*)\s*"
+            r"\b(?:annual\s+recurring\s+revenue)\s+"
+            r"(?:of\s+|at\s+|reaching\s+)?"
+            r"\$\s*([\d][\d,]*\.?\d*)\s*"
             r"(k|m|b|t|thousand|million|billion|trillion)?\b",
             re.I,
         ),
@@ -380,7 +395,8 @@ def parse_growth_rate(text: str) -> float | None:
 def parse_market_size(text: str) -> float | None:
     """Extract market size (TAM/SAM/SOM) from text.
 
-    Matches patterns like "$50 billion TAM", "$1T market", "$200M SAM".
+    Matches patterns like "$50 billion TAM", "$1T market", "$200M SAM",
+    "TAM of $10B", "$5B market", "$200M addressable market".
     """
     patterns = [
         re.compile(
@@ -396,6 +412,12 @@ def parse_market_size(text: str) -> float | None:
             r"(k|m|b|t|thousand|million|billion|trillion)?\b",
             re.I,
         ),
+        re.compile(
+            r"\$\s*([\d][\d,]*\.?\d*)\s*"
+            r"(k|m|b|t|thousand|million|billion|trillion)?\s+"
+            r"(?:addressable\s+)?market\b",
+            re.I,
+        ),
     ]
     for pattern in patterns:
         match = pattern.search(text)
@@ -404,6 +426,343 @@ def parse_market_size(text: str) -> float | None:
                 value = _normalize_comma_number(match.group(1))
                 suffix = match.group(2)
                 return _apply_multiplier(value, suffix)
+            except (ValueError, TypeError):
+                continue
+    return None
+
+
+# ---------------------------------------------------------------------------
+# Domain-specific parsers — Sprint 14.1 additions
+# ---------------------------------------------------------------------------
+
+def parse_valuation(text: str) -> float | None:
+    """Extract company valuation from text.
+
+    Matches patterns like:
+        "$220M valuation", "valued at $1.2B",
+        "$42M raised at a $220M valuation",
+        "pre-money valuation of $500M",
+        "post-money valuation $300M".
+
+    Returns the valuation amount (not the funding amount) in USD.
+    """
+    patterns = [
+        # "$220M valuation" or "$220M pre-money valuation"
+        re.compile(
+            r"\$\s*([\d][\d,]*\.?\d*)\s*"
+            r"(k|m|b|t|thousand|million|billion|trillion)?\s+"
+            r"(?:pre[\s-]money|post[\s-]money)?\s*valuation\b",
+            re.I,
+        ),
+        # "valued at $1.2B"
+        re.compile(
+            r"\bvalued\s+at\s+"
+            r"\$\s*([\d][\d,]*\.?\d*)\s*"
+            r"(k|m|b|t|thousand|million|billion|trillion)?\b",
+            re.I,
+        ),
+        # "valuation of $500M"
+        re.compile(
+            r"\bvaluation\s+(?:of\s+|at\s+)?"
+            r"\$\s*([\d][\d,]*\.?\d*)\s*"
+            r"(k|m|b|t|thousand|million|billion|trillion)?\b",
+            re.I,
+        ),
+        # "$42M raised at a $220M valuation"
+        re.compile(
+            r"\$\s*[\d][\d,]*\.?\d*\s*"
+            r"(?:k|m|b|t|thousand|million|billion|trillion)?\s+"
+            r"raised\s+(?:at\s+(?:a|an)?\s+)?"
+            r"\$\s*([\d][\d,]*\.?\d*)\s*"
+            r"(k|m|b|t|thousand|million|billion|trillion)?\s+valuation\b",
+            re.I,
+        ),
+    ]
+    for pattern in patterns:
+        match = pattern.search(text)
+        if match:
+            try:
+                value = _normalize_comma_number(match.group(1))
+                suffix = match.group(2)
+                return _apply_multiplier(value, suffix)
+            except (ValueError, TypeError):
+                continue
+    return None
+
+
+def parse_nrr(text: str) -> float | None:
+    """Extract Net Revenue Retention percentage from text.
+
+    Matches patterns like "NRR of 120%", "130% net revenue retention",
+    "Net revenue retention is 115%", "NRR stands at 125%".
+    Returns percentage on 0-100+ scale.
+    """
+    patterns = [
+        re.compile(
+            r"\bnrr\s+(?:of\s+|at\s+|stands\s+at\s+|is\s+)?"
+            r"([\d][\d,]*\.?\d*)\s*%",
+            re.I,
+        ),
+        re.compile(
+            r"\bnrr\s+(?:of\s+|at\s+|stands\s+at\s+|is\s+)?"
+            r"([\d][\d,]*\.?\d*)\b",
+            re.I,
+        ),
+        re.compile(
+            r"\b([\d][\d,]*\.?\d*)\s*%?\s*net\s+(?:revenue\s+)?retention\b",
+            re.I,
+        ),
+        re.compile(
+            r"\bnet\s+(?:revenue\s+)?retention\s+"
+            r"(?:stands\s+at\s+|is\s+|of\s+|at\s+)?"
+            r"([\d][\d,]*\.?\d*)\s*%",
+            re.I,
+        ),
+        re.compile(
+            r"\bnet\s+(?:revenue\s+)?retention\s+"
+            r"(?:stands\s+at\s+|is\s+|of\s+|at\s+)?"
+            r"([\d][\d,]*\.?\d*)\b",
+            re.I,
+        ),
+    ]
+    for pattern in patterns:
+        match = pattern.search(text)
+        if match:
+            try:
+                return _normalize_comma_number(match.group(1))
+            except (ValueError, TypeError):
+                continue
+    return None
+
+
+def parse_churn(text: str) -> float | None:
+    """Extract churn rate percentage from text.
+
+    Matches patterns like "churn is 5%", "churn rate of 3.2%",
+    "monthly churn of 2%", "churn is below 4%",
+    "churned at a rate of 8%".
+    Returns percentage on 0-100 scale.
+    """
+    patterns = [
+        re.compile(
+            r"\bchurn(?:ed)?\s+(?:is\s+(?:below\s+|under\s+|at\s+)?)?"
+            r"(\d{1,2}(?:\.\d+)?)\s*%",
+            re.I,
+        ),
+        re.compile(
+            r"\bchurn\s+rate\s+(?:of\s+|at\s+|is\s+)?"
+            r"(\d{1,2}(?:\.\d+)?)\s*%",
+            re.I,
+        ),
+        re.compile(
+            r"\b(?:monthly\s+)?churn\s+(?:of\s+|at\s+|is\s+)?"
+            r"(\d{1,2}(?:\.\d+)?)\s*%",
+            re.I,
+        ),
+        re.compile(
+            r"\bchurned?\s+(?:at\s+(?:a\s+)?)?rate\s+(?:of\s+|at\s+)?"
+            r"(\d{1,2}(?:\.\d+)?)\s*%",
+            re.I,
+        ),
+        re.compile(
+            r"\b(\d{1,2}(?:\.\d+)?)\s*%\s*(?:monthly\s+)?churn(?:ed)?\s+rate\b",
+            re.I,
+        ),
+    ]
+    for pattern in patterns:
+        match = pattern.search(text)
+        if match:
+            try:
+                return _normalize_comma_number(match.group(1))
+            except (ValueError, TypeError):
+                continue
+    return None
+
+
+def parse_burn_rate(text: str) -> float | None:
+    """Extract monthly burn rate from text.
+
+    Matches patterns like "$500K monthly burn", "burn rate of $1.2M",
+    "burning $200K per month".
+    Returns USD amount.
+    """
+    patterns = [
+        re.compile(
+            r"\$\s*([\d][\d,]*\.?\d*)\s*"
+            r"(k|m|b|t|thousand|million|billion|trillion)?\s*"
+            r"(?:monthly\s+)?burn(?:\s+rate)?\b",
+            re.I,
+        ),
+        re.compile(
+            r"\bburn\s+rate\s+(?:of\s+|at\s+|is\s+)?"
+            r"\$\s*([\d][\d,]*\.?\d*)\s*"
+            r"(k|m|b|t|thousand|million|billion|trillion)?\b",
+            re.I,
+        ),
+        re.compile(
+            r"\bburning\s+"
+            r"\$\s*([\d][\d,]*\.?\d*)\s*"
+            r"(k|m|b|t|thousand|million|billion|trillion)?\s*"
+            r"(?:per\s+)?month(?:ly)?\b",
+            re.I,
+        ),
+    ]
+    for pattern in patterns:
+        match = pattern.search(text)
+        if match:
+            try:
+                value = _normalize_comma_number(match.group(1))
+                suffix = match.group(2)
+                return _apply_multiplier(value, suffix)
+            except (ValueError, TypeError):
+                continue
+    return None
+
+
+def parse_runway(text: str) -> int | None:
+    """Extract runway in months from text.
+
+    Matches patterns like "18 months runway", "runway of 24 months",
+    "12-month runway", "24 months of runway".
+    Returns integer months.
+    """
+    patterns = [
+        re.compile(
+            r"([\d][\d,]*)\s*[\-]?\s*months?\s+(?:of\s+)?runway\b",
+            re.I,
+        ),
+        re.compile(
+            r"\brunway\s+(?:of\s+|at\s+|is\s+)?"
+            r"([\d][\d,]*)\s*[\-]?\s*months?\b",
+            re.I,
+        ),
+        re.compile(
+            r"([\d][\d,]*)\s*[\-]?\s*months?\s+runway\b",
+            re.I,
+        ),
+    ]
+    for pattern in patterns:
+        match = pattern.search(text)
+        if match:
+            try:
+                return int(_normalize_comma_number(match.group(1)))
+            except (ValueError, TypeError):
+                continue
+    return None
+
+
+def parse_cac(text: str) -> float | None:
+    """Extract Customer Acquisition Cost from text.
+
+    Matches patterns like "CAC of $500", "$1,200 CAC",
+    "customer acquisition cost is $800".
+    Returns USD amount.
+    """
+    patterns = [
+        re.compile(
+            r"\bcac\s+(?:of\s+|at\s+|is\s+|averaging\s+)?"
+            r"\$\s*([\d][\d,]*\.?\d*)\s*"
+            r"(k|m|thousand|million)?\b",
+            re.I,
+        ),
+        re.compile(
+            r"\$\s*([\d][\d,]*\.?\d*)\s*"
+            r"(k|m|thousand|million)?\s*(?:in\s+)?cac\b",
+            re.I,
+        ),
+        re.compile(
+            r"\bcustomer\s+acquisition\s+cost\s+"
+            r"(?:of\s+|is\s+|at\s+)?"
+            r"\$\s*([\d][\d,]*\.?\d*)\s*"
+            r"(k|m|thousand|million)?\b",
+            re.I,
+        ),
+    ]
+    for pattern in patterns:
+        match = pattern.search(text)
+        if match:
+            try:
+                value = _normalize_comma_number(match.group(1))
+                suffix = match.group(2)
+                return _apply_multiplier(value, suffix)
+            except (ValueError, TypeError):
+                continue
+    return None
+
+
+def parse_ltv(text: str) -> float | None:
+    """Extract Customer Lifetime Value from text.
+
+    Matches patterns like "LTV of $5,000", "$12K LTV",
+    "lifetime value is $8,000".
+    Returns USD amount.
+    """
+    patterns = [
+        re.compile(
+            r"\bltv\s+(?:of\s+|at\s+|is\s+)?"
+            r"\$\s*([\d][\d,]*\.?\d*)\s*"
+            r"(k|m|thousand|million)?\b",
+            re.I,
+        ),
+        re.compile(
+            r"\$\s*([\d][\d,]*\.?\d*)\s*"
+            r"(k|m|thousand|million)?\s*(?:in\s+)?ltv\b",
+            re.I,
+        ),
+        re.compile(
+            r"\blifetime\s+value\s+"
+            r"(?:of\s+|is\s+|at\s+)?"
+            r"\$\s*([\d][\d,]*\.?\d*)\s*"
+            r"(k|m|thousand|million)?\b",
+            re.I,
+        ),
+    ]
+    for pattern in patterns:
+        match = pattern.search(text)
+        if match:
+            try:
+                value = _normalize_comma_number(match.group(1))
+                suffix = match.group(2)
+                return _apply_multiplier(value, suffix)
+            except (ValueError, TypeError):
+                continue
+    return None
+
+
+def parse_team_size(text: str) -> int | None:
+    """Extract team size from text.
+
+    Matches patterns like "team of 42", "50-person team",
+    "200 employees", "headcount of 75".
+    Returns integer count.
+    """
+    patterns = [
+        re.compile(
+            r"\bteam\s+of\s+([\d][\d,]*)\b",
+            re.I,
+        ),
+        re.compile(
+            r"\b([\d][\d,]*)\s*[\-]?\s*person\s+team\b",
+            re.I,
+        ),
+        re.compile(
+            r"\b([\d][\d,]*)\s+employees?\b",
+            re.I,
+        ),
+        re.compile(
+            r"\bheadcount\s+(?:of\s+|is\s+|at\s+)?([\d][\d,]*)\b",
+            re.I,
+        ),
+        re.compile(
+            r"\b([\d][\d,]*)\s*[\-]?\s*person\s+(?:company|startup|team|org)\b",
+            re.I,
+        ),
+    ]
+    for pattern in patterns:
+        match = pattern.search(text)
+        if match:
+            try:
+                return int(_normalize_comma_number(match.group(1)))
             except (ValueError, TypeError):
                 continue
     return None

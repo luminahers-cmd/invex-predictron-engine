@@ -55,6 +55,15 @@ class MarketEvaluator:
         if cross_ctx:
             rationale += cross_ctx
 
+        metadata: dict[str, object] = {
+            "industry": features.industry or "unknown",
+            "geography": features.geography or "unknown",
+            "weighted_confidence": round(weighted_conf, 4),
+            "cross_signal_available": bool(cross_ctx),
+        }
+        if features.market_size_usd is not None:
+            metadata["market_size_usd"] = features.market_size_usd
+
         return DimensionAssessment(
             dimension=self.dimension,
             summary=summary,
@@ -62,10 +71,5 @@ class MarketEvaluator:
             confidence=confidence,
             supporting_observations=market_obs,
             supporting_evidence=market_evidence,
-            metadata={
-                "industry": features.industry or "unknown",
-                "geography": features.geography or "unknown",
-                "weighted_confidence": round(weighted_conf, 4),
-                "cross_signal_available": bool(cross_ctx),
-            },
+            metadata=metadata,
         )

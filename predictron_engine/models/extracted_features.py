@@ -753,3 +753,40 @@ class ExtractedFeatures(BaseModel):
         default=None,
         description="Company valuation in USD (e.g. 100000000.0 for $100M)",
     )
+
+    # --- Derived Metrics fields (Sprint 17) ---
+
+    revenue_per_employee_usd: float | None = Field(
+        default=None,
+        description="Revenue per employee in USD (derived: ARR / team_size)",
+    )
+    funding_efficiency_ratio: float | None = Field(
+        default=None,
+        description="Funding efficiency ratio (derived: ARR / total_funding)",
+    )
+    burn_multiple: float | None = Field(
+        default=None,
+        description=(
+            "Burn multiple (derived: annualized_burn / ARR). "
+            "Lower is better."
+        ),
+    )
+    ltv_cac_ratio: float | None = Field(
+        default=None,
+        description="LTV/CAC ratio (derived: LTV / CAC)",
+    )
+    acv_per_customer_usd: float | None = Field(
+        default=None,
+        description=(
+            "Average contract value per customer in USD "
+            "(derived: ARR / customer_count)"
+        ),
+    )
+    derived_metrics_log: list[dict] = Field(
+        default_factory=list,
+        description=(
+            "Audit log of all deterministic derivations applied. "
+            "Each entry records source fields, formula, explanation, "
+            "and confidence for full traceability."
+        ),
+    )

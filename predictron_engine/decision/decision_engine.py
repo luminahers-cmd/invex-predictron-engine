@@ -498,6 +498,9 @@ class DefaultDecisionEngine:
         """Collect primary reasons supporting the decision."""
         reasons: list[str] = []
 
+        quant_reasons = _collect_quantitative_reasons_for(features)
+        reasons.extend(quant_reasons)
+
         high_scores = [s for s in scores if s.score >= 65.0]
         for s in sorted(high_scores, key=lambda x: x.score, reverse=True)[:3]:
             label = _get_dimension_label(s.dimension)
@@ -524,11 +527,53 @@ class DefaultDecisionEngine:
 
         reinforcing = [
             o for o in observations
-            if o.category not in ("signal_conflict",) and o.confidence >= 0.6
+            if o.category not in (
+                "signal_conflict",
+                "nrr_churn_conflict",
+                "burn_runway_critical",
+                "growth_burn_concerning",
+                "funding_efficiency_weak",
+                "funding_valuation_inconsistent",
+                "customer_count_stage_below",
+                "team_revenue_inconsistent",
+                "valuation_weak_traction",
+                "high_arr_concentrated_customers",
+                "high_burn_low_growth",
+                "funding_without_execution",
+                "arr_burn_gap",
+                "rev_per_employee_low",
+                "nrr_churn_masking",
+            ) and o.confidence >= 0.6
         ]
         if len(reinforcing) >= 3:
             reasons.append(
                 f"{len(reinforcing)} reinforcing observations with confidence >= 0.6"
+            )
+
+        quant_cross_positive = [
+            o for o in observations
+            if o.source_rule == "QuantitativeCrossSignalRule"
+            and o.category not in (
+                "nrr_churn_conflict",
+                "burn_runway_critical",
+                "growth_burn_concerning",
+                "funding_efficiency_weak",
+                "funding_valuation_inconsistent",
+                "customer_count_stage_below",
+                "team_revenue_inconsistent",
+                "valuation_weak_traction",
+                "high_arr_concentrated_customers",
+                "high_burn_low_growth",
+                "funding_without_execution",
+                "arr_burn_gap",
+                "rev_per_employee_low",
+                "nrr_churn_masking",
+            )
+        ]
+        if quant_cross_positive:
+            reasons.append(
+                f"{len(quant_cross_positive)} quantitative cross-signal "
+                f"observations reinforce positive patterns"
             )
 
         return reasons[:5]
@@ -542,6 +587,9 @@ class DefaultDecisionEngine:
     ) -> list[str]:
         """Collect primary reasons reducing conviction."""
         reasons: list[str] = []
+
+        quant_reasons = _collect_quantitative_reasons_against(features)
+        reasons.extend(quant_reasons)
 
         low_scores = [s for s in scores if s.score < 45.0]
         for s in sorted(low_scores, key=lambda x: x.score)[:3]:
@@ -561,6 +609,32 @@ class DefaultDecisionEngine:
         if conflicts:
             reasons.append(
                 f"{len(conflicts)} conflicting signal(s) detected"
+            )
+
+        quant_cross_negative = [
+            o for o in observations
+            if o.source_rule == "QuantitativeCrossSignalRule"
+            and o.category in (
+                "nrr_churn_conflict",
+                "burn_runway_critical",
+                "growth_burn_concerning",
+                "funding_efficiency_weak",
+                "funding_valuation_inconsistent",
+                "customer_count_stage_below",
+                "team_revenue_inconsistent",
+                "valuation_weak_traction",
+                "high_arr_concentrated_customers",
+                "high_burn_low_growth",
+                "funding_without_execution",
+                "arr_burn_gap",
+                "rev_per_employee_low",
+                "nrr_churn_masking",
+            )
+        ]
+        if quant_cross_negative:
+            reasons.append(
+                f"{len(quant_cross_negative)} quantitative cross-signal "
+                f"inconsistencies detected"
             )
 
         if features.data_completeness < 0.3:
@@ -803,3 +877,93 @@ def _get_dimension_label(dimension_value: str) -> str:
         if dim.value == dimension_value:
             return DIMENSION_LABELS.get(dim, dimension_value)
     return dimension_value
+
+
+# ---------------------------------------------------------------------------
+# Quantitative rationale helpers (Sprint 15)
+# ---------------------------------------------------------------------------
+
+
+def _collect_quantitative_reasons_for(
+    features: ExtractedFeatures,
+) -> list[str]:
+    """Extract quantitative strengths from structured metrics."""
+    reasons: list[str] = []
+
+    if features.arr_usd is not None and features.arr_usd >= 10_000_000:
+        reasons.append(
+            f"ARR of ${features.arr_usd / 1_000_000:.1f}M indicates strong "
+            f"revenue traction"
+        )
+
+    if features.nrr_pct is not None and features.nrr_pct >= 110:
+        reasons.append(
+            f"NRR of {features.nrr_pct:.0f}% indicates strong customer "
+            f"retention and expansion"
+        )
+
+    if features.growth_rate_pct is not None and features.growth_rate_pct >= 50:
+        reasons.append(
+            f"Growth rate of {features.growth_rate_pct:.0f}% indicates "
+            f"strong momentum"
+        )
+
+    if (
+        features.cac_usd is not None
+        and features.ltv_usd is not None
+        and features.ltv_usd / max(features.cac_usd, 1) >= 5.0
+    ):
+        ltv_cac = features.ltv_usd / features.cac_usd
+        reasons.append(
+            f"LTV/CAC ratio of {ltv_cac:.1f}x indicates excellent unit "
+            f"economics"
+        )
+
+    if features.runway_months is not None and features.runway_months >= 24:
+        reasons.append(
+            f"Runway of {features.runway_months} months provides strong "
+            f"financial stability"
+        )
+
+    return reasons[:3]
+
+
+def _collect_quantitative_reasons_against(
+    features: ExtractedFeatures,
+) -> list[str]:
+    """Extract quantitative concerns from structured metrics."""
+    reasons: list[str] = []
+
+    if features.runway_months is not None and features.runway_months < 6:
+        reasons.append(
+            f"Runway of {features.runway_months} months indicates critical "
+            f"funding risk"
+        )
+
+    if features.nrr_pct is not None and features.nrr_pct < 90:
+        reasons.append(
+            f"NRR of {features.nrr_pct:.0f}% indicates net revenue contraction"
+        )
+
+    if features.churn_rate_pct is not None and features.churn_rate_pct > 10:
+        reasons.append(
+            f"Churn rate of {features.churn_rate_pct:.1f}% indicates severe "
+            f"retention issues"
+        )
+
+    if (
+        features.cac_usd is not None
+        and features.ltv_usd is not None
+        and features.ltv_usd / max(features.cac_usd, 1) < 1.0
+    ):
+        reasons.append(
+            "LTV/CAC ratio below 1.0x indicates unsustainable unit economics"
+        )
+
+    if features.burn_rate_usd is not None and features.burn_rate_usd >= 5_000_000:
+        reasons.append(
+            f"Monthly burn rate of ${features.burn_rate_usd / 1_000_000:.1f}M "
+            f"is very high"
+        )
+
+    return reasons[:3]

@@ -8,15 +8,23 @@ from __future__ import annotations
 from predictron_engine.extraction.quantitative.parsers import (
     parse_active_user_count,
     parse_arr,
+    parse_burn_rate,
+    parse_cac,
+    parse_churn,
     parse_customer_count,
     parse_dollar_amount,
     parse_funding_amount,
     parse_gmv,
     parse_growth_rate,
     parse_integer,
+    parse_ltv,
     parse_market_size,
     parse_mrr,
+    parse_nrr,
     parse_percentage,
+    parse_runway,
+    parse_team_size,
+    parse_valuation,
     parse_year,
 )
 
@@ -438,3 +446,375 @@ class TestEdgeCases:
         assert parse_active_user_count("") is None
         assert parse_growth_rate("") is None
         assert parse_market_size("") is None
+        assert parse_valuation("") is None
+        assert parse_nrr("") is None
+        assert parse_churn("") is None
+        assert parse_burn_rate("") is None
+        assert parse_runway("") is None
+        assert parse_cac("") is None
+        assert parse_ltv("") is None
+        assert parse_team_size("") is None
+
+
+# ===========================================================================
+# Sprint 14.1 — Valuation extraction (bug fix)
+# ===========================================================================
+
+
+class TestParseValuation:
+    """Regression: valuation_usd must extract the valuation, not the first dollar amount."""
+
+    def test_valuation_dollar_suffix(self) -> None:
+        assert parse_valuation("$220M valuation") == 220_000_000.0
+
+    def test_valued_at(self) -> None:
+        assert parse_valuation("valued at $1.2B") == 1_200_000_000.0
+
+    def test_valuation_of(self) -> None:
+        assert parse_valuation("valuation of $500M") == 500_000_000.0
+
+    def test_raised_at_valuation(self) -> None:
+        result = parse_valuation("$42M raised at a $220M valuation")
+        assert result == 220_000_000.0
+
+    def test_raised_at_valuation_an(self) -> None:
+        result = parse_valuation("$10M raised at an $80M valuation")
+        assert result == 80_000_000.0
+
+    def test_pre_money_valuation(self) -> None:
+        result = parse_valuation("pre-money valuation of $500M")
+        assert result == 500_000_000.0
+
+    def test_post_money_valuation(self) -> None:
+        result = parse_valuation("post-money valuation $300M")
+        assert result == 300_000_000.0
+
+    def test_valuation_small_amount(self) -> None:
+        assert parse_valuation("$5M valuation") == 5_000_000.0
+
+    def test_valuation_billions(self) -> None:
+        assert parse_valuation("$2B valuation") == 2_000_000_000.0
+
+    def test_no_valuation_returns_none(self) -> None:
+        assert parse_valuation("no valuation mentioned") is None
+
+    def test_empty_returns_none(self) -> None:
+        assert parse_valuation("") is None
+
+    def test_only_funding_no_valuation_returns_none(self) -> None:
+        assert parse_valuation("raised $42M in seed round") is None
+
+
+# ===========================================================================
+# Sprint 14.1 — parse_arr improved coverage
+# ===========================================================================
+
+
+class TestParseArrImproved:
+    def test_arr_has_reached(self) -> None:
+        assert parse_arr("ARR has reached $5M") == 5_000_000.0
+
+    def test_arr_stands_at(self) -> None:
+        assert parse_arr("ARR stands at $3M") == 3_000_000.0
+
+    def test_arr_surpassed(self) -> None:
+        assert parse_arr("ARR surpassed $10M") == 10_000_000.0
+
+    def test_arr_grown_to(self) -> None:
+        assert parse_arr("ARR grown to $8M") == 8_000_000.0
+
+    def test_annual_recurring_revenue_of(self) -> None:
+        assert parse_arr("Annual recurring revenue of $10M") == 10_000_000.0
+
+    def test_annual_recurring_revenue_at(self) -> None:
+        assert parse_arr("annual recurring revenue at $2.5M") == 2_500_000.0
+
+    def test_annual_recurring_revenue_reaching(self) -> None:
+        assert parse_arr("annual recurring revenue reaching $1M") == 1_000_000.0
+
+
+# ===========================================================================
+# Sprint 14.1 — parse_nrr
+# ===========================================================================
+
+
+class TestParseNrr:
+    def test_nrr_of_percent(self) -> None:
+        assert parse_nrr("NRR of 120%") == 120.0
+
+    def test_nrr_percent_net_retention(self) -> None:
+        assert parse_nrr("130% net revenue retention") == 130.0
+
+    def test_nrr_is_percent(self) -> None:
+        assert parse_nrr("NRR is 115%") == 115.0
+
+    def test_nrr_stands_at(self) -> None:
+        assert parse_nrr("NRR stands at 125%") == 125.0
+
+    def test_net_revenue_retention_is(self) -> None:
+        assert parse_nrr("Net revenue retention is 118%") == 118.0
+
+    def test_net_revenue_retention_stands_at(self) -> None:
+        assert parse_nrr("Net revenue retention stands at 140%") == 140.0
+
+    def test_net_revenue_retention_of(self) -> None:
+        assert parse_nrr("net revenue retention of 105%") == 105.0
+
+    def test_nrr_decimal(self) -> None:
+        assert parse_nrr("NRR of 112.5%") == 112.5
+
+    def test_nrr_no_percent_sign(self) -> None:
+        assert parse_nrr("NRR of 135") == 135.0
+
+    def test_no_nrr_returns_none(self) -> None:
+        assert parse_nrr("no nrr mentioned") is None
+
+    def test_empty_returns_none(self) -> None:
+        assert parse_nrr("") is None
+
+
+# ===========================================================================
+# Sprint 14.1 — parse_churn improved coverage
+# ===========================================================================
+
+
+class TestParseChurnImproved:
+    def test_churn_is_percent(self) -> None:
+        assert parse_churn("churn is 5%") == 5.0
+
+    def test_churn_is_below_percent(self) -> None:
+        assert parse_churn("churn is below 4%") == 4.0
+
+    def test_churn_is_under_percent(self) -> None:
+        assert parse_churn("churn is under 3%") == 3.0
+
+    def test_churn_rate_of(self) -> None:
+        assert parse_churn("churn rate of 3.2%") == 3.2
+
+    def test_monthly_churn_of(self) -> None:
+        assert parse_churn("monthly churn of 2%") == 2.0
+
+    def test_churned_at_rate(self) -> None:
+        assert parse_churn("churned at a rate of 8%") == 8.0
+
+    def test_percent_churn_rate(self) -> None:
+        assert parse_churn("5% churn rate") == 5.0
+
+    def test_percent_monthly_churn_rate(self) -> None:
+        assert parse_churn("2% monthly churn rate") == 2.0
+
+    def test_churn_decimal(self) -> None:
+        assert parse_churn("churn is 3.5%") == 3.5
+
+    def test_no_churn_returns_none(self) -> None:
+        assert parse_churn("no churn mentioned") is None
+
+    def test_empty_returns_none(self) -> None:
+        assert parse_churn("") is None
+
+
+# ===========================================================================
+# Sprint 14.1 — parse_market_size improved coverage
+# ===========================================================================
+
+
+class TestParseMarketSizeImproved:
+    def test_dollar_amount_market(self) -> None:
+        assert parse_market_size("$5B market") == 5_000_000_000.0
+
+    def test_dollar_amount_addressable_market(self) -> None:
+        assert parse_market_size("$200M addressable market") == 200_000_000.0
+
+    def test_dollar_amount_market_sam(self) -> None:
+        assert parse_market_size("$50B SAM") == 50_000_000_000.0
+
+
+# ===========================================================================
+# Sprint 14.1 — parse_burn_rate
+# ===========================================================================
+
+
+class TestParseBurnRate:
+    def test_monthly_burn_suffix(self) -> None:
+        assert parse_burn_rate("$500K monthly burn") == 500_000.0
+
+    def test_burn_rate_of(self) -> None:
+        assert parse_burn_rate("burn rate of $1.2M") == 1_200_000.0
+
+    def test_burning_per_month(self) -> None:
+        assert parse_burn_rate("burning $200K per month") == 200_000.0
+
+    def test_burning_monthly(self) -> None:
+        assert parse_burn_rate("burning $300K monthly") == 300_000.0
+
+    def test_burn_plain(self) -> None:
+        assert parse_burn_rate("$1M burn") == 1_000_000.0
+
+    def test_burn_rate_is(self) -> None:
+        assert parse_burn_rate("burn rate is $750K") == 750_000.0
+
+    def test_no_burn_returns_none(self) -> None:
+        assert parse_burn_rate("no burn mentioned") is None
+
+    def test_empty_returns_none(self) -> None:
+        assert parse_burn_rate("") is None
+
+
+# ===========================================================================
+# Sprint 14.1 — parse_runway
+# ===========================================================================
+
+
+class TestParseRunway:
+    def test_months_runway(self) -> None:
+        assert parse_runway("18 months runway") == 18
+
+    def test_runway_of_months(self) -> None:
+        assert parse_runway("runway of 24 months") == 24
+
+    def test_dash_months_runway(self) -> None:
+        assert parse_runway("12-month runway") == 12
+
+    def test_months_of_runway(self) -> None:
+        assert parse_runway("36 months of runway") == 36
+
+    def test_runway_at_months(self) -> None:
+        assert parse_runway("runway at 10 months") == 10
+
+    def test_runway_is_months(self) -> None:
+        assert parse_runway("runway is 8 months") == 8
+
+    def test_no_runway_returns_none(self) -> None:
+        assert parse_runway("no runway mentioned") is None
+
+    def test_empty_returns_none(self) -> None:
+        assert parse_runway("") is None
+
+
+# ===========================================================================
+# Sprint 14.1 — parse_cac
+# ===========================================================================
+
+
+class TestParseCac:
+    def test_cac_of_dollar(self) -> None:
+        assert parse_cac("CAC of $500") == 500.0
+
+    def test_dollar_cac(self) -> None:
+        assert parse_cac("$1,200 CAC") == 1_200.0
+
+    def test_cac_is(self) -> None:
+        assert parse_cac("CAC is $800") == 800.0
+
+    def test_cac_suffix_k(self) -> None:
+        assert parse_cac("CAC of $2K") == 2_000.0
+
+    def test_customer_acquisition_cost(self) -> None:
+        assert parse_cac("customer acquisition cost is $600") == 600.0
+
+    def test_cac_averaging(self) -> None:
+        assert parse_cac("CAC averaging $1,500") == 1_500.0
+
+    def test_no_cac_returns_none(self) -> None:
+        assert parse_cac("no cac mentioned") is None
+
+    def test_empty_returns_none(self) -> None:
+        assert parse_cac("") is None
+
+
+# ===========================================================================
+# Sprint 14.1 — parse_ltv
+# ===========================================================================
+
+
+class TestParseLtv:
+    def test_ltv_of_dollar(self) -> None:
+        assert parse_ltv("LTV of $5,000") == 5_000.0
+
+    def test_dollar_ltv(self) -> None:
+        assert parse_ltv("$12K LTV") == 12_000.0
+
+    def test_ltv_is(self) -> None:
+        assert parse_ltv("LTV is $8,000") == 8_000.0
+
+    def test_lifetime_value_of(self) -> None:
+        assert parse_ltv("lifetime value of $3,500") == 3_500.0
+
+    def test_lifetime_value_is(self) -> None:
+        assert parse_ltv("lifetime value is $15,000") == 15_000.0
+
+    def test_no_ltv_returns_none(self) -> None:
+        assert parse_ltv("no ltv mentioned") is None
+
+    def test_empty_returns_none(self) -> None:
+        assert parse_ltv("") is None
+
+
+# ===========================================================================
+# Sprint 14.1 — parse_team_size
+# ===========================================================================
+
+
+class TestParseTeamSize:
+    def test_team_of_number(self) -> None:
+        assert parse_team_size("team of 42") == 42
+
+    def test_person_team(self) -> None:
+        assert parse_team_size("50-person team") == 50
+
+    def test_employees(self) -> None:
+        assert parse_team_size("200 employees") == 200
+
+    def test_headcount_of(self) -> None:
+        assert parse_team_size("headcount of 75") == 75
+
+    def test_person_company(self) -> None:
+        assert parse_team_size("30-person company") == 30
+
+    def test_person_startup(self) -> None:
+        assert parse_team_size("20 person startup") == 20
+
+    def test_no_team_returns_none(self) -> None:
+        assert parse_team_size("no team info") is None
+
+    def test_empty_returns_none(self) -> None:
+        assert parse_team_size("") is None
+
+
+# ===========================================================================
+# Sprint 14.1 — Valuation does NOT return the funding amount
+# ===========================================================================
+
+
+class TestValuationVsFundingSeparation:
+    """Critical regression: valuation_usd must be distinct from funding_amount_usd."""
+
+    def test_two_amounts_valuation_is_second(self) -> None:
+        text = "$42M raised at a $220M valuation"
+        assert parse_funding_amount(text) == 42_000_000.0
+        assert parse_valuation(text) == 220_000_000.0
+
+    def test_valued_at_not_funding(self) -> None:
+        text = "The company raised a seed round and is now valued at $50M"
+        assert parse_valuation(text) == 50_000_000.0
+
+    def test_valuation_keyword_required(self) -> None:
+        text = "$42M raised in Series A"
+        assert parse_valuation(text) is None
+        assert parse_funding_amount(text) == 42_000_000.0
+
+
+# ===========================================================================
+# Sprint 14.1 — parse_funding_amount coverage
+# ===========================================================================
+
+
+class TestParseFundingAmountImproved:
+    def test_series_b_round(self) -> None:
+        assert parse_funding_amount("$30M Series B round") == 30_000_000.0
+
+    def test_pre_seed(self) -> None:
+        assert parse_funding_amount("$2M pre-seed round") == 2_000_000.0
+
+    def test_combined_funding(self) -> None:
+        assert parse_funding_amount("combined funding of $75M") == 75_000_000.0

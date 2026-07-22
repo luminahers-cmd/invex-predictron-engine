@@ -375,10 +375,24 @@ class MarketOpportunityScorer:
     def _score_market_signals(
         score: float, features: ExtractedFeatures
     ) -> tuple[float, float]:
-        if not features.market_signals:
-            return score, 0.0
-        count = len(features.market_signals)
-        delta = min(8.0, count * 1.5)
+        """Score based on market signal count and/or structured market size."""
+        delta = 0.0
+        if features.market_signals:
+            count = len(features.market_signals)
+            delta = min(8.0, count * 1.5)
+
+        if features.market_size_usd is not None:
+            market = features.market_size_usd
+            if market >= 1_000_000_000_000:
+                market_delta = 8.0
+            elif market >= 100_000_000_000:
+                market_delta = 6.0
+            elif market >= 10_000_000_000:
+                market_delta = 4.0
+            else:
+                market_delta = 1.0
+            delta = max(delta, market_delta)
+
         return score + delta, delta
 
     @staticmethod
@@ -1202,10 +1216,36 @@ class TractionScorer:
 
     Evaluates revenue signals, funding signals, investor quality, customer
     metrics, user engagement, growth, retention, expansion, milestones,
-    partnerships, awards, and traction risk. Exceptional traction can
-    compensate for weaknesses in other dimensions through this scorer's
-    higher ceilings. All scoring is deterministic.
+    partnerships, awards, traction risk, AND structured quantitative metrics
+    (ARR, growth rate, NRR, churn, customer count, runway, burn rate).
+
+    Structured metrics augment signal-list scoring. When both a structured
+    metric and a signal list are available, the structured metric provides
+    additional deterministic score adjustments. All scoring is deterministic
+    and traceable.
     """
+
+    # --- Structured metric scoring thresholds ---
+    _ARR_PRE_SCALE: float = 1_000_000.0
+    _ARR_MEANINGFUL: float = 10_000_000.0
+    _ARR_STRONG: float = 50_000_000.0
+    _GROWTH_SLOW: float = 20.0
+    _GROWTH_MODERATE: float = 50.0
+    _GROWTH_STRONG: float = 100.0
+    _NRR_CONTRACTION: float = 90.0
+    _NRR_STRONG: float = 110.0
+    _NRR_EXCEPTIONAL: float = 130.0
+    _CHURN_EXCELLENT: float = 2.0
+    _CHURN_ACCEPTABLE: float = 5.0
+    _CHURN_CONCERNING: float = 10.0
+    _RUNWAY_CRITICAL: int = 6
+    _RUNWAY_ELEVATED: int = 12
+    _RUNWAY_COMFORTABLE: int = 24
+    _BURN_HIGH: float = 1_000_000.0
+    _BURN_VERY_HIGH: float = 5_000_000.0
+    _CUSTOMERS_EARLY: int = 50
+    _CUSTOMERS_GROWING: int = 200
+    _CUSTOMERS_SCALING: int = 1000
 
     def __init__(self) -> None:
         self._dimension = AnalysisDimension.TRACTION_SIGNALS
@@ -1288,6 +1328,34 @@ class TractionScorer:
         if adj != 0:
             adjustments.append(("traction_risk", adj))
 
+        base_score, adj = self._score_structured_arr(base_score, features)
+        if adj != 0:
+            adjustments.append(("structured_arr", adj))
+
+        base_score, adj = self._score_structured_growth(base_score, features)
+        if adj != 0:
+            adjustments.append(("structured_growth", adj))
+
+        base_score, adj = self._score_structured_nrr(base_score, features)
+        if adj != 0:
+            adjustments.append(("structured_nrr", adj))
+
+        base_score, adj = self._score_structured_churn(base_score, features)
+        if adj != 0:
+            adjustments.append(("structured_churn", adj))
+
+        base_score, adj = self._score_structured_customer_count(base_score, features)
+        if adj != 0:
+            adjustments.append(("structured_customer_count", adj))
+
+        base_score, adj = self._score_structured_runway(base_score, features)
+        if adj != 0:
+            adjustments.append(("structured_runway", adj))
+
+        base_score, adj = self._score_structured_burn_rate(base_score, features)
+        if adj != 0:
+            adjustments.append(("structured_burn_rate", adj))
+
         base_score, adj = self._score_observations(base_score, relevant_obs)
         if adj != 0:
             adjustments.append(("observations", adj))
@@ -1305,6 +1373,10 @@ class TractionScorer:
             rationale=rationale,
             evidence=[o.statement for o in relevant_obs],
         )
+
+    # ------------------------------------------------------------------
+    # Qualitative signal scoring (existing)
+    # ------------------------------------------------------------------
 
     @staticmethod
     def _score_has_revenue(
@@ -1500,6 +1572,131 @@ class TractionScorer:
         dampened = 50.0 + deviation * (1.0 - dampening * 0.3)
         return max(0.0, min(100.0, dampened))
 
+    # ------------------------------------------------------------------
+    # Structured quantitative scoring (Sprint 15)
+    # ------------------------------------------------------------------
+
+    def _score_structured_arr(
+        self, score: float, features: ExtractedFeatures
+    ) -> tuple[float, float]:
+        """Score based on actual ARR value rather than signal mentions."""
+        if features.arr_usd is None:
+            return score, 0.0
+        arr = features.arr_usd
+        if arr >= self._ARR_STRONG:
+            delta = 14.0
+        elif arr >= self._ARR_MEANINGFUL:
+            delta = 10.0
+        elif arr >= self._ARR_PRE_SCALE:
+            delta = 6.0
+        else:
+            delta = 2.0
+        return score + delta, delta
+
+    def _score_structured_growth(
+        self, score: float, features: ExtractedFeatures
+    ) -> tuple[float, float]:
+        """Score based on actual growth rate percentage."""
+        if features.growth_rate_pct is None:
+            return score, 0.0
+        growth = features.growth_rate_pct
+        if growth >= self._GROWTH_STRONG:
+            delta = 12.0
+        elif growth >= self._GROWTH_MODERATE:
+            delta = 8.0
+        elif growth >= self._GROWTH_SLOW:
+            delta = 4.0
+        else:
+            delta = 0.0
+        return score + delta, delta
+
+    def _score_structured_nrr(
+        self, score: float, features: ExtractedFeatures
+    ) -> tuple[float, float]:
+        """Score based on net revenue retention percentage."""
+        if features.nrr_pct is None:
+            return score, 0.0
+        nrr = features.nrr_pct
+        if nrr >= self._NRR_EXCEPTIONAL:
+            delta = 12.0
+        elif nrr >= self._NRR_STRONG:
+            delta = 9.0
+        elif nrr >= 100.0:
+            delta = 5.0
+        elif nrr >= self._NRR_CONTRACTION:
+            delta = -2.0
+        else:
+            delta = -6.0
+        return score + delta, delta
+
+    def _score_structured_churn(
+        self, score: float, features: ExtractedFeatures
+    ) -> tuple[float, float]:
+        """Score based on churn rate percentage (lower is better)."""
+        if features.churn_rate_pct is None:
+            return score, 0.0
+        churn = features.churn_rate_pct
+        if churn <= self._CHURN_EXCELLENT:
+            delta = 10.0
+        elif churn <= self._CHURN_ACCEPTABLE:
+            delta = 5.0
+        elif churn <= self._CHURN_CONCERNING:
+            delta = -3.0
+        else:
+            delta = -8.0
+        return score + delta, delta
+
+    def _score_structured_customer_count(
+        self, score: float, features: ExtractedFeatures
+    ) -> tuple[float, float]:
+        """Score based on actual customer count."""
+        if features.customer_count is None:
+            return score, 0.0
+        count = features.customer_count
+        if count >= self._CUSTOMERS_SCALING:
+            delta = 10.0
+        elif count >= self._CUSTOMERS_GROWING:
+            delta = 7.0
+        elif count >= self._CUSTOMERS_EARLY:
+            delta = 4.0
+        elif count >= 10:
+            delta = 2.0
+        else:
+            delta = 0.0
+        return score + delta, delta
+
+    def _score_structured_runway(
+        self, score: float, features: ExtractedFeatures
+    ) -> tuple[float, float]:
+        """Score based on runway in months (longer is better)."""
+        if features.runway_months is None:
+            return score, 0.0
+        runway = features.runway_months
+        if runway >= self._RUNWAY_COMFORTABLE:
+            delta = 6.0
+        elif runway >= self._RUNWAY_ELEVATED:
+            delta = 2.0
+        elif runway >= self._RUNWAY_CRITICAL:
+            delta = -4.0
+        else:
+            delta = -8.0
+        return score + delta, delta
+
+    def _score_structured_burn_rate(
+        self, score: float, features: ExtractedFeatures
+    ) -> tuple[float, float]:
+        """Score based on burn rate (lower is generally better)."""
+        if features.burn_rate_usd is None:
+            return score, 0.0
+        burn = features.burn_rate_usd
+        if burn >= self._BURN_VERY_HIGH:
+            delta = -6.0
+        elif burn >= self._BURN_HIGH:
+            delta = -2.0
+        else:
+            delta = 3.0
+        return score + delta, delta
+
 
 class TeamExecutionScorer:
     """Scores the TEAM_EXECUTION dimension based on team and execution features.
@@ -1613,10 +1810,24 @@ class TeamExecutionScorer:
             evidence=[o.statement for o in relevant_obs],
         )
 
-    @staticmethod
     def _score_team_size(
-        score: float, features: ExtractedFeatures
+        self, score: float, features: ExtractedFeatures
     ) -> tuple[float, float]:
+        """Score based on numeric team size, falling back to text indicator."""
+        if features.team_size_numeric is not None:
+            size = features.team_size_numeric
+            if size >= 1000:
+                delta = 7.0
+            elif size >= 201:
+                delta = 6.0
+            elif size >= 51:
+                delta = 5.0
+            elif size >= 11:
+                delta = 3.0
+            else:
+                delta = 0.0
+            return score + delta, delta
+
         if not features.team_size_indicator:
             return score, 0.0
         key = features.team_size_indicator.lower().replace(" ", "")

@@ -113,8 +113,8 @@ def compute_investment_readiness(
 
     readiness_level = _score_to_level(readiness_score)
 
-    key_strengths = _collect_strengths(observations, assessments, score_map)
-    key_concerns = _collect_concerns(observations, assessments, score_map)
+    key_strengths = _collect_strengths(observations, assessments, score_map, features)
+    key_concerns = _collect_concerns(observations, assessments, score_map, features)
     gaps = _identify_gaps(features)
 
     signal_relationships = _build_signal_relationships(cross_obs)
@@ -181,6 +181,7 @@ def _collect_strengths(
     observations: list[Observation],
     assessments: list[DimensionAssessment],
     score_map: dict[str, float],
+    features: ExtractedFeatures | None = None,
 ) -> list[str]:
     strengths: list[str] = []
 
@@ -190,6 +191,24 @@ def _collect_strengths(
         if score >= 60.0:
             label = DIMENSION_LABELS.get(dim, dim_val)
             strengths.append(f"{label} scores {score:.0f}/100")
+
+    if features is not None:
+        if features.arr_usd is not None and features.arr_usd >= 10_000_000:
+            strengths.append(
+                f"ARR of ${features.arr_usd / 1_000_000:.1f}M"
+            )
+        if features.nrr_pct is not None and features.nrr_pct >= 110:
+            strengths.append(f"NRR of {features.nrr_pct:.0f}%")
+        if features.growth_rate_pct is not None and features.growth_rate_pct >= 50:
+            strengths.append(f"Growth rate of {features.growth_rate_pct:.0f}%")
+        if (
+            features.cac_usd is not None
+            and features.ltv_usd is not None
+            and features.ltv_usd / max(features.cac_usd, 1) >= 5.0
+        ):
+            strengths.append(
+                f"LTV/CAC of {features.ltv_usd / features.cac_usd:.1f}x"
+            )
 
     high_conf = [
         a for a in assessments
@@ -206,6 +225,7 @@ def _collect_concerns(
     observations: list[Observation],
     assessments: list[DimensionAssessment],
     score_map: dict[str, float],
+    features: ExtractedFeatures | None = None,
 ) -> list[str]:
     concerns: list[str] = []
 
@@ -215,6 +235,26 @@ def _collect_concerns(
         if score < 50.0:
             label = DIMENSION_LABELS.get(dim, dim_val)
             concerns.append(f"{label} scores {score:.0f}/100 (below midpoint)")
+
+    if features is not None:
+        if features.runway_months is not None and features.runway_months < 6:
+            concerns.append(
+                f"Runway of {features.runway_months} months — critical funding risk"
+            )
+        if features.nrr_pct is not None and features.nrr_pct < 90:
+            concerns.append(
+                f"NRR of {features.nrr_pct:.0f}% — net revenue contraction"
+            )
+        if features.churn_rate_pct is not None and features.churn_rate_pct > 10:
+            concerns.append(
+                f"Churn rate of {features.churn_rate_pct:.1f}% — severe retention issues"
+            )
+        if (
+            features.cac_usd is not None
+            and features.ltv_usd is not None
+            and features.ltv_usd / max(features.cac_usd, 1) < 1.0
+        ):
+            concerns.append("LTV/CAC below 1.0x — unsustainable unit economics")
 
     conflict_obs = [
         o for o in observations
@@ -257,11 +297,68 @@ def _build_signal_relationships(
         "founder_domain_alignment": ("founder_quality", "market_opportunity"),
         "scale_evidence": ("traction_signals", "product_strength"),
         "signal_conflict": ("unknown", "unknown"),
+        # Quantitative cross-signal categories
+        "rev_per_customer_enterprise": ("traction_signals", "business_model_viability"),
+        "rev_per_customer_mid_market": ("traction_signals", "business_model_viability"),
+        "rev_per_customer_smb": ("traction_signals", "business_model_viability"),
+        "rev_per_employee_exceptional": ("traction_signals", "team_execution"),
+        "rev_per_employee_strong": ("traction_signals", "team_execution"),
+        "rev_per_employee_acceptable": ("traction_signals", "team_execution"),
+        "rev_per_employee_low": ("traction_signals", "team_execution"),
+        "growth_burn_excellent": ("traction_signals", "business_model_viability"),
+        "growth_burn_good": ("traction_signals", "business_model_viability"),
+        "growth_burn_moderate": ("traction_signals", "business_model_viability"),
+        "growth_burn_concerning": ("traction_signals", "business_model_viability"),
+        "burn_runway_critical": ("traction_signals", "market_opportunity"),
+        "burn_runway_warning": ("traction_signals", "market_opportunity"),
+        "burn_runway_sustainable": ("traction_signals", "market_opportunity"),
+        "nrr_churn_reinforcing": ("traction_signals", "product_strength"),
+        "nrr_churn_conflict": ("traction_signals", "product_strength"),
+        "nrr_churn_masking": ("traction_signals", "product_strength"),
+        "nrr_churn_downgrade": ("traction_signals", "product_strength"),
+        "funding_efficiency_strong": ("traction_signals", "business_model_viability"),
+        "funding_efficiency_good": ("traction_signals", "business_model_viability"),
+        "funding_efficiency_moderate": ("traction_signals", "business_model_viability"),
+        "funding_efficiency_weak": ("traction_signals", "business_model_viability"),
+        "valuation_arr_high": ("traction_signals", "market_opportunity"),
+        "valuation_arr_moderate": ("traction_signals", "market_opportunity"),
+        "valuation_arr_low": ("traction_signals", "market_opportunity"),
+        "valuation_arr_very_low": ("traction_signals", "market_opportunity"),
+        "funding_valuation_inconsistent": ("traction_signals", "market_opportunity"),
+        "funding_valuation_high_creation": ("traction_signals", "market_opportunity"),
+        "customer_count_stage_exceeds": ("traction_signals", "founder_quality"),
+        "customer_count_stage_below": ("traction_signals", "founder_quality"),
+        "team_revenue_inconsistent": ("team_execution", "traction_signals"),
+        "team_revenue_efficient": ("team_execution", "traction_signals"),
+        "valuation_weak_traction": ("market_opportunity", "traction_signals"),
+        "high_arr_concentrated_customers": ("traction_signals", "business_model_viability"),
+        "high_burn_low_growth": ("traction_signals", "business_model_viability"),
+        "funding_without_execution": ("traction_signals", "founder_quality"),
+        "arr_exceeds_burn": ("traction_signals", "business_model_viability"),
+        "arr_partial_burn_coverage": ("traction_signals", "business_model_viability"),
+        "arr_burn_gap": ("traction_signals", "business_model_viability"),
     }
 
+    _conflict_categories: set[str] = {
+        "signal_conflict",
+        "nrr_churn_conflict",
+        "burn_runway_critical",
+        "growth_burn_concerning",
+        "funding_efficiency_weak",
+        "funding_valuation_inconsistent",
+        "customer_count_stage_below",
+        "team_revenue_inconsistent",
+        "valuation_weak_traction",
+        "high_arr_concentrated_customers",
+        "high_burn_low_growth",
+        "funding_without_execution",
+        "arr_burn_gap",
+        "rev_per_employee_low",
+        "nrr_churn_masking",
+    }
     for obs in cross_obs:
         pair = dimension_pairs.get(obs.category, ("unknown", "unknown"))
-        rel_type = "conflicting" if obs.category == "signal_conflict" else "reinforcing"
+        rel_type = "conflicting" if obs.category in _conflict_categories else "reinforcing"
 
         relationships.append(
             SignalRelationship(
