@@ -10,13 +10,15 @@ Tests validate that the DerivedMetricsEngine correctly:
   - Does NOT overwrite explicitly extracted values
   - Produces correct traceability logs
   - Handles edge cases (zero, negative, missing values)
+  - Maintains the architectural invariant that no rule depends on a derived field
 """
 
 from __future__ import annotations
 
-from predictron_engine.extraction.derived.engine import DerivedMetricsEngine
+from predictron_engine.extraction.derived.engine import DerivedMetricsEngine, _METRIC_TO_FIELD
 from predictron_engine.extraction.derived.models import DerivedMetricLog
 from predictron_engine.extraction.derived.rules import (
+    ALL_INFERENCE_RULES,
     derive_arr_from_mrr,
     derive_arr_per_customer,
     derive_burn_multiple,
@@ -423,3 +425,202 @@ class TestDerivedMetricLogModel:
         assert d["metric_name"] == "test"
         assert d["source_fields"] == ["a", "b"]
         assert isinstance(d, dict)
+
+
+class TestNoCircularDerivations:
+    """Architectural invariant: no inference rule depends on a derived field.
+
+    The DerivedMetricsEngine applies rules in a single pass.  Each rule
+    reads from the *original* ExtractedFeatures and writes to a separate
+    enriched copy.  For this guarantee to hold:
+
+    1. Every rule must declare source_fields that are canonical source
+       fields — fields populated by domain extractors, not by the
+       inference engine itself.
+    2. No rule may declare as a source field a field that is *exclusively*
+       a derived output (i.e., a field that no extractor ever populates).
+    3. Fields that can be *both* extracted and derived (arr_usd from MRR,
+       mrr_usd from ARR, runway_months from funding+burn) are safe
+       because the engine only writes them when they are None.
+
+    If any rule violates this invariant the DerivedMetricsEngine could
+    silently produce wrong values when it depends on output written by a
+    prior rule in the same pass — a correctness bug that is difficult to
+    detect in production.
+
+    This test class exists to catch such regressions immediately.
+    """
+
+    # Canonical source fields: populated by domain extractors.
+    # A rule may only declare these as source_fields.
+    _CANONICAL_SOURCE_FIELDS: frozenset[str] = frozenset({
+        "mrr_usd",
+        "arr_usd",
+        "team_size_numeric",
+        "funding_amount_usd",
+        "burn_rate_usd",
+        "cac_usd",
+        "ltv_usd",
+        "customer_count",
+    })
+
+    # Fields that are exclusively derived outputs.  No rule may read
+    # from these.  If a rule needs revenue_per_employee, it must
+    # recompute it from arr_usd / team_size_numeric.
+    _EXCLUSIVELY_DERIVED_FIELDS: frozenset[str] = frozenset({
+        "revenue_per_employee_usd",
+        "funding_efficiency_ratio",
+        "burn_multiple",
+        "ltv_cac_ratio",
+        "acv_per_customer_usd",
+    })
+
+    def test_all_rules_only_declare_canonical_source_fields(self) -> None:
+        """Every rule's source_fields must be a subset of canonical source fields.
+
+        If this test fails, a rule is reading from a field that is produced
+        by the inference engine rather than by domain extraction.  This
+        breaks the single-pass immutability guarantee.
+        """
+        for rule_name, rule_fn, metric_name in ALL_INFERENCE_RULES:
+            features = ExtractedFeatures(
+                mrr_usd=50_000.0,
+                arr_usd=600_000.0,
+                team_size_numeric=20,
+                funding_amount_usd=5_000_000.0,
+                burn_rate_usd=200_000.0,
+                cac_usd=2_000.0,
+                ltv_usd=10_000.0,
+                customer_count=100,
+            )
+            logs = rule_fn(features)
+            for log_entry in logs:
+                for field in log_entry.source_fields:
+                    assert field in self._CANONICAL_SOURCE_FIELDS, (
+                        f"Rule '{rule_name}' declares source field "
+                        f"'{field}' which is not a canonical source field. "
+                        f"Rules must only read from domain-extracted fields "
+                        f"to prevent circular derivations."
+                    )
+
+    def test_no_rule_reads_exclusively_derived_fields(self) -> None:
+        """No rule may declare an exclusively-derived field as a source.
+
+        Fields like revenue_per_employee_usd, funding_efficiency_ratio,
+        burn_multiple, ltv_cac_ratio, and acv_per_customer_usd are only
+        ever produced by inference rules.  If a rule reads from these it
+        creates a hidden dependency on a prior rule's output.
+        """
+        for rule_name, rule_fn, metric_name in ALL_INFERENCE_RULES:
+            features = ExtractedFeatures(
+                mrr_usd=50_000.0,
+                arr_usd=600_000.0,
+                team_size_numeric=20,
+                funding_amount_usd=5_000_000.0,
+                burn_rate_usd=200_000.0,
+                cac_usd=2_000.0,
+                ltv_usd=10_000.0,
+                customer_count=100,
+            )
+            logs = rule_fn(features)
+            for log_entry in logs:
+                overlap = set(log_entry.source_fields) & self._EXCLUSIVELY_DERIVED_FIELDS
+                assert not overlap, (
+                    f"Rule '{rule_name}' reads from exclusively-derived "
+                    f"field(s) {overlap}. Rules must recompute ratios from "
+                    f"canonical source fields to avoid circular derivations."
+                )
+
+    def test_engine_mapping_outputs_are_derived_fields(self) -> None:
+        """Every target field in _METRIC_TO_FIELD must be a known derived field.
+
+        This verifies that the engine's write targets are consistent with
+        the set of fields the engine is responsible for populating.
+        """
+        all_known_derived = self._EXCLUSIVELY_DERIVED_FIELDS | {
+            "arr_usd",
+            "mrr_usd",
+            "runway_months",
+        }
+        for metric_name, target_field in _METRIC_TO_FIELD.items():
+            assert target_field in all_known_derived, (
+                f"_METRIC_TO_FIELD maps '{metric_name}' to "
+                f"'{target_field}' which is not a recognized derived field. "
+                f"Update _EXCLUSIVELY_DERIVED_FIELDS or the mapping."
+            )
+
+    def test_rules_read_from_original_not_enriched_features(self) -> None:
+        """Verify that a rule cannot observe values written by a prior rule.
+
+        This is the runtime manifestation of the architectural invariant.
+        We populate only source fields needed for one rule, run the full
+        engine, and confirm that a dependent rule does not see values it
+        could only obtain from a prior rule's output.
+
+        Concretely: if we provide MRR but not ARR, the engine should
+        derive ARR from MRR.  But derive_revenue_per_employee should NOT
+        fire because it reads the original features where ARR is None —
+        even though the engine just computed ARR.
+        """
+        features = ExtractedFeatures(
+            mrr_usd=100_000.0,
+            team_size_numeric=10,
+        )
+        engine = DerivedMetricsEngine()
+        enriched, logs = engine.derive(features)
+
+        metric_names = {log.metric_name for log in logs}
+
+        # ARR should be derived from MRR
+        assert "arr_from_mrr" in metric_names
+        assert enriched.arr_usd == 1_200_000.0
+
+        # But revenue_per_employee should NOT be derived because the engine
+        # reads the *original* features where arr_usd was None.
+        assert "revenue_per_employee" not in metric_names
+        assert enriched.revenue_per_employee_usd is None
+
+    def test_no_circular_chain_possible(self) -> None:
+        """Confirm no rule reads from an exclusively-derived field's output.
+
+        Fields like arr_usd and mrr_usd are dual-purpose — they can be
+        populated by domain extractors OR derived by inference rules.
+        This is safe because the engine only derives them when the field
+        is None.  However, exclusively-derived fields (revenue_per_employee_usd,
+        funding_efficiency_ratio, burn_multiple, ltv_cac_ratio,
+        acv_per_customer_usd) are only ever produced by inference rules.
+
+        If any rule reads from one of these exclusively-derived fields,
+        it creates a hidden dependency on a prior rule's output — a
+        correctness bug that breaks single-pass immutability.
+        """
+        rule_fn_map = {t[0]: t[1] for t in ALL_INFERENCE_RULES}
+
+        for output_rule_name, _, output_metric in ALL_INFERENCE_RULES:
+            output_field = _METRIC_TO_FIELD.get(output_metric)
+            if output_field is None:
+                continue
+            if output_field not in self._EXCLUSIVELY_DERIVED_FIELDS:
+                continue
+
+            for input_rule_name, _, _ in ALL_INFERENCE_RULES:
+                if input_rule_name == output_rule_name:
+                    continue
+                features = ExtractedFeatures(
+                    mrr_usd=50_000.0,
+                    arr_usd=600_000.0,
+                    team_size_numeric=20,
+                    funding_amount_usd=5_000_000.0,
+                    burn_rate_usd=200_000.0,
+                    cac_usd=2_000.0,
+                    ltv_usd=10_000.0,
+                    customer_count=100,
+                )
+                logs = rule_fn_map[input_rule_name](features)
+                for log_entry in logs:
+                    assert output_field not in log_entry.source_fields, (
+                        f"Rule '{input_rule_name}' reads from "
+                        f"'{output_field}' which is produced by "
+                        f"'{output_rule_name}'. This creates a circular "
+                        f"derivation chain."
+                    )

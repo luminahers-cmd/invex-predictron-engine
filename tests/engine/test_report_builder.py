@@ -80,7 +80,7 @@ class TestDefaultReportBuilder:
             sample_startup, sample_features, [], [], [], [], [],
         )
 
-        assert result.analysis_metadata.engine_version == "0.10.0"
+        assert result.analysis_metadata.engine_version == "0.12.1"
 
     def test_empty_scores_gives_zero_overall(
         self, sample_startup, sample_features

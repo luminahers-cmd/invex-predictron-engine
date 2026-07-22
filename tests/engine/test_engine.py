@@ -46,7 +46,7 @@ class TestEnginePipeline:
         report = engine.analyze(full_request)
 
         meta = report.analysis_metadata
-        assert meta.engine_version == "0.10.0"
+        assert meta.engine_version == "0.12.1"
         assert "normalize" in meta.pipeline_stages_completed
         assert "collect" in meta.pipeline_stages_completed
         assert "extract" in meta.pipeline_stages_completed
@@ -104,5 +104,5 @@ class TestEnginePipeline:
         report, debug = engine.analyze_with_debug(full_request)
 
         assert report.overall_score >= 0.0
-        assert report.analysis_metadata.engine_version == "0.10.0"
-        assert debug.pipeline_summary.engine_version == "0.10.0"
+        assert report.analysis_metadata.engine_version == "0.12.1"
+        assert debug.pipeline_summary.engine_version == "0.12.1"
