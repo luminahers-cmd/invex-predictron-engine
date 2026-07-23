@@ -60,6 +60,11 @@ New functionality is validated through automated tests, benchmark datasets, and 
 ---
 
 ## System Architecture
+<p align="center">
+  <img src="assets/architecture.png"
+       alt="Predictron Engine Architecture"
+       width="100%">
+</p>
 
 The engine is organized as a modular intelligence pipeline. Each stage performs a specific responsibility while remaining independently testable and extensible.
 
