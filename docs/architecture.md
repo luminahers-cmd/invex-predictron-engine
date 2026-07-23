@@ -1,0 +1,120 @@
+# System Architecture
+
+## Overview
+
+Predictron Engine is a modular venture intelligence system designed to transform publicly available startup information into structured, explainable intelligence.
+
+Rather than relying on a single prediction model, the engine decomposes startup analysis into independent intelligence domains. Each domain extracts structured signals that are aggregated into evidence, reasoned over, and synthesized into a comprehensive venture intelligence report.
+
+The architecture emphasizes explainability, deterministic extraction, modularity, and continuous evaluation.
+
+---
+
+## High-Level Architecture
+
+```text
+Public Startup Data
+        │
+        ▼
+Data Collection
+        │
+        ▼
+Intelligence Extraction
+ ├── Market Intelligence
+ ├── Founder Intelligence
+ ├── Product Intelligence
+ ├── Technology Intelligence
+ ├── Business Model Intelligence
+        │
+        ▼
+Evidence Framework
+        │
+        ▼
+Reasoning Framework
+        │
+        ▼
+Venture Scoring
+        │
+        ▼
+Report Generation
+```
+
+---
+
+## Core Components
+
+### Data Collection
+
+Predictron Engine begins by collecting publicly available startup information, including company websites, product descriptions, documentation, and other structured sources.
+
+The objective of this stage is to normalize raw startup information before downstream analysis.
+
+---
+
+### Intelligence Extraction
+
+Instead of treating startup information as unstructured text, the engine organizes knowledge into specialized intelligence domains.
+
+Current extraction modules include:
+
+- Market Intelligence
+- Founder Intelligence
+- Product Intelligence
+- Technology Intelligence
+- Business Model Intelligence
+
+Each module produces structured features that can be independently validated, benchmarked, and extended without affecting the remainder of the system.
+
+---
+
+### Evidence Framework
+
+Extracted features are transformed into structured evidence.
+
+The Evidence Framework maintains traceability between raw observations and downstream reasoning, allowing every significant conclusion to be supported by observable evidence rather than opaque inference.
+
+---
+
+### Reasoning Framework
+
+The Reasoning Framework synthesizes evidence across intelligence domains.
+
+Rather than evaluating isolated signals, it considers relationships between market, founders, product, technology, and business model to generate coherent venture intelligence.
+
+This separation between evidence generation and reasoning improves transparency, maintainability, and future extensibility.
+
+---
+
+### Venture Scoring
+
+Structured evidence contributes to multiple evaluation dimensions.
+
+Scores are intended to support decision-making by summarizing evidence across the venture, while preserving the underlying reasoning that produced each assessment.
+
+---
+
+### Report Generation
+
+The final stage produces structured venture intelligence reports containing:
+
+- Intelligence summaries
+- Supporting evidence
+- Venture scores
+- Confidence indicators
+- Key observations
+
+The generated report is designed to be explainable, reproducible, and suitable for further human review.
+
+---
+
+## Architectural Principles
+
+Predictron Engine is built around five engineering principles:
+
+- Explainability
+- Modular architecture
+- Deterministic extraction
+- Structured reasoning
+- Continuous evaluation
+
+These principles allow individual components to evolve independently while preserving transparency, reproducibility, and engineering rigor across the system.
