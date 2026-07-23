@@ -1,4 +1,9 @@
 # System Architecture
+<p align="center">
+  <img src="../assets/architecture.png"
+       alt="Predictron Engine Architecture"
+       width="100%">
+</p>
 
 ## Overview
 
