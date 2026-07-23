@@ -15,9 +15,9 @@ Security updates are provided for the latest development version.
 
 ## Reporting a Vulnerability
 
-If you discover a potential security vulnerability, please report it privately rather than opening a public issue.
+Please report potential security vulnerabilities through GitHub's private vulnerability reporting flow for this repository if it is available. Do not open a public issue for a security concern.
 
-Include the following information whenever possible:
+When reporting, include as much of the following as you can:
 
 - Description of the vulnerability
 - Steps to reproduce

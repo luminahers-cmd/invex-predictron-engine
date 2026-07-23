@@ -9,27 +9,27 @@ assignees: ""
 
 ## Summary
 
-Provide a brief description of the issue.
+Describe the issue briefly.
 
 ---
 
 ## Steps to Reproduce
 
-1.
-2.
-3.
+1. Reproduce the issue.
+2. Note the observed behavior.
+3. Record any relevant context.
 
 ---
 
 ## Expected Behavior
 
-Describe what you expected to happen.
+What should have happened?
 
 ---
 
 ## Actual Behavior
 
-Describe what actually happened.
+What happened instead?
 
 ---
 
@@ -43,4 +43,4 @@ Describe what actually happened.
 
 ## Additional Context
 
-Include logs, screenshots, or other relevant information if applicable.
+Add logs, screenshots, or other relevant details if available.

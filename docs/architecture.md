@@ -21,10 +21,10 @@ The architecture emphasizes explainability, deterministic extraction, modularity
 Public Startup Data
         │
         ▼
-Data Collection
+Collection
         │
         ▼
-Intelligence Extraction
+Extraction
  ├── Market Intelligence
  ├── Founder Intelligence
  ├── Product Intelligence
@@ -67,18 +67,22 @@ Current extraction modules include:
 - Product Intelligence
 - Technology Intelligence
 - Business Model Intelligence
+ └── Business Model Intelligence
 
 Each module produces structured features that can be independently validated, benchmarked, and extended without affecting the remainder of the system.
-
+Evaluation
 ---
 
+Scoring
 ### Evidence Framework
 
+Recommendations
 Extracted features are transformed into structured evidence.
 
+Confidence
 The Evidence Framework maintains traceability between raw observations and downstream reasoning, allowing every significant conclusion to be supported by observable evidence rather than opaque inference.
 
----
+Report Generation
 
 ### Reasoning Framework
 

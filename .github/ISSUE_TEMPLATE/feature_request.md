@@ -9,38 +9,38 @@ assignees: ""
 
 ## Summary
 
-Provide a concise description of the proposed feature.
+Describe the feature briefly.
 
 ---
 
 ## Problem Statement
 
-What limitation, pain point, or opportunity does this feature address?
+What problem, gap, or opportunity does this address?
 
 ---
 
 ## Proposed Solution
 
-Describe your proposed implementation or behavior.
+How should it work?
 
 ---
 
 ## Benefits
 
-How would this feature improve Predictron Engine?
+List the main benefits.
 
-- 
-- 
-- 
+- User impact:
+- Engineering impact:
+- Other benefit:
 
 ---
 
 ## Alternatives Considered
 
-Describe any alternative approaches you have considered.
+What alternatives did you consider?
 
 ---
 
 ## Additional Context
 
-Include references, examples, mockups, or any other relevant information.
+Add any relevant references, examples, or mockups.
