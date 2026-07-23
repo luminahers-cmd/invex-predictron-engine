@@ -1,3 +1,6 @@
+<p align="center">
+  <img src="assets/banner.png" alt="Predictron Engine Banner" width="100%" />
+</p>
 # Predictron Engine
 
 > A structured intelligence engine for reasoning about startups under uncertainty.
