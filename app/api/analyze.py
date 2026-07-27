@@ -1,7 +1,11 @@
-from fastapi import APIRouter, HTTPException, status
+import logging
 
-from app.adapters.predictron_adapter import PredictronError, analyze
+from fastapi import APIRouter, Request, status
+
 from app.schemas.analysis import StartupAnalysisRequest, StartupAnalysisResponse
+from app.services.analysis import run_analysis
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/analyze", tags=["analysis"])
 
@@ -13,13 +17,10 @@ router = APIRouter(prefix="/analyze", tags=["analysis"])
     summary="Analyze a startup venture",
     description="Submit startup info and receive a venture analysis.",
 )
-async def analyze_startup(request: StartupAnalysisRequest) -> StartupAnalysisResponse:
-    """Validate the incoming request and delegate to the Predictron Engine."""
-    try:
-        result = await analyze(request)
-    except PredictronError as exc:
-        raise HTTPException(
-            status_code=status.HTTP_502_BAD_GATEWAY,
-            detail=f"Prediction engine error: {exc}",
-        )
-    return result
+async def analyze_startup(
+    request: StartupAnalysisRequest,
+    raw_request: Request,
+) -> StartupAnalysisResponse:
+    """Delegate analysis to the PredictronEngine singleton via the service layer."""
+    engine = raw_request.app.state.predictron_engine
+    return await run_analysis(engine, request)
