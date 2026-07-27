@@ -9,3 +9,4 @@ async def test_health_returns_ok(client):
     assert body["status"] == "ok"
     assert "version" in body
     assert isinstance(body["engine_reachable"], bool)
+    assert isinstance(body["db_healthy"], bool)

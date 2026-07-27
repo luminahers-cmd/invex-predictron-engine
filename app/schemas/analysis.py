@@ -48,3 +48,4 @@ class HealthResponse(BaseModel):
     status: str = "ok"
     version: str
     engine_reachable: bool = False
+    db_healthy: bool = False
