@@ -47,3 +47,16 @@ async def get_current_user(
             detail="Not authenticated",
         )
     return decode_access_token(credentials.credentials)
+
+
+async def get_current_user_optional(
+    credentials: HTTPAuthorizationCredentials | None = Depends(security),
+) -> dict | None:
+    """FastAPI dependency that optionally extracts the current user.
+
+    Returns None when no credentials are provided, instead of raising 401.
+    Useful for endpoints that work for both authenticated and anonymous users.
+    """
+    if credentials is None:
+        return None
+    return decode_access_token(credentials.credentials)

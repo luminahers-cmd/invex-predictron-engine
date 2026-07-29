@@ -1,4 +1,4 @@
-"""Retrieve persisted analyses."""
+"""Analysis endpoints."""
 
 from __future__ import annotations
 
@@ -7,6 +7,7 @@ import logging
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.auth.jwt import get_current_user, get_current_user_optional
 from app.db.session import get_db
 from app.schemas.analysis import (
     AnalysisDetailResponse,
@@ -31,10 +32,16 @@ router = APIRouter(prefix="/analyze", tags=["analysis"])
 async def analyze_startup(
     request: StartupAnalysisRequest,
     raw_request: Request,
+    current_user: dict | None = Depends(get_current_user_optional),
 ) -> StartupAnalysisResponse:
-    """Delegate analysis to the PredictronEngine singleton via the service layer."""
+    """Delegate analysis to the PredictronEngine singleton via the service layer.
+
+    Authenticated users have their analyses associated with their user account.
+    Anonymous users can still run analyses without persistence association.
+    """
     engine = raw_request.app.state.predictron_engine
-    return await run_analysis(engine, request)
+    user_id = current_user.get("sub") if current_user else None
+    return await run_analysis(engine, request, user_id=user_id)
 
 
 @router.get(
@@ -42,16 +49,18 @@ async def analyze_startup(
     response_model=AnalysisListResponse,
     status_code=status.HTTP_200_OK,
     summary="List persisted analyses",
-    description="Retrieve a paginated list of completed analyses.",
+    description="Retrieve a paginated list of your completed analyses.",
 )
 async def list_analyses(
     db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
     offset: int = Query(default=0, ge=0, description="Number of records to skip"),
     limit: int = Query(default=20, ge=1, le=100, description="Max records to return"),
 ) -> AnalysisListResponse:
     from app.services.persistence import list_analyses as _list
 
-    return await _list(db, offset=offset, limit=limit)
+    user_id = current_user.get("sub")
+    return await _list(db, user_id=user_id, offset=offset, limit=limit)
 
 
 @router.get(
@@ -64,10 +73,12 @@ async def list_analyses(
 async def get_analysis(
     analysis_id: str,
     db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
 ) -> AnalysisDetailResponse:
     from app.services.persistence import get_analysis as _get
 
-    result = await _get(db, analysis_id)
+    user_id = current_user.get("sub")
+    result = await _get(db, analysis_id, user_id=user_id)
     if result is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

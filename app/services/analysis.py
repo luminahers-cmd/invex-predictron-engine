@@ -33,6 +33,7 @@ _SCORE_DIMENSION_MAP: dict[str, str] = {
 async def run_analysis(
     engine: PredictronEngine,
     request: StartupAnalysisRequest,
+    user_id: str | None = None,
 ) -> StartupAnalysisResponse:
     """Execute the analysis pipeline and return an API response.
 
@@ -42,12 +43,15 @@ async def run_analysis(
     After successful execution, the completed analysis is persisted in a
     background fire-and-forget fashion. Persistence errors are logged
     but do not affect the API response.
+
+    Args:
+        user_id: Optional authenticated user to associate with the persisted analysis.
     """
     report = await asyncio.to_thread(engine.analyze, request)
     response = _report_to_response(request.startup_name, report)
 
     try:
-        await _persist_async(request, report, response)
+        await _persist_async(request, report, response, user_id=user_id)
     except Exception:
         logger.warning("Persistence layer error (analysis still returned)", exc_info=True)
 
@@ -58,6 +62,7 @@ async def _persist_async(
     request: StartupAnalysisRequest,
     report: object,
     response: StartupAnalysisResponse,
+    user_id: str | None = None,
 ) -> None:
     """Persist a completed analysis. Errors are logged and swallowed."""
     from app.db.session import AsyncSessionLocal
@@ -65,7 +70,7 @@ async def _persist_async(
 
     try:
         async with AsyncSessionLocal() as session:
-            await persist_analysis(session, request, report, response)
+            await persist_analysis(session, request, report, response, user_id=user_id)
             await session.commit()
         logger.debug("Analysis persisted successfully")
     except Exception:

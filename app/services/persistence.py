@@ -35,6 +35,7 @@ async def persist_analysis(
     request: StartupAnalysisRequest,
     report: Report,
     response: StartupAnalysisResponse,
+    user_id: str | None = None,
 ) -> AnalysisRequest:
     """Persist a successfully completed analysis.
 
@@ -42,10 +43,14 @@ async def persist_analysis(
     This function should ONLY be called after the engine pipeline
     completes without error — partial or failed analyses are never stored.
 
+    Args:
+        user_id: Optional authenticated user identifier to associate with the analysis.
+
     Returns:
         The persisted AnalysisRequest record.
     """
     db_request = AnalysisRequest(
+        user_id=user_id,
         startup_name=request.startup_name,
         website=str(request.website),
         description=request.description,
@@ -78,8 +83,13 @@ async def persist_analysis(
 async def get_analysis(
     session: AsyncSession,
     analysis_id: str,
+    user_id: str | None = None,
 ) -> AnalysisDetailResponse | None:
     """Retrieve a single completed analysis by ID.
+
+    When user_id is provided, only returns the analysis if it belongs
+    to that user. Admin/superuser flows are out of scope — this is a
+    strict ownership gate.
 
     Returns:
         An AnalysisDetailResponse if found, otherwise None.
@@ -89,6 +99,8 @@ async def get_analysis(
         .join(AnalysisReport, AnalysisRequest.id == AnalysisReport.request_id)
         .where(AnalysisRequest.id == analysis_id)
     )
+    if user_id is not None:
+        stmt = stmt.where(AnalysisRequest.user_id == user_id)
     result = await session.execute(stmt)
     row = result.one_or_none()
 
@@ -118,10 +130,14 @@ async def get_analysis(
 
 async def list_analyses(
     session: AsyncSession,
+    user_id: str | None = None,
     offset: int = 0,
     limit: int = 20,
 ) -> AnalysisListResponse:
     """List completed analyses, ordered by most recent first.
+
+    When user_id is provided, only returns analyses belonging to that
+    user. This ensures strict ownership isolation.
 
     Returns:
         An AnalysisListResponse containing summaries and total count.
@@ -129,6 +145,10 @@ async def list_analyses(
     from sqlalchemy import func
 
     count_stmt = select(func.count()).select_from(AnalysisRequest)
+    list_where = None
+    if user_id is not None:
+        count_stmt = count_stmt.where(AnalysisRequest.user_id == user_id)
+        list_where = AnalysisRequest.user_id == user_id
     total = (await session.execute(count_stmt)).scalar() or 0
 
     stmt = (
@@ -138,6 +158,8 @@ async def list_analyses(
         .offset(offset)
         .limit(limit)
     )
+    if list_where is not None:
+        stmt = stmt.where(list_where)
     result = await session.execute(stmt)
     rows = result.all()
 

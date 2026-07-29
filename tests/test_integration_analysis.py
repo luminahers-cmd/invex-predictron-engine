@@ -13,6 +13,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import pytest
 from httpx import ASGITransport, AsyncClient
 
+from app.auth.jwt import get_current_user
 from app.db.session import get_db
 from app.main import app
 from app.schemas.analysis import StartupAnalysisRequest
@@ -33,6 +34,18 @@ def _mock_persist():
     """Prevent _persist_async from connecting to a real database."""
     with patch("app.services.analysis._persist_async", new_callable=AsyncMock):
         yield
+
+
+@pytest.fixture()
+def _mock_auth():
+    """Override get_current_user dependency with a mock authenticated user."""
+
+    async def _override_get_current_user():
+        return {"sub": "test-user-id"}
+
+    app.dependency_overrides[get_current_user] = _override_get_current_user
+    yield
+    app.dependency_overrides.pop(get_current_user, None)
 
 
 @pytest.fixture()
@@ -103,7 +116,7 @@ async def test_analyze_response_unchanged_by_persistence():
 
 
 @pytest.mark.anyio
-async def test_list_analyses_endpoint(_mock_db):
+async def test_list_analyses_endpoint(_mock_db, _mock_auth):
     """GET /api/v1/analyze should return a paginated list."""
     mock_list_result = MagicMock()
     mock_list_result.analyses = []
@@ -125,7 +138,7 @@ async def test_list_analyses_endpoint(_mock_db):
 
 
 @pytest.mark.anyio
-async def test_list_analyses_with_pagination(_mock_db):
+async def test_list_analyses_with_pagination(_mock_db, _mock_auth):
     """GET /api/v1/analyze?offset=10&limit=5 should pass params correctly."""
     mock_list_result = MagicMock()
     mock_list_result.analyses = []
@@ -145,7 +158,7 @@ async def test_list_analyses_with_pagination(_mock_db):
 
 
 @pytest.mark.anyio
-async def test_get_analysis_by_id_found(_mock_db):
+async def test_get_analysis_by_id_found(_mock_db, _mock_auth):
     """GET /api/v1/analyze/{id} should return detail when found."""
     from app.schemas.analysis import AnalysisDetailResponse
 
@@ -178,7 +191,7 @@ async def test_get_analysis_by_id_found(_mock_db):
 
 
 @pytest.mark.anyio
-async def test_get_analysis_by_id_not_found(_mock_db):
+async def test_get_analysis_by_id_not_found(_mock_db, _mock_auth):
     """GET /api/v1/analyze/{id} should return 404 when not found."""
     with patch(
         "app.services.persistence.get_analysis",
@@ -196,7 +209,7 @@ async def test_get_analysis_by_id_not_found(_mock_db):
 
 
 @pytest.mark.anyio
-async def test_full_analyze_and_retrieve_flow(_mock_db):
+async def test_full_analyze_and_retrieve_flow(_mock_db, _mock_auth):
     """Simulate: create analysis -> persist -> retrieve by ID."""
     from app.schemas.analysis import AnalysisDetailResponse
 

@@ -23,6 +23,9 @@ class AnalysisRequest(Base, TimestampMixin):
     id: Mapped[str] = mapped_column(
         String(36), primary_key=True, default=_uuid
     )
+    user_id: Mapped[str | None] = mapped_column(
+        String(255), nullable=True, default=None, index=True
+    )
     startup_name: Mapped[str] = mapped_column(String(255), nullable=False)
     website: Mapped[str] = mapped_column(String(500), nullable=False)
     description: Mapped[str] = mapped_column(Text, nullable=False)
