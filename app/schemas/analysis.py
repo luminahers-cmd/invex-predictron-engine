@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import BaseModel, Field, HttpUrl
 
 
@@ -40,6 +42,49 @@ class StartupAnalysisResponse(BaseModel):
     traction_score: float = Field(..., ge=0, le=100)
     recommendations: list[str] = Field(default_factory=list)
     confidence: float = Field(..., ge=0, le=1, description="Model confidence level")
+
+
+class AnalysisSummaryResponse(BaseModel):
+    """Summary of a persisted analysis for list views."""
+
+    id: str
+    startup_name: str
+    venture_score: float = Field(..., ge=0, le=100)
+    market_score: float = Field(..., ge=0, le=100)
+    founder_score: float = Field(..., ge=0, le=100)
+    traction_score: float = Field(..., ge=0, le=100)
+    confidence: float = Field(..., ge=0, le=1)
+    engine_version: str | None = None
+    processing_time_ms: float | None = None
+    created_at: datetime
+
+
+class AnalysisDetailResponse(BaseModel):
+    """Full detail of a persisted analysis."""
+
+    id: str
+    startup_name: str
+    website: str
+    description: str
+    pitch_deck_url: str | None = None
+    founder_linkedin_urls: list[str] = Field(default_factory=list)
+    venture_score: float = Field(..., ge=0, le=100)
+    market_score: float = Field(..., ge=0, le=100)
+    founder_score: float = Field(..., ge=0, le=100)
+    traction_score: float = Field(..., ge=0, le=100)
+    recommendations: list[str] = Field(default_factory=list)
+    confidence: float = Field(..., ge=0, le=1)
+    engine_version: str | None = None
+    processing_time_ms: float | None = None
+    full_report: dict = Field(default_factory=dict)
+    created_at: datetime
+
+
+class AnalysisListResponse(BaseModel):
+    """Paginated list of persisted analyses."""
+
+    analyses: list[AnalysisSummaryResponse] = Field(default_factory=list)
+    total: int = Field(default=0, ge=0)
 
 
 class HealthResponse(BaseModel):

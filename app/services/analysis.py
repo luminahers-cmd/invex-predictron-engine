@@ -3,6 +3,11 @@
 This module owns the conversion between the API request/response schemas
 and the internal PredictronEngine. It runs the synchronous engine in a
 thread pool via asyncio.to_thread() to avoid blocking the event loop.
+
+After successful engine execution, completed analyses are persisted to the
+database via the persistence service. Persistence failures are logged but
+never propagated to the caller — a successful analysis always returns its
+response regardless of storage status.
 """
 
 from __future__ import annotations
@@ -33,9 +38,38 @@ async def run_analysis(
 
     The synchronous PredictronEngine.analyze() is offloaded to a thread
     so the asyncio event loop remains unblocked.
+
+    After successful execution, the completed analysis is persisted in a
+    background fire-and-forget fashion. Persistence errors are logged
+    but do not affect the API response.
     """
     report = await asyncio.to_thread(engine.analyze, request)
-    return _report_to_response(request.startup_name, report)
+    response = _report_to_response(request.startup_name, report)
+
+    try:
+        await _persist_async(request, report, response)
+    except Exception:
+        logger.warning("Persistence layer error (analysis still returned)", exc_info=True)
+
+    return response
+
+
+async def _persist_async(
+    request: StartupAnalysisRequest,
+    report: object,
+    response: StartupAnalysisResponse,
+) -> None:
+    """Persist a completed analysis. Errors are logged and swallowed."""
+    from app.db.session import AsyncSessionLocal
+    from app.services.persistence import persist_analysis
+
+    try:
+        async with AsyncSessionLocal() as session:
+            await persist_analysis(session, request, report, response)
+            await session.commit()
+        logger.debug("Analysis persisted successfully")
+    except Exception:
+        logger.warning("Failed to persist analysis", exc_info=True)
 
 
 def _report_to_response(
