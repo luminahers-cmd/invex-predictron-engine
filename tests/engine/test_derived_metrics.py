@@ -15,7 +15,7 @@ Tests validate that the DerivedMetricsEngine correctly:
 
 from __future__ import annotations
 
-from predictron_engine.extraction.derived.engine import DerivedMetricsEngine, _METRIC_TO_FIELD
+from predictron_engine.extraction.derived.engine import _METRIC_TO_FIELD, DerivedMetricsEngine
 from predictron_engine.extraction.derived.models import DerivedMetricLog
 from predictron_engine.extraction.derived.rules import (
     ALL_INFERENCE_RULES,

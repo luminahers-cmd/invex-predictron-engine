@@ -27,7 +27,13 @@ router = APIRouter(prefix="/analyze", tags=["analysis"])
     response_model=StartupAnalysisResponse,
     status_code=status.HTTP_200_OK,
     summary="Analyze a startup venture",
-    description="Submit startup info and receive a venture analysis.",
+    description="Submit a startup, receive a venture analysis from Predictron. Auth optional.",
+    responses={
+        200: {"description": "Analysis completed successfully", "model": StartupAnalysisResponse},
+        422: {"description": "Validation error — check request body fields"},
+        429: {"description": "Rate limit exceeded"},
+    },
+
 )
 async def analyze_startup(
     request: StartupAnalysisRequest,
@@ -49,7 +55,12 @@ async def analyze_startup(
     response_model=AnalysisListResponse,
     status_code=status.HTTP_200_OK,
     summary="List persisted analyses",
-    description="Retrieve a paginated list of your completed analyses.",
+    description="List your completed analyses. Requires authentication — only yours are returned.",
+    responses={
+        200: {"description": "Paginated list of analyses", "model": AnalysisListResponse},
+        401: {"description": "Not authenticated — missing or invalid token"},
+        429: {"description": "Rate limit exceeded"},
+    },
 )
 async def list_analyses(
     db: AsyncSession = Depends(get_db),
@@ -68,7 +79,13 @@ async def list_analyses(
     response_model=AnalysisDetailResponse,
     status_code=status.HTTP_200_OK,
     summary="Get a persisted analysis",
-    description="Retrieve the full detail of a completed analysis by ID.",
+    description="Get a completed analysis by ID. Requires authentication — owner only.",
+    responses={
+        200: {"description": "Full analysis details", "model": AnalysisDetailResponse},
+        401: {"description": "Not authenticated — missing or invalid token"},
+        404: {"description": "Analysis not found or access denied"},
+        429: {"description": "Rate limit exceeded"},
+    },
 )
 async def get_analysis(
     analysis_id: str,

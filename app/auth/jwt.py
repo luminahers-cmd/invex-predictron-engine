@@ -1,3 +1,10 @@
+"""JWT authentication utilities.
+
+Uses HS256-based JWT tokens for authentication.  The bearer token is
+extracted from the ``Authorization`` header via the ``HTTPBearer`` security
+scheme, which is automatically registered in the OpenAPI documentation.
+"""
+
 from __future__ import annotations
 
 from datetime import UTC, datetime, timedelta
@@ -9,7 +16,10 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from app.core.config import get_settings
 
 settings = get_settings()
-security = HTTPBearer(auto_error=False)
+security = HTTPBearer(
+    auto_error=False,
+    description="JWT bearer token obtained from the authentication service.",
+)
 
 
 def create_access_token(subject: str, expires_delta: timedelta | None = None) -> str:

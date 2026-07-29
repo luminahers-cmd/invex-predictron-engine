@@ -94,3 +94,17 @@ class HealthResponse(BaseModel):
     version: str
     engine_reachable: bool = False
     db_healthy: bool = False
+    startup_state: str = "unknown"
+
+
+class ReadinessResponse(BaseModel):
+    """Readiness check response.
+
+    Returns 200 only when all dependencies are healthy and the application
+    has finished its startup sequence.
+    """
+
+    status: str = "ok"
+    db_healthy: bool = False
+    engine_ready: bool = False
+    startup_complete: bool = False

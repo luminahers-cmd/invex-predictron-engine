@@ -25,7 +25,7 @@ modifying the composite or any other extractor.
 """
 
 from predictron_engine.extraction.composite import CompositeExtractor
-from predictron_engine.extraction.derived import DerivedMetricsEngine, DerivedMetricLog
+from predictron_engine.extraction.derived import DerivedMetricLog, DerivedMetricsEngine
 from predictron_engine.extraction.extractor import DefaultFeatureExtractor
 from predictron_engine.extraction.feature_models import NlpService
 

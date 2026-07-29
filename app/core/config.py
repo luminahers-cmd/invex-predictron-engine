@@ -22,11 +22,33 @@ class Settings(BaseSettings):
 
     API_V1_PREFIX: str = "/api/v1"
 
+    RATE_LIMIT_ENABLED: bool = True
+    RATE_LIMIT_REQUESTS: int = 100
+    RATE_LIMIT_WINDOW_SECONDS: int = 60
+
+    REQUEST_ID_HEADER: str = "X-Request-ID"
+
     model_config = {
         "env_file": ".env",
         "env_file_encoding": "utf-8",
         "case_sensitive": True,
+        "extra": "ignore",
     }
+
+    def validate_required(self) -> None:
+        errors: list[str] = []
+        warnings: list[str] = []
+        if self.SECRET_KEY == "CHANGE_ME_IN_PRODUCTION":
+            warnings.append("SECRET_KEY is still set to the default value — change for production")
+        if not self.DATABASE_URL:
+            errors.append("DATABASE_URL is not configured")
+        if errors:
+            raise RuntimeError(
+                "Configuration validation failed:\n" + "\n".join(f"  - {e}" for e in errors)
+            )
+        for w in warnings:
+            import logging
+            logging.getLogger(__name__).warning("Configuration warning: %s", w)
 
 
 @lru_cache
