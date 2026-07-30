@@ -78,7 +78,7 @@ class TestAuthenticatedAccess:
         mock_result.total = 0
 
         with patch(
-            "app.services.persistence.list_analyses",
+            "app.api.analyze._list_analyses",
             new_callable=AsyncMock,
             return_value=mock_result,
         ):
@@ -106,7 +106,7 @@ class TestAuthenticatedAccess:
         )
 
         with patch(
-            "app.services.persistence.get_analysis",
+            "app.api.analyze._get_analysis",
             new_callable=AsyncMock,
             return_value=mock_detail,
         ):
@@ -130,7 +130,7 @@ class TestOwnershipIsolation:
             return AnalysisListResponse(analyses=[], total=0)
 
         with patch(
-            "app.services.persistence.list_analyses",
+            "app.api.analyze._list_analyses",
             new_callable=AsyncMock,
             side_effect=_list_for_user,
         ):
@@ -160,7 +160,7 @@ class TestOwnershipIsolation:
             )
 
         with patch(
-            "app.services.persistence.get_analysis",
+            "app.api.analyze._get_analysis",
             new_callable=AsyncMock,
             side_effect=_get_for_user,
         ):

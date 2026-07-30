@@ -54,6 +54,13 @@ def _mock_db():
     mock_session = AsyncMock()
     mock_session.add = MagicMock()
 
+    # Make execute return a result mock compatible with real persistence
+    mock_result = MagicMock()
+    mock_result.one_or_none.return_value = None
+    mock_result.all.return_value = []
+    mock_result.scalar.return_value = 0
+    mock_session.execute = AsyncMock(return_value=mock_result)
+
     async def _override_get_db():
         yield mock_session
 
@@ -123,7 +130,7 @@ async def test_list_analyses_endpoint(_mock_db, _mock_auth):
     mock_list_result.total = 0
 
     with patch(
-        "app.services.persistence.list_analyses",
+        "app.api.analyze._list_analyses",
         new_callable=AsyncMock,
         return_value=mock_list_result,
     ):
@@ -145,7 +152,7 @@ async def test_list_analyses_with_pagination(_mock_db, _mock_auth):
     mock_list_result.total = 0
 
     with patch(
-        "app.services.persistence.list_analyses",
+        "app.api.analyze._list_analyses",
         new_callable=AsyncMock,
         return_value=mock_list_result,
     ) as mock_fn:
@@ -176,7 +183,7 @@ async def test_get_analysis_by_id_found(_mock_db, _mock_auth):
     )
 
     with patch(
-        "app.services.persistence.get_analysis",
+        "app.api.analyze._get_analysis",
         new_callable=AsyncMock,
         return_value=mock_detail,
     ):
@@ -194,7 +201,7 @@ async def test_get_analysis_by_id_found(_mock_db, _mock_auth):
 async def test_get_analysis_by_id_not_found(_mock_db, _mock_auth):
     """GET /api/v1/analyze/{id} should return 404 when not found."""
     with patch(
-        "app.services.persistence.get_analysis",
+        "app.api.analyze._get_analysis",
         new_callable=AsyncMock,
         return_value=None,
     ):
@@ -240,7 +247,7 @@ async def test_full_analyze_and_retrieve_flow(_mock_db, _mock_auth):
     )
 
     with patch(
-        "app.services.persistence.get_analysis",
+        "app.api.analyze._get_analysis",
         new_callable=AsyncMock,
         return_value=mock_detail,
     ):

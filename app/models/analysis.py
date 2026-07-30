@@ -1,10 +1,8 @@
-"""SQLAlchemy models for analysis request and report persistence."""
-
 from __future__ import annotations
 
 import uuid
 
-from sqlalchemy import JSON, Float, ForeignKey, String, Text
+from sqlalchemy import JSON, Float, ForeignKey, Index, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import TimestampMixin
@@ -16,9 +14,11 @@ def _uuid() -> str:
 
 
 class AnalysisRequest(Base, TimestampMixin):
-    """Persisted analysis request — the input to the engine pipeline."""
-
     __tablename__ = "analysis_requests"
+    __table_args__ = (
+        Index("ix_analysis_requests_created_at", "created_at"),
+        Index("ix_analysis_requests_user_created", "user_id", "created_at"),
+    )
 
     id: Mapped[str] = mapped_column(
         String(36), primary_key=True, default=_uuid
@@ -42,13 +42,10 @@ class AnalysisRequest(Base, TimestampMixin):
 
 
 class AnalysisReport(Base, TimestampMixin):
-    """Persisted analysis report — the completed engine output.
-
-    Only written after the engine pipeline completes successfully.
-    Partial or failed analyses are never persisted.
-    """
-
     __tablename__ = "analysis_reports"
+    __table_args__ = (
+        Index("ix_analysis_reports_created_at", "created_at"),
+    )
 
     id: Mapped[str] = mapped_column(
         String(36), primary_key=True, default=_uuid
@@ -58,6 +55,7 @@ class AnalysisReport(Base, TimestampMixin):
         ForeignKey("analysis_requests.id", ondelete="CASCADE"),
         nullable=False,
         unique=True,
+        index=True,
     )
 
     startup_name: Mapped[str] = mapped_column(String(255), nullable=False)

@@ -259,13 +259,10 @@ async def test_list_analyses_returns_summaries():
         created_at=datetime(2025, 1, 1, tzinfo=UTC),
     )
 
-    count_result = MagicMock()
-    count_result.scalar.return_value = 1
-
     list_result = MagicMock()
-    list_result.all.return_value = [(mock_request, mock_report)]
+    list_result.all.return_value = [(mock_request, mock_report, 1)]
 
-    mock_session.execute = AsyncMock(side_effect=[count_result, list_result])
+    mock_session.execute = AsyncMock(return_value=list_result)
 
     result = await list_analyses(mock_session, offset=0, limit=20)
 
@@ -282,13 +279,10 @@ async def test_list_analyses_returns_empty_list():
 
     mock_session = AsyncMock()
 
-    count_result = MagicMock()
-    count_result.scalar.return_value = 0
-
     list_result = MagicMock()
     list_result.all.return_value = []
 
-    mock_session.execute = AsyncMock(side_effect=[count_result, list_result])
+    mock_session.execute = AsyncMock(return_value=list_result)
 
     result = await list_analyses(mock_session, offset=0, limit=20)
 

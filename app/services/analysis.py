@@ -23,13 +23,6 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-_SCORE_DIMENSION_MAP: dict[str, str] = {
-    "market_score": "market_opportunity",
-    "founder_score": "founder_quality",
-    "traction_score": "traction_signals",
-}
-
-
 async def run_analysis(
     engine: PredictronEngine,
     request: StartupAnalysisRequest,

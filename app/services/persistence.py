@@ -134,37 +134,44 @@ async def list_analyses(
     offset: int = 0,
     limit: int = 20,
 ) -> AnalysisListResponse:
-    """List completed analyses, ordered by most recent first.
-
-    When user_id is provided, only returns analyses belonging to that
-    user. This ensures strict ownership isolation.
-
-    Returns:
-        An AnalysisListResponse containing summaries and total count.
-    """
     from sqlalchemy import func
 
-    count_stmt = select(func.count()).select_from(AnalysisRequest)
-    list_where = None
-    if user_id is not None:
-        count_stmt = count_stmt.where(AnalysisRequest.user_id == user_id)
-        list_where = AnalysisRequest.user_id == user_id
-    total = (await session.execute(count_stmt)).scalar() or 0
+    count_over = func.count().over().label("total_count")
+
+    from sqlalchemy.orm import load_only
 
     stmt = (
-        select(AnalysisRequest, AnalysisReport)
+        select(AnalysisRequest, AnalysisReport, count_over)
         .join(AnalysisReport, AnalysisRequest.id == AnalysisReport.request_id)
+        .options(
+            load_only(
+                AnalysisReport.id,
+                AnalysisReport.startup_name,
+                AnalysisReport.venture_score,
+                AnalysisReport.market_score,
+                AnalysisReport.founder_score,
+                AnalysisReport.traction_score,
+                AnalysisReport.confidence,
+                AnalysisReport.engine_version,
+                AnalysisReport.processing_time_ms,
+                AnalysisReport.created_at,
+                AnalysisReport.request_id,
+            )
+        )
         .order_by(desc(AnalysisRequest.created_at))
         .offset(offset)
         .limit(limit)
     )
-    if list_where is not None:
-        stmt = stmt.where(list_where)
+    if user_id is not None:
+        stmt = stmt.where(AnalysisRequest.user_id == user_id)
+
     result = await session.execute(stmt)
     rows = result.all()
 
+    total = 0
     summaries = []
-    for db_request, db_report in rows:
+    for db_request, db_report, total_count in rows:
+        total = total_count
         summaries.append(
             AnalysisSummaryResponse(
                 id=db_request.id,

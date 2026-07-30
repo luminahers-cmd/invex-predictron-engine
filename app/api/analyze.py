@@ -16,6 +16,8 @@ from app.schemas.analysis import (
     StartupAnalysisResponse,
 )
 from app.services.analysis import run_analysis
+from app.services.persistence import get_analysis as _get_analysis
+from app.services.persistence import list_analyses as _list_analyses
 
 logger = logging.getLogger(__name__)
 
@@ -68,10 +70,8 @@ async def list_analyses(
     offset: int = Query(default=0, ge=0, description="Number of records to skip"),
     limit: int = Query(default=20, ge=1, le=100, description="Max records to return"),
 ) -> AnalysisListResponse:
-    from app.services.persistence import list_analyses as _list
-
     user_id = current_user.get("sub")
-    return await _list(db, user_id=user_id, offset=offset, limit=limit)
+    return await _list_analyses(db, user_id=user_id, offset=offset, limit=limit)
 
 
 @router.get(
@@ -92,10 +92,8 @@ async def get_analysis(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
 ) -> AnalysisDetailResponse:
-    from app.services.persistence import get_analysis as _get
-
     user_id = current_user.get("sub")
-    result = await _get(db, analysis_id, user_id=user_id)
+    result = await _get_analysis(db, analysis_id, user_id=user_id)
     if result is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
