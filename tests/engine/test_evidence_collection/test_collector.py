@@ -5,10 +5,8 @@ from __future__ import annotations
 import asyncio
 
 import httpx
-import pytest
 from pydantic import HttpUrl
 
-from predictron_engine.evidence.exceptions import InvalidWebsiteError
 from predictron_engine.evidence.fetcher import FetcherSettings, HttpPageFetcher
 from predictron_engine.evidence.models import DocumentStatus
 from predictron_engine.evidence.orchestrator import EvidenceOrchestrator
@@ -179,10 +177,12 @@ class TestEvidenceOrchestrator:
         assert all(doc.status == DocumentStatus.FAILED for doc in bundle.documents)
         assert all("boom" in (doc.error or "") for doc in bundle.documents)
 
-    async def test_invalid_website_raises(self) -> None:
+    async def test_invalid_website_is_recorded(self) -> None:
         collector = _collector(lambda request: _ok_page(request.url.path))
-        with pytest.raises(InvalidWebsiteError):
-            await collector.collect("ExampleCo", "not a url")
+        bundle = await collector.collect("ExampleCo", "not a url")
+        assert bundle.providers[0].success is False
+        assert "InvalidWebsiteError" in (bundle.providers[0].failure_reason or "")
+        assert bundle.total_pages == 0
 
     async def test_missing_scheme_is_normalized(self) -> None:
         def handler(request: httpx.Request) -> httpx.Response:

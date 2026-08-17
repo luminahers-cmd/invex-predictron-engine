@@ -12,15 +12,13 @@ from __future__ import annotations
 
 import asyncio
 import logging
-import re
 import time
 from datetime import UTC, datetime
 
-from pydantic import BaseModel, Field, HttpUrl, ValidationError
+from pydantic import BaseModel, Field, HttpUrl
 
 from predictron_engine.evidence.cleaner import HtmlCleaner
 from predictron_engine.evidence.discover import DefaultPageDiscoverer
-from predictron_engine.evidence.exceptions import InvalidWebsiteError
 from predictron_engine.evidence.fetcher import HttpPageFetcher
 from predictron_engine.evidence.interfaces import HtmlCleaner as HtmlCleanerProtocol
 from predictron_engine.evidence.interfaces import PageDiscoverer, PageFetcher
@@ -33,10 +31,9 @@ from predictron_engine.evidence.models import (
     make_document_id,
 )
 from predictron_engine.evidence.provider_contracts import CollectContext, ProviderResult
+from predictron_engine.evidence.url_utils import normalise_website
 
 logger = logging.getLogger(__name__)
-
-_SCHEME_RE = re.compile(r"^https?://", re.IGNORECASE)
 
 
 class WebsiteProviderSettings(BaseModel):
@@ -230,17 +227,7 @@ class WebsiteEvidenceProvider:
 
     @staticmethod
     def _normalize_website(website: HttpUrl | str | None) -> HttpUrl:
-        if isinstance(website, HttpUrl):
-            return website
-        if not isinstance(website, str) or not website.strip():
-            raise InvalidWebsiteError("A website URL is required")
-        raw = website.strip()
-        if not _SCHEME_RE.match(raw):
-            raw = f"https://{raw}"
-        try:
-            return HttpUrl(raw)
-        except ValidationError as exc:
-            raise InvalidWebsiteError(f"Invalid website URL: {raw!r}") from exc
+        return normalise_website(website)
 
     async def close(self) -> None:
         """Release any resources held by the provider's dependencies."""

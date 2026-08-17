@@ -11,10 +11,8 @@ from __future__ import annotations
 from datetime import UTC, datetime
 
 import httpx
-import pytest
 from pydantic import HttpUrl
 
-from predictron_engine.evidence.exceptions import InvalidWebsiteError
 from predictron_engine.evidence.fetcher import FetcherSettings, HttpPageFetcher
 from predictron_engine.evidence.models import (
     DocumentStatus,
@@ -215,10 +213,12 @@ class TestEvidenceOrchestrator:
         assert bundle.total_pages == 0
         assert bundle.providers == []
 
-    async def test_default_orchestrator_raises_for_invalid_website(self) -> None:
+    async def test_default_orchestrator_records_invalid_website(self) -> None:
         orchestrator = EvidenceOrchestrator()
-        with pytest.raises(InvalidWebsiteError):
-            await orchestrator.collect("ExampleCo", "not a url")
+        bundle = await orchestrator.collect("ExampleCo", "not a url")
+        assert bundle.providers[0].success is False
+        assert "InvalidWebsiteError" in (bundle.providers[0].failure_reason or "")
+        assert bundle.total_pages == 0
 
     async def test_close_releases_provider_resources(self) -> None:
         provider = ClosableProvider()
