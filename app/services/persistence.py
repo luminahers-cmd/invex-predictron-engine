@@ -52,7 +52,7 @@ async def persist_analysis(
     db_request = AnalysisRequest(
         user_id=user_id,
         startup_name=request.startup_name,
-        website=str(request.website),
+        website=str(request.website) if request.website else "",
         description=request.description,
         pitch_deck_url=str(request.pitch_deck_url) if request.pitch_deck_url else None,
         founder_linkedin_urls=[str(u) for u in request.founder_linkedin_urls],
@@ -99,7 +99,9 @@ async def get_analysis(
         .join(AnalysisReport, AnalysisRequest.id == AnalysisReport.request_id)
         .where(AnalysisRequest.id == analysis_id)
     )
-    if user_id is not None:
+    if user_id is None:
+        stmt = stmt.where(AnalysisRequest.user_id.is_(None))
+    else:
         stmt = stmt.where(AnalysisRequest.user_id == user_id)
     result = await session.execute(stmt)
     row = result.one_or_none()

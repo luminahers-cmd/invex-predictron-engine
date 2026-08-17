@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import logging
 
+from predictron_engine.evidence.models import EvidenceBundle
 from predictron_engine.extraction.composite import CompositeExtractor
 from predictron_engine.extraction.feature_models import NlpService
 from predictron_engine.models.collected_data import CollectedData
@@ -31,10 +32,15 @@ class DefaultFeatureExtractor:
     def __init__(self, nlp_service: NlpService | None = None) -> None:
         self._composite = CompositeExtractor(nlp_service=nlp_service)
 
-    def extract(self, startup: Startup, data: CollectedData) -> ExtractedFeatures:
+    def extract(
+        self,
+        startup: Startup,
+        data: CollectedData,
+        evidence: EvidenceBundle | None = None,
+    ) -> ExtractedFeatures:
         """Extract structured features via the composite extractor pipeline."""
         logger.info(
             "DefaultFeatureExtractor delegating to CompositeExtractor for: %s",
             startup.name,
         )
-        return self._composite.extract(startup, data)
+        return self._composite.extract(startup, data, evidence)

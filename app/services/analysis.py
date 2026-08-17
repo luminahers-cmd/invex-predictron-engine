@@ -44,7 +44,9 @@ async def run_analysis(
     response = _report_to_response(request.startup_name, report)
 
     try:
-        await _persist_async(request, report, response, user_id=user_id)
+        persisted = await _persist_async(request, report, response, user_id=user_id)
+        if persisted is not None and isinstance(getattr(persisted, "id", None), str):
+            response.id = persisted.id
     except Exception:
         logger.warning("Persistence layer error (analysis still returned)", exc_info=True)
 
@@ -56,18 +58,26 @@ async def _persist_async(
     report: object,
     response: StartupAnalysisResponse,
     user_id: str | None = None,
-) -> None:
-    """Persist a completed analysis. Errors are logged and swallowed."""
+) -> object | None:
+    """Persist a completed analysis. Errors are logged and swallowed.
+
+    Returns:
+        The persisted AnalysisRequest when successful, otherwise None.
+    """
     from app.db.session import AsyncSessionLocal
     from app.services.persistence import persist_analysis
 
     try:
         async with AsyncSessionLocal() as session:
-            await persist_analysis(session, request, report, response, user_id=user_id)
+            db_request = await persist_analysis(
+                session, request, report, response, user_id=user_id
+            )
             await session.commit()
         logger.debug("Analysis persisted successfully")
+        return db_request
     except Exception:
         logger.warning("Failed to persist analysis", exc_info=True)
+        return None
 
 
 def _report_to_response(

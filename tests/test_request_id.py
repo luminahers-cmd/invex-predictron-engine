@@ -1,6 +1,19 @@
 """Tests for request identification (Phase 4)."""
 
+from unittest.mock import AsyncMock, patch
+
 import pytest
+
+
+@pytest.fixture(autouse=True)
+def _mock_analysis_db():
+    """Avoid real DB connections from anonymous GET-by-id calls."""
+    with patch(
+        "app.api.analyze._get_analysis",
+        new_callable=AsyncMock,
+        return_value=None,
+    ):
+        yield
 
 
 @pytest.mark.anyio

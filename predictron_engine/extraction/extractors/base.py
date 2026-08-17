@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import re
 
+from predictron_engine.evidence.models import EvidenceBundle
 from predictron_engine.extraction.feature_models import NlpService
 
 STOPWORDS: frozenset[str] = frozenset({
@@ -36,6 +37,32 @@ class BaseExtractor:
     def _count_keyword_matches(self, text: str, keywords: list[str]) -> int:
         """Return the number of keywords found in text."""
         return sum(1 for kw in keywords if kw in text)
+
+    def _evidence_text(self, evidence: EvidenceBundle | None) -> str:
+        """Return the concatenated text of all successfully cleaned evidence pages.
+
+        Returns an empty string when no evidence was collected. Used by
+        extractors to enrich keyword-based classification with website
+        content without changing behavior when evidence is absent.
+        """
+        if evidence is None:
+            return ""
+        return "\n\n".join(
+            doc.text for doc in evidence.documents if doc.status.value == "success"
+        )
+
+    def _combined_text(self, description: str, evidence: EvidenceBundle | None) -> str:
+        """Return the description unchanged when no evidence is available.
+
+        When evidence exists, returns the description combined with the
+        cleaned website text so keyword rules can observe both inputs.
+        """
+        if evidence is None:
+            return description
+        evidence_text = self._evidence_text(evidence)
+        if not evidence_text:
+            return description
+        return f"{description}\n{evidence_text}"
 
     def _best_keyword_match(
         self, text: str, keyword_map: dict[str, list[str]]

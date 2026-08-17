@@ -34,6 +34,7 @@ from __future__ import annotations
 
 import re
 
+from predictron_engine.evidence.models import EvidenceBundle
 from predictron_engine.extraction.extractors.base import BaseExtractor
 from predictron_engine.models.collected_data import CollectedData
 from predictron_engine.models.extracted_features import ExtractedFeatures
@@ -722,8 +723,13 @@ class BusinessModelExtractor(BaseExtractor):
       - business_model_confidence: extraction confidence (0.0-1.0)
     """
 
-    def extract(self, startup: Startup, data: CollectedData) -> ExtractedFeatures:
-        text = startup.description
+    def extract(
+        self,
+        startup: Startup,
+        data: CollectedData,
+        evidence: EvidenceBundle | None = None,
+    ) -> ExtractedFeatures:
+        text = self._combined_text(startup.description, evidence)
         text_lower = text.lower()
 
         # Core classifications

@@ -1,6 +1,6 @@
 """Tests for rate limiting (Phase 4)."""
 
-from unittest.mock import patch
+from unittest.mock import AsyncMock, patch
 
 import pytest
 
@@ -17,6 +17,17 @@ def _reset_rate_limiter():
         with patch.object(original, "RATE_LIMIT_REQUESTS", 3):
             with patch.object(original, "RATE_LIMIT_WINDOW_SECONDS", 60):
                 yield
+
+
+@pytest.fixture(autouse=True)
+def _mock_analysis_db():
+    """Avoid real DB connections from anonymous GET-by-id calls."""
+    with patch(
+        "app.api.analyze._get_analysis",
+        new_callable=AsyncMock,
+        return_value=None,
+    ):
+        yield
 
 
 @pytest.mark.anyio

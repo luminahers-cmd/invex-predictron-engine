@@ -24,6 +24,7 @@ from __future__ import annotations
 import re
 from typing import Final
 
+from predictron_engine.evidence.models import EvidenceBundle
 from predictron_engine.extraction.extractors.base import BaseExtractor
 from predictron_engine.models.collected_data import CollectedData
 from predictron_engine.models.extracted_features import ExtractedFeatures
@@ -234,8 +235,13 @@ class FounderExtractor(BaseExtractor):
     traceable to a specific text pattern or data field.
     """
 
-    def extract(self, startup: Startup, data: CollectedData) -> ExtractedFeatures:
-        desc = startup.description
+    def extract(
+        self,
+        startup: Startup,
+        data: CollectedData,
+        evidence: EvidenceBundle | None = None,
+    ) -> ExtractedFeatures:
+        desc = self._combined_text(startup.description, evidence)
         linkedin_urls = startup.founder_linkedin_urls
         founder_count = data.founder_count
 

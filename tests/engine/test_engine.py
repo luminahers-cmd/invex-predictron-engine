@@ -49,6 +49,7 @@ class TestEnginePipeline:
         assert meta.engine_version == "0.12.1"
         assert "normalize" in meta.pipeline_stages_completed
         assert "collect" in meta.pipeline_stages_completed
+        assert "collect_evidence" in meta.pipeline_stages_completed
         assert "extract" in meta.pipeline_stages_completed
         assert "evidence" in meta.pipeline_stages_completed
         assert "reason" in meta.pipeline_stages_completed
@@ -58,7 +59,7 @@ class TestEnginePipeline:
         assert "confidence" in meta.pipeline_stages_completed
         assert "decide" in meta.pipeline_stages_completed
         assert "build_report" in meta.pipeline_stages_completed
-        assert len(meta.pipeline_stages_completed) == 11
+        assert len(meta.pipeline_stages_completed) == 12
 
     def test_processing_time_positive(self, engine, full_request):
         report = engine.analyze(full_request)

@@ -47,16 +47,6 @@ def anyio_backend():
     return "asyncio"
 
 
-@pytest.fixture(autouse=True)
-def _ensure_app_state():
-    from predictron_engine.engine import PredictronEngine
-
-    if not hasattr(app.state, "predictron_engine") or app.state.predictron_engine is None:
-        app.state.predictron_engine = PredictronEngine()
-    if not hasattr(app.state, "startup_state") or app.state.startup_state is None:
-        app.state.startup_state = "ready"
-
-
 @pytest.fixture
 async def client():
     transport = ASGITransport(app=app)

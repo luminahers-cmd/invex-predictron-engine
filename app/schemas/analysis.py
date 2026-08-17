@@ -1,15 +1,21 @@
 from datetime import datetime
 
-from pydantic import BaseModel, Field, HttpUrl
+from pydantic import BaseModel, ConfigDict, Field, HttpUrl
 
 
 class StartupAnalysisRequest(BaseModel):
     """Request payload for venture analysis."""
 
+    model_config = ConfigDict(populate_by_name=True)
+
     startup_name: str = Field(
         ..., min_length=1, max_length=255, description="Name of the startup"
     )
-    website: HttpUrl = Field(..., description="Startup website URL")
+    website: HttpUrl | None = Field(
+        default=None,
+        alias="website_url",
+        description="Startup website URL (optional; frontend sends website_url)",
+    )
     description: str = Field(
         ..., min_length=10, max_length=5000, description="Brief description of the startup"
     )
@@ -35,6 +41,10 @@ class AnalysisScores(BaseModel):
 class StartupAnalysisResponse(BaseModel):
     """Response payload containing analysis results."""
 
+    id: str | None = Field(
+        default=None,
+        description="Persisted analysis ID. Present when persistence succeeds.",
+    )
     startup_name: str
     venture_score: float = Field(..., ge=0, le=100)
     market_score: float = Field(..., ge=0, le=100)

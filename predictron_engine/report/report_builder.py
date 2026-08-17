@@ -25,6 +25,7 @@ from predictron_engine.models.extracted_features import ExtractedFeatures
 from predictron_engine.models.report import (
     AnalysisMetadata,
     ConfidenceAssessment,
+    EvidenceCollectionMetadata,
     EvidenceItem,
     InvestmentDecision,
     InvestmentReadiness,
@@ -59,6 +60,7 @@ class DefaultReportBuilder:
         dimension_assessments: list[DimensionAssessment] | None = None,
         decision: InvestmentDecision | None = None,
         investment_readiness: InvestmentReadiness | None = None,
+        evidence_collection: EvidenceCollectionMetadata | None = None,
     ) -> Report:
         """Assemble the final report from all pipeline outputs."""
         logger.info("Building analysis report")
@@ -77,6 +79,7 @@ class DefaultReportBuilder:
         pipeline_stages = [
             "normalize",
             "collect",
+            "collect_evidence",
             "extract",
             "evidence",
             "reason",
@@ -109,6 +112,7 @@ class DefaultReportBuilder:
                 processing_time_ms=0.0,
                 timestamp=datetime.now(UTC),
                 data_completeness=features.data_completeness,
+                evidence_collection=evidence_collection,
             ),
         )
 

@@ -41,9 +41,14 @@ class TestUnauthorizedAccess:
 
     @pytest.mark.anyio
     async def test_get_analysis_without_token(self, client):
-        response = await client.get("/api/v1/analyze/some-id")
-        assert response.status_code == 401
-        assert response.json()["detail"] == "Not authenticated"
+        with patch(
+            "app.api.analyze._get_analysis",
+            new_callable=AsyncMock,
+            return_value=None,
+        ):
+            response = await client.get("/api/v1/analyze/some-id")
+        assert response.status_code == 404
+        assert "not found" in response.json()["detail"]
 
     @pytest.mark.anyio
     async def test_list_analyses_with_invalid_token(self, client):

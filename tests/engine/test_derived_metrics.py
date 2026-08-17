@@ -54,7 +54,7 @@ class TestDeriveArrFromMrr:
         logs = derive_arr_from_mrr(features)
         assert len(logs) == 0
 
-    def testHandles_large_mrr(self) -> None:
+    def test_handles_large_mrr(self) -> None:
         features = ExtractedFeatures(mrr_usd=5_000_000.0)
         logs = derive_arr_from_mrr(features)
         assert len(logs) == 1
@@ -342,7 +342,7 @@ class TestDerivedMetricsEngine:
         enriched, logs = engine.derive(features)
 
         assert enriched.arr_usd == 600_000.0
-        arr_logs = [l for l in logs if l.metric_name == "arr_from_mrr"]
+        arr_logs = [log for log in logs if log.metric_name == "arr_from_mrr"]
         assert len(arr_logs) == 1
 
     def test_engine_populates_derived_metrics_log(self) -> None:

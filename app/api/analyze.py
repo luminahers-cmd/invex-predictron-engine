@@ -79,10 +79,10 @@ async def list_analyses(
     response_model=AnalysisDetailResponse,
     status_code=status.HTTP_200_OK,
     summary="Get a persisted analysis",
-    description="Get a completed analysis by ID. Requires authentication — owner only.",
+    description="Get a completed analysis by ID. Anonymous users can retrieve their anonymous analyses; authenticated users only their own.",
     responses={
         200: {"description": "Full analysis details", "model": AnalysisDetailResponse},
-        401: {"description": "Not authenticated — missing or invalid token"},
+        401: {"description": "Invalid token provided"},
         404: {"description": "Analysis not found or access denied"},
         429: {"description": "Rate limit exceeded"},
     },
@@ -90,9 +90,9 @@ async def list_analyses(
 async def get_analysis(
     analysis_id: str,
     db: AsyncSession = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
+    current_user: dict | None = Depends(get_current_user_optional),
 ) -> AnalysisDetailResponse:
-    user_id = current_user.get("sub")
+    user_id = current_user.get("sub") if current_user else None
     result = await _get_analysis(db, analysis_id, user_id=user_id)
     if result is None:
         raise HTTPException(

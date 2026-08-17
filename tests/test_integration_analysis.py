@@ -109,6 +109,7 @@ async def test_analyze_response_unchanged_by_persistence():
         resp = await client.post("/api/v1/analyze", json=_valid_payload())
 
     body = resp.json()
+    assert "id" in body
     assert "startup_name" in body
     assert "venture_score" in body
     assert "market_score" in body
@@ -116,7 +117,7 @@ async def test_analyze_response_unchanged_by_persistence():
     assert "traction_score" in body
     assert "recommendations" in body
     assert "confidence" in body
-    assert len(body) == 7  # No extra fields added by persistence
+    assert len(body) == 8  # No extra fields added by persistence
 
 
 # ── GET /api/v1/analyze — retrieval endpoints ────────────────────────

@@ -4,8 +4,9 @@ This module exposes the PredictronEngine class, which composes all
 pipeline stages into a cohesive analysis flow.
 
 Pipeline:
-  normalize -> collect -> extract -> evidence -> reason ->
-  evaluate -> score -> recommend -> confidence -> decide -> build_report
+  normalize -> collect -> collect_evidence -> extract -> evidence ->
+  reason -> evaluate -> score -> recommend -> confidence -> decide ->
+  build_report
 
 All dependencies are injected via the constructor. Every stage can be
 replaced independently without modifying the engine or any other stage.
@@ -27,19 +28,30 @@ Usage:
 
 import logging
 import time
+import uuid
 
 from app.schemas.analysis import StartupAnalysisRequest
 from predictron_engine.collection.collector import DefaultDataCollector
 from predictron_engine.confidence.confidence_engine import DefaultConfidenceEngine
+from predictron_engine.context import AnalysisContext
 from predictron_engine.decision.decision_engine import DefaultDecisionEngine
 from predictron_engine.evaluation.composite import CompositeEvaluator
 from predictron_engine.evaluation.investment_readiness import (
     compute_investment_readiness,
 )
 from predictron_engine.evidence.evidence_engine import DefaultEvidenceEngine
+from predictron_engine.evidence.models import EvidenceBundle
+from predictron_engine.evidence.orchestrator import EvidenceOrchestrator
+from predictron_engine.evidence.runner import (
+    EvidenceOrchestratorProtocol,
+    collect_evidence_sync,
+)
 from predictron_engine.extraction.composite import CompositeExtractor
 from predictron_engine.ingest.normalizer import DefaultNormalizer
-from predictron_engine.models.report import Report
+from predictron_engine.models.report import (
+    EvidenceCollectionMetadata,
+    Report,
+)
 from predictron_engine.reasoning.reasoning_engine import DefaultReasoningEngine
 from predictron_engine.recommendations.composite import (
     CompositeRecommendationEngine,
@@ -50,6 +62,19 @@ from predictron_engine.scoring.scoring_engine import DefaultScoringEngine
 logger = logging.getLogger(__name__)
 
 ENGINE_VERSION = "0.12.1"
+
+
+def _evidence_metadata(bundle: EvidenceBundle) -> EvidenceCollectionMetadata:
+    """Derive report metadata from a collected evidence bundle."""
+    successful = sum(1 for source in bundle.sources if source.success)
+    return EvidenceCollectionMetadata(
+        website=str(bundle.website) if bundle.website else None,
+        pages_discovered=bundle.attempted_pages,
+        pages_fetched=bundle.total_pages,
+        successful_sources=successful,
+        failed_sources=len(bundle.sources) - successful,
+        collection_time_ms=bundle.duration_ms,
+    )
 
 
 class PredictronEngine:
@@ -67,6 +92,7 @@ class PredictronEngine:
         normalizer: DefaultNormalizer | None = None,
         collector: DefaultDataCollector | None = None,
         extractor: CompositeExtractor | None = None,
+        evidence_collector: EvidenceOrchestratorProtocol | None = None,
         evidence: DefaultEvidenceEngine | None = None,
         reasoning: DefaultReasoningEngine | None = None,
         evaluation: CompositeEvaluator | None = None,
@@ -79,6 +105,7 @@ class PredictronEngine:
         self._normalizer = normalizer or DefaultNormalizer()
         self._collector = collector or DefaultDataCollector()
         self._extractor = extractor or CompositeExtractor()
+        self._evidence_collector = evidence_collector or EvidenceOrchestrator()
         self._evidence = evidence or DefaultEvidenceEngine()
         self._reasoning = reasoning or DefaultReasoningEngine()
         self._evaluation = evaluation or CompositeEvaluator()
@@ -89,14 +116,27 @@ class PredictronEngine:
         self._report_builder = report_builder or DefaultReportBuilder()
         logger.info("PredictronEngine initialized")
 
-    def analyze(self, request: StartupAnalysisRequest) -> Report:
+    def analyze(
+        self,
+        request: StartupAnalysisRequest,
+        request_id: str | None = None,
+    ) -> Report:
         """Execute the full analysis pipeline and return a structured Report.
 
         This is the single public entry point for the engine.
         It orchestrates every pipeline stage in sequence.
+
+        Parameters
+        ----------
+        request:
+            The analysis request to process.
+        request_id:
+            Optional correlation id for logging and tracing. A random id
+            is generated when omitted.
         """
         start_time = time.perf_counter()
-        logger.info("Starting analysis pipeline")
+        request_id = request_id or uuid.uuid4().hex
+        logger.info("Starting analysis pipeline", extra={"request_id": request_id})
 
         # Stage 1: Normalize
         startup = self._normalizer.normalize(request)
@@ -104,40 +144,51 @@ class PredictronEngine:
         # Stage 2: Collect
         collected_data = self._collector.collect(startup)
 
-        # Stage 3: Extract features
-        features = self._extractor.extract(startup, collected_data)
+        # Stage 3: Collect website evidence (best-effort, never fatal)
+        evidence_bundle = self._collect_evidence(startup, request_id)
 
-        # Stage 4: Gather evidence
+        context = AnalysisContext(
+            request_id=request_id,
+            startup=startup,
+            evidence_bundle=evidence_bundle,
+        )
+
+        # Stage 4: Extract features (enriched with website evidence)
+        features = self._extractor.extract(
+            startup, collected_data, context.evidence_bundle
+        )
+
+        # Stage 5: Gather evidence
         evidence_set = self._evidence.gather(features)
 
-        # Stage 5: Reason
+        # Stage 6: Reason
         observations = self._reasoning.reason(features, evidence_set.items)
 
-        # Stage 6: Evaluate
+        # Stage 7: Evaluate
         evaluation_result = self._evaluation.evaluate(
             features, observations, evidence_set.items
         )
 
-        # Stage 7: Score
+        # Stage 8: Score
         scores = self._scoring.score(features, observations)
 
-        # Stage 7b: Compute investment readiness
+        # Stage 8b: Compute investment readiness
         assessments = evaluation_result.assessments
         investment_readiness = compute_investment_readiness(
             features, observations, scores, assessments,
         )
 
-        # Stage 8: Recommend
+        # Stage 9: Recommend
         recs = self._recommendations.recommend(
             features, observations, scores, assessments
         )
 
-        # Stage 9: Assess confidence
+        # Stage 10: Assess confidence
         conf = self._confidence.assess(
             features, observations, scores, assessments
         )
 
-        # Stage 10: Decide
+        # Stage 11: Decide
         decision = self._decision.decide(
             features,
             observations,
@@ -147,7 +198,7 @@ class PredictronEngine:
             investment_readiness.signal_relationships,
         )
 
-        # Stage 11: Build report
+        # Stage 12: Build report
         report = self._report_builder.build(
             startup,
             features,
@@ -159,13 +210,56 @@ class PredictronEngine:
             assessments,
             decision,
             investment_readiness,
+            evidence_collection=_evidence_metadata(evidence_bundle),
         )
 
         elapsed_ms = (time.perf_counter() - start_time) * 1000
         report.analysis_metadata.processing_time_ms = round(elapsed_ms, 2)
 
-        logger.info("Analysis complete in %.1fms", elapsed_ms)
+        logger.info(
+            "Analysis complete in %.1fms",
+            elapsed_ms,
+            extra={"request_id": request_id},
+        )
         return report
+
+    def _collect_evidence(
+        self, startup: object, request_id: str
+    ) -> EvidenceBundle:
+        """Run website evidence collection for the startup, never raising.
+
+        Returns an empty bundle when no website is available or collection
+        fails for any reason, so analysis always proceeds.
+        """
+        website = getattr(startup, "website", "") or ""
+        if not website:
+            logger.info(
+                "Skipping evidence collection: no website",
+                extra={"request_id": request_id},
+            )
+            return EvidenceBundle.empty(getattr(startup, "name", ""))
+
+        try:
+            bundle = collect_evidence_sync(
+                self._evidence_collector,
+                getattr(startup, "name", ""),
+                website,
+            )
+            logger.info(
+                "Evidence collected: %d documents from %d pages in %d ms",
+                bundle.total_pages,
+                bundle.attempted_pages,
+                bundle.duration_ms,
+                extra={"request_id": request_id},
+            )
+            return bundle
+        except Exception:  # noqa: BLE001 - evidence must never break analysis
+            logger.exception(
+                "Evidence collection failed for %s",
+                website,
+                extra={"request_id": request_id},
+            )
+            return EvidenceBundle.empty(getattr(startup, "name", ""))
 
     def analyze_with_debug(
         self, request: StartupAnalysisRequest

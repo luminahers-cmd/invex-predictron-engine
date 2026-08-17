@@ -361,6 +361,33 @@ class InvestmentReadiness(BaseModel):
     )
 
 
+class EvidenceCollectionMetadata(BaseModel):
+    """Aggregate statistics about website evidence collection for one analysis.
+
+    This is an internal analysis artifact today. A later API version may
+    expose these fields publicly; no public endpoint consumes them yet.
+    """
+
+    website: str | None = Field(
+        default=None, description="Website URL that was collected, if any"
+    )
+    pages_discovered: int = Field(
+        default=0, ge=0, description="Number of candidate pages discovered"
+    )
+    pages_fetched: int = Field(
+        default=0, ge=0, description="Number of pages successfully fetched"
+    )
+    successful_sources: int = Field(
+        default=0, ge=0, description="Number of retrieval sources that succeeded"
+    )
+    failed_sources: int = Field(
+        default=0, ge=0, description="Number of retrieval sources that failed"
+    )
+    collection_time_ms: int = Field(
+        default=0, ge=0, description="Wall-clock time spent collecting evidence"
+    )
+
+
 class AnalysisMetadata(BaseModel):
     """Metadata about the analysis execution itself."""
 
@@ -382,6 +409,10 @@ class AnalysisMetadata(BaseModel):
         ge=0.0,
         le=1.0,
         description="Overall data completeness ratio",
+    )
+    evidence_collection: EvidenceCollectionMetadata | None = Field(
+        default=None,
+        description="Website evidence collection statistics, when evidence collection ran",
     )
 
 

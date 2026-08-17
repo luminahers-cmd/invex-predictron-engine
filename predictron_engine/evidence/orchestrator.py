@@ -1,0 +1,156 @@
+"""Orchestration service for the Evidence Collection Layer.
+
+Runs every applicable evidence provider, merges their documents and
+provenance into a single deterministic :class:`EvidenceBundle`, and
+records per-provider diagnostics. Providers are isolated: a failing
+provider is recorded and skipped without aborting the run.
+"""
+
+from __future__ import annotations
+
+import logging
+import time
+from collections.abc import Sequence
+from datetime import UTC, datetime
+
+from pydantic import HttpUrl
+
+from predictron_engine.evidence.exceptions import InvalidWebsiteError
+from predictron_engine.evidence.models import (
+    EvidenceBundle,
+    EvidenceDocument,
+    EvidenceSource,
+    ProviderRun,
+)
+from predictron_engine.evidence.provider_contracts import (
+    CollectContext,
+    EvidenceProvider,
+    ProviderResult,
+)
+from predictron_engine.evidence.website_provider import WebsiteEvidenceProvider
+
+logger = logging.getLogger(__name__)
+
+
+def _run_from_result(result: ProviderResult) -> ProviderRun:
+    """Derive a lightweight diagnostic record from a provider result."""
+    return ProviderRun(
+        provider=result.provider,
+        duration_ms=result.duration_ms,
+        success=result.success,
+        documents=len(result.documents),
+        attempted_pages=result.attempted_pages,
+        failure_reason=result.failure_reason,
+    )
+
+
+class EvidenceOrchestrator:
+    """Runs evidence providers and assembles a single EvidenceBundle.
+
+    Parameters
+    ----------
+    providers:
+        Optional ordered sequence of evidence providers. Defaults to a
+        single :class:`WebsiteEvidenceProvider`.
+    """
+
+    def __init__(self, providers: Sequence[EvidenceProvider] | None = None) -> None:
+        self._providers = (
+            list(providers) if providers is not None else [WebsiteEvidenceProvider()]
+        )
+
+    async def collect(
+        self,
+        startup_name: str,
+        website: str | HttpUrl | None,
+    ) -> EvidenceBundle:
+        """Collect evidence from every applicable provider.
+
+        Returns an :class:`EvidenceBundle` merging all provider results.
+        Raises :class:`InvalidWebsiteError` when a provided website cannot
+        be normalized; other provider failures are isolated and recorded.
+        """
+        started = time.monotonic()
+        context = CollectContext(
+            startup_name=startup_name,
+            website=str(website) if website else None,
+        )
+        documents: list[EvidenceDocument] = []
+        sources: list[EvidenceSource] = []
+        provider_runs: list[ProviderRun] = []
+        attempted_pages = 0
+        bundle_website: HttpUrl | None = None
+        collected_at = datetime.now(UTC)
+
+        logger.info("Evidence collection starting for %s", startup_name)
+
+        for provider in self._providers:
+            try:
+                applicable = provider.can_collect(context)
+            except Exception:  # noqa: BLE001 - a broken can_collect must not kill the run
+                logger.exception(
+                    "Provider %s can_collect failed for %s", provider.name, startup_name
+                )
+                applicable = False
+
+            if not applicable:
+                logger.info("Provider %s skipped for %s", provider.name, startup_name)
+                continue
+
+            logger.info("Provider %s collecting for %s", provider.name, startup_name)
+            try:
+                result = await provider.collect(context)
+            except InvalidWebsiteError:
+                raise
+            except Exception as exc:  # noqa: BLE001 - provider failures are isolated
+                logger.exception("Provider %s failed for %s", provider.name, startup_name)
+                provider_runs.append(
+                    ProviderRun(
+                        provider=provider.name,
+                        success=False,
+                        failure_reason=f"{type(exc).__name__}: {exc}",
+                    )
+                )
+                continue
+
+            provider_runs.append(_run_from_result(result))
+            documents.extend(result.documents)
+            sources.extend(result.sources)
+            attempted_pages += result.attempted_pages
+            if bundle_website is None and result.website is not None:
+                bundle_website = result.website
+
+        documents.sort(key=lambda doc: str(doc.original_url))
+        sources.sort(key=lambda src: str(src.original_url))
+
+        duration_ms = int((time.monotonic() - started) * 1000)
+        bundle = EvidenceBundle(
+            startup_name=startup_name,
+            website=bundle_website,
+            documents=documents,
+            sources=sources,
+            collected_at=collected_at,
+            duration_ms=duration_ms,
+            attempted_pages=attempted_pages,
+            providers=provider_runs,
+        )
+        logger.info(
+            "Evidence bundle completed: %d documents from %d attempted pages in %d ms",
+            len(documents),
+            attempted_pages,
+            duration_ms,
+        )
+        return bundle
+
+    async def close(self) -> None:
+        """Release resources held by any provider that supports closing."""
+        for provider in self._providers:
+            close = getattr(provider, "close", None)
+            if close is not None:
+                await close()
+
+    async def __aenter__(self) -> EvidenceOrchestrator:
+        return self
+
+    async def __aexit__(self, *exc_info: object) -> None:
+        await self.close()

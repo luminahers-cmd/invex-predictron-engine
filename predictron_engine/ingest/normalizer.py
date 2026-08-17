@@ -31,7 +31,7 @@ class DefaultNormalizer:
 
         return Startup(
             name=request.startup_name.strip(),
-            website=str(request.website),
+            website=str(request.website) if request.website else "",
             description=request.description.strip(),
             pitch_deck_url=(
                 str(request.pitch_deck_url) if request.pitch_deck_url else None

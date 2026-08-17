@@ -20,6 +20,7 @@ from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 
+from predictron_engine.evidence.models import EvidenceBundle
 from predictron_engine.extraction.derived.engine import DerivedMetricsEngine
 from predictron_engine.extraction.extractors.business_model import BusinessModelExtractor
 from predictron_engine.extraction.extractors.company import CompanyExtractor
@@ -31,7 +32,10 @@ from predictron_engine.extraction.extractors.product import ProductExtractor
 from predictron_engine.extraction.extractors.risk import RiskExtractor
 from predictron_engine.extraction.extractors.technology import TechnologyExtractor
 from predictron_engine.extraction.extractors.traction import TractionExtractor
-from predictron_engine.extraction.feature_models import NlpService
+from predictron_engine.extraction.feature_models import (
+    NlpService,
+    call_extractor_with_evidence,
+)
 from predictron_engine.models.collected_data import CollectedData
 from predictron_engine.models.extracted_features import ExtractedFeatures
 from predictron_engine.models.startup import Startup
@@ -155,8 +159,17 @@ class CompositeExtractor:
         if self.nlp_service is not None:
             self._inject_nlp()
 
-    def extract(self, startup: Startup, data: CollectedData) -> ExtractedFeatures:
-        """Run all extractors, merge, then apply deterministic inference."""
+    def extract(
+        self,
+        startup: Startup,
+        data: CollectedData,
+        evidence: EvidenceBundle | None = None,
+    ) -> ExtractedFeatures:
+        """Run all extractors, merge, then apply deterministic inference.
+
+        ``evidence`` is forwarded to extractors that accept it; extractors
+        implementing only ``extract(startup, data)`` are called unchanged.
+        """
         logger.info(
             "CompositeExtractor: running %d extractors for %s",
             len(self.extractors),
@@ -166,7 +179,9 @@ class CompositeExtractor:
         merged = ExtractedFeatures()
 
         for extractor in self.extractors:
-            partial = extractor.extract(startup, data)
+            partial = call_extractor_with_evidence(
+                extractor.extract, startup, data, evidence
+            )
             merged = self._merge(merged, partial)
 
         # Deterministic inference layer — derive additional metrics
