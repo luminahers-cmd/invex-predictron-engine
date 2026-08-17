@@ -13,10 +13,10 @@ The evidence layer contains three independent subsystems:
    ``website_provider.py``, ``discover.py``, ``fetcher.py``, ``cleaner.py``,
    and ``models.py``.
 
-3. The Internet Search Discovery Layer (Sprint 3B) — discovers and ranks
+3. The Internet Search Discovery Layer (Sprint 3B / 4A) — discovers and ranks
    candidate URLs across the public internet via a pluggable search backend,
-   implemented in ``search_interfaces.py``, ``ranking.py``, and
-   ``search_provider.py``.
+   implemented in ``search_interfaces.py``, ``ranking.py``,
+   ``search_provider.py``, and ``search_backends.py``.
 """
 
 from predictron_engine.evidence.cleaner import HtmlCleaner
@@ -51,6 +51,7 @@ from predictron_engine.evidence.provider_contracts import (
     ProviderResult,
 )
 from predictron_engine.evidence.ranking import RankedUrl, rank_urls, score_url
+from predictron_engine.evidence.search_backends import TavilySearchBackend
 from predictron_engine.evidence.search_interfaces import (
     SearchBackend,
     SearchResult,
@@ -102,6 +103,7 @@ __all__ = [
     "SearchEvidenceProvider",
     "SearchResult",
     "SearchSettings",
+    "TavilySearchBackend",
     "WebsiteEvidenceProvider",
     "WebsiteProviderSettings",
     "ensure_scheme",
