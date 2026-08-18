@@ -19,6 +19,107 @@ from enum import Enum
 
 from pydantic import BaseModel, Field, HttpUrl, computed_field
 
+# ── Document Intelligence types (Sprint 4C) ────────────────────────
+
+
+class DocumentType(str, Enum):
+    """Classification of an evidence document's content type."""
+
+    HOMEPAGE = "homepage"
+    ABOUT = "about"
+    PRODUCT = "product"
+    PRICING = "pricing"
+    DOCUMENTATION = "documentation"
+    API_DOCS = "api_docs"
+    BLOG = "blog"
+    CAREERS = "careers"
+    SECURITY = "security"
+    PRIVACY = "privacy"
+    TERMS = "terms"
+    FAQ = "faq"
+    CONTACT = "contact"
+    NEWS = "news"
+    PRESS_RELEASE = "press_release"
+    INVESTOR = "investor"
+    REPOSITORY = "repository"
+    UNKNOWN = "unknown"
+
+
+class DocumentMetadata(BaseModel):
+    """Intelligence metadata attached to an :class:`EvidenceDocument`.
+
+    All fields have defaults so the model can be constructed incrementally
+    and remains backward-compatible with existing consumers.
+    """
+
+    document_type: DocumentType = Field(
+        default=DocumentType.UNKNOWN,
+        description="Classified document type",
+    )
+    authority_score: float = Field(
+        default=0.0, ge=0.0, le=1.0,
+        description="Authority confidence [0, 1]",
+    )
+    quality_score: float = Field(
+        default=0.0, ge=0.0, le=1.0,
+        description="Content quality score [0, 1]",
+    )
+    priority: int = Field(
+        default=6, ge=1, le=6,
+        description="Priority tier (1 = highest)",
+    )
+    canonical_url: str | None = Field(
+        default=None,
+        description="Canonical URL after deduplication",
+    )
+    language: str = Field(
+        default="en",
+        description="Detected ISO 639-1 language code",
+    )
+    word_count: int = Field(default=0, description="Word count of cleaned text")
+    heading_count: int = Field(default=0, description="Number of headings")
+    table_count: int = Field(default=0, description="Number of table rows")
+    list_count: int = Field(default=0, description="Number of list items")
+    content_hash: str = Field(
+        default="",
+        description="SHA-256 hex digest of normalised text",
+    )
+    duplicate_of: str | None = Field(
+        default=None,
+        description="Document id of the canonical document when this is a duplicate",
+    )
+    is_duplicate: bool = Field(
+        default=False,
+        description="True when this document is a duplicate of another",
+    )
+    trust_level: str = Field(
+        default="unknown",
+        description="Trust classification: official, third_party, unknown",
+    )
+    source_provider: str = Field(
+        default="",
+        description="Name of the provider that collected this document",
+    )
+
+
+class IntelligenceSummary(BaseModel):
+    """Diagnostics for the Document Intelligence stage."""
+
+    documents_input: int = Field(default=0, description="Documents before intelligence")
+    documents_classified: int = Field(default=0, description="Documents classified")
+    duplicates_removed: int = Field(default=0, description="Duplicate documents removed")
+    average_authority: float = Field(default=0.0, description="Mean authority score")
+    average_quality: float = Field(default=0.0, description="Mean quality score")
+    document_type_distribution: dict[str, int] = Field(
+        default_factory=dict,
+        description="Count per document type",
+    )
+    processing_duration_ms: int = Field(default=0, description="Processing wall-clock time")
+    classification_confidence: float = Field(
+        default=0.0,
+        description="Fraction of documents classified as non-UNKNOWN",
+    )
+
 
 def make_document_id(url: str) -> str:
     """Return a stable UUIDv5 document id derived from a URL."""
@@ -111,6 +212,10 @@ class EvidenceDocument(BaseModel):
     content_type: str | None = Field(default=None, description="Response Content-Type")
     truncated: bool = Field(default=False, description="True if body exceeded the size cap")
     error: str | None = Field(default=None, description="Failure description if any")
+    metadata: DocumentMetadata | None = Field(
+        default=None,
+        description="Document Intelligence metadata (populated after enrichment)",
+    )
 
 
 class EvidenceSource(BaseModel):
@@ -175,6 +280,10 @@ class EvidenceBundle(BaseModel):
     attempted_pages: int = Field(default=0, description="Number of candidate pages attempted")
     providers: list[ProviderRun] = Field(
         default_factory=list, description="Per-provider diagnostic records"
+    )
+    intelligence: IntelligenceSummary | None = Field(
+        default=None,
+        description="Document Intelligence diagnostics (populated after enrichment)",
     )
 
     @classmethod

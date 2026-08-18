@@ -18,10 +18,24 @@ The evidence layer contains three independent subsystems:
    internet via a pluggable search backend and an evidence prioritization
    layer, implemented in ``search_interfaces.py``, ``ranking.py``,
    ``prioritization.py``, ``search_provider.py``, and ``search_backends.py``.
+
+4. The Document Intelligence Layer (Sprint 4C) — classifies documents,
+   computes quality metrics, estimates authority, and detects duplicates.
+   Implemented in ``document_intelligence.py``.
 """
 
 from predictron_engine.evidence.cleaner import HtmlCleaner
 from predictron_engine.evidence.discover import DefaultPageDiscoverer
+from predictron_engine.evidence.document_intelligence import (
+    DocumentIntelligence,
+    QualityMetrics,
+    classify_document,
+    compute_content_hash,
+    compute_quality_metrics,
+    detect_duplicates,
+    enrich_documents,
+    estimate_authority,
+)
 from predictron_engine.evidence.evidence_engine import DefaultEvidenceEngine
 from predictron_engine.evidence.evidence_models import EvidenceItem, EvidenceSet
 from predictron_engine.evidence.exceptions import (
@@ -34,11 +48,14 @@ from predictron_engine.evidence.exceptions import (
 from predictron_engine.evidence.fetcher import FetcherSettings, HttpPageFetcher
 from predictron_engine.evidence.models import (
     CleanResult,
+    DocumentMetadata,
     DocumentStatus,
+    DocumentType,
     EvidenceBundle,
     EvidenceDocument,
     EvidenceSource,
     FetchResult,
+    IntelligenceSummary,
     PageCandidate,
     PageType,
     ProviderRun,
@@ -89,7 +106,10 @@ __all__ = [
     "DefaultEvidenceEngine",
     "DefaultPageDiscoverer",
     "DiscoveryError",
+    "DocumentIntelligence",
+    "DocumentMetadata",
     "DocumentStatus",
+    "DocumentType",
     "EvidenceBundle",
     "EvidenceCollectionError",
     "EvidenceDocument",
@@ -103,6 +123,7 @@ __all__ = [
     "FetcherSettings",
     "HtmlCleaner",
     "HttpPageFetcher",
+    "IntelligenceSummary",
     "InvalidWebsiteError",
     "OfficialWebsiteResult",
     "PageCandidate",
@@ -112,6 +133,7 @@ __all__ = [
     "PrioritizedPage",
     "ProviderResult",
     "ProviderRun",
+    "QualityMetrics",
     "RankedUrl",
     "RetrievalMethod",
     "SearchBackend",
@@ -121,7 +143,13 @@ __all__ = [
     "TavilySearchBackend",
     "WebsiteEvidenceProvider",
     "WebsiteProviderSettings",
+    "classify_document",
+    "compute_content_hash",
+    "compute_quality_metrics",
+    "detect_duplicates",
     "ensure_scheme",
+    "enrich_documents",
+    "estimate_authority",
     "extract_host",
     "has_valid_scheme",
     "identify_official_website",

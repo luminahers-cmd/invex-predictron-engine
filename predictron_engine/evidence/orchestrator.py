@@ -17,10 +17,14 @@ from datetime import UTC, datetime
 
 from pydantic import HttpUrl
 
+from predictron_engine.evidence.document_intelligence import (
+    enrich_documents,
+)
 from predictron_engine.evidence.models import (
     EvidenceBundle,
     EvidenceDocument,
     EvidenceSource,
+    IntelligenceSummary,
     ProviderRun,
 )
 from predictron_engine.evidence.provider_contracts import (
@@ -52,17 +56,28 @@ class EvidenceOrchestrator:
     :func:`asyncio.gather`.  The final output is deterministically ordered
     by the original provider sequence regardless of completion order.
 
+    After provider collection, Document Intelligence enriches every
+    document with classification, quality metrics, authority scores,
+    and duplicate resolution.
+
     Parameters
     ----------
     providers:
         Optional ordered sequence of evidence providers. Defaults to a
         single :class:`WebsiteEvidenceProvider`.
+    official_host:
+        Optional lowercased hostname for official website identification.
     """
 
-    def __init__(self, providers: Sequence[EvidenceProvider] | None = None) -> None:
+    def __init__(
+        self,
+        providers: Sequence[EvidenceProvider] | None = None,
+        official_host: str | None = None,
+    ) -> None:
         self._providers = (
             list(providers) if providers is not None else [WebsiteEvidenceProvider()]
         )
+        self._official_host = official_host
 
     async def collect(
         self,
@@ -147,6 +162,27 @@ class EvidenceOrchestrator:
         documents.sort(key=lambda doc: str(doc.original_url))
         sources.sort(key=lambda src: str(src.original_url))
 
+        # Phase 4: Document Intelligence enrichment
+        intelligence_summary: IntelligenceSummary | None = None
+        if documents:
+            logger.info(
+                "Running Document Intelligence on %d documents for %s",
+                len(documents),
+                startup_name,
+            )
+            documents, intelligence_summary = enrich_documents(
+                documents,
+                official_host=self._official_host,
+                source_provider="evidence",
+            )
+            logger.info(
+                "Document Intelligence completed: %d classified, "
+                "%d duplicates removed for %s",
+                intelligence_summary.documents_classified,
+                intelligence_summary.duplicates_removed,
+                startup_name,
+            )
+
         duration_ms = int((time.monotonic() - started) * 1000)
         bundle = EvidenceBundle(
             startup_name=startup_name,
@@ -157,6 +193,7 @@ class EvidenceOrchestrator:
             duration_ms=duration_ms,
             attempted_pages=attempted_pages,
             providers=provider_runs,
+            intelligence=intelligence_summary,
         )
         logger.info(
             "Evidence bundle completed: %d documents from %d attempted pages in %d ms",
