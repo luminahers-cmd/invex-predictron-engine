@@ -13,10 +13,11 @@ The evidence layer contains three independent subsystems:
    ``website_provider.py``, ``discover.py``, ``fetcher.py``, ``cleaner.py``,
    and ``models.py``.
 
-3. The Internet Search Discovery Layer (Sprint 3B / 4A) — discovers and ranks
-   candidate URLs across the public internet via a pluggable search backend,
-   implemented in ``search_interfaces.py``, ``ranking.py``,
-   ``search_provider.py``, and ``search_backends.py``.
+3. The Internet Search Discovery Layer (Sprint 3B / 4A / 4B) — discovers,
+   ranks, prioritises, and selects candidate URLs across the public
+   internet via a pluggable search backend and an evidence prioritization
+   layer, implemented in ``search_interfaces.py``, ``ranking.py``,
+   ``prioritization.py``, ``search_provider.py``, and ``search_backends.py``.
 """
 
 from predictron_engine.evidence.cleaner import HtmlCleaner
@@ -45,9 +46,19 @@ from predictron_engine.evidence.models import (
     make_document_id,
 )
 from predictron_engine.evidence.orchestrator import EvidenceOrchestrator
+from predictron_engine.evidence.prioritization import (
+    OfficialWebsiteResult,
+    PrioritizationSettings,
+    PrioritizedPage,
+    identify_official_website,
+    prioritise_pages,
+    score_evidence_quality,
+    select_pages_for_fetch,
+)
 from predictron_engine.evidence.provider_contracts import (
     CollectContext,
     EvidenceProvider,
+    PrioritizationSummary,
     ProviderResult,
 )
 from predictron_engine.evidence.ranking import RankedUrl, rank_urls, score_url
@@ -93,8 +104,12 @@ __all__ = [
     "HtmlCleaner",
     "HttpPageFetcher",
     "InvalidWebsiteError",
+    "OfficialWebsiteResult",
     "PageCandidate",
     "PageType",
+    "PrioritizationSettings",
+    "PrioritizationSummary",
+    "PrioritizedPage",
     "ProviderResult",
     "ProviderRun",
     "RankedUrl",
@@ -109,10 +124,14 @@ __all__ = [
     "ensure_scheme",
     "extract_host",
     "has_valid_scheme",
+    "identify_official_website",
     "make_document_id",
     "normalise_url_for_dedup",
     "normalise_website",
     "parse_http_url",
+    "prioritise_pages",
     "rank_urls",
+    "score_evidence_quality",
     "score_url",
+    "select_pages_for_fetch",
 ]

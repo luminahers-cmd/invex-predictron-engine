@@ -2,14 +2,15 @@
 
 The provider queries a configurable :class:`SearchBackend` to discover
 high-quality candidate URLs for a company across the public internet,
-scores and ranks them using deterministic heuristics, and records the
-ranked URLs as provenance sources in the :class:`ProviderResult`.
+scores and ranks them using deterministic heuristics, identifies the
+official website, prioritises evidence quality, and selects only the
+highest-value pages for downstream fetching.
 
 Design constraints
 ------------------
 * **No fetching.**  This provider never retrieves HTML or creates
   :class:`EvidenceDocument` objects.  Its responsibility ends at
-  producing ranked candidate URLs and provider diagnostics.
+  producing prioritised candidate URLs and provider diagnostics.
 * **No hardcoding.**  The actual search backend is injected; the
   ``backend`` name in :class:`SearchSettings` is purely a diagnostics
   label.
@@ -21,13 +22,25 @@ from __future__ import annotations
 import asyncio
 import logging
 import time
+from collections import Counter
 from datetime import UTC, datetime
 
 from pydantic import HttpUrl, ValidationError
 
 from predictron_engine.evidence.models import EvidenceSource, PageType
-from predictron_engine.evidence.provider_contracts import CollectContext, ProviderResult
-from predictron_engine.evidence.ranking import RankedUrl, rank_urls
+from predictron_engine.evidence.prioritization import (
+    PrioritizationSettings,
+    PrioritizedPage,
+    identify_official_website,
+    prioritise_pages,
+    select_pages_for_fetch,
+)
+from predictron_engine.evidence.provider_contracts import (
+    CollectContext,
+    PrioritizationSummary,
+    ProviderResult,
+)
+from predictron_engine.evidence.ranking import rank_urls
 from predictron_engine.evidence.search_interfaces import SearchBackend, SearchSettings
 from predictron_engine.evidence.url_utils import extract_host, parse_http_url
 
@@ -35,7 +48,7 @@ logger = logging.getLogger(__name__)
 
 
 class SearchEvidenceProvider:
-    """Discovers and ranks candidate URLs via a pluggable search backend.
+    """Discovers and prioritises candidate URLs via a pluggable search backend.
 
     Parameters
     ----------
@@ -43,6 +56,9 @@ class SearchEvidenceProvider:
         A :class:`SearchBackend` implementation to query.
     settings:
         Optional configuration (max results, timeouts, retry policy).
+    prioritization_settings:
+        Optional prioritization configuration (official website confidence,
+        max fetch pages).
     """
 
     name = "search"
@@ -52,9 +68,11 @@ class SearchEvidenceProvider:
         *,
         backend: SearchBackend | None = None,
         settings: SearchSettings | None = None,
+        prioritization_settings: PrioritizationSettings | None = None,
     ) -> None:
         self._backend: SearchBackend | None = backend
         self._settings = settings or SearchSettings()
+        self._prioritization_settings = prioritization_settings or PrioritizationSettings()
 
     # ------------------------------------------------------------------
     # EvidenceProvider protocol
@@ -65,11 +83,11 @@ class SearchEvidenceProvider:
         return self._backend is not None
 
     async def collect(self, context: CollectContext) -> ProviderResult:
-        """Discover candidate URLs for *context.startup_name*.
+        """Discover, prioritise, and select candidate URLs for *context.startup_name*.
 
-        Returns a :class:`ProviderResult` whose ``sources`` carry the
-        ranked URL candidates and whose ``documents`` list is always
-        empty (this provider does not fetch pages).
+        Returns a :class:`ProviderResult` whose ``sources`` carry only
+        the highest-value prioritised URLs, and whose ``documents`` list
+        is always empty (this provider does not fetch pages).
         """
         started = time.monotonic()
 
@@ -120,15 +138,57 @@ class SearchEvidenceProvider:
             website_host=website_host,
         )
 
-        # Build provenance sources from ranked URLs
-        sources = self._build_sources(ranked)
+        # Build title/snippet lookup for prioritization
+        search_map: dict[str, tuple[str, str]] = {}
+        for r in all_results:
+            if r.url not in search_map:
+                search_map[r.url] = (r.title, r.snippet)
+
+        # Identify official website
+        official = identify_official_website(
+            ranked,
+            startup_name=context.startup_name,
+            known_website_host=website_host,
+        )
+
+        # Prioritise pages
+        prioritised = prioritise_pages(
+            ranked,
+            search_results=search_map,
+            official_host=extract_host(official.url) if official.url else None,
+            settings=self._prioritization_settings,
+        )
+
+        # Select pages for fetch
+        selected = select_pages_for_fetch(
+            prioritised,
+            settings=self._prioritization_settings,
+        )
+
+        # Build provenance sources from selected pages only
+        sources = self._build_sources(selected)
+
+        # Build diagnostics
+        skipped_count = len(prioritised) - len(selected)
+        evidence_counts: Counter[str] = Counter()
+        for page in selected:
+            evidence_counts[page.evidence_type] += 1
+
+        prioritization_summary = PrioritizationSummary(
+            detected_official_url=official.url,
+            official_confidence=official.confidence,
+            selected_count=len(selected),
+            skipped_count=max(0, skipped_count),
+            evidence_types=dict(sorted(evidence_counts.items())),
+        )
 
         duration_ms = int((time.monotonic() - started) * 1000)
         logger.info(
             "Search evidence provider completed: %d candidates discovered, "
-            "%d accepted for %s in %d ms",
+            "%d prioritised, %d selected for %s in %d ms",
             len(all_results),
-            len(ranked),
+            len(prioritised),
+            len(selected),
             context.startup_name,
             duration_ms,
         )
@@ -140,6 +200,7 @@ class SearchEvidenceProvider:
             attempted_pages=1,
             duration_ms=duration_ms,
             success=True,
+            prioritization=prioritization_summary,
         )
 
     # ------------------------------------------------------------------
@@ -195,15 +256,15 @@ class SearchEvidenceProvider:
         return None
 
     @staticmethod
-    def _build_sources(ranked: list[RankedUrl]) -> list[EvidenceSource]:
-        """Convert ranked URLs into provenance :class:`EvidenceSource` records."""
+    def _build_sources(pages: list[PrioritizedPage]) -> list[EvidenceSource]:
+        """Convert prioritised pages into provenance :class:`EvidenceSource` records."""
         now = datetime.now(UTC)
         sources: list[EvidenceSource] = []
-        for item in ranked:
+        for page in pages:
             try:
-                url = HttpUrl(item.url)
+                url = HttpUrl(page.url)
             except (ValidationError, Exception):  # noqa: BLE001
-                logger.debug("Skipping malformed URL in ranked results: %s", item.url)
+                logger.debug("Skipping malformed URL in prioritised results: %s", page.url)
                 continue
             sources.append(
                 EvidenceSource(

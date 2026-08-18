@@ -31,6 +31,40 @@ class CollectContext(BaseModel):
     website: str | None = Field(default=None, description="Raw website string, if any")
 
 
+class PrioritizationSummary(BaseModel):
+    """Diagnostics for evidence prioritization and page selection.
+
+    Included in :class:`ProviderResult` when the search provider
+    performs prioritization.  Always optional and additive — never
+    breaks existing consumers.
+    """
+
+    detected_official_url: str | None = Field(
+        default=None,
+        description="URL of the identified official website",
+    )
+    official_confidence: float = Field(
+        default=0.0,
+        ge=0.0,
+        le=1.0,
+        description="Confidence score for official website detection",
+    )
+    selected_count: int = Field(
+        default=0,
+        ge=0,
+        description="Number of pages selected for fetching",
+    )
+    skipped_count: int = Field(
+        default=0,
+        ge=0,
+        description="Number of pages skipped (not selected)",
+    )
+    evidence_types: dict[str, int] = Field(
+        default_factory=dict,
+        description="Count of pages by evidence type",
+    )
+
+
 class ProviderResult(BaseModel):
     """Output produced by one evidence provider for a collection run."""
 
@@ -49,6 +83,10 @@ class ProviderResult(BaseModel):
     success: bool = Field(default=True, description="Whether collection completed successfully")
     failure_reason: str | None = Field(
         default=None, description="Why the provider failed, if it did"
+    )
+    prioritization: PrioritizationSummary | None = Field(
+        default=None,
+        description="Prioritization diagnostics when applicable (search provider)",
     )
 
 
