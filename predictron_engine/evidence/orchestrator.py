@@ -194,6 +194,11 @@ class EvidenceOrchestrator:
             attempted_pages=attempted_pages,
             providers=provider_runs,
             intelligence=intelligence_summary,
+            trust_summary=(
+                intelligence_summary.trust_summary
+                if intelligence_summary is not None
+                else None
+            ),
         )
         logger.info(
             "Evidence bundle completed: %d documents from %d attempted pages in %d ms",

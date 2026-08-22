@@ -38,6 +38,12 @@ from predictron_engine.evidence.models import (
     EvidenceDocument,
     IntelligenceSummary,
 )
+from predictron_engine.evidence.provenance import (
+    TrustScore,
+    build_provenance_record,
+    compute_document_trust,
+    compute_trust_summary,
+)
 from predictron_engine.evidence.url_utils import extract_host, normalise_url_for_dedup
 
 # ────────────────────────────────────────────────────────────────────
@@ -712,6 +718,7 @@ def enrich_documents(
     authority_scores: list[float] = []
     quality_scores: list[float] = []
     classified_count = 0
+    trust_scores: list[TrustScore] = []
 
     enriched: list[EvidenceDocument] = []
     for doc in deduplicated:
@@ -765,6 +772,20 @@ def enrich_documents(
         )
         authority_scores.append(authority)
 
+        # Sprint 5A: Trust scoring
+        is_official = _trust_level(doc, official_host) == "official"
+        is_tp_credible = _trust_level(doc, official_host) == "third_party"
+        trust = compute_document_trust(
+            authority_score=authority,
+            quality_score=quality_score,
+            fetched_at=doc.fetched_at,
+            is_official=is_official,
+            is_third_party_credible=is_tp_credible,
+            is_duplicate=doc.id in canonical_of,
+            now=doc.fetched_at,
+        )
+        trust_scores.append(trust)
+
         # Build metadata
         content_hash = compute_content_hash(doc.text)
         words = doc.text.split()
@@ -787,7 +808,25 @@ def enrich_documents(
             duplicate_of=canonical_of.get(doc.id),
             trust_level=_trust_level(doc, official_host),
             source_provider=source_provider,
+            trust_score=trust,
         )
+
+        # Sprint 5A: Provenance record
+        provenance = build_provenance_record(
+            document_id=doc.id,
+            url=str(doc.original_url),
+            final_url=str(doc.url),
+            document_type=dtype.value,
+            source_provider=source_provider,
+            trust_level=_trust_level(doc, official_host),
+            trust_score=trust.overall,
+            fetched_at=doc.fetched_at,
+            is_official=is_official,
+            is_duplicate=is_dup,
+            duplicate_of=canonical_of.get(doc.id),
+            freshness_days=trust.freshness_days,
+        )
+        metadata.provenance = [provenance]
 
         enriched.append(
             doc.model_copy(update={"metadata": metadata})
@@ -810,6 +849,9 @@ def enrich_documents(
         if deduplicated else 0.0
     )
 
+    # Sprint 5A: Trust summary
+    trust_summary = compute_trust_summary(trust_scores)
+
     summary = IntelligenceSummary(
         documents_input=input_count,
         documents_classified=classified_count,
@@ -819,6 +861,7 @@ def enrich_documents(
         document_type_distribution=dict(sorted(type_counts.items())),
         processing_duration_ms=duration_ms,
         classification_confidence=conf,
+        trust_summary=trust_summary,
     )
 
     return enriched, summary

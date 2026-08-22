@@ -1,6 +1,6 @@
 """Evidence module — contextual domain knowledge and web evidence collection.
 
-The evidence layer contains three independent subsystems:
+The evidence layer contains six independent subsystems:
 
 1. Domain knowledge providers (extract → evidence → reason), implemented in
    ``evidence_engine.py`` and ``providers/``. Evidence items are objective,
@@ -22,6 +22,16 @@ The evidence layer contains three independent subsystems:
 4. The Document Intelligence Layer (Sprint 4C) — classifies documents,
    computes quality metrics, estimates authority, and detects duplicates.
    Implemented in ``document_intelligence.py``.
+
+5. The Evidence Provenance & Trust Framework (Sprint 5A) — deterministic,
+   multi-factor trust scoring and provenance records that link every
+   document and extracted feature back to its source.  Implemented in
+   ``provenance.py``.
+
+6. The Evidence Retrieval & Citation Engine (Sprint 5B) — structured
+   citations linking evidence claims to source documents, with retrieval
+   functions for querying the evidence bundle.  Implemented in
+   ``citation.py`` and ``retrieval.py``.
 """
 
 from predictron_engine.evidence.cleaner import HtmlCleaner
@@ -72,6 +82,16 @@ from predictron_engine.evidence.prioritization import (
     score_evidence_quality,
     select_pages_for_fetch,
 )
+from predictron_engine.evidence.provenance import (
+    ProvenanceRecord,
+    SourceTrustLevel,
+    TrustFactor,
+    TrustScore,
+    TrustSummary,
+    build_provenance_record,
+    compute_document_trust,
+    compute_trust_summary,
+)
 from predictron_engine.evidence.provider_contracts import (
     CollectContext,
     EvidenceProvider,
@@ -79,6 +99,15 @@ from predictron_engine.evidence.provider_contracts import (
     ProviderResult,
 )
 from predictron_engine.evidence.ranking import RankedUrl, rank_urls, score_url
+from predictron_engine.evidence.retrieval import (
+    retrieve_best_source,
+    retrieve_citations_for_domain,
+    retrieve_citations_for_observation,
+    retrieve_documents_by_provider,
+    retrieve_documents_by_type,
+    retrieve_evidence_for_domain,
+    retrieve_trusted_documents,
+)
 from predictron_engine.evidence.search_backends import TavilySearchBackend
 from predictron_engine.evidence.search_interfaces import (
     SearchBackend,
@@ -131,6 +160,7 @@ __all__ = [
     "PrioritizationSettings",
     "PrioritizationSummary",
     "PrioritizedPage",
+    "ProvenanceRecord",
     "ProviderResult",
     "ProviderRun",
     "QualityMetrics",
@@ -140,12 +170,19 @@ __all__ = [
     "SearchEvidenceProvider",
     "SearchResult",
     "SearchSettings",
+    "SourceTrustLevel",
     "TavilySearchBackend",
+    "TrustFactor",
+    "TrustScore",
+    "TrustSummary",
     "WebsiteEvidenceProvider",
     "WebsiteProviderSettings",
+    "build_provenance_record",
     "classify_document",
     "compute_content_hash",
+    "compute_document_trust",
     "compute_quality_metrics",
+    "compute_trust_summary",
     "detect_duplicates",
     "ensure_scheme",
     "enrich_documents",
@@ -159,6 +196,13 @@ __all__ = [
     "parse_http_url",
     "prioritise_pages",
     "rank_urls",
+    "retrieve_best_source",
+    "retrieve_citations_for_domain",
+    "retrieve_citations_for_observation",
+    "retrieve_documents_by_provider",
+    "retrieve_documents_by_type",
+    "retrieve_evidence_for_domain",
+    "retrieve_trusted_documents",
     "score_evidence_quality",
     "score_url",
     "select_pages_for_fetch",

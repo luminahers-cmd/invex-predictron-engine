@@ -19,6 +19,8 @@ from enum import Enum
 
 from pydantic import BaseModel, Field, HttpUrl, computed_field
 
+from predictron_engine.evidence.provenance import ProvenanceRecord, TrustScore, TrustSummary
+
 # ── Document Intelligence types (Sprint 4C) ────────────────────────
 
 
@@ -101,6 +103,16 @@ class DocumentMetadata(BaseModel):
         description="Name of the provider that collected this document",
     )
 
+    # ── Sprint 5A: Trust & Provenance ──────────────────────────────
+    trust_score: TrustScore | None = Field(
+        default=None,
+        description="Deterministic trust score for this document",
+    )
+    provenance: list[ProvenanceRecord] = Field(
+        default_factory=list,
+        description="Provenance records linking this document to its sources",
+    )
+
 
 class IntelligenceSummary(BaseModel):
     """Diagnostics for the Document Intelligence stage."""
@@ -118,6 +130,12 @@ class IntelligenceSummary(BaseModel):
     classification_confidence: float = Field(
         default=0.0,
         description="Fraction of documents classified as non-UNKNOWN",
+    )
+
+    # ── Sprint 5A: Trust diagnostics ───────────────────────────────
+    trust_summary: TrustSummary | None = Field(
+        default=None,
+        description="Aggregate trust diagnostics (populated after trust scoring)",
     )
 
 
@@ -284,6 +302,10 @@ class EvidenceBundle(BaseModel):
     intelligence: IntelligenceSummary | None = Field(
         default=None,
         description="Document Intelligence diagnostics (populated after enrichment)",
+    )
+    trust_summary: TrustSummary | None = Field(
+        default=None,
+        description="Aggregate trust diagnostics (populated after trust scoring)",
     )
 
     @classmethod

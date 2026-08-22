@@ -41,6 +41,50 @@ class ConvictionLevel(str, Enum):
     VERY_LOW = "very_low"
 
 
+class EvidenceCitation(BaseModel):
+    """Structured citation linking a claim to its source documents.
+
+    Every citation connects a specific evidence claim (domain, category,
+    statement) to the web documents that support it, along with trust
+    metadata for ranking and filtering.
+
+    Citations are deterministic — the same inputs always produce the
+    same citation.  They are pure value objects with no side effects.
+    """
+
+    claim: str = Field(
+        ..., description="The evidence statement being cited"
+    )
+    domain: str = Field(
+        ..., description="Feature domain of the cited evidence"
+    )
+    category: str = Field(
+        ..., description="Evidence sub-category"
+    )
+    source_document_ids: list[str] = Field(
+        default_factory=list,
+        description="UUIDv5 document ids that support this claim",
+    )
+    source_urls: list[str] = Field(
+        default_factory=list,
+        description="Source URLs of the supporting documents",
+    )
+    best_trust_score: float = Field(
+        default=0.0,
+        ge=0.0,
+        le=1.0,
+        description="Highest trust score among cited source documents",
+    )
+    citation_text: str = Field(
+        default="",
+        description="Human-readable formatted citation",
+    )
+    provider: str = Field(
+        default="",
+        description="Knowledge provider that produced this evidence item",
+    )
+
+
 class EvidenceItem(BaseModel):
     """A single piece of contextual evidence about a startup's domain.
 
@@ -66,6 +110,24 @@ class EvidenceItem(BaseModel):
         ge=0.0,
         le=1.0,
         description="How relevant this evidence is to the specific startup",
+    )
+
+    # Sprint 5A: Provenance linkage
+    provenance_record: str | None = Field(
+        default=None,
+        description=(
+            "JSON-encoded ProvenanceRecord linking this evidence item "
+            "back to the source document that provided it"
+        ),
+    )
+
+    # Sprint 5B: Citation linkage
+    citations: list[EvidenceCitation] = Field(
+        default_factory=list,
+        description=(
+            "Structured citations linking this evidence item to "
+            "supporting source documents with trust metadata"
+        ),
     )
 
 
@@ -104,6 +166,51 @@ class Observation(BaseModel):
     source_rule: str = Field(
         default="",
         description="Name of the reasoning rule that produced this observation",
+    )
+
+    # Sprint 5B: Citation linkage
+    citations: list[EvidenceCitation] = Field(
+        default_factory=list,
+        description=(
+            "Structured citations linking this observation to "
+            "supporting source documents with trust metadata"
+        ),
+    )
+
+    # Sprint 6A: Evidence-backed observation metadata
+    trust_score: float = Field(
+        default=0.0,
+        ge=0.0,
+        le=1.0,
+        description=(
+            "Deterministic evidence trust score for this observation: "
+            "the highest trust score among cited supporting documents"
+        ),
+    )
+    provenance_document_ids: list[str] = Field(
+        default_factory=list,
+        description=(
+            "Evidence document ids supporting this observation, enabling "
+            "traceability Observation -> EvidenceItem -> EvidenceCitation "
+            "-> EvidenceDocument -> Provider -> Original URL"
+        ),
+    )
+    evidence_agreement_ratio: float = Field(
+        default=0.0,
+        ge=0.0,
+        le=1.0,
+        description=(
+            "Fraction of the supporting evidence items that are "
+            "corroborated by multiple independent sources"
+        ),
+    )
+    evidence_conflict_count: int = Field(
+        default=0,
+        ge=0,
+        description=(
+            "Number of conflicting signals detected among the "
+            "supporting evidence items"
+        ),
     )
 
 
@@ -176,6 +283,15 @@ class Recommendation(BaseModel):
         description="Additional metadata about the recommendation",
     )
 
+    # Sprint 5B: Citation linkage
+    citations: list[EvidenceCitation] = Field(
+        default_factory=list,
+        description=(
+            "Structured citations linking this recommendation to "
+            "supporting source documents with trust metadata"
+        ),
+    )
+
 
 class ConfidenceAssessment(BaseModel):
     """Confidence level for a specific scoring dimension."""
@@ -239,6 +355,15 @@ class DimensionAssessment(BaseModel):
     metadata: dict[str, str | int | float | bool | list[str]] = Field(
         default_factory=dict,
         description="Additional metadata about the assessment",
+    )
+
+    # Sprint 5B: Citation linkage
+    citations: list[EvidenceCitation] = Field(
+        default_factory=list,
+        description=(
+            "Structured citations linking this assessment to "
+            "supporting source documents with trust metadata"
+        ),
     )
 
 

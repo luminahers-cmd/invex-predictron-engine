@@ -790,3 +790,81 @@ class ExtractedFeatures(BaseModel):
             "and confidence for full traceability."
         ),
     )
+
+    # --- Sprint 5A: Provenance linkage ---
+
+    provenance_document_ids: list[str] = Field(
+        default_factory=list,
+        description=(
+            "Evidence document IDs that contributed to this extraction. "
+            "Enables tracing every extracted feature back to its source "
+            "document for full auditability."
+        ),
+    )
+
+    # --- Sprint 5C: Evidence-aware extraction ---
+
+    provenance_trust_summary: str | None = Field(
+        default=None,
+        description=(
+            "Human-readable summary of evidence trust quality for this "
+            "extraction run (e.g. '3 high-trust, 1 medium-trust sources')."
+        ),
+    )
+    provider_evidence: dict[str, list[dict]] = Field(
+        default_factory=dict,
+        description=(
+            "Per-provider evidence items used in this extraction. "
+            "Maps provider name to a list of evidence item dicts with "
+            "domain, category, statement, source, and relevance_score."
+        ),
+    )
+    provider_run_metadata: dict[str, dict] = Field(
+        default_factory=dict,
+        description=(
+            "Per-provider run metadata including document counts, "
+            "average trust, and citation counts."
+        ),
+    )
+    evidence_confidence: float = Field(
+        default=0.0,
+        ge=0.0,
+        le=1.0,
+        description=(
+            "Composite evidence-aware confidence score for this extraction "
+            "combining document trust, agreement, diversity, and signal "
+            "density. Separate from domain-specific confidence scores."
+        ),
+    )
+    evidence_agreement_ratio: float = Field(
+        default=0.0,
+        ge=0.0,
+        le=1.0,
+        description=(
+            "Fraction of evidence items corroborated by multiple sources. "
+            "Higher values indicate more reliable evidence."
+        ),
+    )
+    evidence_conflict_count: int = Field(
+        default=0,
+        description=(
+            "Number of conflicting evidence signals detected during "
+            "extraction. Conflicts indicate uncertainty in the extracted "
+            "features."
+        ),
+    )
+    evidence_sources_used: list[str] = Field(
+        default_factory=list,
+        description=(
+            "Distinct source providers whose evidence contributed to "
+            "this extraction. More sources generally means higher "
+            "confidence."
+        ),
+    )
+    evidence_document_count: int = Field(
+        default=0,
+        description=(
+            "Number of evidence documents used in this extraction. "
+            "Provides a measure of evidence coverage."
+        ),
+    )
