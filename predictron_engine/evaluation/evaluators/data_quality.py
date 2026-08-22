@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING
 
 from predictron_engine.evaluation.evaluation_models import DimensionAssessment
 from predictron_engine.evaluation.evaluators.base import (
+    build_citations_for_assessment,
     calculate_average_confidence,
     calculate_weighted_importance,
     filter_evidence_by_domain,
@@ -50,6 +51,8 @@ class DataQualityEvaluator:
         confidence = calculate_average_confidence(dq_obs)
         weighted_conf = calculate_weighted_importance(dq_obs)
 
+        citations = build_citations_for_assessment(dq_obs, dq_evidence)
+
         return DimensionAssessment(
             dimension=self.dimension,
             summary=summary,
@@ -62,4 +65,5 @@ class DataQualityEvaluator:
                 "description_length": features.description_length,
                 "weighted_confidence": round(weighted_conf, 4),
             },
+            citations=citations,
         )

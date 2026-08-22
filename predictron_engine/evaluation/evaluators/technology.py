@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING
 
 from predictron_engine.evaluation.evaluation_models import DimensionAssessment
 from predictron_engine.evaluation.evaluators.base import (
+    build_citations_for_assessment,
     calculate_average_confidence,
     calculate_weighted_importance,
     filter_evidence_by_domain,
@@ -55,6 +56,8 @@ class TechnologyEvaluator:
         if cross_ctx:
             rationale += cross_ctx
 
+        citations = build_citations_for_assessment(tech_obs, tech_evidence)
+
         return DimensionAssessment(
             dimension=self.dimension,
             summary=summary,
@@ -68,4 +71,5 @@ class TechnologyEvaluator:
                 "weighted_confidence": round(weighted_conf, 4),
                 "cross_signal_available": bool(cross_ctx),
             },
+            citations=citations,
         )

@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING
 
 from predictron_engine.evaluation.evaluation_models import DimensionAssessment
 from predictron_engine.evaluation.evaluators.base import (
+    build_citations_for_assessment,
     calculate_average_confidence,
     calculate_weighted_importance,
     filter_evidence_by_domain,
@@ -73,6 +74,8 @@ class TeamEvaluator:
             "cross_signal_available": bool(cross_ctx),
         }
 
+        citations = build_citations_for_assessment(team_obs, team_evidence)
+
         return DimensionAssessment(
             dimension=self.dimension,
             summary=summary,
@@ -81,4 +84,5 @@ class TeamEvaluator:
             supporting_observations=team_obs,
             supporting_evidence=team_evidence,
             metadata=metadata,
+            citations=citations,
         )

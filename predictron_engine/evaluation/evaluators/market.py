@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING
 
 from predictron_engine.evaluation.evaluation_models import DimensionAssessment
 from predictron_engine.evaluation.evaluators.base import (
+    build_citations_for_assessment,
     calculate_average_confidence,
     calculate_weighted_importance,
     filter_evidence_by_domain,
@@ -64,6 +65,8 @@ class MarketEvaluator:
         if features.market_size_usd is not None:
             metadata["market_size_usd"] = features.market_size_usd
 
+        citations = build_citations_for_assessment(market_obs, market_evidence)
+
         return DimensionAssessment(
             dimension=self.dimension,
             summary=summary,
@@ -72,4 +75,5 @@ class MarketEvaluator:
             supporting_observations=market_obs,
             supporting_evidence=market_evidence,
             metadata=metadata,
+            citations=citations,
         )

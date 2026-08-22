@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING
 
 from predictron_engine.evaluation.evaluation_models import DimensionAssessment
 from predictron_engine.evaluation.evaluators.base import (
+    build_citations_for_assessment,
     calculate_average_confidence,
     calculate_weighted_importance,
     filter_evidence_by_domain,
@@ -50,6 +51,8 @@ class RiskEvaluator:
         confidence = calculate_average_confidence(risk_obs)
         weighted_conf = calculate_weighted_importance(risk_obs)
 
+        citations = build_citations_for_assessment(risk_obs, risk_evidence)
+
         return DimensionAssessment(
             dimension=self.dimension,
             summary=summary,
@@ -69,4 +72,5 @@ class RiskEvaluator:
                 "open_source_competition_count": len(features.open_source_competition),
                 "weighted_confidence": round(weighted_conf, 4),
             },
+            citations=citations,
         )

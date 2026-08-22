@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from predictron_engine.evaluation.evaluation_models import DimensionAssessment
     from predictron_engine.evidence.evidence_models import EvidenceItem
     from predictron_engine.models.extracted_features import ExtractedFeatures
-    from predictron_engine.models.report import Observation
+    from predictron_engine.models.report import EvidenceCitation, Observation
 
 
 @runtime_checkable
@@ -200,3 +200,54 @@ def generate_cross_signal_context(
     if not relevant:
         return ""
     return " Cross-signal context: " + " ".join(relevant[:2])
+
+
+def collect_citations_from_observations(
+    observations: list[Observation],
+) -> list[EvidenceCitation]:
+    """Collect all citations from a list of observations.
+
+    Aggregates citations from all observations, deduplicating by
+    claim and domain.
+    """
+    from predictron_engine.evidence.citation import deduplicate_citations
+
+    all_citations: list[EvidenceCitation] = []
+    for obs in observations:
+        all_citations.extend(obs.citations)
+    return deduplicate_citations(all_citations)
+
+
+def collect_citations_from_evidence(
+    evidence_items: list[EvidenceItem],
+) -> list[EvidenceCitation]:
+    """Collect all citations embedded in evidence items.
+
+    Evidence items produced by Sprint 5B-enriched providers carry
+    ``citations`` directly.  This function extracts them.
+    """
+    from predictron_engine.evidence.citation import deduplicate_citations
+
+    all_citations: list[EvidenceCitation] = []
+    for item in evidence_items:
+        all_citations.extend(item.citations)
+    return deduplicate_citations(all_citations)
+
+
+def build_citations_for_assessment(
+    observations: list[Observation],
+    evidence_items: list[EvidenceItem],
+) -> list[EvidenceCitation]:
+    """Build citations for a dimension assessment.
+
+    Combines citations from observations and evidence items,
+    deduplicates, and ranks by trust score.
+    """
+    from predictron_engine.evidence.citation import rank_citations_by_trust
+
+    obs_citations = collect_citations_from_observations(observations)
+    ev_citations = collect_citations_from_evidence(evidence_items)
+    combined = obs_citations + ev_citations
+    from predictron_engine.evidence.citation import deduplicate_citations
+    deduped = deduplicate_citations(combined)
+    return rank_citations_by_trust(deduped)

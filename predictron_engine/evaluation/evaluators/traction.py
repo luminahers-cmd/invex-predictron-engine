@@ -11,6 +11,7 @@ from typing import TYPE_CHECKING
 
 from predictron_engine.evaluation.evaluation_models import DimensionAssessment
 from predictron_engine.evaluation.evaluators.base import (
+    build_citations_for_assessment,
     calculate_average_confidence,
     calculate_weighted_importance,
     filter_evidence_by_domain,
@@ -109,6 +110,8 @@ class TractionEvaluator:
         if features.runway_months is not None:
             metadata["runway_months"] = features.runway_months
 
+        citations = build_citations_for_assessment(traction_obs, traction_evidence)
+
         return DimensionAssessment(
             dimension=self.dimension,
             summary=summary,
@@ -117,4 +120,5 @@ class TractionEvaluator:
             supporting_observations=traction_obs,
             supporting_evidence=traction_evidence,
             metadata=metadata,
+            citations=citations,
         )
