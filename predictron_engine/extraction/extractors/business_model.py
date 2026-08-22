@@ -729,7 +729,33 @@ class BusinessModelExtractor(BaseExtractor):
         data: CollectedData,
         evidence: EvidenceBundle | None = None,
     ) -> ExtractedFeatures:
-        text = self._combined_text(startup.description, evidence)
+        from predictron_engine.evidence.citation import build_citations
+        from predictron_engine.extraction.evidence_agreement import (
+            compute_agreement_ratio,
+            detect_conflicts,
+        )
+        from predictron_engine.extraction.evidence_confidence import (
+            compute_evidence_confidence,
+        )
+        from predictron_engine.extraction.evidence_retrieval import (
+            BusinessModelRetrievalStrategy,
+        )
+
+        strategy = BusinessModelRetrievalStrategy()
+        docs_filtered: list = []
+        evidence_items: list = []
+        citations: list = []
+
+        if evidence is not None:
+            [
+                doc for doc in evidence.documents
+                if doc.status.value == "success"
+            ]
+            docs_filtered = strategy.retrieve_documents(evidence)
+            evidence_items = []  # Domain-specific items populated from reasoning layer
+            citations = build_citations(evidence_items, docs_filtered)
+
+        text = self._combined_text_from_docs(startup.description, docs_filtered) if docs_filtered else self._combined_text(startup.description, evidence)
         text_lower = text.lower()
 
         # Core classifications
@@ -766,7 +792,7 @@ class BusinessModelExtractor(BaseExtractor):
             revenue_model, pricing_model,
         )
 
-        return ExtractedFeatures(
+        features = ExtractedFeatures(
             business_model=business_model,
             secondary_business_model=secondary,
             customer_type=customer_type,
@@ -787,6 +813,29 @@ class BusinessModelExtractor(BaseExtractor):
             business_model_keywords=keywords,
             business_model_confidence=confidence,
         )
+
+        # --- Sprint 5C: Evidence-aware provenance ---
+        if evidence is not None and docs_filtered:
+            agreement = compute_agreement_ratio(evidence_items)
+            conflicts = detect_conflicts(evidence_items)
+            ev_confidence = compute_evidence_confidence(
+                evidence_items=evidence_items,
+                documents=docs_filtered,
+                keywords_matched=self._count_keyword_matches(text_lower, strategy.get_keywords()),
+                total_keywords=len(strategy.get_keywords()),
+                description_length=len(text),
+            )
+            self._populate_evidence_provenance(
+                features,
+                documents=docs_filtered,
+                evidence_items=evidence_items,
+                citations=citations,
+                evidence_confidence=ev_confidence,
+                agreement_ratio=agreement,
+                conflict_count=len(conflicts),
+            )
+
+        return features
 
     # ------------------------------------------------------------------
     # Primary business model classification
