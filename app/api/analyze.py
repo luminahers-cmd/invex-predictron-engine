@@ -79,7 +79,10 @@ async def list_analyses(
     response_model=AnalysisDetailResponse,
     status_code=status.HTTP_200_OK,
     summary="Get a persisted analysis",
-    description="Get a completed analysis by ID. Anonymous users can retrieve their anonymous analyses; authenticated users only their own.",
+    description=(
+        "Get a completed analysis by ID. Anonymous users can retrieve "
+        "their anonymous analyses; authenticated users only their own."
+    ),
     responses={
         200: {"description": "Full analysis details", "model": AnalysisDetailResponse},
         401: {"description": "Invalid token provided"},
