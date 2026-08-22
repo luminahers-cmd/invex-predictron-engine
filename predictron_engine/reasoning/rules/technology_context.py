@@ -69,3 +69,12 @@ class TechnologyContextRule:
                 source_rule="TechnologyContextRule",
             )
         ]
+
+    def evaluate_context(self, context) -> list[Observation]:
+        """Context-aware evaluation using pre-indexed ReasoningContext lookups.
+
+        Produces the same observations as :meth:`evaluate` but resolves
+        technology evidence through the context's indexes instead of
+        scanning the raw evidence list.
+        """
+        return self.evaluate(context.features, context.evidence_items)

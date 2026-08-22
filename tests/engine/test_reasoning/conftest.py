@@ -4,6 +4,59 @@ from predictron_engine.evidence.evidence_models import EvidenceItem
 from predictron_engine.models.extracted_features import ExtractedFeatures
 
 
+def make_trust(overall: float):
+    """Build a deterministic TrustScore with a single overall value."""
+    from predictron_engine.evidence.provenance import (
+        TrustFactor,
+        TrustScore,
+    )
+
+    return TrustScore(
+        overall=overall,
+        factors=[
+            TrustFactor(name="authority", weight=1.0, value=overall),
+        ],
+    )
+
+
+def make_document(
+    doc_id: str,
+    url: str = "https://example.com/about",
+    trust: float | None = None,
+    provider: str = "website",
+    title: str = "Example About",
+):
+    """Build a successful EvidenceDocument with optional trust metadata."""
+    from datetime import UTC, datetime
+
+    from predictron_engine.evidence.models import (
+        DocumentMetadata,
+        DocumentStatus,
+        EvidenceDocument,
+        PageType,
+    )
+
+    metadata = DocumentMetadata(source_provider=provider)
+    if trust is not None:
+        metadata = DocumentMetadata(
+            source_provider=provider,
+            trust_score=make_trust(trust),
+        )
+
+    return EvidenceDocument(
+        id=doc_id,
+        original_url=url,
+        url=url,
+        page_type=PageType.ABOUT,
+        status=DocumentStatus.SUCCESS,
+        fetched_at=datetime(2026, 1, 1, tzinfo=UTC),
+        response_time_ms=10,
+        http_status=200,
+        title=title,
+        metadata=metadata,
+    )
+
+
 @pytest.fixture
 def rich_features() -> ExtractedFeatures:
     """Features with multiple domains populated for comprehensive testing."""
