@@ -82,11 +82,11 @@ class DefaultConfidenceEngine:
             coverage_factor = self._compute_coverage_factor(obs_count)
 
             overall = (
-                (completeness * 0.25)
-                + (obs_confidence * 0.25)
-                + (assessment_confidence * 0.20)
-                + (observation_diversity * 0.10)
-                + (coverage_factor * 0.10)
+                (completeness * 0.22)
+                + (obs_confidence * 0.22)
+                + (assessment_confidence * 0.18)
+                + (observation_diversity * 0.12)
+                + (coverage_factor * 0.11)
                 + 0.15
             )
 
@@ -125,7 +125,7 @@ class DefaultConfidenceEngine:
         """
         if not observations:
             return 0.0
-        categories = {o.category for o in observations}
+        categories = sorted({o.category for o in observations})
         diversity = min(len(categories) / 3.0, 1.0)
         return diversity
 

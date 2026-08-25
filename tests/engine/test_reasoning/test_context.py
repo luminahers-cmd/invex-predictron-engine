@@ -189,3 +189,40 @@ class TestReasoningContextCitations:
         ctx = ReasoningContext(rich_features, [item])
         assert ctx.citations_for_domain("industry") == [citation]
         assert ctx.citations_for_domain("geography") == []
+
+
+class TestReasoningContextCaching:
+    """Regression: trusted_documents, best_source, average_trust are cached."""
+
+    def test_trusted_documents_returns_consistent_results(self, rich_features):
+        low = make_document("low", trust=0.3)
+        high = make_document("high", url="https://example.com/h", trust=0.9)
+        bundle = EvidenceBundle(startup_name="x", documents=[low, high])
+        ctx = ReasoningContext(rich_features, [], bundle)
+        first = ctx.trusted_documents()
+        second = ctx.trusted_documents()
+        assert [d.id for d in first] == [d.id for d in second]
+
+    def test_best_source_returns_same_reference(self, rich_features):
+        high = make_document("high", url="https://example.com/h", trust=0.95)
+        bundle = EvidenceBundle(startup_name="x", documents=[high])
+        ctx = ReasoningContext(rich_features, [], bundle)
+        assert ctx.best_source() is ctx.best_source()
+
+    def test_average_trust_is_cached(self, rich_features):
+        docs = [
+            make_document("a", trust=0.8),
+            make_document("b", url="https://example.com/b", trust=0.4),
+        ]
+        bundle = EvidenceBundle(startup_name="x", documents=docs)
+        ctx = ReasoningContext(rich_features, [], bundle)
+        assert ctx.average_trust == 0.6
+
+    def test_trusted_documents_custom_threshold_still_works(self, rich_features):
+        low = make_document("low", trust=0.3)
+        mid = make_document("mid", url="https://example.com/m", trust=0.6)
+        high = make_document("high", url="https://example.com/h", trust=0.9)
+        bundle = EvidenceBundle(startup_name="x", documents=[low, mid, high])
+        ctx = ReasoningContext(rich_features, [], bundle)
+        trusted = ctx.trusted_documents(min_trust=0.8)
+        assert [d.id for d in trusted] == ["high"]

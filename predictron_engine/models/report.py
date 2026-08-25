@@ -7,6 +7,10 @@ from enum import Enum
 
 from pydantic import BaseModel, Field
 
+from predictron_engine.decision.models import (
+    CalibrationSummary,
+    DecisionConfidence,
+)
 from predictron_engine.models.extracted_features import ExtractedFeatures
 from predictron_engine.models.startup import Startup
 
@@ -289,6 +293,43 @@ class Recommendation(BaseModel):
         description=(
             "Structured citations linking this recommendation to "
             "supporting source documents with trust metadata"
+        ),
+    )
+
+    # Sprint 6B: Decision calibration risk (optional, backward compatible)
+    expected_confidence: float | None = Field(
+        default=None,
+        ge=0.0,
+        le=1.0,
+        description=(
+            "Calibrated confidence expected if this recommendation is "
+            "followed (Sprint 6B decision calibration)"
+        ),
+    )
+    expected_uncertainty: float | None = Field(
+        default=None,
+        ge=0.0,
+        le=1.0,
+        description=(
+            "Calibrated uncertainty associated with this recommendation "
+            "(Sprint 6B decision calibration)"
+        ),
+    )
+    recommended_action: str = Field(
+        default="",
+        description=(
+            "Deterministic action guidance derived from calibrated "
+            "confidence (Sprint 6B decision calibration)"
+        ),
+    )
+
+    # Sprint 6C: Deterministic synthesis rank (optional, backward compatible)
+    rank: int | None = Field(
+        default=None,
+        ge=1,
+        description=(
+            "1-based deterministic priority rank assigned by the decision "
+            "synthesis engine (Sprint 6C). None when not synthesized."
         ),
     )
 
@@ -645,6 +686,283 @@ class InvestmentDecision(BaseModel):
     )
 
 
+# ---------------------------------------------------------------------------
+# Sprint 6C: Decision synthesis models.
+#
+# These models are containers for artifacts synthesized from ALREADY
+# produced pipeline outputs. They never recompute scores, confidence,
+# trust, evidence, reasoning, or evaluations — they only aggregate,
+# prioritize, explain, and connect existing artifacts. Confidence values
+# on every synthesis artifact are propagated (typically the minimum of
+# the contributing artifacts), never recomputed.
+# ---------------------------------------------------------------------------
+
+
+class SynthesisSeverity(str, Enum):
+    """Deterministic severity/impact bands used by the risk and
+    opportunity registers.
+
+    Bands mirror the thresholds already used by the scoring layer
+    (TractionScorer) and the investment readiness assessment so that no
+    new judgment scale is introduced.
+    """
+
+    CRITICAL = "critical"
+    HIGH = "high"
+    MODERATE = "moderate"
+    LOW = "low"
+
+
+_SEVERITY_ORDER: dict[str, int] = {
+    SynthesisSeverity.CRITICAL.value: 0,
+    SynthesisSeverity.HIGH.value: 1,
+    SynthesisSeverity.MODERATE.value: 2,
+    SynthesisSeverity.LOW.value: 3,
+}
+
+
+def severity_order(severity: str | SynthesisSeverity) -> int:
+    """Deterministic sort key for a severity value (lower sorts first)."""
+    return _SEVERITY_ORDER.get(
+        severity.value if isinstance(severity, SynthesisSeverity) else str(severity),
+        len(_SEVERITY_ORDER),
+    )
+
+
+class TradeOff(BaseModel):
+    """An explicit tension between a strength and a concern.
+
+    Both sides must come from existing evaluator outputs (dimension
+    scores and supporting observations). Confidence is the minimum of
+    the contributing confidences — propagated, never recomputed.
+    """
+
+    dimension: str = Field(..., description="Analysis dimension the trade-off belongs to")
+    strength: str = Field(default="", description="The positive side of the tension")
+    concern: str = Field(default="", description="The negative side of the tension")
+    strength_score: float | None = Field(
+        default=None, ge=0.0, le=100.0, description="Dimension score supporting the strength"
+    )
+    concern_score: float | None = Field(
+        default=None, ge=0.0, le=100.0, description="Dimension score driving the concern"
+    )
+    supporting_evidence: list[str] = Field(
+        default_factory=list,
+        description="Statements from existing observations backing this trade-off",
+    )
+    supporting_citations: list[EvidenceCitation] = Field(
+        default_factory=list,
+        description="Citations carried over from the supporting observations",
+    )
+    net_assessment: str = Field(
+        default="balanced",
+        description=(
+            "Deterministic label: 'strength_dominant', 'concern_dominant', "
+            "or 'balanced'"
+        ),
+    )
+    confidence: float = Field(
+        default=0.0,
+        ge=0.0,
+        le=1.0,
+        description="Minimum confidence among contributing observations",
+    )
+
+
+class AlternativeScenario(BaseModel):
+    """A deterministic what-if scenario derived from decision margins.
+
+    Scenarios are generated from templates only (no generative text).
+    Every numeric projection is a bounded arithmetic derivation of an
+    already-emitted scalar such as margin_to_next_category or the
+    data_quality_modifier recovery headroom.
+    """
+
+    direction: str = Field(
+        ...,
+        description=(
+            "Scenario direction: 'improve', 'worsen', or 'information'"
+        ),
+    )
+    title: str = Field(..., description="Deterministic template title")
+    condition: str = Field(
+        ..., description="What would have to happen for this scenario"
+    )
+    description: str = Field(
+        ..., description="Deterministic template sentence describing the outcome"
+    )
+    projected_impact: float | None = Field(
+        default=None,
+        description=(
+            "Bounded projected composite-score delta derived from "
+            "existing decision scalars, when derivable"
+        ),
+    )
+    plausibility: float = Field(
+        default=0.0,
+        ge=0.0,
+        le=1.0,
+        description=(
+            "Deterministic plausibility in [0, 1] derived from existing "
+            "margin, uncertainty, and gap counts"
+        ),
+    )
+
+
+class RiskItem(BaseModel):
+    """One entry in the unified risk register.
+
+    Aggregated (and deduplicated) from feature risks, consistency
+    conflicts, low-confidence assessments, missing evidence, weakening
+    calibration factors, and negative signal relationships.
+    """
+
+    label: str = Field(..., description="Stable, human-readable risk label")
+    dimension: str = Field(
+        default="", description="Owning analysis dimension ('' when cross-cutting)"
+    )
+    severity: SynthesisSeverity = Field(
+        default=SynthesisSeverity.LOW,
+        description="Deterministic severity band",
+    )
+    sources: list[str] = Field(
+        default_factory=list,
+        description=(
+            "Traceability tags of contributing artifacts, e.g. "
+            "'feature:risk_flags' or 'consistency:conflict'"
+        ),
+    )
+    statements: list[str] = Field(
+        default_factory=list,
+        description="Verbatim statements carried over from source artifacts",
+    )
+    citations: list[EvidenceCitation] = Field(
+        default_factory=list,
+        description="Citations carried over from contributing observations",
+    )
+    provenance_document_ids: list[str] = Field(
+        default_factory=list,
+        description="Provenance document ids carried over from contributing observations",
+    )
+    confidence: float = Field(
+        default=0.0,
+        ge=0.0,
+        le=1.0,
+        description="Minimum confidence among contributing artifacts",
+    )
+
+
+class OpportunityItem(BaseModel):
+    """One entry in the unified opportunity register.
+
+    Aggregated (and deduplicated) from strengths, high dimension scores,
+    reinforcing signals, readiness strengths, positive quantitative
+    metrics, and strong evidence.
+    """
+
+    label: str = Field(..., description="Stable, human-readable opportunity label")
+    dimension: str = Field(
+        default="", description="Owning analysis dimension ('' when cross-cutting)"
+    )
+    impact: SynthesisSeverity = Field(
+        default=SynthesisSeverity.LOW,
+        description="Deterministic impact band (reuses the severity scale)",
+    )
+    sources: list[str] = Field(
+        default_factory=list,
+        description=(
+            "Traceability tags of contributing artifacts, e.g. "
+            "'score:market_opportunity' or 'relationship:reinforcing'"
+        ),
+    )
+    statements: list[str] = Field(
+        default_factory=list,
+        description="Verbatim statements carried over from source artifacts",
+    )
+    citations: list[EvidenceCitation] = Field(
+        default_factory=list,
+        description="Citations carried over from contributing observations",
+    )
+    provenance_document_ids: list[str] = Field(
+        default_factory=list,
+        description="Provenance document ids carried over from contributing observations",
+    )
+    confidence: float = Field(
+        default=0.0,
+        ge=0.0,
+        le=1.0,
+        description="Minimum confidence among contributing artifacts",
+    )
+
+
+class DecisionSynthesis(BaseModel):
+    """Single container for every Sprint 6C synthesized artifact.
+
+    Attached to Report as ``decision_synthesis``. All contained data is
+    derived deterministically from already-produced pipeline outputs;
+    confidence and uncertainty are propagated passthrough values from
+    DecisionConfidence / CalibrationSummary, never recomputed.
+    """
+
+    executive_summary: str = Field(
+        default="",
+        description="Deterministic template executive summary paragraph",
+    )
+    executive_summary_key_points: list[str] = Field(
+        default_factory=list,
+        description="Deterministic bullet points behind the summary",
+    )
+    prioritized_recommendations: list[Recommendation] = Field(
+        default_factory=list,
+        description=(
+            "Deduplicated, globally prioritized, capped recommendations "
+            "with rank assigned; citations/provenance/confidence preserved"
+        ),
+    )
+    trade_offs: list[TradeOff] = Field(
+        default_factory=list,
+        description="Explicit strength-vs-concern tensions from evaluator outputs",
+    )
+    scenarios: list[AlternativeScenario] = Field(
+        default_factory=list,
+        description="Deterministic improve/worsen/information scenarios",
+    )
+    risks: list[RiskItem] = Field(
+        default_factory=list,
+        description="Unified, deduplicated, severity-ranked risk register",
+    )
+    opportunities: list[OpportunityItem] = Field(
+        default_factory=list,
+        description="Unified, deduplicated, impact-ranked opportunity register",
+    )
+    overall_confidence: float = Field(
+        default=0.0,
+        ge=0.0,
+        le=1.0,
+        description=(
+            "Passthrough of DecisionConfidence.overall_confidence "
+            "(propagated, never recomputed)"
+        ),
+    )
+    uncertainty_score: float = Field(
+        default=0.0,
+        ge=0.0,
+        le=1.0,
+        description=(
+            "Passthrough of DecisionConfidence.uncertainty_score "
+            "(propagated, never recomputed)"
+        ),
+    )
+    confidence_level: str = Field(
+        default="",
+        description="Passthrough of the calibrated ConfidenceLevel value",
+    )
+    recommended_action: str = Field(
+        default="",
+        description="Passthrough of the calibrated action guidance",
+    )
+
+
 class Report(BaseModel):
     """Complete analysis report assembled from all pipeline stages.
 
@@ -697,6 +1015,24 @@ class Report(BaseModel):
     investment_decision: InvestmentDecision | None = Field(
         default=None,
         description="Deterministic investment decision (Sprint 13)",
+    )
+    decision_confidence: DecisionConfidence | None = Field(
+        default=None,
+        description=(
+            "Calibrated decision confidence and uncertainty (Sprint 6B)"
+        ),
+    )
+    calibration_summary: CalibrationSummary | None = Field(
+        default=None,
+        description="Compact digest of the decision calibration (Sprint 6B)",
+    )
+    decision_synthesis: DecisionSynthesis | None = Field(
+        default=None,
+        description=(
+            "Unified decision synthesis: prioritized recommendations, "
+            "trade-offs, scenarios, risks, opportunities, and executive "
+            "summary (Sprint 6C)"
+        ),
     )
     signal_relationships: list[SignalRelationship] = Field(
         default_factory=list,

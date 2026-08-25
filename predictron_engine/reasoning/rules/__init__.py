@@ -45,7 +45,7 @@ __all__ = [
     "TechnologyContextRule",
 ]
 
-DEFAULT_RULES = [
+DEFAULT_RULES: tuple = (
     MarketContextRule(),
     BusinessModelContextRule(),
     StageExpectationRule(),
@@ -57,4 +57,4 @@ DEFAULT_RULES = [
     QuantitativeSignalsRule(),
     CrossSignalReasoningRule(),
     QuantitativeCrossSignalRule(),
-]
+)

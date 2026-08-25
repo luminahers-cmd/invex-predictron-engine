@@ -6,7 +6,7 @@ pipeline stages into a cohesive analysis flow.
 Pipeline:
   normalize -> collect -> collect_evidence -> extract -> evidence ->
   reason -> evaluate -> score -> recommend -> confidence -> decide ->
-  build_report
+  calibrate -> synthesize -> build_report
 
 All dependencies are injected via the constructor. Every stage can be
 replaced independently without modifying the engine or any other stage.
@@ -34,6 +34,11 @@ from app.schemas.analysis import StartupAnalysisRequest
 from predictron_engine.collection.collector import DefaultDataCollector
 from predictron_engine.confidence.confidence_engine import DefaultConfidenceEngine
 from predictron_engine.context import AnalysisContext
+from predictron_engine.decision.calibration import (
+    apply_recommendation_risk,
+    build_calibration_summary,
+    compute_decision_confidence,
+)
 from predictron_engine.decision.decision_engine import DefaultDecisionEngine
 from predictron_engine.evaluation.composite import CompositeEvaluator
 from predictron_engine.evaluation.investment_readiness import (
@@ -58,6 +63,7 @@ from predictron_engine.recommendations.composite import (
 )
 from predictron_engine.report.report_builder import DefaultReportBuilder
 from predictron_engine.scoring.scoring_engine import DefaultScoringEngine
+from predictron_engine.synthesis.engine import DecisionSynthesisEngine
 
 logger = logging.getLogger(__name__)
 
@@ -101,6 +107,7 @@ class PredictronEngine:
         confidence: DefaultConfidenceEngine | None = None,
         decision: DefaultDecisionEngine | None = None,
         report_builder: DefaultReportBuilder | None = None,
+        synthesis: DecisionSynthesisEngine | None = None,
     ) -> None:
         self._normalizer = normalizer or DefaultNormalizer()
         self._collector = collector or DefaultDataCollector()
@@ -114,6 +121,7 @@ class PredictronEngine:
         self._confidence = confidence or DefaultConfidenceEngine()
         self._decision = decision or DefaultDecisionEngine()
         self._report_builder = report_builder or DefaultReportBuilder()
+        self._synthesis = synthesis or DecisionSynthesisEngine()
         logger.info("PredictronEngine initialized")
 
     def analyze(
@@ -198,6 +206,40 @@ class PredictronEngine:
             investment_readiness.signal_relationships,
         )
 
+        # Stage 11b: Calibrate decision confidence (Sprint 6B).
+        # Combines existing pipeline outputs only — no new evidence,
+        # reasoning, or evaluation work is performed here.
+        decision_confidence = compute_decision_confidence(
+            bundle=evidence_bundle,
+            observations=observations,
+            assessments=assessments,
+            features=features,
+            scores=scores,
+        )
+        recs = apply_recommendation_risk(recs, decision_confidence)
+        calibration_summary = build_calibration_summary(
+            decision_confidence,
+            observation_count=len(observations),
+            assessed_dimension_count=len(assessments),
+            evidence_document_count=evidence_bundle.total_pages,
+        )
+
+        # Stage 11c: Decision synthesis (Sprint 6C).
+        # Aggregates already-produced outputs only — no recomputation of
+        # scores, confidence, trust, evidence, reasoning, or evaluations.
+        synthesis = self._synthesis.synthesize(
+            features=features,
+            observations=observations,
+            assessments=assessments,
+            scores=scores,
+            recommendations=recs,
+            readiness=investment_readiness,
+            decision=decision,
+            decision_confidence=decision_confidence,
+            calibration_summary=calibration_summary,
+            consistency=getattr(self._reasoning, "last_consistency", None),
+        )
+
         # Stage 12: Build report
         report = self._report_builder.build(
             startup,
@@ -212,6 +254,9 @@ class PredictronEngine:
             investment_readiness,
             evidence_collection=_evidence_metadata(evidence_bundle),
         )
+        report.decision_confidence = decision_confidence
+        report.calibration_summary = calibration_summary
+        report.decision_synthesis = synthesis
 
         elapsed_ms = (time.perf_counter() - start_time) * 1000
         report.analysis_metadata.processing_time_ms = round(elapsed_ms, 2)

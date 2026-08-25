@@ -93,6 +93,52 @@ class ReasoningContext:
             doc.id: doc for doc in self._documents
         }
 
+        self._trusted_docs: list[EvidenceDocument] = sorted(
+            [
+                doc
+                for doc in self._documents
+                if doc.metadata is not None
+                and doc.metadata.trust_score is not None
+                and doc.metadata.trust_score.overall >= 0.5
+            ],
+            key=lambda d: (
+                d.metadata.trust_score.overall,  # type: ignore[union-attr]
+                str(d.url),
+            ),
+            reverse=True,
+        )
+
+        scored_for_best = [
+            doc
+            for doc in self._documents
+            if doc.metadata is not None
+            and doc.metadata.trust_score is not None
+        ]
+        self._best_source: EvidenceDocument | None = (
+            max(
+                scored_for_best,
+                key=lambda d: (
+                    d.metadata.trust_score.overall,  # type: ignore[union-attr]
+                    d.metadata.quality_score,
+                    str(d.url),
+                ),
+            )
+            if scored_for_best
+            else None
+        )
+
+        trust_values = [
+            doc.metadata.trust_score.overall
+            for doc in self._documents
+            if doc.metadata is not None
+            and doc.metadata.trust_score is not None
+        ]
+        self._average_trust: float = (
+            round(sum(trust_values) / len(trust_values), 4)
+            if trust_values
+            else 0.0
+        )
+
     # ────────────────────────────────────────────────────────────────
     # Evidence item accessors
     # ────────────────────────────────────────────────────────────────
@@ -130,6 +176,8 @@ class ReasoningContext:
 
     def trusted_documents(self, min_trust: float = 0.5) -> list[EvidenceDocument]:
         """Return documents with trust score >= min_trust, highest first."""
+        if min_trust == 0.5:
+            return list(self._trusted_docs)
         scored = [
             doc
             for doc in self._documents
@@ -148,22 +196,7 @@ class ReasoningContext:
 
     def best_source(self) -> EvidenceDocument | None:
         """Return the highest-trust document, or None when none are scored."""
-        scored = [
-            doc
-            for doc in self._documents
-            if doc.metadata is not None
-            and doc.metadata.trust_score is not None
-        ]
-        if not scored:
-            return None
-        return max(
-            scored,
-            key=lambda d: (
-                d.metadata.trust_score.overall,  # type: ignore[union-attr]
-                d.metadata.quality_score,
-                str(d.url),
-            ),
-        )
+        return self._best_source
 
     # ────────────────────────────────────────────────────────────────
     # Trust & diagnostics accessors
@@ -179,15 +212,7 @@ class ReasoningContext:
     @property
     def average_trust(self) -> float:
         """Average trust score across scored documents (0.0 when unscored)."""
-        values = [
-            doc.metadata.trust_score.overall
-            for doc in self._documents
-            if doc.metadata is not None
-            and doc.metadata.trust_score is not None
-        ]
-        if not values:
-            return 0.0
-        return round(sum(values) / len(values), 4)
+        return self._average_trust
 
     @property
     def retrieval_diagnostics(self) -> list[ProviderRun]:

@@ -84,14 +84,14 @@ class ConsistencyValidator:
     ) -> list[ValidationFinding]:
         """Check that assessments and scores align on dimensions."""
         findings: list[ValidationFinding] = []
-        assess_dims = {
-            getattr(a, "dimension", "") for a in assessments
-        }
-        score_dims = {
-            getattr(s, "dimension", "") for s in scores
-        }
+        assess_dims = sorted(
+            {getattr(a, "dimension", "") for a in assessments}
+        )
+        score_dims = sorted(
+            {getattr(s, "dimension", "") for s in scores}
+        )
 
-        unscored = assess_dims - score_dims
+        unscored = sorted(set(assess_dims) - set(score_dims))
         for dim in unscored:
             findings.append(
                 ValidationFinding(
@@ -106,7 +106,7 @@ class ConsistencyValidator:
                 )
             )
 
-        unassessed = score_dims - assess_dims
+        unassessed = sorted(set(score_dims) - set(assess_dims))
         for dim in unassessed:
             findings.append(
                 ValidationFinding(
@@ -129,9 +129,9 @@ class ConsistencyValidator:
     ) -> list[ValidationFinding]:
         """Check that recommendations reference valid assessments."""
         findings: list[ValidationFinding] = []
-        assess_dims = {
-            getattr(a, "dimension", "") for a in assessments
-        }
+        assess_dims = sorted(
+            {getattr(a, "dimension", "") for a in assessments}
+        )
         for i, rec in enumerate(recommendations):
             rec_assessments = getattr(
                 rec, "supporting_assessments", []

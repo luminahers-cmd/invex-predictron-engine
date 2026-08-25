@@ -80,16 +80,12 @@ def build_rule_diagnostic(
     carries a citation whose claim matches the item statement.
     """
     selected_refs: set[tuple[str, str, str]] = set()
-    cited_claims: set[str] = set()
 
     for obs in observations:
         for ref in obs.evidence:
             parsed = _parse_evidence_ref(ref)
             if parsed is not None:
                 selected_refs.add(parsed)
-        for citation in obs.citations:
-            if citation.claim:
-                cited_claims.add(citation.claim)
 
     confidence = (
         round(sum(o.confidence for o in observations) / len(observations), 4)

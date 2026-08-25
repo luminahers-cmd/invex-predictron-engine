@@ -82,11 +82,13 @@ class CompletenessValidator:
         if not observations:
             return findings
 
-        assessed_dims = {
-            getattr(a, "dimension", "") for a in assessments
-        }
-        scored_dims = {getattr(s, "dimension", "") for s in scores}
-        used_dims = assessed_dims | scored_dims
+        assessed_dims = sorted(
+            {getattr(a, "dimension", "") for a in assessments}
+        )
+        scored_dims = sorted(
+            {getattr(s, "dimension", "") for s in scores}
+        )
+        used_dims = assessed_dims + scored_dims
 
         for i, obs in enumerate(observations):
             dim = getattr(obs, "dimension", "")
@@ -113,11 +115,17 @@ class CompletenessValidator:
     ) -> list[ValidationFinding]:
         """Check that all dimensions with observations have assessments."""
         findings: list[ValidationFinding] = []
-        obs_dims = {getattr(o, "dimension", "") for o in observations}
-        assessed_dims = {getattr(a, "dimension", "") for a in assessments}
-        scored_dims = {getattr(s, "dimension", "") for s in scores}
+        obs_dims = sorted(
+            {getattr(o, "dimension", "") for o in observations}
+        )
+        assessed_dims = sorted(
+            {getattr(a, "dimension", "") for a in assessments}
+        )
+        scored_dims = sorted(
+            {getattr(s, "dimension", "") for s in scores}
+        )
 
-        uncovered = obs_dims - assessed_dims
+        uncovered = sorted(set(obs_dims) - set(assessed_dims))
         for dim in uncovered:
             if dim:
                 findings.append(
@@ -133,7 +141,7 @@ class CompletenessValidator:
                     )
                 )
 
-        unscored = obs_dims - scored_dims
+        unscored = sorted(set(obs_dims) - set(scored_dims))
         for dim in unscored:
             if dim:
                 findings.append(

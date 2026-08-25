@@ -144,7 +144,7 @@ class ExplanationBuilder:
         features: object,
     ) -> StageExplanation:
         """Explain the evidence gathering stage output."""
-        domains = {e.domain for e in evidence_items}
+        domains = sorted({e.domain for e in evidence_items})
         completeness = getattr(features, "data_completeness", 0.0)
 
         missing_domains = set()
@@ -161,7 +161,7 @@ class ExplanationBuilder:
             artifact_type="EvidenceSet",
             what_happened=(
                 f"Gathered {len(evidence_items)} evidence items from "
-                f"{len(domains)} domain(s): {', '.join(sorted(domains))}."
+                f"{len(domains)} domain(s): {', '.join(domains)}."
             ),
             why_it_happened=(
                 "Evidence providers retrieved domain-specific facts "
@@ -173,7 +173,7 @@ class ExplanationBuilder:
             ],
             confidence=completeness,
             missing_information=[
-                f"Missing feature for domain '{d}'" for d in missing_domains
+                f"Missing feature for domain '{d}'" for d in sorted(missing_domains)
             ] if missing_domains else [],
         )
 
@@ -184,8 +184,8 @@ class ExplanationBuilder:
         evidence: list[EvidenceItem],
     ) -> StageExplanation:
         """Explain the reasoning stage output."""
-        rules_used = {obs.source_rule for obs in observations}
-        dimensions = {obs.dimension for obs in observations}
+        rules_used = sorted({obs.source_rule for obs in observations})
+        dimensions = sorted({obs.dimension for obs in observations})
         avg_confidence = (
             sum(o.confidence for o in observations) / len(observations)
             if observations else 0.0
@@ -230,9 +230,9 @@ class ExplanationBuilder:
             sum(a.confidence for a in assessments) / len(assessments)
             if assessments else 0.0
         )
-        obs_dims = {o.dimension for o in observations}
-        assess_dims = {a.dimension for a in assessments}
-        uncovered = obs_dims - assess_dims
+        obs_dims = sorted({o.dimension for o in observations})
+        assess_dims = sorted({a.dimension for a in assessments})
+        uncovered = sorted(set(obs_dims) - set(assess_dims))
 
         return StageExplanation(
             stage="evaluate",
@@ -264,12 +264,12 @@ class ExplanationBuilder:
         observations: list[Observation],
     ) -> StageExplanation:
         """Explain the recommendation stage output."""
-        categories = {r.category for r in recommendations}
-        strategies = {
+        categories = sorted({r.category for r in recommendations})
+        strategies = sorted({
             r.metadata.get("strategy", "unknown")
             for r in recommendations
             if isinstance(r.metadata, dict)
-        }
+        })
         avg_confidence = (
             sum(r.confidence for r in recommendations) / len(recommendations)
             if recommendations else 0.0

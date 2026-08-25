@@ -217,3 +217,59 @@ class TestDefaultConfidenceEngine:
 
         for assessment in result:
             assert assessment.confidence <= 0.5
+
+    def test_weight_sum_exactly_one(self):
+        """Regression: factor weights + base must sum to exactly 1.0."""
+        from predictron_engine.evaluation.evaluation_models import (
+            DimensionAssessment,
+        )
+
+        engine = DefaultConfidenceEngine()
+        features = ExtractedFeatures(
+            data_completeness=1.0,
+            description_length=500,
+            has_pitch_deck=True,
+            founder_profile_count=2,
+        )
+        obs = [
+            Observation(
+                dimension="market_opportunity",
+                category="market_context",
+                statement="x",
+                evidence=[],
+                confidence=1.0,
+                importance=1.0,
+                source_rule="r",
+            ),
+            Observation(
+                dimension="market_opportunity",
+                category="market_size",
+                statement="y",
+                evidence=[],
+                confidence=1.0,
+                importance=1.0,
+                source_rule="r",
+            ),
+            Observation(
+                dimension="market_opportunity",
+                category="market_growth",
+                statement="z",
+                evidence=[],
+                confidence=1.0,
+                importance=1.0,
+                source_rule="r",
+            ),
+        ]
+        from predictron_engine.models.report import ScoreResult
+
+        scores = [ScoreResult(dimension="market_opportunity", score=80.0)]
+        assessments = [
+            DimensionAssessment(
+                dimension="market_opportunity",
+                summary="s",
+                rationale="r",
+                confidence=1.0,
+            ),
+        ]
+        result = engine.assess(features, obs, scores, assessments)
+        assert abs(result[0].confidence - 1.0) < 1e-6

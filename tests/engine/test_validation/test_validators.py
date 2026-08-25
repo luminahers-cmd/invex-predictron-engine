@@ -437,6 +437,62 @@ class TestCompletenessValidator:
         assert len(missing) >= 2
 
 
+class TestValidatorDeterminism:
+    """Regression: validator findings must be deterministically ordered."""
+
+    def test_completeness_coverage_gap_order(self):
+        validator = CompletenessValidator()
+        observations = [
+            Observation(
+                dimension="product_strength",
+                category="t", statement="s",
+                confidence=0.7, importance=0.5, source_rule="r",
+            ),
+            Observation(
+                dimension="team_quality",
+                category="t", statement="s",
+                confidence=0.7, importance=0.5, source_rule="r",
+            ),
+            Observation(
+                dimension="market_opportunity",
+                category="t", statement="s",
+                confidence=0.7, importance=0.5, source_rule="r",
+            ),
+        ]
+        results = []
+        for _ in range(3):
+            findings = validator.validate(
+                features=_make_features(),
+                evidence=[], observations=observations,
+                assessments=[], scores=[], recommendations=[],
+            )
+            gaps = [f.message for f in findings if f.category == "coverage_gap"]
+            results.append(gaps)
+        assert results[0] == results[1] == results[2]
+
+    def test_consistency_alignment_order(self):
+        validator = ConsistencyValidator()
+        assessments = [
+            DimensionAssessment(
+                dimension="product_strength", summary="s",
+                rationale="r", confidence=0.6,
+            ),
+            DimensionAssessment(
+                dimension="market_opportunity", summary="s",
+                rationale="r", confidence=0.6,
+            ),
+        ]
+        results = []
+        for _ in range(3):
+            findings = validator.validate(
+                observations=[], assessments=assessments,
+                scores=[], recommendations=[],
+            )
+            msgs = [f.message for f in findings if f.category == "alignment"]
+            results.append(msgs)
+        assert results[0] == results[1] == results[2]
+
+
 class TestReportValidator:
     """Tests for ReportValidator."""
 

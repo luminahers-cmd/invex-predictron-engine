@@ -188,3 +188,56 @@ class TestExplanationBuilder:
         builder = ExplanationBuilder()
         result = builder.explain_confidence(conf, features)
         assert len(result.missing_information) > 0
+
+
+class TestExplainabilityDeterminism:
+    """Regression: set comprehensions in explanations must be sorted."""
+
+    def test_evidence_domains_sorted(self):
+        features = ExtractedFeatures(data_completeness=0.5)
+        evidence = [
+            EvidenceItem(
+                domain="geography", category="c",
+                statement="s", source="src",
+            ),
+            EvidenceItem(
+                domain="industry", category="c",
+                statement="s", source="src",
+            ),
+            EvidenceItem(
+                domain="business_model", category="c",
+                statement="s", source="src",
+            ),
+        ]
+        builder = ExplanationBuilder()
+        result = builder.explain_evidence(evidence, features)
+        assert "business_model, geography, industry" in result.what_happened
+
+    def test_reasoning_rules_sorted(self):
+        features = ExtractedFeatures(data_completeness=0.5)
+        obs = [
+            Observation(
+                dimension="d", category="c", statement="s",
+                confidence=0.7, importance=0.5, source_rule="ZebraRule",
+            ),
+            Observation(
+                dimension="d", category="c", statement="s",
+                confidence=0.7, importance=0.5, source_rule="AlphaRule",
+            ),
+        ]
+        builder = ExplanationBuilder()
+        result = builder.explain_reasoning(obs, features, [])
+        assert "AlphaRule, ZebraRule" in result.upstream_contributors[0]
+
+    def test_recommendation_categories_sorted(self):
+        recs = [
+            Recommendation(
+                category="risk", action="a", priority="high",
+            ),
+            Recommendation(
+                category="opportunity", action="b", priority="medium",
+            ),
+        ]
+        builder = ExplanationBuilder()
+        result = builder.explain_recommendations(recs, [], [])
+        assert "opportunity, risk" in result.upstream_contributors[1]

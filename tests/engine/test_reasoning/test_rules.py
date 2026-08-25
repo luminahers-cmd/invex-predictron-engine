@@ -256,3 +256,19 @@ class TestRiskIndicatorRule:
 
         for obs in result:
             assert obs.source_rule == "RiskIndicatorRule"
+
+
+class TestDefaultRulesImmutability:
+    """Regression: DEFAULT_RULES must be a tuple (immutable)."""
+
+    def test_default_rules_is_tuple(self):
+        from predictron_engine.reasoning.rules import DEFAULT_RULES
+        assert isinstance(DEFAULT_RULES, tuple)
+
+    def test_default_rules_not_appendable(self):
+        from predictron_engine.reasoning.rules import DEFAULT_RULES
+        assert not hasattr(DEFAULT_RULES, "append")
+
+    def test_default_rules_has_all_rules(self):
+        from predictron_engine.reasoning.rules import DEFAULT_RULES
+        assert len(DEFAULT_RULES) == 11
