@@ -150,11 +150,13 @@ def compute_decision_confidence(
         dimensions when computing missing-evidence uncertainty.
     """
     score_list = scores or []
+    evidence_trust = compute_evidence_trust(bundle)
     breakdown = _compute_confidence_breakdown(
         bundle=bundle,
         observations=observations,
         assessments=assessments,
         features=features,
+        evidence_trust=evidence_trust,
     )
     uncertainty_breakdown = _compute_uncertainty_breakdown(
         bundle=bundle,
@@ -162,6 +164,7 @@ def compute_decision_confidence(
         assessments=assessments,
         features=features,
         scores=score_list,
+        evidence_trust=evidence_trust,
     )
     assessed_dimensions = (
         {a.dimension for a in assessments}
@@ -312,10 +315,13 @@ def _compute_confidence_breakdown(
     observations: list[Observation],
     assessments: list[DimensionAssessment],
     features: ExtractedFeatures,
+    evidence_trust: float | None = None,
 ) -> ConfidenceBreakdown:
     """Compute the weighted confidence decomposition."""
+    if evidence_trust is None:
+        evidence_trust = compute_evidence_trust(bundle)
     values: dict[str, float] = {
-        "evidence_trust": compute_evidence_trust(bundle),
+        "evidence_trust": evidence_trust,
         "evidence_confidence": compute_evidence_confidence(bundle),
         "evidence_agreement": compute_evidence_agreement(observations),
         "reasoning_confidence": compute_reasoning_confidence(observations),
@@ -476,6 +482,7 @@ def _compute_uncertainty_breakdown(
     assessments: list[DimensionAssessment],
     features: ExtractedFeatures,
     scores: list[ScoreResult],
+    evidence_trust: float | None = None,
 ) -> UncertaintyBreakdown:
     """Compute the weighted uncertainty decomposition."""
     observed_dimensions = {o.dimension for o in observations}
@@ -483,12 +490,14 @@ def _compute_uncertainty_breakdown(
         a.dimension for a in assessments
     } | {s.dimension for s in scores}
 
+    if evidence_trust is None:
+        evidence_trust = compute_evidence_trust(bundle)
     values: dict[str, float] = {
         "missing_evidence": _missing_evidence_factor(
             assessed_dimensions, observed_dimensions, bool(observations),
         ),
         "conflicting_evidence": _conflicting_evidence_factor(observations),
-        "low_trust": round(1.0 - compute_evidence_trust(bundle), 4),
+        "low_trust": round(1.0 - evidence_trust, 4),
         "low_coverage": _low_coverage_factor(
             observations, assessed_dimensions,
         ),

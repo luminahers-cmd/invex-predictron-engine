@@ -547,3 +547,80 @@ def _make_mock_report_for_case(case: dict) -> Any:
         engine_version="0.9.1", processing_time_ms=12.0,
     )
     return report
+
+
+class TestDeterminism:
+    """Validate that identical inputs always produce identical outputs.
+
+    Sprint 7B requirement: same position + same seed must always produce
+    identical best move (investment_decision), identical evaluation
+    (overall_score), identical PV (observations, assessments, scores),
+    and identical node count.
+    """
+
+    def test_same_input_produces_identical_output(self) -> None:
+        from benchmarks.benchmark_runner import _build_request
+        from benchmarks.startup_cases.cases import BENCHMARK_CASES
+        from predictron_engine.engine import PredictronEngine
+
+        engine = PredictronEngine()
+        case = BENCHMARK_CASES[0]
+        request = _build_request(case)
+
+        report1 = engine.analyze(request, request_id="determinism_test_1")
+        report2 = engine.analyze(request, request_id="determinism_test_2")
+
+        assert report1.overall_score == report2.overall_score
+        assert report1.overall_confidence == report2.overall_confidence
+
+        assert len(report1.observations) == len(report2.observations)
+        for o1, o2 in zip(report1.observations, report2.observations):
+            assert o1.dimension == o2.dimension
+            assert o1.statement == o2.statement
+            assert o1.confidence == o2.confidence
+            assert o1.importance == o2.importance
+
+        assert len(report1.scores) == len(report2.scores)
+        for s1, s2 in zip(report1.scores, report2.scores):
+            assert s1.dimension == s2.dimension
+            assert s1.score == s2.score
+
+        assert len(report1.dimension_assessments) == len(
+            report2.dimension_assessments
+        )
+        for a1, a2 in zip(report1.dimension_assessments, report2.dimension_assessments):
+            assert a1.dimension == a2.dimension
+            assert a1.score == a2.score
+            assert a1.confidence == a2.confidence
+
+        if report1.investment_decision and report2.investment_decision:
+            assert (
+                report1.investment_decision.category
+                == report2.investment_decision.category
+            )
+            assert (
+                report1.investment_decision.conviction
+                == report2.investment_decision.conviction
+            )
+
+        node_count1 = len(report1.observations) + len(report1.evidence) + len(report1.scores)
+        node_count2 = len(report2.observations) + len(report2.evidence) + len(report2.scores)
+        assert node_count1 == node_count2
+
+    def test_all_benchmark_cases_are_deterministic(self) -> None:
+        from benchmarks.benchmark_runner import _build_request
+        from benchmarks.startup_cases.cases import BENCHMARK_CASES
+        from predictron_engine.engine import PredictronEngine
+
+        engine = PredictronEngine()
+        for case in BENCHMARK_CASES:
+            request = _build_request(case)
+            r1 = engine.analyze(request, request_id=f"det_{case['id']}_1")
+            r2 = engine.analyze(request, request_id=f"det_{case['id']}_2")
+            assert r1.overall_score == r2.overall_score, (
+                f"Score mismatch for {case['id']}: "
+                f"{r1.overall_score} != {r2.overall_score}"
+            )
+            assert len(r1.observations) == len(r2.observations), (
+                f"Observation count mismatch for {case['id']}"
+            )

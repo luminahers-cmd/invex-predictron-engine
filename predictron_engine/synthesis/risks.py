@@ -199,6 +199,10 @@ def aggregate_risks(
     """Build the unified, deduplicated, severity-ranked risk register."""
     register = _Register()
 
+    obs_by_dim: dict[str, list[Observation]] = {}
+    for obs in observations:
+        obs_by_dim.setdefault(obs.dimension, []).append(obs)
+
     # --- Source 1: feature-level risk flags ------------------------------
     risk_confidence = float(getattr(features, "risk_confidence", 0.5))
     for field_name, dimension in _FEATURE_RISK_FIELDS:
@@ -211,7 +215,7 @@ def aggregate_risks(
             severity=_severity_for_count(len(flagged)),
             source=f"feature:{field_name}",
             statements=[str(item) for item in flagged],
-            observations=_collect_observations(observations, dimension),
+            observations=obs_by_dim.get(dimension, []),
             confidence=risk_confidence,
         )
 
@@ -227,7 +231,7 @@ def aggregate_risks(
                 f"Runway of {runway} months is below the "
                 f"{_CRITICAL_RUNWAY_MONTHS}-month critical threshold"
             ],
-            observations=_collect_observations(observations, "business_model_viability"),
+            observations=obs_by_dim.get("business_model_viability", []),
             confidence=1.0,
         )
     elif (
@@ -243,7 +247,7 @@ def aggregate_risks(
             statements=[
                 f"Runway of {runway} months with active monthly burn"
             ],
-            observations=_collect_observations(observations, "business_model_viability"),
+            observations=obs_by_dim.get("business_model_viability", []),
             confidence=1.0,
         )
 
@@ -255,7 +259,7 @@ def aggregate_risks(
             severity=SynthesisSeverity.HIGH,
             source="feature:nrr_pct",
             statements=[f"Net revenue retention of {nrr:.0f}% is below {_NRR_FLOOR_PCT:.0f}%"],
-            observations=_collect_observations(observations, "traction_signals"),
+            observations=obs_by_dim.get("traction_signals", []),
             confidence=1.0,
         )
 
@@ -267,7 +271,7 @@ def aggregate_risks(
             severity=SynthesisSeverity.HIGH,
             source="feature:churn_rate_pct",
             statements=[f"Churn rate of {churn:.1f}% exceeds {_CHURN_CEILING_PCT:.0f}%"],
-            observations=_collect_observations(observations, "traction_signals"),
+            observations=obs_by_dim.get("traction_signals", []),
             confidence=1.0,
         )
 
@@ -279,7 +283,7 @@ def aggregate_risks(
             severity=SynthesisSeverity.HIGH,
             source="feature:ltv_cac_ratio",
             statements=[f"LTV/CAC ratio of {ltv_cac:.2f} is below {_LTV_CAC_FLOOR:.1f}"],
-            observations=_collect_observations(observations, "business_model_viability"),
+            observations=obs_by_dim.get("business_model_viability", []),
             confidence=1.0,
         )
 
@@ -330,7 +334,7 @@ def aggregate_risks(
                 severity=severity,
                 source="readiness:conflicting_relationship",
                 statements=descriptions,
-                observations=_collect_observations(observations, dimension),
+                observations=obs_by_dim.get(dimension, []),
                 confidence=1.0,
             )
 

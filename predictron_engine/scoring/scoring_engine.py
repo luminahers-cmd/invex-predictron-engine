@@ -2077,10 +2077,19 @@ class DefaultScoringEngine:
         """Score all dimensions and return results."""
         logger.info("Running scoring engine with %d scorers", len(self._scorers))
 
+        obs_by_dim: dict[str, list[Observation]] = {}
+        for obs in observations:
+            obs_by_dim.setdefault(obs.dimension, []).append(obs)
+
         results: list[ScoreResult] = []
         for scorer in self._scorers:
             try:
-                results.append(scorer.score(features, observations))
+                dim = getattr(scorer, "_dimension", None)
+                if dim is not None:
+                    dim_observations = obs_by_dim.get(dim.value, [])
+                    results.append(scorer.score(features, dim_observations))
+                else:
+                    results.append(scorer.score(features, observations))
             except Exception:
                 logger.warning(
                     "Scorer %s failed, skipping", type(scorer).__name__

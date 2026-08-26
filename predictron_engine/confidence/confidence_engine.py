@@ -56,11 +56,13 @@ class DefaultConfidenceEngine:
         completeness = features.data_completeness
         assessment_map = {a.dimension: a for a in (assessments or [])}
 
+        obs_by_dim: dict[str, list[Observation]] = {}
+        for obs in observations:
+            obs_by_dim.setdefault(obs.dimension, []).append(obs)
+
         confidence_assessments: list[ConfidenceAssessment] = []
         for score in scores:
-            dim_observations = [
-                o for o in observations if o.dimension == score.dimension
-            ]
+            dim_observations = obs_by_dim.get(score.dimension, [])
             obs_count = len(dim_observations)
 
             obs_confidence = (

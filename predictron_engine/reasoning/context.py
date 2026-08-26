@@ -139,6 +139,28 @@ class ReasoningContext:
             else 0.0
         )
 
+        self._documents_snapshot: list[EvidenceDocument] = list(self._documents)
+        self._retrieval_diagnostics_snapshot: list[ProviderRun] = (
+            list(self.bundle.providers) if self.bundle is not None else []
+        )
+        self._provenance_records: list[dict] = self._parse_provenance_records()
+
+    def _parse_provenance_records(self) -> list[dict]:
+        """Pre-parse all provenance records once at construction time."""
+        records: list[dict] = []
+        for item in self.evidence_items:
+            encoded = item.provenance_record
+            if not encoded:
+                continue
+            try:
+                parsed = json.loads(encoded)
+            except (TypeError, ValueError):
+                logger.warning("Skipping unparsable provenance record")
+                continue
+            if isinstance(parsed, dict):
+                records.append(parsed)
+        return records
+
     # ────────────────────────────────────────────────────────────────
     # Evidence item accessors
     # ────────────────────────────────────────────────────────────────
@@ -164,7 +186,7 @@ class ReasoningContext:
     @property
     def documents(self) -> list[EvidenceDocument]:
         """Successfully collected evidence documents."""
-        return list(self._documents)
+        return self._documents_snapshot
 
     def documents_by_provider(self, provider: str) -> list[EvidenceDocument]:
         """Return successful documents collected by the given provider."""
@@ -217,9 +239,7 @@ class ReasoningContext:
     @property
     def retrieval_diagnostics(self) -> list[ProviderRun]:
         """Per-provider retrieval diagnostic records from the bundle."""
-        if self.bundle is None:
-            return []
-        return list(self.bundle.providers)
+        return self._retrieval_diagnostics_snapshot
 
     @property
     def extraction_diagnostics(self) -> dict[str, dict]:
@@ -240,25 +260,13 @@ class ReasoningContext:
         return ids
 
     def provenance_records(self) -> list[dict]:
-        """Parse provenance records attached to evidence items.
+        """Return pre-parsed provenance records attached to evidence items.
 
         Each record is the JSON-encoded ProvenanceRecord stored on an
         EvidenceItem.  Unparsable records are skipped so a single bad
         record can never break reasoning.
         """
-        records: list[dict] = []
-        for item in self.evidence_items:
-            encoded = item.provenance_record
-            if not encoded:
-                continue
-            try:
-                parsed = json.loads(encoded)
-            except (TypeError, ValueError):
-                logger.warning("Skipping unparsable provenance record")
-                continue
-            if isinstance(parsed, dict):
-                records.append(parsed)
-        return records
+        return self._provenance_records
 
     def citations_for_domain(self, domain: str) -> list[EvidenceCitation]:
         """Collect all citations carried by evidence items in a domain."""

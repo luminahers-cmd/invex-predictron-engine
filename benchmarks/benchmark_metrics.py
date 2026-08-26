@@ -97,6 +97,11 @@ class BenchmarkMetrics:
         metrics.append(self._extraction_completeness(successful))
         metrics.append(self._processing_time_stats(results))
         metrics.append(self._coverage_distribution(results))
+        metrics.append(self._throughput(results))
+        metrics.append(self._avg_observations_per_case(successful))
+        metrics.append(self._avg_evidence_per_case(successful))
+        metrics.append(self._avg_branching_factor(successful))
+        metrics.append(self._avg_recommendations_per_case(successful))
 
         return MetricsReport(
             total_cases=len(results),
@@ -538,4 +543,93 @@ class BenchmarkMetrics:
                 "industries": industries,
                 "unique_industries": len(industries),
             },
+        )
+
+    def _throughput(self, results: list[CaseResult]) -> MetricResult:
+        """Analyses per second (NPS analog)."""
+        successful = [r for r in results if r.success]
+        if not successful:
+            return MetricResult(
+                name="throughput", value=0.0,
+                description="Analyses per second (no data)",
+            )
+        total_time_s = sum(r.processing_time_ms for r in successful) / 1000.0
+        if total_time_s <= 0:
+            return MetricResult(
+                name="throughput", value=0.0,
+                description="Analyses per second (zero time)",
+            )
+        nps = len(successful) / total_time_s
+        return MetricResult(
+            name="throughput",
+            value=round(nps, 2),
+            description="Analyses per second (NPS analog)",
+            details={
+                "total_analyses": len(successful),
+                "total_time_s": round(total_time_s, 3),
+            },
+        )
+
+    def _avg_observations_per_case(
+        self, results: list[CaseResult]
+    ) -> MetricResult:
+        """Average observations generated per analysis."""
+        counts = [
+            len(r.report.observations) for r in results if r.report is not None
+        ]
+        avg = sum(counts) / len(counts) if counts else 0.0
+        return MetricResult(
+            name="avg_observations_per_case",
+            value=round(avg, 2),
+            description="Average observations generated per analysis",
+            details={"cases": len(counts)},
+        )
+
+    def _avg_evidence_per_case(
+        self, results: list[CaseResult]
+    ) -> MetricResult:
+        """Average evidence items per analysis."""
+        counts = [
+            len(r.report.evidence) for r in results if r.report is not None
+        ]
+        avg = sum(counts) / len(counts) if counts else 0.0
+        return MetricResult(
+            name="avg_evidence_per_case",
+            value=round(avg, 2),
+            description="Average evidence items per analysis",
+            details={"cases": len(counts)},
+        )
+
+    def _avg_branching_factor(
+        self, results: list[CaseResult]
+    ) -> MetricResult:
+        """Average observations per scored dimension (branching factor analog)."""
+        ratios: list[float] = []
+        for r in results:
+            if r.report is None:
+                continue
+            dim_count = len(r.report.scores)
+            if dim_count > 0:
+                ratios.append(len(r.report.observations) / dim_count)
+        avg = sum(ratios) / len(ratios) if ratios else 0.0
+        return MetricResult(
+            name="avg_branching_factor",
+            value=round(avg, 2),
+            description="Average observations per scored dimension (branching factor analog)",
+            details={"cases": len(ratios)},
+        )
+
+    def _avg_recommendations_per_case(
+        self, results: list[CaseResult]
+    ) -> MetricResult:
+        """Average recommendations generated per analysis."""
+        counts = [
+            len(r.report.recommendations) for r in results if r.report is not None
+        ]
+        avg = sum(counts) / len(counts) if counts else 0.0
+        return MetricResult(
+            name="avg_recommendations_per_case",
+            value=round(avg, 2),
+            description="Average recommendations generated per analysis",
+            details={"cases": len(counts)},
         )

@@ -170,6 +170,10 @@ def aggregate_opportunities(
     """Build the unified, deduplicated, impact-ranked opportunity register."""
     register = _Register()
 
+    obs_by_dim: dict[str, list[Observation]] = {}
+    for obs in observations:
+        obs_by_dim.setdefault(obs.dimension, []).append(obs)
+
     # --- Source 1: high dimension scores ----------------------------------
     assessment_confidence = {
         assessment.dimension: assessment.confidence for assessment in assessments
@@ -177,7 +181,7 @@ def aggregate_opportunities(
     for score in sorted(scores, key=lambda s: (-s.score, s.dimension)):
         if score.score < _NOTABLE_SCORE:
             continue
-        dim_observations = [obs for obs in observations if obs.dimension == score.dimension]
+        dim_observations = obs_by_dim.get(score.dimension, [])
         register.add(
             label=f"strong {score.dimension.replace('_', ' ')}",
             dimension=score.dimension,
@@ -234,11 +238,13 @@ def aggregate_opportunities(
                 impact=impact,
                 source="readiness:reinforcing_relationship",
                 statements=descriptions,
-                observations=[obs for obs in observations if obs.dimension == dimension],
+                observations=obs_by_dim.get(dimension, []),
                 confidence=1.0,
             )
 
     # --- Source 4: positive quantitative metrics ---------------------------
+    traction_obs = obs_by_dim.get("traction_signals", [])
+    bmv_obs = obs_by_dim.get("business_model_viability", [])
     if features.arr_usd is not None and features.arr_usd >= _STRONG_ARR_USD:
         register.add(
             label="strong annual recurring revenue",
@@ -247,7 +253,7 @@ def aggregate_opportunities(
             source="feature:arr_usd",
             statements=[f"ARR of ${features.arr_usd:,.0f} clears the "
                         f"${_STRONG_ARR_USD:,.0f} strength threshold"],
-            observations=[obs for obs in observations if obs.dimension == "traction_signals"],
+            observations=traction_obs,
             confidence=1.0,
         )
     if features.nrr_pct is not None and features.nrr_pct >= _STRONG_NRR_PCT:
@@ -258,7 +264,7 @@ def aggregate_opportunities(
             source="feature:nrr_pct",
             statements=[f"NRR of {features.nrr_pct:.0f}% is at or above "
                         f"{_STRONG_NRR_PCT:.0f}%"],
-            observations=[obs for obs in observations if obs.dimension == "traction_signals"],
+            observations=traction_obs,
             confidence=1.0,
         )
     if features.growth_rate_pct is not None and features.growth_rate_pct >= _STRONG_GROWTH_PCT:
@@ -269,7 +275,7 @@ def aggregate_opportunities(
             source="feature:growth_rate_pct",
             statements=[f"Growth rate of {features.growth_rate_pct:.0f}% exceeds "
                         f"{_STRONG_GROWTH_PCT:.0f}%"],
-            observations=[obs for obs in observations if obs.dimension == "traction_signals"],
+            observations=traction_obs,
             confidence=1.0,
         )
     if features.ltv_cac_ratio is not None and features.ltv_cac_ratio >= _STRONG_LTV_CAC:
@@ -280,10 +286,7 @@ def aggregate_opportunities(
             source="feature:ltv_cac_ratio",
             statements=[f"LTV/CAC ratio of {features.ltv_cac_ratio:.2f} is at or above "
                         f"{_STRONG_LTV_CAC:.1f}"],
-            observations=[
-                obs for obs in observations
-                if obs.dimension == "business_model_viability"
-            ],
+            observations=bmv_obs,
             confidence=1.0,
         )
 
