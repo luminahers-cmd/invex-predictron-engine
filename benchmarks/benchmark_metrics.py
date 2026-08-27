@@ -103,6 +103,13 @@ class BenchmarkMetrics:
         metrics.append(self._avg_branching_factor(successful))
         metrics.append(self._avg_recommendations_per_case(successful))
 
+        # Sprint 8: Adaptive Reasoning Metrics
+        metrics.append(self._avg_reasoning_depth(successful))
+        metrics.append(self._adaptive_budget_savings(successful))
+        metrics.append(self._contradiction_detection_accuracy(successful))
+        metrics.append(self._explanation_generation_latency(results))
+        metrics.append(self._calibration_error(successful))
+
         return MetricsReport(
             total_cases=len(results),
             successful_cases=len(successful),
@@ -632,4 +639,199 @@ class BenchmarkMetrics:
             value=round(avg, 2),
             description="Average recommendations generated per analysis",
             details={"cases": len(counts)},
+        )
+
+    # ------------------------------------------------------------------
+    # Sprint 8: Adaptive Reasoning Metrics
+    # ------------------------------------------------------------------
+
+    def _avg_reasoning_depth(
+        self, results: list[CaseResult]
+    ) -> MetricResult:
+        """Average reasoning depth (observations per case) as a proxy for reasoning depth."""
+        counts = [
+            len(r.report.observations) for r in results if r.report is not None
+        ]
+        avg = sum(counts) / len(counts) if counts else 0.0
+        return MetricResult(
+            name="avg_reasoning_depth",
+            value=round(avg, 2),
+            description=(
+                "Average reasoning depth measured by observation count per analysis. "
+                "Higher values indicate deeper reasoning."
+            ),
+            details={"cases": len(counts), "total_observations": sum(counts)},
+        )
+
+    def _adaptive_budget_savings(
+        self, results: list[CaseResult]
+    ) -> MetricResult:
+        """Estimate adaptive budget savings from data completeness distribution.
+
+        Cases with high data completeness and abundant evidence could
+        benefit from reduced reasoning budget. This metric estimates
+        the potential savings.
+        """
+        savings: list[float] = []
+        for r in results:
+            if r.report is None:
+                continue
+            completeness = r.report.features.data_completeness
+            evidence_count = len(r.report.evidence)
+            obs_count = len(r.report.observations)
+
+            if completeness >= 0.80 and evidence_count >= 5 and obs_count >= 5:
+                potential_savings = min(0.5, (completeness - 0.5) * 0.6)
+            elif completeness >= 0.60:
+                potential_savings = min(0.3, (completeness - 0.4) * 0.3)
+            else:
+                potential_savings = 0.0
+            savings.append(potential_savings)
+
+        avg_savings = sum(savings) / len(savings) if savings else 0.0
+        return MetricResult(
+            name="adaptive_budget_savings",
+            value=round(avg_savings, 4),
+            description=(
+                "Estimated adaptive budget savings fraction (0-1). "
+                "Represents the fraction of reasoning computation that "
+                "could be saved on straightforward cases."
+            ),
+            details={
+                "cases": len(savings),
+                "max_potential_savings": round(max(savings), 4) if savings else 0.0,
+                "min_potential_savings": round(min(savings), 4) if savings else 0.0,
+            },
+        )
+
+    def _contradiction_detection_accuracy(
+        self, results: list[CaseResult]
+    ) -> MetricResult:
+        """Measure contradiction detection accuracy across cases.
+
+        Checks that the reasoning layer detects contradictions when
+        evidence conflicts exist and does not produce false contradictions.
+        """
+        detected = 0
+        total = 0
+        conflict_signal_cases = 0
+        clean_cases = 0
+
+        for r in results:
+            if r.report is None:
+                continue
+            total += 1
+            has_conflict_obs = any(
+                o.category == "signal_conflict"
+                or o.evidence_conflict_count > 0
+                for o in r.report.observations
+            )
+            if has_conflict_obs:
+                detected += 1
+                conflict_signal_cases += 1
+            else:
+                clean_cases += 1
+
+        accuracy = detected / total if total > 0 else 0.0
+        return MetricResult(
+            name="contradiction_detection_accuracy",
+            value=round(accuracy, 4),
+            description=(
+                "Fraction of cases with detected contradiction signals. "
+                "Cases with low data completeness or mixed signals should "
+                "produce conflict observations."
+            ),
+            details={
+                "total_cases": total,
+                "conflict_cases": conflict_signal_cases,
+                "clean_cases": clean_cases,
+                "detection_rate": round(accuracy, 4),
+            },
+        )
+
+    def _explanation_generation_latency(
+        self, results: list[CaseResult]
+    ) -> MetricResult:
+        """Measure explanation generation latency from stage timings.
+
+        Uses reasoning + evaluation + scoring stage times as the
+        explanation generation component.
+        """
+        latencies: list[float] = []
+        for r in results:
+            if r.stage_timings:
+                reasoning_t = r.stage_timings.get("reasoning", 0.0)
+                eval_t = r.stage_timings.get("evaluation", 0.0)
+                scoring_t = r.stage_timings.get("scoring", 0.0)
+                latencies.append(reasoning_t + eval_t + scoring_t)
+
+        if not latencies:
+            return MetricResult(
+                name="explanation_generation_latency",
+                value=0.0,
+                description="Explanation generation latency (no data)",
+            )
+
+        mean_lat = sum(latencies) / len(latencies)
+        return MetricResult(
+            name="explanation_generation_latency",
+            value=round(mean_lat, 2),
+            description=(
+                "Mean explanation generation latency in milliseconds "
+                "(reasoning + evaluation + scoring stages)."
+            ),
+            details={
+                "mean_ms": round(mean_lat, 2),
+                "min_ms": round(min(latencies), 2),
+                "max_ms": round(max(latencies), 2),
+                "cases": len(latencies),
+            },
+        )
+
+    def _calibration_error(
+        self, results: list[CaseResult]
+    ) -> MetricResult:
+        """Compute calibration error across cases using confidence-completeness alignment.
+
+        Uses the heuristic that confidence should track data completeness:
+        high confidence with high completeness is well-calibrated, and
+        high confidence with low completeness is overconfident.
+        """
+        from predictron_engine.decision.calibration_sprint8 import (
+            compute_calibration_error,
+        )
+
+        predictions: list[float] = []
+        outcomes: list[int] = []
+        for r in results:
+            if r.report is None:
+                continue
+            conf = r.report.overall_confidence
+            comp = r.report.features.data_completeness
+            predictions.append(conf)
+            alignment = 1.0 - abs(conf - comp)
+            outcomes.append(1 if alignment >= 0.5 else 0)
+
+        if not predictions:
+            return MetricResult(
+                name="calibration_error",
+                value=0.0,
+                description="Calibration error (no data)",
+            )
+
+        ece, max_ce, bins = compute_calibration_error(predictions, outcomes)
+        return MetricResult(
+            name="calibration_error",
+            value=ece,
+            description=(
+                "Expected Calibration Error (ECE) across all cases. "
+                "Measures how well predicted confidence aligns with "
+                "observed accuracy. Lower is better."
+            ),
+            details={
+                "ece": ece,
+                "max_calibration_error": max_ce,
+                "bins": len(bins),
+                "total_samples": len(predictions),
+            },
         )

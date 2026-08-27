@@ -17,6 +17,13 @@ Sprint 6A additions (fully backward compatible):
   - Per-rule diagnostics are exposed via ``last_diagnostics`` and
     ``reason_with_diagnostics`` without changing existing signatures.
 
+Sprint 8 additions (fully backward compatible):
+  - ``reason_adaptive`` uses an adaptive reasoning budget to skip
+    unnecessary computation on straightforward cases.
+  - ``last_budget`` exposes the budget allocation from the most
+    recent adaptive reasoning pass.
+  - ``last_trace`` exposes the reasoning trace for explainability.
+
 Extensibility:
   - Add new ReasoningRule implementations
   - Inject rule sets via the constructor
@@ -37,6 +44,8 @@ if TYPE_CHECKING:
     from predictron_engine.evidence.models import EvidenceBundle
     from predictron_engine.models.extracted_features import ExtractedFeatures
     from predictron_engine.models.report import Observation
+    from predictron_engine.reasoning.adaptive_budget import ReasoningBudget
+    from predictron_engine.reasoning.trace import ReasoningTrace
 
 logger = logging.getLogger(__name__)
 
@@ -86,3 +95,81 @@ class DefaultReasoningEngine:
     def last_consistency(self):
         """Consistency report from the most recent reasoning pass."""
         return self._reasoner.last_consistency
+
+    def reason_adaptive(
+        self,
+        features: ExtractedFeatures,
+        evidence: list[EvidenceItem] | None = None,
+        bundle: EvidenceBundle | None = None,
+    ) -> tuple[list[Observation], ReasoningBudget]:
+        """Evaluate rules with adaptive budget allocation.
+
+        Computes a reasoning budget based on data completeness and
+        evidence quality, then runs only the rules necessary for
+        the estimated complexity. Returns observations plus the
+        budget allocation used.
+
+        The existing ``reason()`` method is unchanged and always runs
+        all rules. This method optimizes for cases where full reasoning
+        is unnecessary.
+
+        Returns
+        -------
+        tuple of (observations, budget)
+        """
+        if evidence is None:
+            evidence = []
+
+        from predictron_engine.reasoning.adaptive_budget import (
+            compute_reasoning_budget,
+        )
+
+        budget = compute_reasoning_budget(features, evidence)
+        self._last_budget = budget
+
+        if budget.budget_fraction >= 1.0:
+            observations = self._reasoner.reason(features, evidence, bundle)
+            return observations, budget
+
+        observations = self._reasoner.reason_with_budget(
+            features, evidence, bundle, budget,
+        )
+        return observations, budget
+
+    def reason_with_trace(
+        self,
+        features: ExtractedFeatures,
+        evidence: list[EvidenceItem] | None = None,
+        bundle: EvidenceBundle | None = None,
+        scores: list | None = None,
+    ) -> tuple[list[Observation], ReasoningTrace]:
+        """Run reasoning and produce a full reasoning trace.
+
+        Combines adaptive reasoning with trace generation for
+        complete explainability.
+
+        Returns
+        -------
+        tuple of (observations, trace)
+        """
+        if evidence is None:
+            evidence = []
+
+        observations = self._reasoner.reason(features, evidence, bundle)
+
+        from predictron_engine.reasoning.trace import build_reasoning_trace
+
+        trace = build_reasoning_trace(observations, evidence, scores or [])
+        self._last_trace = trace
+
+        return observations, trace
+
+    @property
+    def last_budget(self) -> ReasoningBudget | None:
+        """Budget from the most recent adaptive reasoning pass."""
+        return getattr(self, "_last_budget", None)
+
+    @property
+    def last_trace(self) -> ReasoningTrace | None:
+        """Trace from the most recent reasoning-with-trace pass."""
+        return getattr(self, "_last_trace", None)

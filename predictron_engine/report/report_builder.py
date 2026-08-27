@@ -9,8 +9,10 @@ Key principles:
   - Confidence aggregation is straightforward (average)
   - Evidence is passed through without modification
   - Metadata is populated here (timing, version, completeness)
-  - Investment readiness is computed from all available signals (Sprint 8)
-  - Investment decision is computed from all signals (Sprint 13)
+  - Investment readiness is provided by the pipeline (canonical
+    computation in ``PredictronEngine``); the builder reuses it. A
+    fallback recompute remains only for direct callers that do not
+    supply readiness, preserving the standalone build() API.
   - The Report is the single output consumed by the adapter layer
 """
 
@@ -35,10 +37,9 @@ from predictron_engine.models.report import (
     ScoreResult,
 )
 from predictron_engine.models.startup import Startup
+from predictron_engine.version import ENGINE_VERSION
 
 logger = logging.getLogger(__name__)
-
-ENGINE_VERSION = "0.12.1"
 
 
 class DefaultReportBuilder:

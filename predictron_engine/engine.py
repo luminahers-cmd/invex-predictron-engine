@@ -64,10 +64,11 @@ from predictron_engine.recommendations.composite import (
 from predictron_engine.report.report_builder import DefaultReportBuilder
 from predictron_engine.scoring.scoring_engine import DefaultScoringEngine
 from predictron_engine.synthesis.engine import DecisionSynthesisEngine
+from predictron_engine.version import ENGINE_VERSION
 
 logger = logging.getLogger(__name__)
 
-ENGINE_VERSION = "0.12.1"
+__all__ = ["PredictronEngine", "ENGINE_VERSION"]
 
 
 def _evidence_metadata(bundle: EvidenceBundle) -> EvidenceCollectionMetadata:

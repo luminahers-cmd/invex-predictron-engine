@@ -21,24 +21,31 @@ The architecture emphasizes explainability, deterministic extraction, modularity
 Public Startup Data
         │
         ▼
-Collection
+Collection + Website Evidence Collection
         │
         ▼
 Extraction
- ├── Market Intelligence
- ├── Founder Intelligence
- ├── Product Intelligence
- ├── Technology Intelligence
- ├── Business Model Intelligence
+ ├── Company / Market / Founder
+ ├── Product / Technology / Business Model
+ └── Traction / Competition / Risk / Metadata
         │
         ▼
-Evidence Framework
+Evidence Gathering (knowledge providers)
         │
         ▼
-Reasoning Framework
+Reasoning (observations)
         │
         ▼
-Venture Scoring
+Evaluation (dimension assessments) ──► Scoring
+        │
+        ▼
+Recommendation + Confidence
+        │
+        ▼
+Investment Decision
+        │
+        ▼
+Calibration ──► Decision Synthesis
         │
         ▼
 Report Generation
@@ -60,14 +67,20 @@ The objective of this stage is to normalize raw startup information before downs
 
 Instead of treating startup information as unstructured text, the engine organizes knowledge into specialized intelligence domains.
 
-Current extraction modules include:
+Current extraction modules include (each a single-responsibility extractor
+composed by the `CompositeExtractor`, then enriched by deterministic
+derived-metric inference):
 
-- Market Intelligence
-- Founder Intelligence
-- Product Intelligence
-- Technology Intelligence
-- Business Model Intelligence
- └── Business Model Intelligence
+- Company
+- Market
+- Founder
+- Product
+- Technology
+- Business Model
+- Traction
+- Competition
+- Risk
+- Metadata
 
 Each module produces structured features that can be independently validated, benchmarked, and extended without affecting the remainder of the system.
 Evaluation

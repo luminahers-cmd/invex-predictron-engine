@@ -47,6 +47,7 @@ if TYPE_CHECKING:
     from predictron_engine.evidence.models import EvidenceBundle
     from predictron_engine.models.extracted_features import ExtractedFeatures
     from predictron_engine.models.report import Observation
+    from predictron_engine.reasoning.adaptive_budget import ReasoningBudget
     from predictron_engine.reasoning.consistency import ConsistencyReport
     from predictron_engine.reasoning.reasoning_engine import ReasoningRule
 
@@ -97,14 +98,43 @@ class CompositeReasoner:
         """Evaluate all rules and return observations plus rule diagnostics."""
         return self._run(features, evidence, bundle)
 
+    def reason_with_budget(
+        self,
+        features: ExtractedFeatures,
+        evidence: list[EvidenceItem],
+        bundle: EvidenceBundle | None,
+        budget: ReasoningBudget,
+    ) -> list[Observation]:
+        """Evaluate only the rules allowed by the adaptive budget.
+
+        Rules in ``budget.skipped_rules`` are skipped. This method
+        preserves all other behavior of the standard ``reason()`` path
+        (enrichment, diagnostics, consistency).
+        """
+        observations, _ = self._run(features, evidence, bundle, budget)
+        return observations
+
     def _run(
         self,
         features: ExtractedFeatures,
         evidence: list[EvidenceItem],
         bundle: EvidenceBundle | None,
+        budget: ReasoningBudget | None = None,
     ) -> tuple[list[Observation], list[RuleDiagnostic]]:
-        """Shared execution path for reason() and reason_with_diagnostics()."""
-        logger.info("CompositeReasoner: running %d rules", len(self._rules))
+        """Shared execution path for reason(), reason_with_diagnostics(), and reason_with_budget().
+
+        When a budget is provided, rules listed in ``budget.skipped_rules``
+        are skipped. When budget is None, all rules are executed (standard behavior).
+        """
+        skipped = frozenset(budget.skipped_rules) if budget else frozenset()
+        if skipped:
+            logger.info(
+                "CompositeReasoner: running %d rules (skipping %d by budget)",
+                len(self._rules) - len(skipped),
+                len(skipped),
+            )
+        else:
+            logger.info("CompositeReasoner: running %d rules", len(self._rules))
 
         context = ReasoningContext(features, evidence, bundle)
         documents = context.documents
@@ -114,6 +144,11 @@ class CompositeReasoner:
         diagnostics: list[RuleDiagnostic] = []
 
         for rule in self._rules:
+            rule_name = self._rule_name(rule)
+            if rule_name in skipped:
+                logger.debug("Skipping rule %s (adaptive budget)", rule_name)
+                continue
+
             timer = RuleTimer()
             try:
                 result = self._invoke_rule(rule, context)
