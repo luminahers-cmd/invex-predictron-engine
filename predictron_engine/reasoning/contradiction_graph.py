@@ -20,7 +20,6 @@ Public API:
 
 from __future__ import annotations
 
-import math
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
@@ -95,7 +94,7 @@ class ContradictionGraph:
     def edge_count(self) -> int:
         return len(self.edges)
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, object]:
         """Serialize for reporting and benchmarking."""
         return {
             "total_edges": self.edge_count,
@@ -129,7 +128,7 @@ class DimensionContradictionSummary:
     conflicting_count: int = 0
     intensity: float = 0.0
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, object]:
         return {
             "dimension": self.dimension,
             "supporting": self.supporting_count,
@@ -316,13 +315,20 @@ def build_contradiction_graph(
             elif relationship == "supporting":
                 reason = _build_support_reason(a, b)
             else:
-                reason = f"No direct relationship between observations in '{a.dimension}' vs '{b.dimension}'"
+                reason = (
+                    f"No direct relationship between observations in '{a.dimension}' "
+                    f"vs '{b.dimension}'"
+                )
 
             edges.append(
                 ContradictionEdge(
                     observation_a_idx=i,
                     observation_b_idx=j,
-                    dimension=a.dimension if a.dimension == b.dimension else f"{a.dimension}:{b.dimension}",
+                    dimension=(
+                        a.dimension
+                        if a.dimension == b.dimension
+                        else f"{a.dimension}:{b.dimension}"
+                    ),
                     relationship=relationship,
                     intensity=intensity,
                     reason=reason,

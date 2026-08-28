@@ -14,6 +14,7 @@ if TYPE_CHECKING:
     from predictron_engine.evidence.evidence_models import EvidenceItem
     from predictron_engine.models.extracted_features import ExtractedFeatures
     from predictron_engine.models.report import Observation
+    from predictron_engine.reasoning.context import ReasoningContext
 
 
 class TechnologyContextRule:
@@ -70,7 +71,7 @@ class TechnologyContextRule:
             )
         ]
 
-    def evaluate_context(self, context) -> list[Observation]:
+    def evaluate_context(self, context: ReasoningContext) -> list[Observation]:
         """Context-aware evaluation using pre-indexed ReasoningContext lookups.
 
         Produces the same observations as :meth:`evaluate` but resolves

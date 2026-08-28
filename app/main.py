@@ -129,7 +129,7 @@ def create_app() -> FastAPI:
 
     # --- Global exception handlers ---
     for status_code, handler in _build_exception_handlers().items():
-        app.add_exception_handler(status_code, handler)  # type: ignore[arg-type]
+        app.add_exception_handler(status_code, handler)
 
     # --- Routes ---
     app.include_router(api_router)

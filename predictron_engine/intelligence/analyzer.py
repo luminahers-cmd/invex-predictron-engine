@@ -69,11 +69,7 @@ class IntelligenceAnalyzer:
             [list[Report]], RecommendationEffectiveness
         ]
         | None = None,
-        drift_fn: Callable[
-            [list[PerformanceSnapshot], list[PerformanceSnapshot]],
-            ConfidenceDrift,
-        ]
-        | None = None,
+        drift_fn: Callable[..., ConfidenceDrift] | None = None,
         quality_fn: Callable[..., EngineQualityMetrics] | None = None,
     ) -> None:
         self._version = version or ENGINE_VERSION

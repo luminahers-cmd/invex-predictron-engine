@@ -41,7 +41,11 @@ from predictron_engine.evidence.provider_contracts import (
     ProviderResult,
 )
 from predictron_engine.evidence.ranking import rank_urls
-from predictron_engine.evidence.search_interfaces import SearchBackend, SearchSettings
+from predictron_engine.evidence.search_interfaces import (
+    SearchBackend,
+    SearchResult,
+    SearchSettings,
+)
 from predictron_engine.evidence.url_utils import extract_host, parse_http_url
 
 logger = logging.getLogger(__name__)
@@ -101,7 +105,7 @@ class SearchEvidenceProvider:
 
         # Build one or more search queries
         queries = self._build_queries(context.startup_name)
-        all_results = []
+        all_results: list[SearchResult] = []
 
         for query in queries:
             try:
@@ -120,12 +124,13 @@ class SearchEvidenceProvider:
             except Exception as exc:  # noqa: BLE001 — provider must not crash
                 logger.warning("Search backend failed for query %r: %s", query, exc)
                 if self._settings.retry_count > 0:
-                    all_results = await self._retry(query, all_results)
-                    if all_results is None:
+                    retried = await self._retry(query, all_results)
+                    if retried is None:
                         return self._failure_result(
                             reason=f"Backend failed after retries: {exc}",
                             started=started,
                         )
+                    all_results = retried
                     break
                 return self._failure_result(
                     reason=f"Backend failed: {exc}",
@@ -234,14 +239,17 @@ class SearchEvidenceProvider:
     async def _retry(
         self,
         query: str,
-        previous_results: list,
-    ) -> list | None:
+        previous_results: list[SearchResult],
+    ) -> list[SearchResult] | None:
         """Retry a failed query per the configured retry policy."""
+        backend = self._backend
+        if backend is None:
+            return None
         for attempt in range(self._settings.retry_count):
             try:
                 await asyncio.sleep(self._settings.retry_delay)
                 results = await asyncio.wait_for(
-                    self._backend.search(query, self._settings.max_results),  # type: ignore[union-attr]
+                    backend.search(query, self._settings.max_results),
                     timeout=self._settings.timeout,
                 )
                 return results

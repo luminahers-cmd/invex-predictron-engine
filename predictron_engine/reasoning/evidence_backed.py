@@ -125,7 +125,13 @@ def _compute_trust_score(
     for item in matched:
         record = _parse_provenance(item)
         if record is not None:
-            value = float(record.get("trust_score", 0.0) or 0.0)
+            raw_score = record.get("trust_score", 0.0) or 0.0
+            if not isinstance(raw_score, int | float | str):
+                continue
+            try:
+                value = float(raw_score)
+            except (TypeError, ValueError):
+                continue
             if value > best:
                 best = value
     return round(best, 4)
@@ -145,9 +151,13 @@ def _collect_provenance_ids(
         record = _parse_provenance(item)
         if record is None:
             continue
-        doc_id = record.get("document_id")
-        if isinstance(doc_id, str) and doc_id and doc_id not in ids:
-            ids.append(doc_id)
+        provenance_doc_id = record.get("document_id")
+        if (
+            isinstance(provenance_doc_id, str)
+            and provenance_doc_id
+            and provenance_doc_id not in ids
+        ):
+            ids.append(provenance_doc_id)
     return ids
 
 
@@ -175,7 +185,7 @@ def _count_conflicts(matched: list[EvidenceItem]) -> int:
     return len(detect_conflicts(matched))
 
 
-def _parse_provenance(item: EvidenceItem) -> dict | None:
+def _parse_provenance(item: EvidenceItem) -> dict[str, object] | None:
     """Parse the JSON-encoded provenance record on an evidence item."""
     encoded = item.provenance_record
     if not encoded:

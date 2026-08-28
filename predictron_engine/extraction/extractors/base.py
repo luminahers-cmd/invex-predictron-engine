@@ -9,9 +9,15 @@ base class entirely.
 from __future__ import annotations
 
 import re
+from typing import TYPE_CHECKING
 
 from predictron_engine.evidence.models import EvidenceBundle
 from predictron_engine.extraction.feature_models import NlpService
+
+if TYPE_CHECKING:
+    from predictron_engine.evidence.models import EvidenceDocument
+    from predictron_engine.models.extracted_features import ExtractedFeatures
+    from predictron_engine.models.report import EvidenceCitation, EvidenceItem
 
 STOPWORDS: frozenset[str] = frozenset({
     "the", "that", "this", "with", "from", "have", "been",
@@ -53,7 +59,7 @@ class BaseExtractor:
             doc.text for doc in evidence.documents if doc.status.value == "success"
         )
 
-    def _evidence_text_from_docs(self, docs: list) -> str:
+    def _evidence_text_from_docs(self, docs: list[EvidenceDocument]) -> str:
         """Return concatenated text from a filtered list of evidence documents.
 
         Used by extractors after domain-specific retrieval to get text
@@ -74,7 +80,7 @@ class BaseExtractor:
             return description
         return f"{description}\n{evidence_text}"
 
-    def _combined_text_from_docs(self, description: str, docs: list) -> str:
+    def _combined_text_from_docs(self, description: str, docs: list[EvidenceDocument]) -> str:
         """Combine description with text from filtered evidence documents.
 
         Used by extractors after domain-specific retrieval.
@@ -86,9 +92,9 @@ class BaseExtractor:
 
     def _build_citations_for_items(
         self,
-        evidence_items: list,
-        documents: list,
-    ) -> list:
+        evidence_items: list[EvidenceItem],
+        documents: list[EvidenceDocument],
+    ) -> list[EvidenceCitation]:
         """Build citations for a list of evidence items against source documents.
 
         Delegates to the citation builder module. Returns a list of
@@ -97,7 +103,7 @@ class BaseExtractor:
         from predictron_engine.evidence.citation import build_citations
         return build_citations(evidence_items, documents)
 
-    def _build_trust_summary(self, documents: list) -> str:
+    def _build_trust_summary(self, documents: list[EvidenceDocument]) -> str:
         """Build a human-readable trust summary string from documents."""
         if not documents:
             return "no evidence documents"
@@ -133,11 +139,11 @@ class BaseExtractor:
 
     def _populate_evidence_provenance(
         self,
-        features,
+        features: ExtractedFeatures,
         *,
-        documents: list,
-        evidence_items: list,
-        citations: list,
+        documents: list[EvidenceDocument],
+        evidence_items: list[EvidenceItem],
+        citations: list[EvidenceCitation],
         evidence_confidence: float,
         agreement_ratio: float,
         conflict_count: int,
@@ -159,8 +165,8 @@ class BaseExtractor:
         features.evidence_document_count = len(documents)
         features.provenance_trust_summary = self._build_trust_summary(documents)
 
-        provider_items: dict[str, list[dict]] = {}
-        provider_meta: dict[str, dict] = {}
+        provider_items: dict[str, list[dict[str, object]]] = {}
+        provider_meta: dict[str, dict[str, object]] = {}
         for item in evidence_items:
             provider_items.setdefault(item.source, []).append({
                 "domain": item.domain,

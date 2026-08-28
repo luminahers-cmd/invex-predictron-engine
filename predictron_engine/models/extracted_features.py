@@ -203,10 +203,6 @@ class ExtractedFeatures(BaseModel):
         default=None,
         description="Product lifecycle stage (concept, beta, growth, mature, legacy)",
     )
-    differentiation_signals: list[str] = Field(
-        default_factory=list,
-        description="Detected competitive differentiators",
-    )
     defensibility_signals: list[str] = Field(
         default_factory=list,
         description="Detected moat and defensibility indicators",
@@ -782,7 +778,7 @@ class ExtractedFeatures(BaseModel):
             "(derived: ARR / customer_count)"
         ),
     )
-    derived_metrics_log: list[dict] = Field(
+    derived_metrics_log: list[dict[str, object]] = Field(
         default_factory=list,
         description=(
             "Audit log of all deterministic derivations applied. "
@@ -811,7 +807,7 @@ class ExtractedFeatures(BaseModel):
             "extraction run (e.g. '3 high-trust, 1 medium-trust sources')."
         ),
     )
-    provider_evidence: dict[str, list[dict]] = Field(
+    provider_evidence: dict[str, list[dict[str, object]]] = Field(
         default_factory=dict,
         description=(
             "Per-provider evidence items used in this extraction. "
@@ -819,7 +815,7 @@ class ExtractedFeatures(BaseModel):
             "domain, category, statement, source, and relevance_score."
         ),
     )
-    provider_run_metadata: dict[str, dict] = Field(
+    provider_run_metadata: dict[str, dict[str, object]] = Field(
         default_factory=dict,
         description=(
             "Per-provider run metadata including document counts, "

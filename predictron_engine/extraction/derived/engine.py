@@ -22,6 +22,7 @@ Usage:
 from __future__ import annotations
 
 import logging
+from collections.abc import Callable
 
 from predictron_engine.extraction.derived.models import DerivedMetricLog
 from predictron_engine.extraction.derived.rules import (
@@ -46,7 +47,10 @@ class DerivedMetricsEngine:
 
     def __init__(
         self,
-        rules: list | None = None,
+        rules: list[
+            tuple[str, Callable[[ExtractedFeatures], list[DerivedMetricLog]], str]
+        ]
+        | None = None,
     ) -> None:
         """Initialize with an optional custom rule set.
 

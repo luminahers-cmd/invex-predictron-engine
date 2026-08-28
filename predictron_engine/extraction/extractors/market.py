@@ -23,6 +23,7 @@ Design principles:
 from __future__ import annotations
 
 import re
+from typing import TYPE_CHECKING, TypedDict
 
 from predictron_engine.evidence.models import EvidenceBundle
 from predictron_engine.extraction.extractors.base import BaseExtractor
@@ -30,6 +31,15 @@ from predictron_engine.extraction.quantitative import parse_market_size
 from predictron_engine.models.collected_data import CollectedData
 from predictron_engine.models.extracted_features import ExtractedFeatures
 from predictron_engine.models.startup import Startup
+
+if TYPE_CHECKING:
+    from predictron_engine.evidence.models import EvidenceDocument
+    from predictron_engine.models.report import EvidenceCitation, EvidenceItem
+
+
+class _IndustryResult(TypedDict):
+    primary: str | None
+    confidence: float
 
 # ---------------------------------------------------------------------------
 # Weighted industry keywords — primary signal for industry classification.
@@ -726,9 +736,9 @@ class MarketExtractor(BaseExtractor):
         )
 
         strategy = MarketRetrievalStrategy()
-        docs_filtered: list = []
-        evidence_items: list = []
-        citations: list = []
+        docs_filtered: list[EvidenceDocument] = []
+        evidence_items: list[EvidenceItem] = []
+        citations: list[EvidenceCitation] = []
 
         if evidence is not None:
             [
@@ -807,7 +817,7 @@ class MarketExtractor(BaseExtractor):
     # Industry classification — weighted multi-signal scoring
     # ------------------------------------------------------------------
 
-    def _classify_industry(self, text: str) -> dict[str, object]:
+    def _classify_industry(self, text: str) -> _IndustryResult:
         """Classify primary industry using weighted keyword scoring.
 
         Returns dict with 'primary' (str|None) and 'confidence' (float).

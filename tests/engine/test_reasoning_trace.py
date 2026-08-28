@@ -6,16 +6,11 @@ and rationale production.
 
 from __future__ import annotations
 
-import pytest
-
-from predictron_engine.reasoning.trace import (
-    ReasoningTrace,
-    TraceEntry,
-    ConfidenceEvolution,
-    build_reasoning_trace,
-)
 from predictron_engine.evidence.evidence_models import EvidenceItem
 from predictron_engine.models.report import Observation, ScoreResult
+from predictron_engine.reasoning.trace import (
+    build_reasoning_trace,
+)
 
 
 def _make_obs(
@@ -69,12 +64,21 @@ class TestBuildReasoningTrace:
 
     def test_final_rationale_mentions_key_signals(self) -> None:
         observations = [
-            _make_obs(category="market_context", confidence=0.9, importance=0.8, statement="Strong market"),
+            _make_obs(
+                category="market_context", confidence=0.9, importance=0.8,
+                statement="Strong market",
+            ),
             _make_obs(category="risk", confidence=0.2, importance=0.7, statement="High risk"),
         ]
         trace = build_reasoning_trace(observations, [])
-        assert "Strongest positive signal" in trace.final_rationale or len(trace.final_rationale) > 0
-        assert "Strongest concern" in trace.final_rationale or len(trace.final_rationale) > 0
+        assert (
+            "Strongest positive signal" in trace.final_rationale
+            or len(trace.final_rationale) > 0
+        )
+        assert (
+            "Strongest concern" in trace.final_rationale
+            or len(trace.final_rationale) > 0
+        )
 
     def test_trace_is_deterministic(self) -> None:
         observations = [
@@ -104,7 +108,10 @@ class TestBuildReasoningTrace:
         ]
         trace = build_reasoning_trace(observations, [])
         if trace.strongest_supporting:
-            assert trace.strongest_supporting[0].strength_score >= trace.strongest_supporting[-1].strength_score
+            assert (
+                trace.strongest_supporting[0].strength_score
+                >= trace.strongest_supporting[-1].strength_score
+            )
 
     def test_serialization(self) -> None:
         observations = [_make_obs()]

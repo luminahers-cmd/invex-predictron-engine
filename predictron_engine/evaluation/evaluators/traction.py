@@ -91,7 +91,7 @@ class TractionEvaluator:
         if quant_ctx:
             rationale += quant_ctx
 
-        metadata: dict[str, object] = {
+        metadata: dict[str, str | int | float | bool | list[str]] = {
             "has_revenue": features.has_revenue or False,
             "funding_stage": features.funding_stage or "unknown",
             "weighted_confidence": round(weighted_conf, 4),

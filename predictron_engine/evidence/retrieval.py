@@ -111,8 +111,10 @@ def retrieve_best_source(bundle: EvidenceBundle) -> EvidenceDocument | None:
     return max(
         scored,
         key=lambda d: (
-            d.metadata.trust_score.overall,  # type: ignore[union-attr]
-            d.metadata.quality_score,
+            d.metadata.trust_score.overall
+            if d.metadata is not None and d.metadata.trust_score is not None
+            else 0.0,
+            d.metadata.quality_score if d.metadata is not None else 0.0,
             str(d.url),
         ),
     )

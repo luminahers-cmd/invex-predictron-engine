@@ -22,7 +22,7 @@ Public API:
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -90,7 +90,7 @@ class ReasoningTrace:
     total_evidence: int = 0
     overall_confidence: float = 0.0
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, object]:
         """Serialize for reporting and API responses."""
         return {
             "strongest_supporting": [
@@ -340,7 +340,10 @@ def _build_final_rationale(
     if overall_confidence >= 0.75:
         parts.append(f"High overall confidence ({overall_confidence:.2f})")
     elif overall_confidence <= 0.35:
-        parts.append(f"Low overall confidence ({overall_confidence:.2f}): recommend additional due diligence")
+        parts.append(
+            f"Low overall confidence ({overall_confidence:.2f}): "
+            "recommend additional due diligence"
+        )
     else:
         parts.append(f"Moderate overall confidence ({overall_confidence:.2f})")
 

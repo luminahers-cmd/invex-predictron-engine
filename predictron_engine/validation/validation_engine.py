@@ -8,8 +8,15 @@ it only reads them and produces diagnostic information.
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import cast
 
+from predictron_engine.evidence.evidence_models import EvidenceItem
+from predictron_engine.models.report import (
+    ConfidenceAssessment,
+    DimensionAssessment,
+    Observation,
+    Recommendation,
+)
 from predictron_engine.validation.debug_report import (
     ConfidenceSummary,
     DebugReport,
@@ -32,9 +39,6 @@ from predictron_engine.validation.validators.pipeline_validator import (
 from predictron_engine.validation.validators.report_validator import (
     ReportValidator,
 )
-
-if TYPE_CHECKING:
-    pass
 
 logger = logging.getLogger(__name__)
 
@@ -212,6 +216,11 @@ class ValidationEngine:
     ) -> list[StageOutput]:
         """Build per-stage output summaries with explanations."""
         startup_name = getattr(startup, "name", "unknown")
+        typed_evidence = cast(list[EvidenceItem], evidence)
+        typed_observations = cast(list[Observation], observations)
+        typed_assessments = cast(list[DimensionAssessment], assessments)
+        typed_recommendations = cast(list[Recommendation], recommendations)
+        typed_confidence = cast(list[ConfidenceAssessment], confidence)
         return [
             StageOutput(
                 stage="collect",
@@ -231,7 +240,7 @@ class ValidationEngine:
                 artifact_type="EvidenceSet",
                 artifact_count=len(evidence),
                 explanation=self._explainer.explain_evidence(
-                    evidence, features
+                    typed_evidence, features
                 ),
             ),
             StageOutput(
@@ -239,7 +248,7 @@ class ValidationEngine:
                 artifact_type="list[Observation]",
                 artifact_count=len(observations),
                 explanation=self._explainer.explain_reasoning(
-                    observations, features, evidence
+                    typed_observations, features, typed_evidence
                 ),
             ),
             StageOutput(
@@ -247,7 +256,7 @@ class ValidationEngine:
                 artifact_type="EvaluationResult",
                 artifact_count=len(assessments),
                 explanation=self._explainer.explain_evaluation(
-                    assessments, observations, evidence
+                    typed_assessments, typed_observations, typed_evidence
                 ),
             ),
             StageOutput(
@@ -255,7 +264,8 @@ class ValidationEngine:
                 artifact_type="list[Recommendation]",
                 artifact_count=len(recommendations),
                 explanation=self._explainer.explain_recommendations(
-                    recommendations, assessments, observations
+                    typed_recommendations, typed_assessments,
+                    typed_observations,
                 ),
             ),
             StageOutput(
@@ -263,7 +273,7 @@ class ValidationEngine:
                 artifact_type="list[ConfidenceAssessment]",
                 artifact_count=len(confidence),
                 explanation=self._explainer.explain_confidence(
-                    confidence, features
+                    typed_confidence, features
                 ),
             ),
         ]
@@ -333,8 +343,8 @@ class ValidationEngine:
         overall = (
             sum(per_dim.values()) / len(per_dim) if per_dim else 0.0
         )
-        lowest = min(per_dim, key=per_dim.get) if per_dim else ""
-        highest = max(per_dim, key=per_dim.get) if per_dim else ""
+        lowest = min(per_dim, key=lambda d: per_dim[d]) if per_dim else ""
+        highest = max(per_dim, key=lambda d: per_dim[d]) if per_dim else ""
 
         return ConfidenceSummary(
             overall_confidence=overall,

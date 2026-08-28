@@ -19,14 +19,12 @@ Public API:
 
 from __future__ import annotations
 
-import math
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from predictron_engine.evidence.evidence_models import EvidenceItem
     from predictron_engine.models.extracted_features import ExtractedFeatures
-    from predictron_engine.models.report import Observation
 
 
 # ---------------------------------------------------------------------------
@@ -125,7 +123,7 @@ class BudgetReport:
         actual = self.rules_executed / self.total_rules
         return round(1.0 - abs(planned - actual), 4)
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, object]:
         """Serialize for benchmark reporting."""
         return {
             "budget_fraction": self.budget.budget_fraction,

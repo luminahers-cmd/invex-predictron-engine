@@ -339,9 +339,7 @@ def detect_reinforcing_features(
         findings.append(
             ReinforcementFinding(
                 field_a="network_effects_signals",
-                value_a=len(  # type: ignore[arg-type]
-                    features.network_effects_signals
-                ),
+                value_a=len(features.network_effects_signals),
                 field_b="marketplace_dynamics",
                 value_b=len(features.marketplace_dynamics),
                 reason=(

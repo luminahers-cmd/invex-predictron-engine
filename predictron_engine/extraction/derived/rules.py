@@ -20,6 +20,8 @@ Design principles:
 
 from __future__ import annotations
 
+from collections.abc import Callable
+
 from predictron_engine.extraction.derived.models import DerivedMetricLog
 from predictron_engine.models.extracted_features import ExtractedFeatures
 
@@ -426,7 +428,7 @@ def derive_arr_from_customer_count_and_acv(
 # ---------------------------------------------------------------------------
 
 ALL_INFERENCE_RULES: list[
-    tuple[str, type | object, str]
+    tuple[str, Callable[[ExtractedFeatures], list[DerivedMetricLog]], str]
 ] = [
     ("derive_arr_from_mrr", derive_arr_from_mrr, "arr_from_mrr"),
     ("derive_mrr_from_arr", derive_mrr_from_arr, "mrr_from_arr"),

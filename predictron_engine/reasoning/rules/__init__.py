@@ -4,6 +4,10 @@ Each rule evaluates extracted features and evidence to produce structured
 observations. Rules are independent, stateless, and testable in isolation.
 """
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from predictron_engine.reasoning.rules.business_model_context import (
     BusinessModelContextRule,
 )
@@ -30,6 +34,9 @@ from predictron_engine.reasoning.rules.technology_context import (
     TechnologyContextRule,
 )
 
+if TYPE_CHECKING:
+    from predictron_engine.reasoning.composite import ReasoningRule
+
 __all__ = [
     "BusinessModelContextRule",
     "CompetitionAssessmentRule",
@@ -45,7 +52,7 @@ __all__ = [
     "TechnologyContextRule",
 ]
 
-DEFAULT_RULES: tuple = (
+DEFAULT_RULES: tuple[ReasoningRule, ...] = (
     MarketContextRule(),
     BusinessModelContextRule(),
     StageExpectationRule(),

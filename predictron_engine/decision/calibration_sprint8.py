@@ -54,7 +54,7 @@ class CalibrationBin:
         """Gap between predicted and actual accuracy."""
         return round(self.mean_predicted_confidence - self.actual_accuracy, 4)
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, object]:
         return {
             "bin_lower": self.bin_lower,
             "bin_upper": self.bin_upper,
@@ -82,7 +82,7 @@ class CalibrationReport:
     total_samples: int = 0
     calibration_quality: str = "unknown"
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, object]:
         return {
             "expected_calibration_error": self.expected_calibration_error,
             "maximum_calibration_error": self.maximum_calibration_error,
@@ -214,7 +214,7 @@ def _classify_calibration_quality(ece: float) -> str:
 
 
 def validate_pipeline_confidence(
-    analysis_results: list[dict],
+    analysis_results: list[dict[str, object]],
 ) -> CalibrationReport:
     """Validate confidence calibration across multiple analysis results.
 
@@ -227,14 +227,15 @@ def validate_pipeline_confidence(
     analysis_results:
         List of analysis result dicts with confidence and outcome data.
     """
-    predictions = [
-        r["predicted_confidence"] for r in analysis_results
-        if "predicted_confidence" in r
-    ]
-    outcomes = [
-        r["correct"] for r in analysis_results
-        if "correct" in r
-    ]
+    predictions: list[float] = []
+    outcomes: list[int] = []
+    for r in analysis_results:
+        confidence = r.get("predicted_confidence")
+        if isinstance(confidence, int | float):
+            predictions.append(float(confidence))
+        correct = r.get("correct")
+        if isinstance(correct, int):
+            outcomes.append(int(correct))
 
     if not predictions or not outcomes:
         return CalibrationReport(calibration_quality="insufficient_data")

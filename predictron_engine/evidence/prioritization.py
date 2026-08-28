@@ -99,7 +99,7 @@ class PrioritizedPage:
     priority: int = field(compare=False)
     reasons: tuple[str, ...] = field(default=(), compare=False)
 
-    def __lt__(self, other: PrioritizedPage) -> bool:  # type: ignore[override]
+    def __lt__(self, other: PrioritizedPage) -> bool:
         if not isinstance(other, PrioritizedPage):
             return NotImplemented
         if self.priority != other.priority:

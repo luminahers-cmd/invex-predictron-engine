@@ -23,9 +23,10 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
+from predictron_engine.evidence.models import DocumentType
+
 if TYPE_CHECKING:
     from predictron_engine.evidence.models import (
-        DocumentType,
         EvidenceBundle,
         EvidenceDocument,
     )
@@ -127,7 +128,11 @@ class MarketRetrievalStrategy(RetrievalStrategy):
     ]
 
     _PREFERRED_DOC_TYPES: list[DocumentType] = [
-        "homepage", "about", "blog", "news", "press_release",
+        DocumentType.HOMEPAGE,
+        DocumentType.ABOUT,
+        DocumentType.BLOG,
+        DocumentType.NEWS,
+        DocumentType.PRESS_RELEASE,
     ]
 
     def retrieve_documents(
@@ -177,7 +182,10 @@ class FounderRetrievalStrategy(RetrievalStrategy):
     ]
 
     _PREFERRED_DOC_TYPES: list[DocumentType] = [
-        "about", "careers", "repository", "blog",
+        DocumentType.ABOUT,
+        DocumentType.CAREERS,
+        DocumentType.REPOSITORY,
+        DocumentType.BLOG,
     ]
 
     def retrieve_documents(
@@ -229,7 +237,10 @@ class TechnologyRetrievalStrategy(RetrievalStrategy):
     ]
 
     _PREFERRED_DOC_TYPES: list[DocumentType] = [
-        "documentation", "api_docs", "repository", "product",
+        DocumentType.DOCUMENTATION,
+        DocumentType.API_DOCS,
+        DocumentType.REPOSITORY,
+        DocumentType.PRODUCT,
     ]
 
     def retrieve_documents(
@@ -280,7 +291,10 @@ class BusinessModelRetrievalStrategy(RetrievalStrategy):
     ]
 
     _PREFERRED_DOC_TYPES: list[DocumentType] = [
-        "pricing", "about", "blog", "homepage",
+        DocumentType.PRICING,
+        DocumentType.ABOUT,
+        DocumentType.BLOG,
+        DocumentType.HOMEPAGE,
     ]
 
     def retrieve_documents(
@@ -331,7 +345,10 @@ class ProductRetrievalStrategy(RetrievalStrategy):
     ]
 
     _PREFERRED_DOC_TYPES: list[DocumentType] = [
-        "product", "documentation", "api_docs", "homepage",
+        DocumentType.PRODUCT,
+        DocumentType.DOCUMENTATION,
+        DocumentType.API_DOCS,
+        DocumentType.HOMEPAGE,
     ]
 
     def retrieve_documents(

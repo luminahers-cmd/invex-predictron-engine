@@ -8,6 +8,7 @@ scheme, which is automatically registered in the OpenAPI documentation.
 from __future__ import annotations
 
 from datetime import UTC, datetime, timedelta
+from typing import cast
 
 import jwt
 from fastapi import Depends, HTTPException, status
@@ -31,10 +32,15 @@ def create_access_token(subject: str, expires_delta: timedelta | None = None) ->
     return jwt.encode(payload, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
 
-def decode_access_token(token: str) -> dict:
+def decode_access_token(token: str) -> dict[str, object]:
     """Decode and validate a JWT access token."""
     try:
-        return jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        return cast(
+            dict[str, object],
+            jwt.decode(
+                token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
+            ),
+        )
     except jwt.ExpiredSignatureError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -49,7 +55,7 @@ def decode_access_token(token: str) -> dict:
 
 async def get_current_user(
     credentials: HTTPAuthorizationCredentials | None = Depends(security),
-) -> dict:
+) -> dict[str, object]:
     """FastAPI dependency that extracts and validates the current user from the JWT."""
     if credentials is None:
         raise HTTPException(
@@ -61,7 +67,7 @@ async def get_current_user(
 
 async def get_current_user_optional(
     credentials: HTTPAuthorizationCredentials | None = Depends(security),
-) -> dict | None:
+) -> dict[str, object] | None:
     """FastAPI dependency that optionally extracts the current user.
 
     Returns None when no credentials are provided, instead of raising 401.

@@ -63,7 +63,7 @@ class ReasoningEngine(Protocol):
     """Generates explainable observations from extracted features and evidence."""
 
     def reason(
-        self, features: ExtractedFeatures, evidence: list
+        self, features: ExtractedFeatures, evidence: list[EvidenceItem]
     ) -> list[Observation]: ...
 
 
@@ -110,7 +110,7 @@ class ReportBuilder(Protocol):
         self,
         startup: Startup,
         features: ExtractedFeatures,
-        evidence: list,
+        evidence: list[EvidenceItem],
         observations: list[Observation],
         scores: list[ScoreResult],
         recommendations: list[Recommendation],

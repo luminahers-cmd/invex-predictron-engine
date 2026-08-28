@@ -266,7 +266,7 @@ class ExplanationBuilder:
         """Explain the recommendation stage output."""
         categories = sorted({r.category for r in recommendations})
         strategies = sorted({
-            r.metadata.get("strategy", "unknown")
+            str(r.metadata.get("strategy", "unknown"))
             for r in recommendations
             if isinstance(r.metadata, dict)
         })
@@ -369,7 +369,9 @@ class ExplanationBuilder:
         ]
 
         supporting_evidence_statements = [
-            e.statement for e in recommendation.supporting_evidence
+            e.statement
+            for a in recommendation.supporting_assessments
+            for e in a.supporting_evidence
         ]
 
         feature_refs = []
@@ -453,9 +455,14 @@ class ExplanationBuilder:
             )
             chain.append(obs_summary)
 
-        if recommendation.supporting_evidence:
+        evidence_count = sum(
+            len(a.supporting_evidence)
+            for a in recommendation.supporting_assessments
+        )
+
+        if evidence_count:
             evidence_summary = (
-                f"Supported by {len(recommendation.supporting_evidence)} "
+                f"Supported by {evidence_count} "
                 f"evidence item(s)"
             )
             chain.append(evidence_summary)

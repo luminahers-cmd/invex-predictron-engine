@@ -33,6 +33,7 @@ from predictron_engine.extraction.extractors.risk import RiskExtractor
 from predictron_engine.extraction.extractors.technology import TechnologyExtractor
 from predictron_engine.extraction.extractors.traction import TractionExtractor
 from predictron_engine.extraction.feature_models import (
+    DomainExtractor,
     NlpService,
     call_extractor_with_evidence,
 )
@@ -110,7 +111,7 @@ _LIST_FIELDS: frozenset[str] = frozenset({
 })
 
 
-def _default_extractors() -> list[object]:
+def _default_extractors() -> list[DomainExtractor]:
     """Return the default ordered list of domain extractors."""
     return [
         CompanyExtractor(),
@@ -149,7 +150,7 @@ class CompositeExtractor:
         If None, a default engine is created.
     """
 
-    extractors: list[object] = field(default_factory=_default_extractors)
+    extractors: list[DomainExtractor] = field(default_factory=_default_extractors)
     nlp_service: NlpService | None = None
     derived_engine: DerivedMetricsEngine = field(
         default_factory=DerivedMetricsEngine,
@@ -219,7 +220,7 @@ class CompositeExtractor:
             else:
                 merged_data[field_name] = base_val
 
-        return ExtractedFeatures(**merged_data)
+        return ExtractedFeatures.model_validate(merged_data)
 
     def _inject_nlp(self) -> None:
         """Inject NlpService into all BaseExtractor subclasses."""

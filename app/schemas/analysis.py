@@ -86,7 +86,7 @@ class AnalysisDetailResponse(BaseModel):
     confidence: float = Field(..., ge=0, le=1)
     engine_version: str | None = None
     processing_time_ms: float | None = None
-    full_report: dict = Field(default_factory=dict)
+    full_report: dict[str, object] = Field(default_factory=dict)
     created_at: datetime
 
 

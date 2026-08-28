@@ -46,7 +46,7 @@ class BenchmarkEvaluation:
     def failed_cases(self) -> int:
         return sum(1 for v in self.validations if not v.passed)
 
-    def metrics_dict(self) -> dict:
+    def metrics_dict(self) -> dict[str, object]:
         return self.metrics.to_dict()
 
 
@@ -86,7 +86,7 @@ def evaluate_benchmark(
 
 def evaluate_benchmark_with_validation(
     results: list[CaseResult],
-    cases: list[dict],
+    cases: list[dict[str, object]],
     *,
     validator: BenchmarkValidator | None = None,
 ) -> BenchmarkEvaluation:

@@ -65,8 +65,8 @@ class VersionDiff:
         return (
             abs(self.overall_score_delta) > 0.01
             or abs(self.overall_confidence_delta) > 0.01
-            or self.feature_changes
-            or self.score_changes
+            or bool(self.feature_changes)
+            or bool(self.score_changes)
             or self.observation_count_delta != 0
             or self.recommendation_count_delta != 0
         )
@@ -103,10 +103,11 @@ def generate_text_report(results: list[CaseResult]) -> str:
     lines.append(f"  Failed: {failed}")
 
     if results:
-        successful = [r for r in results if r.success and r.report]
+        successful = [r for r in results if r.success and r.report is not None]
         if successful:
-            avg_score = sum(r.report.overall_score for r in successful) / len(successful)
-            avg_conf = sum(r.report.overall_confidence for r in successful) / len(successful)
+            valid_reports = [r.report for r in successful if r.report is not None]
+            avg_score = sum(rp.overall_score for rp in valid_reports) / len(successful)
+            avg_conf = sum(rp.overall_confidence for rp in valid_reports) / len(successful)
             avg_time = sum(r.processing_time_ms for r in successful) / len(successful)
             lines.append(f"  Avg Overall Score: {avg_score:.1f}")
             lines.append(f"  Avg Confidence: {avg_conf:.2f}")
@@ -146,6 +147,9 @@ def generate_text_report(results: list[CaseResult]) -> str:
             continue
 
         r = result.report
+        if r is None:
+            lines.append(f"  Error: {result.error}")
+            continue
 
         lines.append("\n  Extracted Features:")
         lines.append(f"    Industry: {r.features.industry}")

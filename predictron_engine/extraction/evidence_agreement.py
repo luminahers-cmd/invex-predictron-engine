@@ -113,13 +113,13 @@ def detect_conflicts(
     seen: set[tuple[str, str, str]] = set()
     unique: list[ConflictingGroup] = []
     for c in conflicts:
-        key = (
+        dedupe_key = (
             c.domain,
             c.item_a.statement[:50],
             c.item_b.statement[:50],
         )
-        if key not in seen:
-            seen.add(key)
+        if dedupe_key not in seen:
+            seen.add(dedupe_key)
             unique.append(c)
 
     return unique

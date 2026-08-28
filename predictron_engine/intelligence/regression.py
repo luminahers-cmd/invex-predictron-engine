@@ -30,7 +30,7 @@ def _mean(records: list[PerformanceSnapshot], metric: str) -> float:
     values = [getattr(r, metric) for r in records]
     if not values:
         return 0.0
-    return round(sum(values) / len(values), 4)
+    return round(float(sum(values)) / len(values), 4)
 
 
 def detect_regressions(

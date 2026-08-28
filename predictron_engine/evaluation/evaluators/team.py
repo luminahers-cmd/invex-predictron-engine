@@ -56,7 +56,7 @@ class TeamEvaluator:
         if cross_ctx:
             rationale += cross_ctx
 
-        metadata: dict[str, object] = {
+        metadata: dict[str, str | int | float | bool | list[str]] = {
             "founder_count": features.founder_profile_count,
             "team_size": features.team_size_indicator or "unknown",
             "founder_team_type": features.founder_team_type or "unknown",

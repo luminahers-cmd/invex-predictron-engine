@@ -475,7 +475,8 @@ def load_snapshot(version: str) -> dict[str, Any] | None:
     snapshot_path = EXPECTED_OUTPUTS_DIR / f"snapshot_v{version}.json"
     if not snapshot_path.exists():
         return None
-    return json.loads(snapshot_path.read_text(encoding="utf-8"))
+    snapshot: dict[str, Any] = json.loads(snapshot_path.read_text(encoding="utf-8"))
+    return snapshot
 
 
 def _get_case_metadata(case_id: str) -> tuple[str, str] | tuple[None, None]:
@@ -500,6 +501,9 @@ def _print_case_summary(result: CaseResult) -> None:
         return
 
     r = result.report
+    if r is None:
+        print(f"    Error: {result.error}")
+        return
     print(f"    Industry: {r.features.industry} | Model: {r.features.business_model}")
     print(f"    Features completeness: {r.features.data_completeness:.0%}")
     print(f"    Evidence items: {len(r.evidence)}")
@@ -590,6 +594,13 @@ def main() -> None:
         for result in results:
             if result.success:
                 r = result.report
+                if r is None:
+                    print(
+                        f"{result.case_id:<25} {'PASS':<8} "
+                        f"{result.processing_time_ms:<12.1f} "
+                        f"{'N/A':<8} {'N/A':<8}"
+                    )
+                    continue
                 print(
                     f"{result.case_id:<25} {'PASS':<8} "
                     f"{result.processing_time_ms:<12.1f} "
@@ -609,9 +620,9 @@ def main() -> None:
 
         if passed < total:
             print("\nFailed cases:")
-            for r in results:
-                if not r.success:
-                    print(f"  - {r.case_id}: {r.error}")
+            for res in results:
+                if not res.success:
+                    print(f"  - {res.case_id}: {res.error}")
 
         print("\nDetailed Results:")
         for result in results:

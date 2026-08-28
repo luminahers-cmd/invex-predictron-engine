@@ -6,15 +6,11 @@ and dominant conflict identification.
 
 from __future__ import annotations
 
-import pytest
-
+from predictron_engine.models.report import Observation
 from predictron_engine.reasoning.contradiction_graph import (
-    ContradictionGraph,
     ContradictionEdge,
-    DominantConflict,
     build_contradiction_graph,
 )
-from predictron_engine.models.report import Observation
 
 
 def _make_obs(

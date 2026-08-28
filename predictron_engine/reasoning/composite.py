@@ -28,7 +28,7 @@ Key principles:
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Protocol, runtime_checkable
 
 from predictron_engine.reasoning.consistency import (
     build_consistency_report,
@@ -49,9 +49,35 @@ if TYPE_CHECKING:
     from predictron_engine.models.report import Observation
     from predictron_engine.reasoning.adaptive_budget import ReasoningBudget
     from predictron_engine.reasoning.consistency import ConsistencyReport
-    from predictron_engine.reasoning.reasoning_engine import ReasoningRule
 
 logger = logging.getLogger(__name__)
+
+
+@runtime_checkable
+class ReasoningRule(Protocol):
+    """Structural contract for a single reasoning rule.
+
+    Rules are stateless, independent observation generators. They expose
+    a stable ``name`` and an ``evaluate(features, evidence)`` method;
+    context-aware rules additionally implement
+    ``evaluate_context(context)``.
+    """
+
+    @property
+    def name(self) -> str: ...
+
+    def evaluate(
+        self,
+        features: ExtractedFeatures,
+        evidence: list[EvidenceItem],
+    ) -> list[Observation]: ...
+
+
+@runtime_checkable
+class ContextAwareReasoningRule(ReasoningRule, Protocol):
+    """Extension protocol for rules that accept a ReasoningContext."""
+
+    def evaluate_context(self, context: ReasoningContext) -> list[Observation]: ...
 
 
 class CompositeReasoner:
@@ -194,8 +220,8 @@ class CompositeReasoner:
         """
         evaluate_context = getattr(rule, "evaluate_context", None)
         if callable(evaluate_context):
-            return evaluate_context(context)
-        return rule.evaluate(context.features, context.evidence_items)  # type: ignore[union-attr]
+            return list(evaluate_context(context))
+        return rule.evaluate(context.features, context.evidence_items)
 
     @staticmethod
     def _rule_name(rule: ReasoningRule) -> str:

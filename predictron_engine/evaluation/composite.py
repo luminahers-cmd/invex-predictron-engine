@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     from predictron_engine.evaluation.evaluators.base import DimensionEvaluator
     from predictron_engine.evidence.evidence_models import EvidenceItem
     from predictron_engine.models.extracted_features import ExtractedFeatures
-    from predictron_engine.models.report import Observation
+    from predictron_engine.models.report import DimensionAssessment, Observation
 
 logger = logging.getLogger(__name__)
 
@@ -71,7 +71,9 @@ class CompositeEvaluator:
             metadata={"evaluator_count": len(self._evaluators)},
         )
 
-    def _generate_overall_summary(self, assessments: list) -> str:
+    def _generate_overall_summary(
+        self, assessments: list[DimensionAssessment]
+    ) -> str:
         """Generate a high-level summary across all dimensions."""
         if not assessments:
             return "No dimensions were assessed."

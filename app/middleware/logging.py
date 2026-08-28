@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import time
-from collections.abc import Callable
+from collections.abc import Awaitable, Callable
 from typing import Any
 
 from fastapi import Request, Response
@@ -42,7 +42,11 @@ class LoggingMiddleware(BaseHTTPMiddleware):
     def __init__(self, app: ASGIApp) -> None:
         super().__init__(app)
 
-    async def dispatch(self, request: Request, call_next: Callable) -> Response:
+    async def dispatch(
+        self,
+        request: Request,
+        call_next: Callable[[Request], Awaitable[Response]],
+    ) -> Response:
         start = time.perf_counter()
         response = await call_next(request)
         elapsed_ms = round((time.perf_counter() - start) * 1000, 2)

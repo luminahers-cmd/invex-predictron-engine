@@ -16,6 +16,7 @@ if TYPE_CHECKING:
         DimensionAssessment,
         Observation,
         Recommendation,
+        ScoreResult,
     )
     from predictron_engine.recommendations.strategies.base import (
         DomainRecommendationStrategy,
@@ -48,7 +49,7 @@ class CompositeRecommendationEngine:
         self,
         features: ExtractedFeatures,
         observations: list[Observation],
-        scores: list,
+        scores: list[ScoreResult],
         assessments: list[DimensionAssessment] | None = None,
     ) -> list[Recommendation]:
         """Generate recommendations from all active domain strategies."""

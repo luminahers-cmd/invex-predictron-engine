@@ -27,7 +27,7 @@ def _pearson(xs: list[float], ys: list[float]) -> float:
     denom = (var_x * var_y) ** 0.5
     if var_x == 0 or var_y == 0 or denom == 0:
         return 0.0
-    return round(max(-1.0, min(1.0, cov / denom)), 4)
+    return round(float(max(-1.0, min(1.0, cov / denom))), 4)
 
 
 def recommendation_effectiveness(

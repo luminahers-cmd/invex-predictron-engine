@@ -97,7 +97,7 @@ def _build_request(case: dict[str, Any]) -> StartupAnalysisRequest:
 
 def _profile_engine_stages(
     engine: PredictronEngine, request: StartupAnalysisRequest
-) -> dict[str, float]:
+) -> tuple[dict[str, float], Report]:
     timings: dict[str, float] = {}
 
     t = time.perf_counter()

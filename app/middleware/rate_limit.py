@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import time
-from collections.abc import Callable
+from collections.abc import Awaitable, Callable
 from collections.abc import Set as AbstractSet
 
 from fastapi import Request, Response
@@ -61,7 +61,11 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         timestamps = type(self)._windows.get(client_ip, [])
         type(self)._windows[client_ip] = [t for t in timestamps if now - t < window_seconds]
 
-    async def dispatch(self, request: Request, call_next: Callable) -> Response:
+    async def dispatch(
+        self,
+        request: Request,
+        call_next: Callable[[Request], Awaitable[Response]],
+    ) -> Response:
         if not settings.RATE_LIMIT_ENABLED:
             return await call_next(request)
 

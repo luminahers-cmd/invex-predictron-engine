@@ -313,7 +313,7 @@ class EvidenceBundle(BaseModel):
         """Return an empty bundle for the "no website" or "collection skipped" cases."""
         return cls(startup_name=startup_name, website=None)
 
-    @computed_field
+    @computed_field  # type: ignore[prop-decorator]
     @property
     def total_pages(self) -> int:
         """Number of collected documents (pages retrieved and processed)."""

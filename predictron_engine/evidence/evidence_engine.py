@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass, field
+from typing import Protocol
 
 from predictron_engine.evidence.evidence_models import EvidenceItem, EvidenceSet
 from predictron_engine.evidence.providers.business_model_provider import (
@@ -45,7 +46,13 @@ from predictron_engine.models.extracted_features import ExtractedFeatures
 logger = logging.getLogger(__name__)
 
 
-def _default_providers() -> list[object]:
+class GatherProvider(Protocol):
+    """A legacy synchronous evidence provider exposing ``gather``."""
+
+    def gather(self, features: ExtractedFeatures) -> list[EvidenceItem]: ...
+
+
+def _default_providers() -> list[GatherProvider]:
     """Return the default ordered list of evidence providers."""
     return [
         IndustryEvidenceProvider(),
@@ -70,7 +77,7 @@ class DefaultEvidenceEngine:
         Ordered list of evidence providers to run.
     """
 
-    providers: list[object] = field(default_factory=_default_providers)
+    providers: list[GatherProvider] = field(default_factory=_default_providers)
 
     def gather(self, features: ExtractedFeatures) -> EvidenceSet:
         """Run all providers and aggregate into an EvidenceSet."""
@@ -84,7 +91,7 @@ class DefaultEvidenceEngine:
 
         for provider in self.providers:
             try:
-                items = provider.gather(features)  # type: ignore[union-attr]
+                items = provider.gather(features)
                 if items:
                     all_items.extend(items)
                     contributing_providers += 1

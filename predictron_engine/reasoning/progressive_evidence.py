@@ -19,6 +19,7 @@ Public API:
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
@@ -102,7 +103,7 @@ class ProgressiveEvaluation:
             return 0.0
         return round(len(self.observations) / self.evaluated_count, 4)
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, object]:
         """Serialize for benchmark reporting."""
         return {
             "total_evidence": self.total_evidence_count,
@@ -254,7 +255,10 @@ def _should_continue_evaluation(
     if agreement >= _CONCLUSIVE_AGREEMENT and total_evaluated >= _MIN_EVIDENCE_FOR_EARLY_STOP:
         return False
 
-    if support_ratio >= _CONCLUSIVE_SUPPORT_RATIO and total_evaluated >= _MIN_EVIDENCE_FOR_EARLY_STOP:
+    if (
+        support_ratio >= _CONCLUSIVE_SUPPORT_RATIO
+        and total_evaluated >= _MIN_EVIDENCE_FOR_EARLY_STOP
+    ):
         return False
 
     if consecutive_support >= _CONSECUTIVE_SUPPORT_LIMIT:
@@ -272,11 +276,20 @@ def _early_stop_reason(
 ) -> str:
     """Build deterministic early-stop reason string."""
     if cumulative_conf >= _CONFIDENCE_CEILING:
-        return f"Cumulative confidence ({cumulative_conf:.2f}) exceeded ceiling ({_CONFIDENCE_CEILING})"
+        return (
+            f"Cumulative confidence ({cumulative_conf:.2f}) exceeded ceiling "
+            f"({_CONFIDENCE_CEILING})"
+        )
     if agreement >= _CONCLUSIVE_AGREEMENT:
-        return f"Evidence agreement ({agreement:.2f}) exceeded conclusive threshold ({_CONCLUSIVE_AGREEMENT})"
+        return (
+            f"Evidence agreement ({agreement:.2f}) exceeded conclusive "
+            f"threshold ({_CONCLUSIVE_AGREEMENT})"
+        )
     if support_ratio >= _CONCLUSIVE_SUPPORT_RATIO:
-        return f"Support ratio ({support_ratio:.2f}) exceeded threshold ({_CONCLUSIVE_SUPPORT_RATIO})"
+        return (
+            f"Support ratio ({support_ratio:.2f}) exceeded threshold "
+            f"({_CONCLUSIVE_SUPPORT_RATIO})"
+        )
     if consecutive_support >= _CONSECUTIVE_SUPPORT_LIMIT:
         return f"{consecutive_support} consecutive supporting evidence items"
     return f"Maximum evaluation items ({_MAX_EVALUATION_ITEMS}) reached"
@@ -291,7 +304,10 @@ def evaluate_evidence_progressively(
     evidence: list[EvidenceItem],
     initial_observations: list[Observation],
     *,
-    observation_factory: object | None = None,
+    observation_factory: Callable[
+        [EvidenceItem, list[Observation]], list[Observation] | None
+    ]
+    | None = None,
 ) -> ProgressiveEvaluation:
     """Evaluate evidence progressively with early-stop capability.
 

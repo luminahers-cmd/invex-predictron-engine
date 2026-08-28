@@ -36,7 +36,7 @@ class RankedUrl:
     score: float = field(compare=False)
     reasons: tuple[str, ...] = field(default=(), compare=False)
 
-    def __lt__(self, other: RankedUrl) -> bool:  # type: ignore[override]
+    def __lt__(self, other: RankedUrl) -> bool:
         if not isinstance(other, RankedUrl):
             return NotImplemented
         if self.score != other.score:

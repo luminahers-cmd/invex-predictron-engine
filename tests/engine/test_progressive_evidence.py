@@ -6,15 +6,12 @@ evaluation of evidence items.
 
 from __future__ import annotations
 
-import pytest
-
+from predictron_engine.evidence.evidence_models import EvidenceItem
+from predictron_engine.models.report import Observation
 from predictron_engine.reasoning.progressive_evidence import (
-    ProgressiveEvaluation,
     EvidenceCheckpoint,
     evaluate_evidence_progressively,
 )
-from predictron_engine.evidence.evidence_models import EvidenceItem
-from predictron_engine.models.report import Observation
 
 
 def _make_evidence(domain: str = "industry", statement: str = "Evidence") -> EvidenceItem:

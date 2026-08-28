@@ -31,12 +31,6 @@ from predictron_engine.reasoning.confidence import (
     compute_reasoning_confidence,
     compute_reasoning_confidence_breakdown,
 )
-from predictron_engine.reasoning.contradiction_graph import (
-    ContradictionEdge,
-    ContradictionGraph,
-    DominantConflict,
-    build_contradiction_graph,
-)
 from predictron_engine.reasoning.consistency import (
     ConsistencyReport,
     ContradictionFinding,
@@ -49,6 +43,12 @@ from predictron_engine.reasoning.consistency import (
     detect_unsupported_conclusions,
 )
 from predictron_engine.reasoning.context import ReasoningContext
+from predictron_engine.reasoning.contradiction_graph import (
+    ContradictionEdge,
+    ContradictionGraph,
+    DominantConflict,
+    build_contradiction_graph,
+)
 from predictron_engine.reasoning.diagnostics import RuleDiagnostic
 from predictron_engine.reasoning.evidence_backed import (
     enrich_observation,

@@ -35,6 +35,7 @@ from predictron_engine.models.report import (
     DecisionCategory,
     DecisionRationale,
     DimensionAssessment,
+    EvidenceItem,
     InvestmentDecision,
     Observation,
     ScoreResult,
@@ -283,7 +284,7 @@ class DefaultDecisionEngine:
     @staticmethod
     def _compute_evidence_quality_factor(
         observations: list[Observation],
-        evidence_items: list | None = None,
+        evidence_items: list[EvidenceItem] | None = None,
     ) -> float:
         """Evidence quality factor (0-1) based on observation confidence
         and diversity."""
@@ -815,10 +816,7 @@ class DefaultDecisionEngine:
         elif category == DecisionCategory.WATCH:
             if features.data_completeness < 0.7:
                 info.append("Additional data to increase confidence")
-            low_dims = [
-                s.dimension for s in []
-                if s.score < 50
-            ]
+            low_dims: list[str] = []
             if low_dims:
                 info.append(
                     "Improved performance in underperforming dimensions"

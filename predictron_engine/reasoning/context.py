@@ -119,7 +119,7 @@ class ReasoningContext:
                 scored_for_best,
                 key=lambda d: (
                     d.metadata.trust_score.overall,  # type: ignore[union-attr]
-                    d.metadata.quality_score,
+                    d.metadata.quality_score,  # type: ignore[union-attr]
                     str(d.url),
                 ),
             )
@@ -143,11 +143,11 @@ class ReasoningContext:
         self._retrieval_diagnostics_snapshot: list[ProviderRun] = (
             list(self.bundle.providers) if self.bundle is not None else []
         )
-        self._provenance_records: list[dict] = self._parse_provenance_records()
+        self._provenance_records: list[dict[str, object]] = self._parse_provenance_records()
 
-    def _parse_provenance_records(self) -> list[dict]:
+    def _parse_provenance_records(self) -> list[dict[str, object]]:
         """Pre-parse all provenance records once at construction time."""
-        records: list[dict] = []
+        records: list[dict[str, object]] = []
         for item in self.evidence_items:
             encoded = item.provenance_record
             if not encoded:
@@ -242,7 +242,7 @@ class ReasoningContext:
         return self._retrieval_diagnostics_snapshot
 
     @property
-    def extraction_diagnostics(self) -> dict[str, dict]:
+    def extraction_diagnostics(self) -> dict[str, dict[str, object]]:
         """Per-provider extraction run metadata recorded on the features."""
         return dict(getattr(self.features, "provider_run_metadata", {}) or {})
 
@@ -259,7 +259,7 @@ class ReasoningContext:
                 ids.append(doc_id)
         return ids
 
-    def provenance_records(self) -> list[dict]:
+    def provenance_records(self) -> list[dict[str, object]]:
         """Return pre-parsed provenance records attached to evidence items.
 
         Each record is the JSON-encoded ProvenanceRecord stored on an

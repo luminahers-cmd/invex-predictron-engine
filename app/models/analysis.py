@@ -32,7 +32,7 @@ class AnalysisRequest(Base, TimestampMixin):
     pitch_deck_url: Mapped[str | None] = mapped_column(
         String(500), nullable=True, default=None
     )
-    founder_linkedin_urls: Mapped[list] = mapped_column(
+    founder_linkedin_urls: Mapped[list[str]] = mapped_column(
         JSON, nullable=False, default=list
     )
 
@@ -63,7 +63,7 @@ class AnalysisReport(Base, TimestampMixin):
     market_score: Mapped[float] = mapped_column(Float, nullable=False)
     founder_score: Mapped[float] = mapped_column(Float, nullable=False)
     traction_score: Mapped[float] = mapped_column(Float, nullable=False)
-    recommendations: Mapped[list] = mapped_column(
+    recommendations: Mapped[list[str]] = mapped_column(
         JSON, nullable=False, default=list
     )
     confidence: Mapped[float] = mapped_column(Float, nullable=False)
@@ -74,6 +74,6 @@ class AnalysisReport(Base, TimestampMixin):
     processing_time_ms: Mapped[float | None] = mapped_column(
         Float, nullable=True
     )
-    full_report: Mapped[dict] = mapped_column(JSON, nullable=False)
+    full_report: Mapped[dict[str, object]] = mapped_column(JSON, nullable=False)
 
     request: Mapped[AnalysisRequest] = relationship(back_populates="report")

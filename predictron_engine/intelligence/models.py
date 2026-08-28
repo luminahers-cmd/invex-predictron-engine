@@ -174,7 +174,7 @@ class PerformanceSnapshot(BaseModel):
         description="Count of observations per source_rule",
     )
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, object]:
         """Deterministic JSON-friendly serialization."""
         return {
             "version": self.version,
@@ -273,7 +273,7 @@ class IntelligenceDashboard(BaseModel):
     confidence_drift: ConfidenceDrift | None = Field(default=None)
     quality: EngineQualityMetrics = Field(default_factory=EngineQualityMetrics)
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, object]:
         """Deterministic JSON-friendly serialization of the whole dashboard."""
         return {
             "version": self.version,

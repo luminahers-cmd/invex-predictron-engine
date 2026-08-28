@@ -11,14 +11,14 @@ from __future__ import annotations
 
 import pytest
 
+from predictron_engine.evidence.evidence_models import EvidenceItem
+from predictron_engine.models.extracted_features import ExtractedFeatures
 from predictron_engine.reasoning.adaptive_budget import (
-    ReasoningBudget,
     BudgetReport,
+    ReasoningBudget,
     compute_reasoning_budget,
     should_skip_rule,
 )
-from predictron_engine.evidence.evidence_models import EvidenceItem
-from predictron_engine.models.extracted_features import ExtractedFeatures
 
 
 class TestReasoningBudget:
@@ -68,7 +68,10 @@ class TestComputeReasoningBudget:
             EvidenceItem(domain="industry", category="market", statement="Evidence 1", source="s1"),
             EvidenceItem(domain="industry", category="market", statement="Evidence 2", source="s2"),
             EvidenceItem(domain="industry", category="market", statement="Evidence 3", source="s3"),
-            EvidenceItem(domain="business_model", category="model", statement="Evidence 4", source="s4"),
+            EvidenceItem(
+                domain="business_model", category="model",
+                statement="Evidence 4", source="s4",
+            ),
         ]
         budget = compute_reasoning_budget(features, evidence)
         assert budget.budget_fraction < 1.0

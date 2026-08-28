@@ -43,8 +43,10 @@ if TYPE_CHECKING:
     from predictron_engine.evidence.evidence_models import EvidenceItem
     from predictron_engine.evidence.models import EvidenceBundle
     from predictron_engine.models.extracted_features import ExtractedFeatures
-    from predictron_engine.models.report import Observation
+    from predictron_engine.models.report import Observation, ScoreResult
     from predictron_engine.reasoning.adaptive_budget import ReasoningBudget
+    from predictron_engine.reasoning.composite import ReasoningRule
+    from predictron_engine.reasoning.consistency import ConsistencyReport
     from predictron_engine.reasoning.trace import ReasoningTrace
 
 logger = logging.getLogger(__name__)
@@ -59,7 +61,7 @@ class DefaultReasoningEngine:
 
     def __init__(
         self,
-        rules: list | None = None,
+        rules: list[ReasoningRule] | None = None,
     ) -> None:
         effective_rules = list(rules) if rules is not None else list(DEFAULT_RULES)
         self._reasoner = CompositeReasoner(effective_rules)
@@ -92,7 +94,7 @@ class DefaultReasoningEngine:
         return self._reasoner.last_diagnostics
 
     @property
-    def last_consistency(self):
+    def last_consistency(self) -> ConsistencyReport | None:
         """Consistency report from the most recent reasoning pass."""
         return self._reasoner.last_consistency
 
@@ -141,7 +143,7 @@ class DefaultReasoningEngine:
         features: ExtractedFeatures,
         evidence: list[EvidenceItem] | None = None,
         bundle: EvidenceBundle | None = None,
-        scores: list | None = None,
+        scores: list[ScoreResult] | None = None,
     ) -> tuple[list[Observation], ReasoningTrace]:
         """Run reasoning and produce a full reasoning trace.
 

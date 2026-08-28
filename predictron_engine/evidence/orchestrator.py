@@ -151,6 +151,8 @@ class EvidenceOrchestrator:
                 )
                 continue
 
+            if not isinstance(raw, ProviderResult):
+                continue
             result: ProviderResult = raw
             provider_runs.append(_run_from_result(result))
             documents.extend(result.documents)

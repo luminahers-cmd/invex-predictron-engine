@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import time
 import uuid
-from collections.abc import Callable
+from collections.abc import Awaitable, Callable
 
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -25,7 +25,11 @@ class RequestIDMiddleware(BaseHTTPMiddleware):
     def __init__(self, app: ASGIApp) -> None:
         super().__init__(app)
 
-    async def dispatch(self, request: Request, call_next: Callable) -> Response:
+    async def dispatch(
+        self,
+        request: Request,
+        call_next: Callable[[Request], Awaitable[Response]],
+    ) -> Response:
         header_name = settings.REQUEST_ID_HEADER
         request_id = request.headers.get(header_name, str(uuid.uuid4()))
         request.state.request_id = request_id

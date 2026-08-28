@@ -16,10 +16,12 @@ import asyncio
 import logging
 from typing import TYPE_CHECKING
 
+from app.models.analysis import AnalysisRequest
 from app.schemas.analysis import StartupAnalysisRequest, StartupAnalysisResponse
 
 if TYPE_CHECKING:
     from predictron_engine.engine import PredictronEngine
+    from predictron_engine.models.report import Report
 
 logger = logging.getLogger(__name__)
 
@@ -55,10 +57,10 @@ async def run_analysis(
 
 async def _persist_async(
     request: StartupAnalysisRequest,
-    report: object,
+    report: Report,
     response: StartupAnalysisResponse,
     user_id: str | None = None,
-) -> object | None:
+) -> AnalysisRequest | None:
     """Persist a completed analysis. Errors are logged and swallowed.
 
     Returns:

@@ -19,7 +19,12 @@ from __future__ import annotations
 
 import re
 
-from predictron_engine.models.report import Recommendation
+from predictron_engine.models.report import (
+    DimensionAssessment,
+    EvidenceCitation,
+    Observation,
+    Recommendation,
+)
 
 _PRIORITY_WEIGHTS: dict[str, float] = {
     "high": 3.0,
@@ -81,7 +86,7 @@ def _merge(first: Recommendation, second: Recommendation) -> Recommendation:
     if second.rationale and second.rationale != first.rationale:
         rationale = f"{first.rationale} {second.rationale}" if first.rationale else second.rationale
 
-    citations: list = []
+    citations: list[EvidenceCitation] = []
     seen_claims: set[tuple[str, str, str]] = set()
     for citation in [*first.citations, *second.citations]:
         key = (citation.claim, citation.domain, citation.category)
@@ -89,7 +94,7 @@ def _merge(first: Recommendation, second: Recommendation) -> Recommendation:
             seen_claims.add(key)
             citations.append(citation)
 
-    observations: list = []
+    observations: list[Observation] = []
     seen_obs: set[int] = set()
     for observation in [*first.supporting_observations, *second.supporting_observations]:
         obs_id = id(observation)
@@ -97,7 +102,7 @@ def _merge(first: Recommendation, second: Recommendation) -> Recommendation:
             seen_obs.add(obs_id)
             observations.append(observation)
 
-    assessments: list = []
+    assessments: list[DimensionAssessment] = []
     seen_asmt: set[int] = set()
     for assessment in [*first.supporting_assessments, *second.supporting_assessments]:
         asmt_id = id(assessment)
@@ -122,7 +127,7 @@ def _merge(first: Recommendation, second: Recommendation) -> Recommendation:
             else max(expected_uncertainty, second.expected_uncertainty)
         )
 
-    updates: dict = {
+    updates: dict[str, object] = {
         "priority": priority,
         "confidence": max(first.confidence, second.confidence),
         "rationale": rationale,
@@ -138,7 +143,7 @@ def _merge(first: Recommendation, second: Recommendation) -> Recommendation:
     return first.model_copy(update=updates)
 
 
-def _rank_score(rec: Recommendation) -> tuple[float, int]:
+def _rank_score(rec: Recommendation) -> tuple[float]:
     """Deterministic descending sort key from existing fields only."""
     score = (
         _priority_weight(rec.priority) * _WEIGHT_PRIORITY

@@ -19,3 +19,15 @@ select = ["E", "F", "I", "N", "W", "UP"]
 [tool.mypy]
 python_version = "3.12"
 strict = true
+files = ["predictron_engine", "app", "benchmarks"]
+exclude = ["^alembic/"]
+
+[[tool.mypy.overrides]]
+module = ["benchmarks.*", "app.*"]
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+check_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = ["app.main", "app.api.*"]
+check_untyped_defs = false

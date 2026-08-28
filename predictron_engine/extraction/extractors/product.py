@@ -33,12 +33,17 @@ Design principles:
 from __future__ import annotations
 
 import re
+from typing import TYPE_CHECKING
 
 from predictron_engine.evidence.models import EvidenceBundle
 from predictron_engine.extraction.extractors.base import BaseExtractor
 from predictron_engine.models.collected_data import CollectedData
 from predictron_engine.models.extracted_features import ExtractedFeatures
 from predictron_engine.models.startup import Startup
+
+if TYPE_CHECKING:
+    from predictron_engine.evidence.models import EvidenceDocument
+    from predictron_engine.models.report import EvidenceCitation, EvidenceItem
 
 # ---------------------------------------------------------------------------
 # Product category — weighted keyword scoring for product domain classification.
@@ -612,9 +617,9 @@ class ProductExtractor(BaseExtractor):
         )
 
         strategy = ProductRetrievalStrategy()
-        docs_filtered: list = []
-        evidence_items: list = []
-        citations: list = []
+        docs_filtered: list[EvidenceDocument] = []
+        evidence_items: list[EvidenceItem] = []
+        citations: list[EvidenceCitation] = []
 
         if evidence is not None:
             [

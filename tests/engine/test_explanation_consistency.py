@@ -7,17 +7,14 @@ rationales are deterministic and meaningful.
 
 from __future__ import annotations
 
-import pytest
-
-from predictron_engine.reasoning.trace import (
-    build_reasoning_trace,
-    ReasoningTrace,
-)
-from predictron_engine.reasoning.contradiction_graph import build_contradiction_graph
-from predictron_engine.reasoning.adaptive_budget import compute_reasoning_budget
 from predictron_engine.evidence.evidence_models import EvidenceItem
 from predictron_engine.models.extracted_features import ExtractedFeatures
 from predictron_engine.models.report import Observation, ScoreResult
+from predictron_engine.reasoning.adaptive_budget import compute_reasoning_budget
+from predictron_engine.reasoning.contradiction_graph import build_contradiction_graph
+from predictron_engine.reasoning.trace import (
+    build_reasoning_trace,
+)
 
 
 def _make_obs(
@@ -78,7 +75,10 @@ class TestExplanationConsistency:
     def test_rationale_references_evidence_when_present(self) -> None:
         """Rationale should reference evidence when available."""
         observations = [
-            _make_obs(category="market_context", confidence=0.9, importance=0.8, statement="Strong market position"),
+            _make_obs(
+                category="market_context", confidence=0.9, importance=0.8,
+                statement="Strong market position",
+            ),
         ]
         trace = build_reasoning_trace(observations, [])
         assert "Strongest positive signal" in trace.final_rationale

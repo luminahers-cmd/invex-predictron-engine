@@ -12,6 +12,8 @@ not judgments about the startup itself.
 
 from predictron_engine.models.report import EvidenceItem  # noqa: F401
 
+__all__ = ["EvidenceItem", "EvidenceSet"]
+
 
 class EvidenceSet:
     """Aggregated evidence from all providers for a single analysis run.

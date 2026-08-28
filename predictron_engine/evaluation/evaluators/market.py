@@ -56,7 +56,7 @@ class MarketEvaluator:
         if cross_ctx:
             rationale += cross_ctx
 
-        metadata: dict[str, object] = {
+        metadata: dict[str, str | int | float | bool | list[str]] = {
             "industry": features.industry or "unknown",
             "geography": features.geography or "unknown",
             "weighted_confidence": round(weighted_conf, 4),

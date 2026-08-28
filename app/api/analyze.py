@@ -40,7 +40,7 @@ router = APIRouter(prefix="/analyze", tags=["analysis"])
 async def analyze_startup(
     request: StartupAnalysisRequest,
     raw_request: Request,
-    current_user: dict | None = Depends(get_current_user_optional),
+    current_user: dict[str, object] | None = Depends(get_current_user_optional),
 ) -> StartupAnalysisResponse:
     """Delegate analysis to the PredictronEngine singleton via the service layer.
 
@@ -48,7 +48,8 @@ async def analyze_startup(
     Anonymous users can still run analyses without persistence association.
     """
     engine = raw_request.app.state.predictron_engine
-    user_id = current_user.get("sub") if current_user else None
+    sub = current_user.get("sub") if current_user else None
+    user_id = str(sub) if sub is not None else None
     return await run_analysis(engine, request, user_id=user_id)
 
 
@@ -66,11 +67,12 @@ async def analyze_startup(
 )
 async def list_analyses(
     db: AsyncSession = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
+    current_user: dict[str, object] = Depends(get_current_user),
     offset: int = Query(default=0, ge=0, description="Number of records to skip"),
     limit: int = Query(default=20, ge=1, le=100, description="Max records to return"),
 ) -> AnalysisListResponse:
-    user_id = current_user.get("sub")
+    sub = current_user.get("sub")
+    user_id = str(sub) if sub is not None else None
     return await _list_analyses(db, user_id=user_id, offset=offset, limit=limit)
 
 
@@ -93,9 +95,10 @@ async def list_analyses(
 async def get_analysis(
     analysis_id: str,
     db: AsyncSession = Depends(get_db),
-    current_user: dict | None = Depends(get_current_user_optional),
+    current_user: dict[str, object] | None = Depends(get_current_user_optional),
 ) -> AnalysisDetailResponse:
-    user_id = current_user.get("sub") if current_user else None
+    sub = current_user.get("sub") if current_user else None
+    user_id = str(sub) if sub is not None else None
     result = await _get_analysis(db, analysis_id, user_id=user_id)
     if result is None:
         raise HTTPException(
