@@ -16,6 +16,24 @@ layer from five evidence-aware factors:
 The final score is a fixed-weight linear combination, rounded to four
 decimals and clamped to [0, 1].  No ML, no LLMs, no randomness —
 identical inputs always produce identical outputs.
+
+Ownership
+---------
+This module owns the **reasoning-layer** confidence: a single scalar that
+summarizes confidence in the *observation set* produced by the reasoning
+stage, derived from a :class:`ReasoningContext`.  It is distinct from two
+other confidence implementations in the codebase:
+
+* :mod:`predictron_engine.confidence.confidence_engine` — per-dimension
+  :class:`ConfidenceAssessment` for each scored dimension (the pipeline's
+  "assess confidence" stage).
+* :mod:`predictron_engine.decision.calibration` — decision-level
+  confidence *and* uncertainty for an investment decision.
+
+These three compute confidence for different pipeline artifacts at
+different stages and are intentionally NOT consolidated.  Note also that
+:class:`ConfidenceBreakdown` (a frozen dataclass here) is a different
+type from ``decision.models.ConfidenceBreakdown`` (a pydantic model).
 """
 
 from __future__ import annotations
@@ -171,16 +189,11 @@ def _agreement_from_items(context: ReasoningContext) -> float | None:
     if not items:
         return None
 
-    groups: dict[tuple[str, str], set[str]] = {}
-    for item in items:
-        groups.setdefault((item.domain, item.category), set()).add(item.source)
-
-    corroborated = sum(
-        1
-        for item in items
-        if len(groups[(item.domain, item.category)]) >= 2
+    from predictron_engine.extraction.evidence_agreement import (
+        compute_agreement_ratio,
     )
-    return round(corroborated / len(items), 4)
+
+    return compute_agreement_ratio(items)
 
 
 def _diversity_from_citations(context: ReasoningContext) -> float:

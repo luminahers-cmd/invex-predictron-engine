@@ -11,6 +11,12 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 
+from predictron_engine.evaluation.aggregation import (
+    DEFAULT_DIMENSION_WEIGHT,
+    DIMENSION_WEIGHTS,
+    MAX_DIMENSION_WEIGHT,
+    weighted_composite,
+)
 from predictron_engine.knowledge.concepts import DIMENSION_LABELS, AnalysisDimension
 from predictron_engine.models.report import (
     InvestmentReadiness,
@@ -33,16 +39,6 @@ _LEVEL_THRESHOLDS: list[tuple[float, str]] = [
     (15.0, "early"),
     (0.0, "needs_data"),
 ]
-
-_DIMENSION_WEIGHTS: dict[str, float] = {
-    AnalysisDimension.MARKET_OPPORTUNITY.value: 0.20,
-    AnalysisDimension.FOUNDER_QUALITY.value: 0.18,
-    AnalysisDimension.PRODUCT_STRENGTH.value: 0.15,
-    AnalysisDimension.BUSINESS_MODEL_VIABILITY.value: 0.15,
-    AnalysisDimension.TRACTION_SIGNALS.value: 0.15,
-    AnalysisDimension.COMPETITIVE_POSITION.value: 0.10,
-    AnalysisDimension.TEAM_EXECUTION.value: 0.07,
-}
 
 _GAP_FIELDS: list[tuple[str, str]] = [
     ("industry", "Industry classification"),
@@ -72,20 +68,18 @@ def compute_investment_readiness(
         score_map, obs_by_dim, assessments
     )
 
-    total_weight = sum(
-        _DIMENSION_WEIGHTS.get(d, 0.05)
-        for d in dimension_contributions
-        if d != "investment_thesis"
-    )
-    if total_weight == 0.0:
-        total_weight = 1.0
+    # H3 — missing-data calibration: a dimension that carries no evidence
+    # (no score, no observations, no assessment) is *missing*, not *average*.
+    # It is excluded from the weighted readiness composite so a data-poor
+    # startup no longer looks "middling" at ~50 through fabricated neutral
+    # contributions.
+    assessed_dims = _assessed_dimensions(score_map, obs_by_dim, assessments)
 
-    readiness_score = 0.0
-    for dim, contrib in dimension_contributions.items():
-        if dim == "investment_thesis":
-            continue
-        w = _DIMENSION_WEIGHTS.get(dim, 0.05)
-        readiness_score += contrib * (w / total_weight)
+    readiness_score = weighted_composite(
+        dimension_contributions,
+        DIMENSION_WEIGHTS,
+        present_keys=assessed_dims,
+    )
 
     cross_obs = obs_by_dim.get("investment_thesis", [])
     reinforcing = [o for o in cross_obs if o.category not in ("signal_conflict",)]
@@ -168,6 +162,24 @@ def _compute_dimension_contributions(
         contributions[dim_val] = round(max(0.0, min(100.0, contrib)), 2)
 
     return contributions
+
+
+def _assessed_dimensions(
+    score_map: dict[str, float],
+    obs_by_dim: dict[str, list[Observation]],
+    assessments: list[DimensionAssessment],
+) -> set[str]:
+    """Return the set of dimensions that actually carry evidence.
+
+    H3 — a dimension is considered *assessed* when it has a score, at least
+    one observation, or a dimension assessment.  Dimensions absent from all
+    three are *missing* and must not be averaged in as if they were neutral;
+    excluding them is what makes "unknown" mean unknown rather than average.
+    """
+    assessed: set[str] = set(score_map.keys())
+    assessed |= set(obs_by_dim.keys())
+    assessed |= {a.dimension for a in assessments}
+    return assessed
 
 
 def _score_to_level(score: float) -> str:
@@ -394,3 +406,44 @@ def _build_summary(
             f"cross-signal relationship(s) detected."
         )
     return " ".join(parts)
+
+
+def dimension_contribution(
+    dimension: str,
+    scores: list[ScoreResult],
+    readiness: InvestmentReadiness | None = None,
+) -> float:
+    """Return the 0-100 readiness contribution for a dimension.
+
+    Reuses existing weighted readiness outputs: the readiness
+    ``dimension_contributions`` mapping is preferred, falling back to the
+    scored dimension output and finally a neutral 50.0 baseline.
+    """
+    if readiness is not None and readiness.dimension_contributions:
+        contribution = readiness.dimension_contributions.get(dimension)
+        if contribution is not None:
+            return contribution
+    for result in scores:
+        if result.dimension == dimension:
+            return result.score
+    return 50.0
+
+
+def weighted_gap_magnitude(
+    dimension: str,
+    scores: list[ScoreResult],
+    readiness: InvestmentReadiness | None = None,
+) -> float:
+    """Normalized [0,1] weighted readiness gap for a dimension.
+
+    Derives the gap from existing weighted readiness outputs: the
+    canonical dimension weight scaled by how far the dimension's
+    contribution sits below full readiness. Larger gaps come from weaker
+    contributions on higher-weighted dimensions. Returns 0.0 when the
+    dimension is at full readiness.
+    """
+    weight = DIMENSION_WEIGHTS.get(dimension, DEFAULT_DIMENSION_WEIGHT)
+    contribution = dimension_contribution(dimension, scores, readiness)
+    raw_gap = max(0.0, 100.0 - contribution)
+    normalized = (raw_gap / 100.0) * (weight / MAX_DIMENSION_WEIGHT)
+    return round(normalized, 4)

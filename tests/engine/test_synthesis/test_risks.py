@@ -234,3 +234,57 @@ class TestDeduplicationAndPropagation:
 
     def test_empty_inputs_return_empty_register(self):
         assert aggregate_risks(make_features(), [], [], None, None) == []
+
+
+class TestContradictionGraphRisks:
+    """Sprint P8D — contradiction graph drives risk entries."""
+
+    def _graph(self):
+        from predictron_engine.reasoning.contradiction_graph import (
+            build_contradiction_graph,
+        )
+
+        observations = [
+            make_observation(
+                "market", category="strength", confidence=0.9, importance=0.9,
+            ),
+            make_observation(
+                "market", category="risk", confidence=0.2, importance=0.1,
+            ),
+        ]
+        graph = build_contradiction_graph(observations)
+        assert graph.conflicting_count >= 1
+        return graph, observations
+
+    def test_conflicting_edges_become_risks(self):
+        graph, observations = self._graph()
+        result = aggregate_risks(
+            make_features(), observations, [], None, None,
+            contradiction_graph=graph,
+        )
+        contradiction_labels = [
+            item.label for item in result if "contradiction" in item.label
+        ]
+        assert contradiction_labels
+
+    def test_dominant_conflict_become_high_risk(self):
+        graph, observations = self._graph()
+        assert graph.dominant_conflict is not None
+        result = aggregate_risks(
+            make_features(), observations, [], None, None,
+            contradiction_graph=graph,
+        )
+        dominant = next(
+            (item for item in result if item.label == "dominant contradiction"),
+            None,
+        )
+        assert dominant is not None
+        assert dominant.severity.value == "high"
+
+    def test_without_graph_no_contradiction_source(self):
+        graph, observations = self._graph()
+        result = aggregate_risks(make_features(), observations, [], None, None)
+        assert not any(
+            item.source.startswith("contradiction_graph")
+            for item in result
+        )

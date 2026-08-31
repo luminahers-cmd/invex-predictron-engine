@@ -36,6 +36,10 @@ import logging
 from typing import TYPE_CHECKING
 
 from predictron_engine.reasoning.composite import CompositeReasoner
+from predictron_engine.reasoning.contradiction_graph import (
+    ContradictionGraph,
+    build_contradiction_graph,
+)
 from predictron_engine.reasoning.diagnostics import RuleDiagnostic
 from predictron_engine.reasoning.rules import DEFAULT_RULES
 
@@ -72,10 +76,18 @@ class DefaultReasoningEngine:
         evidence: list[EvidenceItem] | None = None,
         bundle: EvidenceBundle | None = None,
     ) -> list[Observation]:
-        """Evaluate all rules and return combined observations."""
+        """Evaluate all rules and return combined observations.
+
+        After reasoning completes, a contradiction graph is deterministically
+        built from the observations so downstream stages (confidence,
+        calibration, synthesis) can reuse richer conflict data without
+        recomputing observations.
+        """
         if evidence is None:
             evidence = []
-        return self._reasoner.reason(features, evidence, bundle)
+        observations = self._reasoner.reason(features, evidence, bundle)
+        self._last_contradiction_graph = build_contradiction_graph(observations)
+        return observations
 
     def reason_with_diagnostics(
         self,
@@ -159,9 +171,18 @@ class DefaultReasoningEngine:
 
         observations = self._reasoner.reason(features, evidence, bundle)
 
+        # Build and store the contradiction graph from the observations
+        # so it is available through last_contradiction_graph() for
+        # downstream stages even when only reason() was called.
+        graph = build_contradiction_graph(observations)
+        self._last_contradiction_graph = graph
+
         from predictron_engine.reasoning.trace import build_reasoning_trace
 
-        trace = build_reasoning_trace(observations, evidence, scores or [])
+        trace = build_reasoning_trace(
+            observations, evidence, scores or [],
+            contradiction_graph=graph,
+        )
         self._last_trace = trace
 
         return observations, trace
@@ -175,3 +196,14 @@ class DefaultReasoningEngine:
     def last_trace(self) -> ReasoningTrace | None:
         """Trace from the most recent reasoning-with-trace pass."""
         return getattr(self, "_last_trace", None)
+
+    @property
+    def last_contradiction_graph(self) -> ContradictionGraph | None:
+        """Contradiction graph from the most recent reasoning pass.
+
+        Built deterministically from the observations produced by
+        ``reason()``, ``reason_with_trace()``, or
+        ``reason_adaptive()``.  Available for downstream consumers
+        (confidence, calibration, synthesis) without recomputation.
+        """
+        return getattr(self, "_last_contradiction_graph", None)

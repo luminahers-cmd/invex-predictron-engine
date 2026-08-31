@@ -18,8 +18,10 @@ import pytest
 from predictron_engine.decision.decision_engine import (
     _CONVICTION_THRESHOLDS,
     _DECISION_THRESHOLDS,
+    _READINESS_WEIGHT,
     DefaultDecisionEngine,
 )
+from predictron_engine.evidence.models import EvidenceBundle
 from predictron_engine.knowledge.concepts import AnalysisDimension
 from predictron_engine.models.extracted_features import ExtractedFeatures
 from predictron_engine.models.report import (
@@ -729,8 +731,13 @@ class TestFactorComputation:
         assert engine._compute_score_factor(scores) == 70.0
 
     def test_score_factor_empty(self) -> None:
+        """Empty input yields no evidence (0), not a fabricated neutral 50.
+
+        H3/H2 — the decision's score factor is the same canonical mean used
+        by the report ``overall_score``, which also reports 0.0 for empty.
+        """
         engine = DefaultDecisionEngine()
-        assert engine._compute_score_factor([]) == 50.0
+        assert engine._compute_score_factor([]) == 0.0
 
     def test_confidence_factor_averages(self) -> None:
         engine = DefaultDecisionEngine()
@@ -914,3 +921,140 @@ class TestEnums:
             ConvictionLevel.VERY_LOW,
         ]
         assert len(levels) == 5
+
+
+# ---------------------------------------------------------------------------
+# Tests: Sprint P8A — readiness & evidence-quality wiring (C1, M2)
+# ---------------------------------------------------------------------------
+
+
+def _make_trusted_bundle() -> EvidenceBundle:
+    """A bundle with highly trusted, diverse, quality documents (M2)."""
+    from datetime import UTC, datetime
+
+    from predictron_engine.evidence.models import (
+        DocumentMetadata,
+        DocumentStatus,
+        EvidenceDocument,
+        EvidenceSource,
+        PageType,
+    )
+    from predictron_engine.evidence.provenance import TrustScore
+
+    fetched_at = datetime(2024, 1, 1, tzinfo=UTC)
+
+    def _doc(idx: int, provider: str, trust: float) -> EvidenceDocument:
+        return EvidenceDocument(
+            id=f"doc-{idx}",
+            original_url=f"https://example.com/{idx}",
+            url=f"https://example.com/{idx}",
+            page_type=PageType.HOMEPAGE,
+            status=DocumentStatus.SUCCESS,
+            fetched_at=fetched_at,
+            response_time_ms=10,
+            http_status=200,
+            metadata=DocumentMetadata(
+                source_provider=provider,
+                trust_score=TrustScore(overall=trust),
+                authority_score=trust,
+                quality_score=0.9,
+            ),
+        )
+
+    return EvidenceBundle(
+        startup_name="TestCo",
+        documents=[
+            _doc(1, "website", 0.9),
+            _doc(2, "search", 0.85),
+            _doc(3, "crunchbase", 0.95),
+        ],
+        sources=[
+            EvidenceSource(
+                original_url="https://example.com/1",
+                page_type=PageType.HOMEPAGE,
+                fetched_at=fetched_at,
+                success=True,
+            )
+        ],
+    )
+
+
+class TestReadinessWiring:
+    """C1 — the decision must consume the canonical readiness score."""
+
+    def test_readiness_score_used_when_provided(self) -> None:
+        engine = DefaultDecisionEngine()
+        decision = engine.decide(
+            _make_features(),
+            _make_observations(),
+            _make_scores(),
+            _make_confidence(),
+            readiness_score=85.0,
+        )
+        expected = 85.0 * _READINESS_WEIGHT
+        assert decision.decision_factors["readiness_contribution"] == round(
+            expected, 4
+        )
+
+    def test_readiness_defaults_to_assessment_average(self) -> None:
+        """Backward compatible: without a readiness score, per-assessment
+        scores (where populated) drive the readiness factor."""
+        engine = DefaultDecisionEngine()
+        decision = engine.decide(
+            _make_features(),
+            _make_observations(),
+            _make_scores(),
+            _make_confidence(),
+            _make_assessments(),
+        )
+        # _make_assessments() sets every score to 58.0
+        expected = 58.0 * _READINESS_WEIGHT
+        assert decision.decision_factors["readiness_contribution"] == round(
+            expected, 4
+        )
+
+    def test_readiness_bounds(self) -> None:
+        """Scoring mathematics are unchanged — only the source is wired."""
+        engine = DefaultDecisionEngine()
+        assert engine._resolve_readiness_factor(120.0, []) == 100.0
+        assert engine._resolve_readiness_factor(-5.0, []) == 0.0
+        assert engine._resolve_readiness_factor(None, []) == 50.0
+
+
+class TestEvidenceQualityWiring:
+    """M2 — genuine evidence quality comes from bundle provenance."""
+
+    def test_evidence_quality_uses_bundle_trust(self) -> None:
+        engine = DefaultDecisionEngine()
+        bundle = _make_trusted_bundle()
+        quality = engine._compute_evidence_quality_factor(
+            [], evidence_bundle=bundle,
+        )
+        # Bundle is trusted -> genuine quality well above a raw empty proxy.
+        assert quality >= 0.8
+
+    def test_evidence_quality_falls_back_without_bundle(self) -> None:
+        """Direct callers without a bundle retain the observation proxy."""
+        engine = DefaultDecisionEngine()
+        observations = [
+            Observation(
+                dimension="d", category="cat_a", statement="s",
+                confidence=0.9, importance=0.9, source_rule="r",
+            ),
+        ]
+        assert engine._compute_evidence_quality_factor(observations) > 0.5
+
+    def test_decide_accepts_evidence_bundle(self) -> None:
+        """The pipeline-level bundle is threaded into the decision without
+        changing thresholds or public category semantics."""
+        engine = DefaultDecisionEngine()
+        decision = engine.decide(
+            _make_features(),
+            _make_observations(),
+            _make_scores(),
+            _make_confidence(),
+            evidence_bundle=_make_trusted_bundle(),
+        )
+        factors = decision.decision_factors
+        assert "evidence_quality_contribution" in factors
+        assert 0.0 <= decision.composite_score <= 100.0

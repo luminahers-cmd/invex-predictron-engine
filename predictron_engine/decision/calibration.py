@@ -31,6 +31,22 @@ Public API
 * :func:`action_for_confidence_level` — deterministic action guidance.
 * :func:`build_calibration_summary` — compact digest for reports.
 * :func:`apply_recommendation_risk` — expose per-recommendation risk.
+
+Ownership
+---------
+This module owns **decision-level** calibration: a
+:class:`~predictron_engine.decision.models.DecisionConfidence` (combined
+confidence *and* uncertainty) for a single investment decision, built
+exclusively from existing pipeline artifacts.  It is distinct from two
+other confidence implementations in the codebase:
+
+* :mod:`predictron_engine.reasoning.confidence` — reasoning-layer
+  confidence for the observation set.
+* :mod:`predictron_engine.confidence.confidence_engine` — per-dimension
+  :class:`ConfidenceAssessment` for each scored dimension.
+
+These three compute confidence for different pipeline artifacts at
+different stages and are intentionally NOT consolidated.
 """
 
 from __future__ import annotations
@@ -55,6 +71,9 @@ if TYPE_CHECKING:
         Observation,
         Recommendation,
         ScoreResult,
+    )
+    from predictron_engine.reasoning.contradiction_graph import (
+        ContradictionGraph,
     )
 
 # ---------------------------------------------------------------------------
@@ -132,6 +151,7 @@ def compute_decision_confidence(
     assessments: list[DimensionAssessment],
     features: ExtractedFeatures,
     scores: list[ScoreResult] | None = None,
+    contradiction_graph: ContradictionGraph | None = None,
 ) -> DecisionConfidence:
     """Compute calibrated decision confidence from existing pipeline outputs.
 
@@ -148,6 +168,11 @@ def compute_decision_confidence(
     scores:
         Optional scoring results used only to identify assessed
         dimensions when computing missing-evidence uncertainty.
+    contradiction_graph:
+        Optional pre-built contradiction graph.  When supplied the
+        ``conflicting_evidence`` uncertainty driver reuses the richer
+        O(n²) pairwise conflict count instead of only the coarse
+        per-observation ``evidence_conflict_count`` proxy.
     """
     score_list = scores or []
     evidence_trust = compute_evidence_trust(bundle)
@@ -165,6 +190,7 @@ def compute_decision_confidence(
         features=features,
         scores=score_list,
         evidence_trust=evidence_trust,
+        contradiction_graph=contradiction_graph,
     )
     assessed_dimensions = (
         {a.dimension for a in assessments}
@@ -186,6 +212,7 @@ def compute_decision_confidence(
         observations=observations,
         features=features,
         assessed_dimensions=assessed_dimensions,
+        contradiction_graph=contradiction_graph,
     )
 
     return DecisionConfidence(
@@ -483,8 +510,14 @@ def _compute_uncertainty_breakdown(
     features: ExtractedFeatures,
     scores: list[ScoreResult],
     evidence_trust: float | None = None,
+    contradiction_graph: ContradictionGraph | None = None,
 ) -> UncertaintyBreakdown:
-    """Compute the weighted uncertainty decomposition."""
+    """Compute the weighted uncertainty decomposition.
+
+    When a ``contradiction_graph`` is supplied, the
+    ``conflicting_evidence`` driver reuses the richer O(n²) pairwise
+    conflict count instead of only the coarse per-observation proxy.
+    """
     observed_dimensions = {o.dimension for o in observations}
     assessed_dimensions = {
         a.dimension for a in assessments
@@ -496,7 +529,9 @@ def _compute_uncertainty_breakdown(
         "missing_evidence": _missing_evidence_factor(
             assessed_dimensions, observed_dimensions, bool(observations),
         ),
-        "conflicting_evidence": _conflicting_evidence_factor(observations),
+        "conflicting_evidence": _conflicting_evidence_factor(
+            observations, contradiction_graph=contradiction_graph,
+        ),
         "low_trust": round(1.0 - evidence_trust, 4),
         "low_coverage": _low_coverage_factor(
             observations, assessed_dimensions,
@@ -545,17 +580,36 @@ def _missing_evidence_factor(
     return round(len(missing) / len(assessed_dimensions), 4)
 
 
-def _conflicting_evidence_factor(observations: list[Observation]) -> float:
+def _negative_signal_categories() -> frozenset[str]:
+    """Shared negative-signal category set (lazy to avoid import cycles)."""
+    from predictron_engine.models.report import NEGATIVE_SIGNAL_CATEGORIES
+
+    return NEGATIVE_SIGNAL_CATEGORIES
+
+
+def _conflicting_evidence_factor(
+    observations: list[Observation],
+    *,
+    contradiction_graph: ContradictionGraph | None = None,
+) -> float:
     """Conflict density across observations using existing metadata.
 
-    Counts both per-observation conflict tallies and explicit
-    ``signal_conflict`` categories produced by the reasoning layer.
+    Counts both per-observation conflict tallies and observations whose
+    category belongs to the shared negative-signal set (produced by the
+    reasoning layer).  When a ``contradiction_graph`` is available its
+    richer O(n²) ``conflicting_count`` replaces the coarse
+    per-observation tally.
     """
     if not observations:
         return 0.0
-    conflicts = sum(o.evidence_conflict_count for o in observations)
+    if contradiction_graph is not None and contradiction_graph.conflicting_count > 0:
+        conflicts = contradiction_graph.conflicting_count
+    else:
+        conflicts = sum(o.evidence_conflict_count for o in observations)
     conflicts += sum(
-        1 for o in observations if o.category == "signal_conflict"
+        1
+        for o in observations
+        if o.category in _negative_signal_categories()
     )
     return round(min(conflicts / len(observations), 1.0), 4)
 
@@ -658,6 +712,7 @@ def _collect_weakening_factors(
     observations: list[Observation],
     features: ExtractedFeatures,
     assessed_dimensions: set[str],
+    contradiction_graph: ContradictionGraph | None = None,
 ) -> list[str]:
     """Deterministic statements explaining why confidence is low."""
     statements: list[str] = []
@@ -674,10 +729,20 @@ def _collect_weakening_factors(
     if not features.technology_stack:
         statements.append("technology evidence weak")
 
-    conflicts = _count_conflicts(observations)
+    conflicts = _count_conflicts(observations, contradiction_graph=contradiction_graph)
     if conflicts > 0:
         statements.append(
             f"{conflicts} conflicting evidence signal(s) detected",
+        )
+
+    if (
+        contradiction_graph is not None
+        and contradiction_graph.dominant_conflict is not None
+    ):
+        dc = contradiction_graph.dominant_conflict
+        statements.append(
+            f"dominant contradiction in {_label_dim(dc.dimension)}: "
+            f"{dc.explanation}",
         )
 
     trust = _value("evidence_trust")
@@ -721,10 +786,31 @@ def _has_official_support(observations: list[Observation]) -> bool:
     )
 
 
-def _count_conflicts(observations: list[Observation]) -> int:
-    """Total conflicting signals using existing observation metadata."""
-    conflicts = sum(o.evidence_conflict_count for o in observations)
+def _count_conflicts(
+    observations: list[Observation],
+    *,
+    contradiction_graph: ContradictionGraph | None = None,
+) -> int:
+    """Total conflicting signals using existing observation metadata.
+
+    When a ``contradiction_graph`` is available its richer conflict
+    count is used instead of only the per-observation proxy.
+    """
+    if (
+        contradiction_graph is not None
+        and contradiction_graph.conflicting_count > 0
+    ):
+        conflicts = contradiction_graph.conflicting_count
+    else:
+        conflicts = sum(o.evidence_conflict_count for o in observations)
     conflicts += sum(
-        1 for o in observations if o.category == "signal_conflict"
+        1
+        for o in observations
+        if o.category in _negative_signal_categories()
     )
     return conflicts
+
+
+def _label_dim(dimension: str) -> str:
+    """Produce a human-friendly label for a dimension string."""
+    return dimension.replace("_", " ") if dimension else "cross-dimension"

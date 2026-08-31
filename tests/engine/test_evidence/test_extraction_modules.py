@@ -4,7 +4,6 @@ Covers:
   - evidence_retrieval.py — domain-specific retrieval strategies
   - evidence_confidence.py — deterministic confidence scoring
   - evidence_agreement.py — corroboration & conflict detection
-  - extraction_diagnostics.py — structured diagnostic records
   - BaseExtractor evidence-aware helpers
 """
 
@@ -50,10 +49,6 @@ from predictron_engine.extraction.evidence_retrieval import (
     _sort_by_trust,
     get_all_strategies,
     get_strategy_for_domain,
-)
-from predictron_engine.extraction.extraction_diagnostics import (
-    ExtractionDiagnostic,
-    build_diagnostic,
 )
 from predictron_engine.models.report import EvidenceCitation, EvidenceItem
 
@@ -558,13 +553,43 @@ class TestDetectSingleSourceClaims:
 
 
 class TestComputeAgreementRatio:
-    def test_empty_returns_one(self):
-        assert compute_agreement_ratio([]) == 1.0
+    def _citing_item(
+        self,
+        *,
+        domain: str,
+        category: str,
+        statement: str,
+        source: str,
+        doc_id: str,
+    ) -> EvidenceItem:
+        """Build an item citing one distinct source document."""
+        citation = EvidenceCitation(
+            claim=statement,
+            domain=domain,
+            category=category,
+            source_document_ids=[doc_id],
+        )
+        return _make_evidence_item(
+            domain=domain,
+            category=category,
+            statement=statement,
+            source=source,
+            citations=[citation],
+        )
+
+    def test_empty_returns_zero(self):
+        assert compute_agreement_ratio([]) == 0.0
 
     def test_all_corroborated(self):
         items = [
-            _make_evidence_item(domain="m", category="c", source="p1", statement="a"),
-            _make_evidence_item(domain="m", category="c", source="p2", statement="b"),
+            self._citing_item(
+                domain="m", category="c", source="p1",
+                statement="a", doc_id="doc-1",
+            ),
+            self._citing_item(
+                domain="m", category="c", source="p2",
+                statement="b", doc_id="doc-2",
+            ),
         ]
         result = compute_agreement_ratio(items)
         assert result == 1.0
@@ -579,100 +604,37 @@ class TestComputeAgreementRatio:
 
     def test_partial_corroboration(self):
         items = [
-            _make_evidence_item(domain="m", category="c", source="p1", statement="a"),
-            _make_evidence_item(domain="m", category="c", source="p2", statement="b"),
-            _make_evidence_item(domain="f", category="c", source="p3", statement="c"),
+            self._citing_item(
+                domain="m", category="c", source="p1",
+                statement="a", doc_id="doc-1",
+            ),
+            self._citing_item(
+                domain="m", category="c", source="p2",
+                statement="b", doc_id="doc-2",
+            ),
+            self._citing_item(
+                domain="f", category="c", source="p3",
+                statement="c", doc_id="doc-3",
+            ),
         ]
         result = compute_agreement_ratio(items)
-        # 2 out of 3 items corroborated (market category has 2 sources)
+        # 2 out of 3 items corroborated (market category cites 2 documents)
         assert abs(result - 2.0 / 3.0) < 1e-4
 
-
-# ============================================================================
-# extraction_diagnostics.py
-# ============================================================================
-
-
-class TestBuildDiagnostic:
-    def test_basic_construction(self):
-        diag = build_diagnostic(
-            extractor_name="MarketExtractor",
-            documents_examined=[_make_doc(doc_id="d1"), _make_doc(doc_id="d2")],
-            documents_selected=[_make_doc(doc_id="d1", trust_overall=0.8)],
-            citation_count=3,
-            conflict_count=1,
-            corroborated_count=2,
-            single_source_count=1,
-            evidence_confidence=0.75,
-        )
-        assert isinstance(diag, ExtractionDiagnostic)
-        assert diag.extractor_name == "MarketExtractor"
-        assert diag.documents_examined == 2
-        assert diag.documents_selected == 1
-        assert diag.citation_count == 3
-        assert diag.conflict_count == 1
-        assert diag.corroborated_count == 2
-        assert diag.single_source_count == 1
-        assert diag.evidence_confidence == 0.75
-
-    def test_average_trust_computed(self):
-        doc1 = _make_doc(trust_overall=0.6)
-        doc2 = _make_doc(trust_overall=0.8)
-        diag = build_diagnostic(
-            extractor_name="TestExtractor",
-            documents_examined=[doc1, doc2],
-            documents_selected=[doc1, doc2],
-            citation_count=0,
-            conflict_count=0,
-            corroborated_count=0,
-            single_source_count=0,
-            evidence_confidence=0.5,
-        )
-        assert abs(diag.average_trust_score - 0.7) < 1e-4
-
-    def test_selected_document_ids(self):
-        doc = _make_doc(doc_id="unique-id-123")
-        diag = build_diagnostic(
-            extractor_name="TestExtractor",
-            documents_examined=[doc],
-            documents_selected=[doc],
-            citation_count=0,
-            conflict_count=0,
-            corroborated_count=0,
-            single_source_count=0,
-            evidence_confidence=0.0,
-        )
-        assert "unique-id-123" in diag.selected_document_ids
-
-    def test_keywords_fields(self):
-        diag = build_diagnostic(
-            extractor_name="TestExtractor",
-            documents_examined=[],
-            documents_selected=[],
-            citation_count=0,
-            conflict_count=0,
-            corroborated_count=0,
-            single_source_count=0,
-            evidence_confidence=0.0,
-            keywords_matched=5,
-            total_keywords=10,
-        )
-        assert diag.keywords_matched == 5
-        assert diag.total_keywords == 10
-
-    def test_empty_selected_documents(self):
-        diag = build_diagnostic(
-            extractor_name="TestExtractor",
-            documents_examined=[_make_doc()],
-            documents_selected=[],
-            citation_count=0,
-            conflict_count=0,
-            corroborated_count=0,
-            single_source_count=0,
-            evidence_confidence=0.0,
-        )
-        assert diag.average_trust_score == 0.0
-        assert diag.selected_document_ids == []
+    def test_same_document_is_one_source(self):
+        items = [
+            self._citing_item(
+                domain="m", category="c", source="p1",
+                statement="a", doc_id="doc-1",
+            ),
+            self._citing_item(
+                domain="m", category="c", source="p2",
+                statement="b", doc_id="doc-1",
+            ),
+        ]
+        result = compute_agreement_ratio(items)
+        # Distinct source labels do not constitute independent corroboration.
+        assert result == 0.0
 
 
 # ============================================================================

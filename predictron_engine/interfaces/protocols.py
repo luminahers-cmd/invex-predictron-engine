@@ -10,7 +10,7 @@ inheritance (ABC), which means:
   - mypy verifies implementation correctness at check time
 """
 
-from typing import Protocol, runtime_checkable
+from typing import TYPE_CHECKING, Protocol, runtime_checkable
 
 from app.schemas.analysis import StartupAnalysisRequest
 from predictron_engine.evaluation.evaluation_models import DimensionAssessment, EvaluationResult
@@ -28,6 +28,9 @@ from predictron_engine.models.report import (
     SignalRelationship,
 )
 from predictron_engine.models.startup import Startup
+
+if TYPE_CHECKING:
+    from predictron_engine.evidence.models import EvidenceBundle
 
 
 @runtime_checkable
@@ -133,6 +136,9 @@ class DecisionEngine(Protocol):
         confidence: list[ConfidenceAssessment],
         assessments: list[DimensionAssessment] | None = ...,
         signal_relationships: list[SignalRelationship] | None = ...,
+        *,
+        readiness_score: float | None = ...,
+        evidence_bundle: EvidenceBundle | None = ...,
     ) -> InvestmentDecision: ...
 
 

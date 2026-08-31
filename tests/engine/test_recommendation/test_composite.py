@@ -1,9 +1,18 @@
 """Tests for CompositeRecommendationEngine."""
 
+import pytest
+
 from predictron_engine.models.extracted_features import ExtractedFeatures
-from predictron_engine.models.report import DimensionAssessment, Observation
+from predictron_engine.models.report import (
+    DimensionAssessment,
+    InvestmentReadiness,
+    Observation,
+    Recommendation,
+    ScoreResult,
+)
 from predictron_engine.recommendations.composite import (
     CompositeRecommendationEngine,
+    _gap_aware_rank,
 )
 from predictron_engine.recommendations.strategies.base import (
     DomainRecommendationStrategy,
@@ -137,9 +146,7 @@ class TestCompositeRecommendationEngine:
             def generate(self, features, observations, assessments):
                 raise RuntimeError("boom")
 
-        engine = CompositeRecommendationEngine(
-            strategies=[BadStrategy(), GoodStrategy()]
-        )
+        engine = CompositeRecommendationEngine(strategies=[BadStrategy(), GoodStrategy()])
         features = ExtractedFeatures(data_completeness=0.5)
         result = engine.recommend(features, [], [])
         assert len(result) == 1
@@ -269,3 +276,90 @@ class TestCompositeIntegration:
         assert len(result) > 0
         categories = {r.category for r in result}
         assert "due_diligence" in categories or "follow_up" in categories
+
+
+class TestGapAwareOrdering:
+    """Tests for gap-aware recommendation ordering (Sprint P8C)."""
+
+    @staticmethod
+    def _rec(
+        action: str,
+        priority: str = "medium",
+        confidence: float = 0.5,
+        domain: str = "",
+    ) -> tuple[str, Recommendation]:
+        rec = Recommendation(
+            category="due_diligence",
+            action=action,
+            priority=priority,
+            rationale="r",
+            confidence=confidence,
+        )
+        return (domain, rec)
+
+    def _readiness(self, contributions: dict[str, float]) -> InvestmentReadiness:
+        overall = sum(contributions.values()) / len(contributions)
+        return InvestmentReadiness(
+            readiness_score=round(overall, 2),
+            dimension_contributions=contributions,
+        )
+
+    def test_gap_aware_ordering_prioritizes_largest_weighted_gap(self):
+        """0.20-weight market at 55 (gap 0.45) outranks 0.15-weight
+        product at 75 (gap 0.1875), so market recommendation sorts first."""
+        scores = [
+            ScoreResult(dimension="market_opportunity", score=55.0),
+            ScoreResult(dimension="product_strength", score=75.0),
+        ]
+        readiness = self._readiness({"market_opportunity": 55.0, "product_strength": 75.0})
+        collected = [
+            self._rec("product action", domain="product_strength"),
+            self._rec("market action", domain="market_opportunity"),
+        ]
+
+        ordered = CompositeRecommendationEngine._order_gap_aware(collected, scores, readiness)
+        assert [r.action for r in ordered] == ["market action", "product action"]
+
+    def test_gap_beats_static_priority(self):
+        """A low-priority rec on a high-gap dimension ranks above a
+        high-priority rec on a near-healthy dimension."""
+        scores = [
+            ScoreResult(dimension="market_opportunity", score=55.0),
+            ScoreResult(dimension="product_strength", score=90.0),
+        ]
+        readiness = self._readiness({"market_opportunity": 55.0, "product_strength": 90.0})
+        collected = [
+            self._rec("product high", priority="high", domain="product_strength"),
+            self._rec("market low", priority="low", domain="market_opportunity"),
+        ]
+
+        ordered = CompositeRecommendationEngine._order_gap_aware(collected, scores, readiness)
+        assert ordered[0].action == "market low"
+
+    def test_readiness_contributions_override_scores(self):
+        scores = [
+            ScoreResult(dimension="market_opportunity", score=90.0),
+            ScoreResult(dimension="product_strength", score=75.0),
+        ]
+        readiness = self._readiness({"market_opportunity": 55.0, "product_strength": 75.0})
+        collected = [
+            self._rec("product action", domain="product_strength"),
+            self._rec("market action", domain="market_opportunity"),
+        ]
+
+        ordered = CompositeRecommendationEngine._order_gap_aware(collected, scores, readiness)
+        assert ordered[0].action == "market action"
+
+    def test_unknown_dimension_falls_back_to_overall_gap(self):
+        """Recommendations without a canonical dimension or supporting
+        assessments fall back to the overall readiness gap."""
+        scores: list[ScoreResult] = []
+        readiness = InvestmentReadiness(
+            readiness_score=65.0,
+            dimension_contributions={},
+        )
+        collected = [self._rec("custom rec", domain="custom")]
+
+        [rec] = CompositeRecommendationEngine._order_gap_aware(collected, scores, readiness)
+        rank = _gap_aware_rank("custom", rec, scores, readiness)
+        assert rank[0] == pytest.approx(0.35)

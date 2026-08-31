@@ -1,6 +1,7 @@
 """Tests for Sprint 6A deterministic reasoning confidence."""
 
 from predictron_engine.evidence.evidence_models import EvidenceItem
+from predictron_engine.models.report import EvidenceCitation
 from predictron_engine.reasoning.confidence import (
     WEIGHTS,
     compute_context_confidence,
@@ -152,12 +153,24 @@ class TestContextConfidence:
             category="market_size",
             statement="Big market.",
             source="src-a",
+            citations=[EvidenceCitation(
+                claim="Big market.",
+                domain="industry",
+                category="market_size",
+                source_document_ids=["d1"],
+            )],
         )
         item_b = EvidenceItem(
             domain="industry",
             category="market_size",
             statement="Big market again.",
             source="src-b",
+            citations=[EvidenceCitation(
+                claim="Big market again.",
+                domain="industry",
+                category="market_size",
+                source_document_ids=["d2"],
+            )],
         )
         docs = [
             make_document("d1", trust=0.8),
@@ -167,7 +180,7 @@ class TestContextConfidence:
         breakdown = compute_context_confidence(ctx)
 
         assert breakdown.evidence_trust == round((0.8 + 0.6) / 2, 4)
-        # Both items share (domain, category) with two distinct sources.
+        # Both items share (domain, category) with two distinct documents.
         assert breakdown.evidence_agreement == 1.0
         # Two distinct sources saturate at 3 -> 2/3.
         assert breakdown.citation_diversity == round(2 / 3, 4)

@@ -7,6 +7,8 @@ and stage-appropriate expectations.
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from predictron_engine.knowledge.concepts import Priority, RecommendationCategory
 from predictron_engine.models.extracted_features import ExtractedFeatures
 from predictron_engine.models.report import (
@@ -20,6 +22,9 @@ from predictron_engine.recommendations.strategies.base import (
     filter_observations,
     observation_confidence,
 )
+
+if TYPE_CHECKING:
+    from predictron_engine.models.report import InvestmentReadiness, ScoreResult
 
 
 class TractionStrategy:
@@ -38,6 +43,8 @@ class TractionStrategy:
         features: ExtractedFeatures,
         observations: list[Observation],
         assessments: list[DimensionAssessment],
+        scores: list[ScoreResult] | None = None,
+        readiness: InvestmentReadiness | None = None,
     ) -> list[Recommendation]:
         recommendations: list[Recommendation] = []
         traction_obs = filter_observations(observations, self.domain)
@@ -81,8 +88,7 @@ class TractionStrategy:
                         action="Investigate revenue generation status for mature company.",
                         priority=Priority.HIGH.value,
                         rationale=(
-                            f"Company is {company_age} years old but revenue "
-                            f"status is unconfirmed."
+                            f"Company is {company_age} years old but revenue status is unconfirmed."
                         ),
                         title="Revenue Validation for Mature Startup",
                         description=(

@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import os
 import time
 from collections.abc import Sequence
 from datetime import UTC, datetime
@@ -32,9 +33,16 @@ from predictron_engine.evidence.provider_contracts import (
     EvidenceProvider,
     ProviderResult,
 )
+from predictron_engine.evidence.replay import build_replay_provider
+from predictron_engine.evidence.search_backends import TavilySearchBackend
+from predictron_engine.evidence.search_provider import SearchEvidenceProvider
 from predictron_engine.evidence.website_provider import WebsiteEvidenceProvider
 
 logger = logging.getLogger(__name__)
+
+_ENV_SEARCH_ENABLED = "EVIDENCE_SEARCH_ENABLED"
+_ENV_TAVILY_API_KEY = "TAVILY_API_KEY"
+_SEARCH_TRUE_VALUES = frozenset({"1", "true", "yes", "on"})
 
 
 def _run_from_result(result: ProviderResult) -> ProviderRun:
@@ -47,6 +55,57 @@ def _run_from_result(result: ProviderResult) -> ProviderRun:
         attempted_pages=result.attempted_pages,
         failure_reason=result.failure_reason,
     )
+
+
+def _search_enabled_from_env() -> bool:
+    """Return True when search-backed discovery is explicitly enabled."""
+    return os.environ.get(_ENV_SEARCH_ENABLED, "").strip().lower() in _SEARCH_TRUE_VALUES
+
+
+def _default_search_provider() -> EvidenceProvider | None:
+    """Return the default search provider, or None when search is unavailable.
+
+    Search discovery is opt-in.  It is registered only when both
+    ``EVIDENCE_SEARCH_ENABLED`` is truthy *and* a non-empty
+    ``TAVILY_API_KEY`` is present.  In every other case, ``None`` is
+    returned so orchestration remains byte-identical to the pre-search
+    engine — no provider is registered, nothing is attempted, and no
+    runtime failure can occur.
+    """
+    if not _search_enabled_from_env():
+        return None
+    if not os.environ.get(_ENV_TAVILY_API_KEY, "").strip():
+        logger.info(
+            "EVIDENCE_SEARCH_ENABLED is set but %s is missing — search provider not registered",
+            _ENV_TAVILY_API_KEY,
+        )
+        return None
+    return SearchEvidenceProvider(backend=TavilySearchBackend())
+
+
+def default_collection_providers() -> list[EvidenceProvider]:
+    """Build the default provider sequence for the :class:`EvidenceOrchestrator`.
+
+    Always starts with the website provider.  Search-backed discovery is
+    appended (in deterministic order) only when search is enabled and an
+    API key is configured; otherwise the sequence is a single website
+    provider, identical to the pre-search engine.
+
+    When offline replay is explicitly enabled (``EVIDENCE_REPLAY_ENABLED``
+    with a configured ``EVIDENCE_REPLAY_DATASET``), the live providers are
+    replaced by a single replay provider so no network access is performed
+    and the recorded corpus is reproduced deterministically.  When replay
+    is disabled the sequence is byte-identical to the live engine.
+    """
+    replay = build_replay_provider()
+    if replay is not None:
+        return [replay]
+
+    providers: list[EvidenceProvider] = [WebsiteEvidenceProvider()]
+    search = _default_search_provider()
+    if search is not None:
+        providers.append(search)
+    return providers
 
 
 class EvidenceOrchestrator:
@@ -63,8 +122,10 @@ class EvidenceOrchestrator:
     Parameters
     ----------
     providers:
-        Optional ordered sequence of evidence providers. Defaults to a
-        single :class:`WebsiteEvidenceProvider`.
+        Optional ordered sequence of evidence providers. Defaults to
+        :func:`default_collection_providers` — a website provider, plus
+        the search-backed discovery provider when it is explicitly
+        enabled and an API key is configured.
     official_host:
         Optional lowercased hostname for official website identification.
     """
@@ -75,7 +136,7 @@ class EvidenceOrchestrator:
         official_host: str | None = None,
     ) -> None:
         self._providers = (
-            list(providers) if providers is not None else [WebsiteEvidenceProvider()]
+            list(providers) if providers is not None else default_collection_providers()
         )
         self._official_host = official_host
 

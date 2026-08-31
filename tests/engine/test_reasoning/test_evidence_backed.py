@@ -128,14 +128,32 @@ class TestEnrichProvenance:
 
 class TestEnrichAgreementAndConflicts:
     def test_corroborated_items_yield_full_agreement(self):
-        a = _item("industry", "market_size", "Big market.", source="src-a")
-        b = _item("industry", "market_size", "Bigger market.", source="src-b")
+        a = _item(
+            "industry", "market_size", "Big market.", source="src-a",
+            citations=[EvidenceCitation(
+                claim="Big market.", domain="industry", category="market_size",
+                source_document_ids=["doc-1"],
+            )],
+        )
+        b = _item(
+            "industry", "market_size", "Bigger market.", source="src-b",
+            citations=[EvidenceCitation(
+                claim="Bigger market.", domain="industry", category="market_size",
+                source_document_ids=["doc-2"],
+            )],
+        )
         enriched = enrich_observation(_obs(_ref(a), _ref(b)), [a, b])
         assert enriched.evidence_agreement_ratio == 1.0
 
     def test_single_source_items_yield_zero_agreement(self):
         a = _item("industry", "market_size", "Big market.", source="src-a")
         b = _item("geography", "market_size", "Large region.", source="src-a")
+        enriched = enrich_observation(_obs(_ref(a), _ref(b)), [a, b])
+        assert enriched.evidence_agreement_ratio == 0.0
+
+    def test_one_source_document_is_not_corroboration(self):
+        a = _item("industry", "market_size", "Big market.", source="src-a")
+        b = _item("industry", "market_size", "Bigger market.", source="src-b")
         enriched = enrich_observation(_obs(_ref(a), _ref(b)), [a, b])
         assert enriched.evidence_agreement_ratio == 0.0
 

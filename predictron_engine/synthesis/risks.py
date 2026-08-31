@@ -193,6 +193,7 @@ def aggregate_risks(
     readiness: InvestmentReadiness | None,
     decision_confidence: DecisionConfidence | None,
     consistency: object | None = None,
+    contradiction_graph: object | None = None,
     *,
     max_risks: int = _MAX_RISKS,
 ) -> list[RiskItem]:
@@ -335,6 +336,42 @@ def aggregate_risks(
                 source="readiness:conflicting_relationship",
                 statements=descriptions,
                 observations=obs_by_dim.get(dimension, []),
+                confidence=1.0,
+            )
+
+    # --- Source 4b: contradiction graph conflicts (Sprint P8D) ------------
+    # Reuses the richer O(n²) pairwise contradiction graph when the
+    # reasoning layer produced one; falls back gracefully when absent.
+    if contradiction_graph is not None:
+        graph_edges = getattr(contradiction_graph, "edges", ()) or ()
+        columns: dict[str, list[str]] = {}
+        for edge in graph_edges:
+            if not getattr(edge, "is_conflict", False):
+                continue
+            dim = edge.dimension or ""
+            columns.setdefault(dim, []).append(getattr(edge, "reason", "") or "")
+        for dim, reasons in sorted(columns.items()):
+            severity = (
+                SynthesisSeverity.HIGH if len(reasons) >= 3 else SynthesisSeverity.MODERATE
+            )
+            register.add(
+                label=f"{dim.replace(':', ' vs ').replace('_', ' ')} contradiction",
+                dimension=dim,
+                severity=severity,
+                source="contradiction_graph:edge",
+                statements=reasons[:_MAX_STATEMENTS_PER_ITEM],
+                observations=obs_by_dim.get(dim, []),
+                confidence=1.0,
+            )
+        dominant = getattr(contradiction_graph, "dominant_conflict", None)
+        if dominant is not None:
+            register.add(
+                label="dominant contradiction",
+                dimension=getattr(dominant, "dimension", "") or "",
+                severity=SynthesisSeverity.HIGH,
+                source="contradiction_graph:dominant_conflict",
+                statements=[getattr(dominant, "explanation", "") or ""],
+                observations=[],
                 confidence=1.0,
             )
 

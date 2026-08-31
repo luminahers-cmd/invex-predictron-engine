@@ -42,12 +42,13 @@ def make_observation(
     confidence: float = 0.8,
     importance: float = 0.7,
     trust_score: float = 0.0,
+    category: str = "context",
     citations: list[EvidenceCitation] | None = None,
     provenance_document_ids: list[str] | None = None,
 ) -> Observation:
     return Observation(
         dimension=dimension,
-        category="context",
+        category=category,
         statement=statement,
         confidence=confidence,
         importance=importance,

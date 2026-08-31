@@ -19,6 +19,7 @@ from predictron_engine.reasoning.adaptive_budget import (
     compute_reasoning_budget,
     should_skip_rule,
 )
+from predictron_engine.reasoning.reasoning_engine import DefaultReasoningEngine
 
 
 class TestReasoningBudget:
@@ -34,7 +35,7 @@ class TestReasoningBudget:
         budget = ReasoningBudget(
             budget_fraction=0.7,
             max_rules=11,
-            skipped_rules=("QuantitativeCrossSignalRule",),
+            skipped_rules=("quantitative_cross_signal",),
         )
         assert budget.savings_fraction == pytest.approx(0.3, abs=0.01)
         assert budget.rules_executed == 10
@@ -165,3 +166,89 @@ class TestBudgetReport:
         report = BudgetReport(total_rules=0)
         assert report.actual_savings_fraction == 0.0
         assert report.budget_adherence == 1.0
+
+
+class TestAdaptiveRuleSkippingRegression:
+    """Regression: rule-name mismatch between budget identifiers and rule names.
+
+    Sprint P6A confirmed that ``adaptive_budget`` previously matched PascalCase
+    class names (e.g. ``QuantitativeCrossSignalRule``) while
+    ``CompositeReasoner._rule_name`` emits lowercase identifiers
+    (e.g. ``quantitative_cross_signal``), so rule skipping never actually
+    engaged. These tests prove skipping now works end-to-end.
+    """
+
+    def test_skipped_rules_use_canonical_lowercase_identifiers(self) -> None:
+        """Budget skipped_rules must match the lowercase rule ``name`` tokens."""
+        features = ExtractedFeatures(
+            industry="SaaS",
+            business_model="subscription",
+            funding_stage="series_a",
+            has_revenue=True,
+            data_completeness=0.95,
+            founder_profile_count=4,
+            technology_stack=["Python", "React", "Postgres", "Redis"],
+        )
+        evidence = [
+            EvidenceItem(domain="industry", category="m", statement=f"E{i}", source=f"s{i}")
+            for i in range(10)
+        ]
+        budget = compute_reasoning_budget(features, evidence)
+        assert budget.skipped_rules
+
+        engine = DefaultReasoningEngine()
+        canonical_names = {
+            getattr(rule, "name", type(rule).__name__)
+            for rule in engine._reasoner._rules
+        }
+        for name in budget.skipped_rules:
+            assert name in canonical_names, (
+                f"skipped rule {name!r} is not a real rule identifier"
+            )
+
+    def test_rule_skipping_actually_reduces_observations(self) -> None:
+        """High-completeness input should genuinely skip rules and yield fewer observations."""
+        features = ExtractedFeatures(
+            industry="SaaS",
+            business_model="subscription",
+            funding_stage="series_a",
+            has_revenue=True,
+            data_completeness=0.95,
+            founder_profile_count=4,
+            technology_stack=["Python", "React", "Postgres", "Redis"],
+        )
+        evidence = [
+            EvidenceItem(domain="industry", category="m", statement=f"E{i}", source=f"s{i}")
+            for i in range(10)
+        ]
+        engine = DefaultReasoningEngine()
+
+        full = engine.reason(features, evidence)
+        observations, budget = engine.reason_adaptive(features, evidence)
+
+        assert budget.budget_fraction < 1.0
+        assert len(budget.skipped_rules) > 0
+        assert len(observations) < len(full), (
+            "adaptive reasoning should skip rules and produce fewer observations"
+        )
+
+    def test_should_skip_matches_composite_reasoner(self) -> None:
+        """should_skip_rule must agree with the identifier used by the reasoner."""
+        features = ExtractedFeatures(
+            industry="SaaS",
+            business_model="subscription",
+            funding_stage="series_a",
+            has_revenue=True,
+            data_completeness=0.95,
+            founder_profile_count=4,
+        )
+        evidence = [
+            EvidenceItem(domain="industry", category="m", statement=f"E{i}", source=f"s{i}")
+            for i in range(10)
+        ]
+        budget = compute_reasoning_budget(features, evidence)
+        assert budget.skipped_rules
+        for name in budget.skipped_rules:
+            assert should_skip_rule(name, budget) is True
+        for name in ("quantitative_cross_signal", "cross_signal_reasoning"):
+            assert should_skip_rule(name, budget) is (name in budget.skipped_rules)

@@ -7,6 +7,8 @@ signals for more targeted and actionable recommendations.
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from predictron_engine.knowledge.concepts import Priority, RecommendationCategory
 from predictron_engine.models.extracted_features import ExtractedFeatures
 from predictron_engine.models.report import (
@@ -20,6 +22,9 @@ from predictron_engine.recommendations.strategies.base import (
     filter_observations,
     observation_confidence,
 )
+
+if TYPE_CHECKING:
+    from predictron_engine.models.report import InvestmentReadiness, ScoreResult
 
 
 class TeamStrategy:
@@ -39,6 +44,8 @@ class TeamStrategy:
         features: ExtractedFeatures,
         observations: list[Observation],
         assessments: list[DimensionAssessment],
+        scores: list[ScoreResult] | None = None,
+        readiness: InvestmentReadiness | None = None,
     ) -> list[Recommendation]:
         recommendations: list[Recommendation] = []
         team_obs = filter_observations(observations, self.domain)
@@ -114,9 +121,7 @@ class TeamStrategy:
             recommendations.append(
                 Recommendation(
                     category=RecommendationCategory.DUE_DILIGENCE.value,
-                    action=(
-                        "Request concrete traction metrics and execution evidence."
-                    ),
+                    action=("Request concrete traction metrics and execution evidence."),
                     priority=Priority.MEDIUM.value,
                     rationale=(
                         f"Founding team of {features.founder_profile_count} identified "
@@ -154,9 +159,7 @@ class TeamStrategy:
             recommendations.append(
                 Recommendation(
                     category=RecommendationCategory.FOLLOW_UP.value,
-                    action=(
-                        "Explore founder background and domain expertise depth."
-                    ),
+                    action=("Explore founder background and domain expertise depth."),
                     priority=Priority.LOW.value,
                     rationale=(
                         "Founding team identified with moderate confidence but "

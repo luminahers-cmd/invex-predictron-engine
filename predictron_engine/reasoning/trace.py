@@ -359,6 +359,7 @@ def build_reasoning_trace(
     observations: list[Observation],
     evidence: list[EvidenceItem],
     scores: list[ScoreResult] | None = None,
+    contradiction_graph: ContradictionGraph | None = None,
 ) -> ReasoningTrace:
     """Build the complete reasoning trace from pipeline outputs.
 
@@ -370,13 +371,21 @@ def build_reasoning_trace(
         Evidence items used in the analysis.
     scores:
         Optional scoring results for confidence evolution.
+    contradiction_graph:
+        Optional pre-built contradiction graph.  When supplied the
+        caller's graph is reused without re-computation; when omitted
+        a fresh graph is built from the observations.
     """
     score_list = scores or []
 
     supporting = _rank_by_supporting(observations)
     opposing = _rank_by_opposing(observations)
     evolution = _build_confidence_evolution(observations, evidence, score_list)
-    graph = build_contradiction_graph(observations)
+    graph = (
+        contradiction_graph
+        if contradiction_graph is not None
+        else build_contradiction_graph(observations)
+    )
     dominant = graph.dominant_conflict
 
     overall_conf = (

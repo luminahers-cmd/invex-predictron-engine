@@ -1725,7 +1725,7 @@ tests/engine/
 │   ├── test_strategies.py              # 40 strategy unit tests
 │   └── test_composite.py               # 13 composite engine tests
 ├── test_confidence_engine.py           # 6 unit tests
-├── test_report_builder.py              # 6 unit tests
+├── test_report_builder.py              # 8 unit tests
 └── test_validation/
     ├── __init__.py
     ├── conftest.py                     # Validation-specific fixtures

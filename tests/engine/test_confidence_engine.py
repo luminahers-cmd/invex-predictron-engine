@@ -273,3 +273,75 @@ class TestDefaultConfidenceEngine:
         ]
         result = engine.assess(features, obs, scores, assessments)
         assert abs(result[0].confidence - 1.0) < 1e-6
+
+
+class TestContradictionGraphWiring:
+    """Sprint P8D — confidence reuses the contradiction graph."""
+
+    @staticmethod
+    def _observation(
+        statement: str,
+        *,
+        category: str,
+        confidence: float,
+        importance: float = 0.7,
+        dimension: str = "market_opportunity",
+    ):
+        return Observation(
+            dimension=dimension,
+            category=category,
+            statement=statement,
+            evidence=[],
+            confidence=confidence,
+            importance=importance,
+            source_rule="TestRule",
+        )
+
+    def test_graph_conflicts_reduce_confidence(self, sample_features, sample_scores):
+        """A dimension with graph conflicts must score lower than clean."""
+        from predictron_engine.reasoning.contradiction_graph import (
+            build_contradiction_graph,
+        )
+
+        engine = DefaultConfidenceEngine()
+
+        # Tensioned categories ("strength" vs "risk") plus divergent
+        # confidence/importance produce a graph conflict, but the
+        # observations themselves carry no evidence_conflict_count.
+        obs = [
+            self._observation(
+                "strong", category="strength", confidence=0.9, importance=0.9
+            ),
+            self._observation(
+                "risky", category="risk", confidence=0.2, importance=0.1
+            ),
+        ]
+        graph = build_contradiction_graph(obs)
+
+        assert graph.conflicting_count >= 1
+
+        clean_result = engine.assess(sample_features, obs, sample_scores)
+        graph_result = engine.assess(
+            sample_features, obs, sample_scores, contradiction_graph=graph
+        )
+
+        clean_market = next(
+            r for r in clean_result if r.dimension == "market_opportunity"
+        )
+        graph_market = next(
+            r for r in graph_result if r.dimension == "market_opportunity"
+        )
+        assert graph_market.confidence < clean_market.confidence
+
+    def test_without_graph_uses_legacy_proxy(
+        self, sample_features, sample_scores
+    ):
+        """Without a graph the penalty falls back to the legacy path."""
+        engine = DefaultConfidenceEngine()
+        obs = [
+            self._observation(
+                "strong", category="strength", confidence=0.9, importance=0.9
+            )
+        ]
+        result = engine.assess(sample_features, obs, sample_scores)
+        assert 0.0 <= result[0].confidence <= 1.0

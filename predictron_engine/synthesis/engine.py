@@ -48,6 +48,7 @@ class DecisionSynthesisEngine:
         decision_confidence: DecisionConfidence | None,
         calibration_summary: CalibrationSummary | None = None,
         consistency: object | None = None,
+        contradiction_graph: object | None = None,
     ) -> DecisionSynthesis:
         """Build the DecisionSynthesis from already-produced outputs."""
         prioritized = prioritize_recommendations(recommendations)
@@ -60,6 +61,7 @@ class DecisionSynthesisEngine:
             readiness,
             decision_confidence,
             consistency=consistency,
+            contradiction_graph=contradiction_graph,
         )
         opportunities = aggregate_opportunities(
             features, scores, assessments, observations, readiness

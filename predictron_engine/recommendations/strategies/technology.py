@@ -7,6 +7,8 @@ and technical differentiation.
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from predictron_engine.knowledge.concepts import Priority, RecommendationCategory
 from predictron_engine.models.extracted_features import ExtractedFeatures
 from predictron_engine.models.report import (
@@ -20,6 +22,9 @@ from predictron_engine.recommendations.strategies.base import (
     filter_observations,
     observation_confidence,
 )
+
+if TYPE_CHECKING:
+    from predictron_engine.models.report import InvestmentReadiness, ScoreResult
 
 
 class TechnologyStrategy:
@@ -38,6 +43,8 @@ class TechnologyStrategy:
         features: ExtractedFeatures,
         observations: list[Observation],
         assessments: list[DimensionAssessment],
+        scores: list[ScoreResult] | None = None,
+        readiness: InvestmentReadiness | None = None,
     ) -> list[Recommendation]:
         recommendations: list[Recommendation] = []
         tech_obs = filter_observations(observations, self.domain)

@@ -234,3 +234,83 @@ def test_entry_point_smoke_all_components():
     )
     assert dc.breakdown.composite >= 0.0
     assert dc.uncertainty_breakdown.composite >= 0.0
+
+
+class TestContradictionGraphCalibration:
+    """Sprint P8D — calibration reuses the contradiction graph."""
+
+    def _conflicting_observations(self):
+        """Tensioned categories plus divergent confidence/importance that
+        the contradiction graph classifies as a conflict, but which carry
+        no per-observation conflict tally."""
+        from predictron_engine.models.report import Observation
+
+        return [
+            Observation(
+                dimension="market",
+                category="strength",
+                statement="Market is large.",
+                confidence=0.9,
+                importance=0.9,
+            ),
+            Observation(
+                dimension="market",
+                category="risk",
+                statement="Market is saturated.",
+                confidence=0.2,
+                importance=0.1,
+            ),
+        ]
+
+    def test_graph_raises_conflicting_evidence_uncertainty(self):
+        from predictron_engine.reasoning.contradiction_graph import (
+            build_contradiction_graph,
+        )
+
+        observations = self._conflicting_observations()
+        graph = build_contradiction_graph(observations)
+        assert graph.conflicting_count >= 1
+
+        base = dict(
+            bundle=None,
+            observations=observations,
+            assessments=[],
+            features=ExtractedFeatures(data_completeness=0.9),
+        )
+        without = compute_decision_confidence(**base)
+        with_graph = compute_decision_confidence(
+            **base, contradiction_graph=graph
+        )
+
+        def driver(dc, name):
+            return dc.uncertainty_breakdown.value_of(name)
+
+        assert (
+            driver(with_graph, "conflicting_evidence")
+            > driver(without, "conflicting_evidence")
+        )
+
+    def test_graph_adds_dominant_conflict_weakening_factor(self):
+        from predictron_engine.reasoning.contradiction_graph import (
+            build_contradiction_graph,
+        )
+
+        observations = self._conflicting_observations()
+        graph = build_contradiction_graph(observations)
+        base = dict(
+            bundle=None,
+            observations=observations,
+            assessments=[],
+            features=ExtractedFeatures(data_completeness=0.9),
+        )
+        without = compute_decision_confidence(**base)
+        with_graph = compute_decision_confidence(
+            **base, contradiction_graph=graph
+        )
+
+        assert any(
+            "dominant contradiction" in f for f in with_graph.weakening_factors
+        )
+        assert not any(
+            "dominant contradiction" in f for f in without.weakening_factors
+        )

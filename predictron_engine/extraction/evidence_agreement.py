@@ -14,10 +14,13 @@ Design
 
 from __future__ import annotations
 
+import json
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from predictron_engine.models.report import EvidenceItem
+
+_PROVENANCE_DOCUMENT_ID_KEY = "document_id"
 
 
 def detect_corroboration(
@@ -144,19 +147,44 @@ def detect_single_source_claims(
     return single_source
 
 
+def _independent_source_ids(item: EvidenceItem) -> set[str]:
+    """Underlying source documents supporting an evidence item.
+
+    Corroboration must be anchored to genuine independent documents
+    rather than the ``item.source`` label, which identifies the
+    knowledge provider that generated the item.  Document ids are
+    resolved from each citation's :attr:`EvidenceCitation.source_document_ids`
+    and the provenance record's ``document_id``.
+    """
+    ids: set[str] = set()
+    for citation in item.citations:
+        ids.update(citation.source_document_ids)
+    encoded = item.provenance_record
+    if encoded:
+        try:
+            record = json.loads(encoded)
+        except (TypeError, ValueError):
+            record = None
+        if isinstance(record, dict):
+            doc_id = record.get(_PROVENANCE_DOCUMENT_ID_KEY)
+            if isinstance(doc_id, str) and doc_id:
+                ids.add(doc_id)
+    return ids
+
+
 def compute_agreement_ratio(
     items: list[EvidenceItem],
 ) -> float:
     """Compute the fraction of items that are corroborated.
 
-    An item is considered corroborated when it has citations from
-    more than one source, or when multiple items exist in the same
-    (domain, category) group.
+    An item is corroborated when its (domain, category) group is
+    supported by at least two distinct underlying source documents
+    (resolved from each item's citations and provenance record).
 
-    Returns a value in [0, 1].  Returns 1.0 when no items are provided.
+    Returns a value in [0, 1].  Returns 0.0 when no items are provided.
     """
     if not items:
-        return 1.0
+        return 0.0
 
     groups: dict[tuple[str, str], list[EvidenceItem]] = {}
     for item in items:
@@ -165,11 +193,13 @@ def compute_agreement_ratio(
 
     corroborated_count = 0
     for group_items in groups.values():
-        sources = {i.source for i in group_items}
-        if len(sources) >= 2:
+        document_ids: set[str] = set()
+        for item in group_items:
+            document_ids.update(_independent_source_ids(item))
+        if len(document_ids) >= 2:
             corroborated_count += len(group_items)
 
-    return round(corroborated_count / len(items), 4) if items else 1.0
+    return round(corroborated_count / len(items), 4)
 
 
 class CorroboratedGroup:

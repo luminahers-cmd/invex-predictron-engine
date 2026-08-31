@@ -104,6 +104,14 @@ class DebugReport(BaseModel):
     Aggregates all validation results, traceability information,
     explanations, and diagnostics into a single structured object
     for debugging, auditing, and trust verification.
+
+    Sprint P8D additions (all optional, backward compatible):
+      - ``contradiction_graph`` — dict serialization of the reasoning
+        contradiction graph when the reasoning layer produced one.
+      - ``reasoning_trace`` — dict serialization of the reasoning trace
+        when generated (recommendation/debug path only; never changes
+        the production Report schema).
+      - ``reasoning_budget`` — adaptive-budget diagnostics dict.
     """
 
     pipeline_summary: PipelineSummary = Field(
@@ -137,6 +145,24 @@ class DebugReport(BaseModel):
     key_artifacts: dict[str, str] = Field(
         default_factory=dict,
         description="Maps artifact type to its ID in the trace graph",
+    )
+    contradiction_graph: dict[str, object] | None = Field(
+        default=None,
+        description=(
+            "Serialized reasoning contradiction graph (Sprint P8D)"
+        ),
+    )
+    reasoning_trace: dict[str, object] | None = Field(
+        default=None,
+        description=(
+            "Serialized reasoning trace, when generated (Sprint P8D)"
+        ),
+    )
+    reasoning_budget: dict[str, object] | None = Field(
+        default=None,
+        description=(
+            "Adaptive-budget diagnostics, when computed (Sprint P8D)"
+        ),
     )
 
     @property

@@ -28,6 +28,12 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 
+from predictron_engine.decision.calibration import (
+    compute_evidence_confidence,
+    compute_evidence_diversity,
+    compute_evidence_trust,
+)
+from predictron_engine.evaluation.aggregation import mean_score
 from predictron_engine.knowledge.concepts import DIMENSION_LABELS, AnalysisDimension
 from predictron_engine.models.report import (
     ConfidenceAssessment,
@@ -43,6 +49,7 @@ from predictron_engine.models.report import (
 )
 
 if TYPE_CHECKING:
+    from predictron_engine.evidence.models import EvidenceBundle
     from predictron_engine.models.extracted_features import ExtractedFeatures
 
 logger = logging.getLogger(__name__)
@@ -104,6 +111,18 @@ _CONV_CROSS_SIGNAL_WEIGHT: float = 0.15
 _CONV_READINESS_WEIGHT: float = 0.15
 
 # ---------------------------------------------------------------------------
+# Genuine evidence-quality blend (M2).
+#
+# When bundle provenance is available the evidence-quality factor is derived
+# from trust, extraction/quality confidence, and source diversity rather than
+# a second observation-quality aggregate.
+# ---------------------------------------------------------------------------
+
+_EVIDENCE_BUNDLE_TRUST_WEIGHT: float = 0.50
+_EVIDENCE_BUNDLE_CONFIDENCE_WEIGHT: float = 0.30
+_EVIDENCE_BUNDLE_DIVERSITY_WEIGHT: float = 0.20
+
+# ---------------------------------------------------------------------------
 # Risk modifier constants.
 # ---------------------------------------------------------------------------
 
@@ -134,6 +153,9 @@ class DefaultDecisionEngine:
         confidence: list[ConfidenceAssessment],
         assessments: list[DimensionAssessment] | None = None,
         signal_relationships: list[SignalRelationship] | None = None,
+        *,
+        readiness_score: float | None = None,
+        evidence_bundle: EvidenceBundle | None = None,
     ) -> InvestmentDecision:
         """Produce a deterministic investment decision.
 
@@ -144,6 +166,14 @@ class DefaultDecisionEngine:
             confidence: Per-dimension confidence assessments.
             assessments: Per-dimension evaluations (optional).
             signal_relationships: Cross-signal relationships (optional).
+            readiness_score: Canonical investment readiness score (0-100)
+                already computed by the readiness stage. When provided it is
+                used directly as the readiness factor, avoiding recomputation
+                from per-assessment scores.
+            evidence_bundle: Collected evidence bundle used to derive a
+                genuine evidence-quality factor (trust, authority, quality).
+                When omitted, a best-effort observation-derived proxy is
+                used for backward compatibility.
 
         Returns:
             A fully populated InvestmentDecision.
@@ -155,10 +185,12 @@ class DefaultDecisionEngine:
 
         # Compute quantitative factors
         score_factor = self._compute_score_factor(scores)
-        readiness_factor = self._compute_readiness_factor(assessments)
+        readiness_factor = self._resolve_readiness_factor(
+            readiness_score, assessments,
+        )
         confidence_factor = self._compute_confidence_factor(confidence)
         evidence_quality_factor = self._compute_evidence_quality_factor(
-            observations, evidence_items=None,
+            observations, evidence_items=None, evidence_bundle=evidence_bundle,
         )
         cross_signal_factor = self._compute_cross_signal_factor(
             signal_relationships,
@@ -255,10 +287,30 @@ class DefaultDecisionEngine:
 
     @staticmethod
     def _compute_score_factor(scores: list[ScoreResult]) -> float:
-        """Average of all dimension scores (0-100)."""
-        if not scores:
-            return 50.0
-        return sum(s.score for s in scores) / len(scores)
+        """Canonical mean of all dimension scores (0-100).
+
+        Reuses :func:`~predictron_engine.evaluation.aggregation.mean_score`,
+        the same primitive that produces the report's ``overall_score``, so
+        the decision's score factor and the report cannot drift apart.  Empty
+        input yields 0.0 (no evidence) rather than a fabricated neutral 50.
+        """
+        return mean_score(scores)
+
+    @staticmethod
+    def _resolve_readiness_factor(
+        readiness_score: float | None,
+        assessments: list[DimensionAssessment],
+    ) -> float:
+        """Resolve the readiness factor for the composite score.
+
+        Uses the canonical readiness score produced by the investment
+        readiness stage when available; otherwise falls back to the
+        average of per-assessment scores (backward-compatible for callers
+        that bypass the readiness stage).
+        """
+        if readiness_score is not None:
+            return max(0.0, min(100.0, readiness_score))
+        return DefaultDecisionEngine._compute_readiness_factor(assessments)
 
     @staticmethod
     def _compute_readiness_factor(
@@ -285,9 +337,27 @@ class DefaultDecisionEngine:
     def _compute_evidence_quality_factor(
         observations: list[Observation],
         evidence_items: list[EvidenceItem] | None = None,
+        evidence_bundle: EvidenceBundle | None = None,
     ) -> float:
-        """Evidence quality factor (0-1) based on observation confidence
-        and diversity."""
+        """Genuine evidence-quality factor (0-1).
+
+        When an ``EvidenceBundle`` with usable trust/intelligence metadata is
+        available, evidence quality is derived from the bundle's provenance:
+        average trust, extraction/quality confidence, and source diversity.
+        This avoids the historical duplication where the factor was merely a
+        second observation-quality aggregate overlapping with
+        ``confidence_factor``.
+
+        When no bundle metadata is available (e.g. direct/test callers), a
+        best-effort observation-derived proxy is returned so behaviour remains
+        backward compatible.
+        """
+        bundle_quality = DefaultDecisionEngine._evidence_quality_from_bundle(
+            evidence_bundle
+        )
+        if bundle_quality is not None:
+            return bundle_quality
+
         if not observations:
             return 0.0
 
@@ -309,6 +379,35 @@ class DefaultDecisionEngine:
             + importance_ratio * 0.25
         )
         return max(0.0, min(1.0, quality))
+
+    @staticmethod
+    def _evidence_quality_from_bundle(
+        evidence_bundle: EvidenceBundle | None,
+    ) -> float | None:
+        """Compute a genuine evidence-quality factor from bundle provenance.
+
+        Returns None when the bundle carries no usable trust/intelligence
+        metadata, signalling that callers should fall back to the
+        observation-derived proxy.
+        """
+        if evidence_bundle is None:
+            return None
+        if not evidence_bundle.documents:
+            return None
+
+        trust = compute_evidence_trust(evidence_bundle)
+        confidence = compute_evidence_confidence(evidence_bundle)
+        diversity = compute_evidence_diversity(evidence_bundle)
+
+        if trust <= 0.0 and confidence <= 0.0 and diversity <= 0.0:
+            return None
+
+        quality = (
+            trust * _EVIDENCE_BUNDLE_TRUST_WEIGHT
+            + confidence * _EVIDENCE_BUNDLE_CONFIDENCE_WEIGHT
+            + diversity * _EVIDENCE_BUNDLE_DIVERSITY_WEIGHT
+        )
+        return round(max(0.0, min(1.0, quality)), 4)
 
     @staticmethod
     def _compute_cross_signal_factor(

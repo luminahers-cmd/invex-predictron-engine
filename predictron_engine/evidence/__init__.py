@@ -32,6 +32,11 @@ The evidence layer contains six independent subsystems:
    citations linking evidence claims to source documents, with retrieval
    functions for querying the evidence bundle.  Implemented in
    ``citation.py`` and ``retrieval.py``.
+
+7. The Deterministic Offline Evidence Replay subsystem (Sprint P7) —
+   replays a recorded evidence corpus so the engine can be regression-
+   tested offline, without network access and without changing production
+   behavior.  Implemented in ``replay/``.
 """
 
 from predictron_engine.evidence.cleaner import HtmlCleaner

@@ -84,12 +84,33 @@ class TestPackageSurface:
         ):
             assert hasattr(decision, name), name
 
-    def test_report_builder_signature_unchanged(self):
+    def test_report_builder_signature_backward_compatible(self):
         import inspect
 
         from predictron_engine.report.report_builder import (
             DefaultReportBuilder,
         )
 
-        params = list(inspect.signature(DefaultReportBuilder.build).parameters)
-        assert params[-1] == "evidence_collection"
+        sig = inspect.signature(DefaultReportBuilder.build)
+        params = list(sig.parameters.values())
+
+        original = [
+            "startup",
+            "features",
+            "evidence",
+            "observations",
+            "scores",
+            "recommendations",
+            "confidence",
+            "dimension_assessments",
+            "decision",
+            "investment_readiness",
+            "evidence_collection",
+        ]
+        names = [p.name for p in params if p.name != "self"]
+        # Every original parameter must be preserved, in order, and all
+        # post-``confidence`` parameters stay optional with defaults so
+        # existing positional callers are unaffected.
+        assert names[: len(original)] == original
+        for p in params[len(original) + 1:]:
+            assert p.default is not inspect.Parameter.empty, p.name

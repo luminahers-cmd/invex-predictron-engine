@@ -7,6 +7,8 @@ and fundraising readiness.
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from predictron_engine.knowledge.concepts import Priority, RecommendationCategory
 from predictron_engine.models.extracted_features import ExtractedFeatures
 from predictron_engine.models.report import (
@@ -20,6 +22,9 @@ from predictron_engine.recommendations.strategies.base import (
     filter_observations,
     observation_confidence,
 )
+
+if TYPE_CHECKING:
+    from predictron_engine.models.report import InvestmentReadiness, ScoreResult
 
 
 class FundraisingStrategy:
@@ -38,9 +43,10 @@ class FundraisingStrategy:
         features: ExtractedFeatures,
         observations: list[Observation],
         assessments: list[DimensionAssessment],
+        scores: list[ScoreResult] | None = None,
+        readiness: InvestmentReadiness | None = None,
     ) -> list[Recommendation]:
         recommendations: list[Recommendation] = []
-
         if features.funding_stage is not None:
             stage_obs = filter_observations(observations, "traction_signals")
             stage_assess = filter_assessments(assessments, "traction_signals")
@@ -81,9 +87,9 @@ class FundraisingStrategy:
             )
 
         if features.founder_profile_count > 0 and features.has_pitch_deck:
-            all_assess = filter_assessments(
-                assessments, "market_opportunity"
-            ) + filter_assessments(assessments, "product_strength")
+            all_assess = filter_assessments(assessments, "market_opportunity") + filter_assessments(
+                assessments, "product_strength"
+            )
             avg_conf = assessment_confidence(all_assess) if all_assess else 0.0
 
             if avg_conf > 0.5:

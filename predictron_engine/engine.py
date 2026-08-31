@@ -54,8 +54,10 @@ from predictron_engine.evidence.runner import (
 from predictron_engine.extraction.composite import CompositeExtractor
 from predictron_engine.ingest.normalizer import DefaultNormalizer
 from predictron_engine.models.report import (
+    DimensionAssessment,
     EvidenceCollectionMetadata,
     Report,
+    ScoreResult,
 )
 from predictron_engine.reasoning.reasoning_engine import DefaultReasoningEngine
 from predictron_engine.recommendations.composite import (
@@ -64,6 +66,7 @@ from predictron_engine.recommendations.composite import (
 from predictron_engine.report.report_builder import DefaultReportBuilder
 from predictron_engine.scoring.scoring_engine import DefaultScoringEngine
 from predictron_engine.synthesis.engine import DecisionSynthesisEngine
+from predictron_engine.validation.debug_report import DebugReport
 from predictron_engine.version import ENGINE_VERSION
 
 logger = logging.getLogger(__name__)
@@ -170,8 +173,20 @@ class PredictronEngine:
         # Stage 5: Gather evidence
         evidence_set = self._evidence.gather(features)
 
-        # Stage 6: Reason
-        observations = self._reasoning.reason(features, evidence_set.items)
+        # Stage 6: Reason (thread the collected EvidenceBundle through so
+        # reasoning consumes trust, provenance, authority, quality, and
+        # citations rather than only extracted features and static evidence).
+        observations = self._reasoning.reason(
+            features, evidence_set.items, context.evidence_bundle
+        )
+
+        # H5 (Sprint P8D): the contradiction graph is built exactly once
+        # by the reasoning layer from the observations and reused by every
+        # downstream stage — no duplicate contradiction detection or
+        # recomputation of observations.
+        contradiction_graph = getattr(
+            self._reasoning, "last_contradiction_graph", None
+        )
 
         # Stage 7: Evaluate
         evaluation_result = self._evaluation.evaluate(
@@ -181,8 +196,14 @@ class PredictronEngine:
         # Stage 8: Score
         scores = self._scoring.score(features, observations)
 
-        # Stage 8b: Compute investment readiness
+        # L1: Populate DimensionAssessment.score from the matching ScoreResult
+        # so otherwise-dead rationale branches (which filter on assessment
+        # scores) become reachable. Reuses existing scoring output — no
+        # duplicate computation is performed.
         assessments = evaluation_result.assessments
+        self._annex_scores_to_assessments(assessments, scores)
+
+        # Stage 8b: Compute investment readiness
         investment_readiness = compute_investment_readiness(
             features, observations, scores, assessments,
         )
@@ -194,10 +215,18 @@ class PredictronEngine:
 
         # Stage 10: Assess confidence
         conf = self._confidence.assess(
-            features, observations, scores, assessments
+            features,
+            observations,
+            scores,
+            assessments,
+            contradiction_graph=contradiction_graph,
         )
 
         # Stage 11: Decide
+        # C1: wire the canonical readiness score (Stage 8b output) into the
+        # decision instead of falling back to a constant readiness factor.
+        # M2: supply the collected evidence bundle so the decision weighs
+        # genuine evidence quality rather than an observation-quality proxy.
         decision = self._decision.decide(
             features,
             observations,
@@ -205,6 +234,8 @@ class PredictronEngine:
             conf,
             assessments,
             investment_readiness.signal_relationships,
+            readiness_score=investment_readiness.readiness_score,
+            evidence_bundle=evidence_bundle,
         )
 
         # Stage 11b: Calibrate decision confidence (Sprint 6B).
@@ -216,6 +247,7 @@ class PredictronEngine:
             assessments=assessments,
             features=features,
             scores=scores,
+            contradiction_graph=contradiction_graph,
         )
         recs = apply_recommendation_risk(recs, decision_confidence)
         calibration_summary = build_calibration_summary(
@@ -239,9 +271,11 @@ class PredictronEngine:
             decision_confidence=decision_confidence,
             calibration_summary=calibration_summary,
             consistency=getattr(self._reasoning, "last_consistency", None),
+            contradiction_graph=contradiction_graph,
         )
 
         # Stage 12: Build report
+        elapsed_ms = (time.perf_counter() - start_time) * 1000
         report = self._report_builder.build(
             startup,
             features,
@@ -254,13 +288,11 @@ class PredictronEngine:
             decision,
             investment_readiness,
             evidence_collection=_evidence_metadata(evidence_bundle),
+            decision_confidence=decision_confidence,
+            calibration_summary=calibration_summary,
+            decision_synthesis=synthesis,
+            processing_time_ms=round(elapsed_ms, 2),
         )
-        report.decision_confidence = decision_confidence
-        report.calibration_summary = calibration_summary
-        report.decision_synthesis = synthesis
-
-        elapsed_ms = (time.perf_counter() - start_time) * 1000
-        report.analysis_metadata.processing_time_ms = round(elapsed_ms, 2)
 
         logger.info(
             "Analysis complete in %.1fms",
@@ -268,6 +300,22 @@ class PredictronEngine:
             extra={"request_id": request_id},
         )
         return report
+
+    @staticmethod
+    def _annex_scores_to_assessments(
+        assessments: list[DimensionAssessment],
+        scores: list[ScoreResult],
+    ) -> None:
+        """Populate each assessment's ``score`` from the matching ScoreResult.
+
+        Reuses the scoring engine's per-dimension output so the assessment
+        score field reflects real data (making dead rationale branches
+        reachable) without performing any new scoring work.
+        """
+        score_by_dim = {s.dimension: s.score for s in scores}
+        for assessment in assessments:
+            if assessment.score is None and assessment.dimension in score_by_dim:
+                assessment.score = score_by_dim[assessment.dimension]
 
     def _collect_evidence(
         self, startup: object, request_id: str
@@ -309,13 +357,18 @@ class PredictronEngine:
 
     def analyze_with_debug(
         self, request: StartupAnalysisRequest
-    ) -> tuple[Report, object]:
+    ) -> tuple[Report, DebugReport]:
         """Execute analysis and return a DebugReport alongside the Report.
+
+        The debug path runs the identical production pipeline and then
+        augments the DebugReport with the reasoning contradiction graph,
+        a reasoning trace, and adaptive-budget diagnostics.  The Report
+        schema is unchanged.
 
         Returns:
             A tuple of (Report, DebugReport). The DebugReport contains
-            traceability, explanations, validation findings, and
-            confidence summaries.
+            traceability, explanations, validation findings, confidence
+            summaries, and (Sprint P8D) reasoning diagnostics.
         """
         from predictron_engine.validation.validation_engine import (
             ValidationEngine,
@@ -324,4 +377,57 @@ class PredictronEngine:
         report = self.analyze(request)
         val_engine = ValidationEngine()
         debug = val_engine.validate_report(report)
+        self._attach_reasoning_debug(debug, report)
         return report, debug
+
+    def _attach_reasoning_debug(self, debug: DebugReport, report: Report) -> None:
+        """Attach contradiction graph, trace, and budget to the DebugReport.
+
+        All artifacts are derived deterministically from already-produced
+        pipeline outputs (observations, evidence, features, scores) using
+        the existing graph/trace/budget implementations.  Nothing here
+        touches the Report schema; failures degrade gracefully.
+        """
+        try:
+            from predictron_engine.reasoning.adaptive_budget import (
+                compute_reasoning_budget,
+            )
+            from predictron_engine.reasoning.trace import build_reasoning_trace
+
+            graph = getattr(self._reasoning, "last_contradiction_graph", None)
+
+            # Contradiction graph (already built exactly once by reason()).
+            if graph is not None:
+                try:
+                    debug.contradiction_graph = graph.to_dict()
+                except AttributeError:
+                    pass
+
+            # Reasoning trace, reusing the already-built graph so it is
+            # never recomputed.
+            trace = build_reasoning_trace(
+                report.observations,
+                report.evidence,
+                report.scores,
+                contradiction_graph=graph,
+            )
+            debug.reasoning_trace = trace.to_dict()
+
+            # Adaptive-budget diagnostics (reuses existing computation on
+            # the produced features/evidence; never changes the pipeline).
+            budget = compute_reasoning_budget(report.features, report.evidence)
+            debug.reasoning_budget = {
+                "budget_fraction": budget.budget_fraction,
+                "max_rules": budget.max_rules,
+                "skipped_rules": list(budget.skipped_rules),
+                "rules_executed": budget.rules_executed,
+                "savings_fraction": budget.savings_fraction,
+                "confidence_estimate": budget.confidence_estimate,
+                "impact_score": budget.impact_score,
+                "rationale": budget.rationale,
+            }
+        except Exception:  # noqa: BLE001 - debug path must never raise
+            logger.debug(
+                "Failed to attach reasoning debug diagnostics",
+                exc_info=True,
+            )

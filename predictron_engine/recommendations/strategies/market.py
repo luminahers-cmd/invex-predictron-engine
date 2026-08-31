@@ -7,6 +7,8 @@ and market entry considerations.
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from predictron_engine.knowledge.concepts import Priority, RecommendationCategory
 from predictron_engine.models.extracted_features import ExtractedFeatures
 from predictron_engine.models.report import (
@@ -20,6 +22,9 @@ from predictron_engine.recommendations.strategies.base import (
     filter_observations,
     observation_confidence,
 )
+
+if TYPE_CHECKING:
+    from predictron_engine.models.report import InvestmentReadiness, ScoreResult
 
 
 class MarketStrategy:
@@ -38,6 +43,8 @@ class MarketStrategy:
         features: ExtractedFeatures,
         observations: list[Observation],
         assessments: list[DimensionAssessment],
+        scores: list[ScoreResult] | None = None,
+        readiness: InvestmentReadiness | None = None,
     ) -> list[Recommendation]:
         recommendations: list[Recommendation] = []
         market_obs = filter_observations(observations, self.domain)
@@ -49,9 +56,7 @@ class MarketStrategy:
         recommendations.extend(self._recommend_industry(features, conf))
         recommendations.extend(self._recommend_geography(features, conf))
         recommendations.extend(
-            self._recommend_market_analysis(
-                market_obs, market_assess, conf, assess_conf
-            )
+            self._recommend_market_analysis(market_obs, market_assess, conf, assess_conf)
         )
         recommendations.extend(self._recommend_network_effects(features))
         recommendations.extend(self._recommend_fragmentation(features))
@@ -59,9 +64,7 @@ class MarketStrategy:
         return recommendations
 
     @staticmethod
-    def _recommend_industry(
-        features: ExtractedFeatures, conf: float
-    ) -> list[Recommendation]:
+    def _recommend_industry(features: ExtractedFeatures, conf: float) -> list[Recommendation]:
         if features.industry is not None:
             return []
         return [
@@ -88,9 +91,7 @@ class MarketStrategy:
         ]
 
     @staticmethod
-    def _recommend_geography(
-        features: ExtractedFeatures, conf: float
-    ) -> list[Recommendation]:
+    def _recommend_geography(features: ExtractedFeatures, conf: float) -> list[Recommendation]:
         if features.geography is not None or features.headquarters_region is not None:
             return []
         return [
@@ -208,8 +209,7 @@ class MarketStrategy:
                 ),
                 confidence=0.55,
                 expected_impact=(
-                    "Identifies consolidation or differentiation "
-                    "strategies in fragmented markets."
+                    "Identifies consolidation or differentiation strategies in fragmented markets."
                 ),
                 action_items=[
                     "Map competitive landscape and key players",

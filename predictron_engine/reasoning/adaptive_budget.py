@@ -229,34 +229,37 @@ def _estimate_decision_impact(
 # Budget computation
 # ---------------------------------------------------------------------------
 
-# Rule names in canonical order (must match DEFAULT_RULES order)
+# Canonical rule identifiers, in canonical order (must match DEFAULT_RULES order).
+# These are the lowercase snake_case identifiers emitted by each rule's ``name``
+# property (see CompositeReasoner._rule_name), so they match the identifiers used
+# to decide skipping at execution time.
 _RULE_NAMES: tuple[str, ...] = (
-    "MarketContextRule",
-    "BusinessModelContextRule",
-    "StageExpectationRule",
-    "TechnologyContextRule",
-    "TeamAssessmentRule",
-    "DataQualityRule",
-    "RiskIndicatorRule",
-    "CompetitionAssessmentRule",
-    "QuantitativeSignalsRule",
-    "CrossSignalReasoningRule",
-    "QuantitativeCrossSignalRule",
+    "market_context",
+    "business_model_context",
+    "stage_expectation",
+    "technology_context",
+    "team_assessment",
+    "data_quality",
+    "risk_indicator",
+    "competition_assessment",
+    "quantitative_signals",
+    "cross_signal_reasoning",
+    "quantitative_cross_signal",
 )
 
 # Rules that are most skippable when budget is tight (least critical)
 _SKIPPABLE_PRIORITY: tuple[str, ...] = (
-    "QuantitativeCrossSignalRule",
-    "CrossSignalReasoningRule",
-    "QuantitativeSignalsRule",
-    "CompetitionAssessmentRule",
-    "RiskIndicatorRule",
-    "DataQualityRule",
-    "StageExpectationRule",
-    "BusinessModelContextRule",
-    "TechnologyContextRule",
-    "TeamAssessmentRule",
-    "MarketContextRule",
+    "quantitative_cross_signal",
+    "cross_signal_reasoning",
+    "quantitative_signals",
+    "competition_assessment",
+    "risk_indicator",
+    "data_quality",
+    "stage_expectation",
+    "business_model_context",
+    "technology_context",
+    "team_assessment",
+    "market_context",
 )
 
 

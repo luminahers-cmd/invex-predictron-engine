@@ -167,12 +167,24 @@ class TestEvidenceBackedPopulation:
                 category="market_size",
                 statement="Big market.",
                 source="src-a",
+                citations=[EvidenceCitation(
+                    claim="Big market.",
+                    domain="industry",
+                    category="market_size",
+                    source_document_ids=["doc-1"],
+                )],
             ),
             EvidenceItem(
                 domain="industry",
                 category="market_size",
                 statement="Bigger market.",
                 source="src-b",
+                citations=[EvidenceCitation(
+                    claim="Bigger market.",
+                    domain="industry",
+                    category="market_size",
+                    source_document_ids=["doc-2"],
+                )],
             ),
         ]
         reasoner = CompositeReasoner([MarketRefRule()])

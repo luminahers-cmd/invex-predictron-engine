@@ -17,6 +17,16 @@ Extensibility:
   - Implement RecommendationStrategy for different recommendation types
   - Inject strategy sets for different investor profiles
   - Strategies can be enabled/disabled per analysis context
+
+Deprecation notice (Sprint P6A)
+------------------------------
+:class:`DefaultRecommendationEngine` and this module are **legacy**.  The
+production pipeline uses :class:`CompositeRecommendationEngine`
+(:mod:`predictron_engine.recommendations.composite`) with the domain
+strategies in :mod:`predictron_engine.recommendations.strategies`.  This
+module has zero production imports and is retained only for backward
+compatibility with any downstream consumers of the public
+``DefaultRecommendationEngine`` symbol; it should not be used for new work.
 """
 
 import logging
@@ -174,12 +184,8 @@ class DefaultRecommendationEngine:
     the combined output.
     """
 
-    def __init__(
-        self, strategies: list[RecommendationStrategy] | None = None
-    ) -> None:
-        self._strategies = (
-            strategies if strategies is not None else _build_default_strategies()
-        )
+    def __init__(self, strategies: list[RecommendationStrategy] | None = None) -> None:
+        self._strategies = strategies if strategies is not None else _build_default_strategies()
 
     def recommend(
         self,
@@ -202,17 +208,11 @@ class DefaultRecommendationEngine:
                 )
             except TypeError:
                 try:
-                    recommendations.extend(
-                        strategy.generate(features, observations, scores)
-                    )
+                    recommendations.extend(strategy.generate(features, observations, scores))
                 except Exception:
-                    logger.warning(
-                        "Strategy %s failed, skipping", type(strategy).__name__
-                    )
+                    logger.warning("Strategy %s failed, skipping", type(strategy).__name__)
             except Exception:
-                logger.warning(
-                    "Strategy %s failed, skipping", type(strategy).__name__
-                )
+                logger.warning("Strategy %s failed, skipping", type(strategy).__name__)
 
         deduplicated = _deduplicate_recommendations(recommendations)
         prioritized = _prioritize_recommendations(deduplicated)

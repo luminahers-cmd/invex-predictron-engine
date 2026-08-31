@@ -19,6 +19,8 @@ Key principles:
 import logging
 from datetime import UTC, datetime
 
+from predictron_engine.decision.models import CalibrationSummary, DecisionConfidence
+from predictron_engine.evaluation.aggregation import mean_score
 from predictron_engine.evaluation.evaluation_models import DimensionAssessment
 from predictron_engine.evaluation.investment_readiness import (
     compute_investment_readiness,
@@ -27,6 +29,7 @@ from predictron_engine.models.extracted_features import ExtractedFeatures
 from predictron_engine.models.report import (
     AnalysisMetadata,
     ConfidenceAssessment,
+    DecisionSynthesis,
     EvidenceCollectionMetadata,
     EvidenceItem,
     InvestmentDecision,
@@ -62,8 +65,20 @@ class DefaultReportBuilder:
         decision: InvestmentDecision | None = None,
         investment_readiness: InvestmentReadiness | None = None,
         evidence_collection: EvidenceCollectionMetadata | None = None,
+        decision_confidence: DecisionConfidence | None = None,
+        calibration_summary: CalibrationSummary | None = None,
+        decision_synthesis: DecisionSynthesis | None = None,
+        processing_time_ms: float = 0.0,
     ) -> Report:
-        """Assemble the final report from all pipeline outputs."""
+        """Assemble the final report from all pipeline outputs.
+
+        When supplied, ``decision_confidence``, ``calibration_summary``,
+        ``decision_synthesis``, and ``processing_time_ms`` are embedded in
+        the Report so that ``build()`` can produce a complete Report on
+        its own.  All parameters remain optional so existing callers are
+        unaffected; the engine supplies them to avoid post-construction
+        mutation.
+        """
         logger.info("Building analysis report")
 
         overall_score = self._aggregate_scores(scores)
@@ -106,11 +121,14 @@ class DefaultReportBuilder:
             overall_confidence=overall_confidence,
             investment_readiness=investment_readiness,
             investment_decision=decision,
+            decision_confidence=decision_confidence,
+            calibration_summary=calibration_summary,
+            decision_synthesis=decision_synthesis,
             signal_relationships=signal_relationships,
             analysis_metadata=AnalysisMetadata(
                 engine_version=ENGINE_VERSION,
                 pipeline_stages_completed=pipeline_stages,
-                processing_time_ms=0.0,
+                processing_time_ms=processing_time_ms,
                 timestamp=datetime.now(UTC),
                 data_completeness=features.data_completeness,
                 evidence_collection=evidence_collection,
@@ -118,10 +136,12 @@ class DefaultReportBuilder:
         )
 
     def _aggregate_scores(self, scores: list[ScoreResult]) -> float:
-        """Compute the overall score as the mean of dimension scores."""
-        if not scores:
-            return 0.0
-        return round(sum(s.score for s in scores) / len(scores), 2)
+        """Compute the overall score via the canonical mean aggregation.
+
+        ``mean_score`` is the same primitive consumed by the decision score
+        factor, so the report and decision cannot drift apart.
+        """
+        return round(mean_score(scores), 2)
 
     def _aggregate_confidence(
         self, confidence: list[ConfidenceAssessment]

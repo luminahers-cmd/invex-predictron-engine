@@ -60,8 +60,8 @@ def enrich_observation(
     * ``provenance_document_ids`` — ordered, deduplicated union of
       citation source ids and matched-item provenance record ids.
     * ``evidence_agreement_ratio`` — fraction of matched evidence items
-      corroborated by ≥2 distinct sources within their (domain, category)
-      group; 0.0 when nothing is matched.
+      corroborated by ≥2 distinct source documents within their
+      (domain, category) group; 0.0 when nothing is matched.
     * ``evidence_conflict_count`` — number of conflicting signal pairs
       detected among matched items.
     * ``citations`` — existing citations are preserved; when absent,
@@ -162,18 +162,12 @@ def _collect_provenance_ids(
 
 
 def _compute_agreement_ratio(matched: list[EvidenceItem]) -> float:
-    """Fraction of matched items corroborated by ≥2 distinct sources."""
-    if not matched:
-        return 0.0
-
-    groups: dict[tuple[str, str], set[str]] = {}
-    for item in matched:
-        groups.setdefault((item.domain, item.category), set()).add(item.source)
-
-    corroborated = sum(
-        1 for item in matched if len(groups[(item.domain, item.category)]) >= 2
+    """Fraction of matched items corroborated by ≥2 distinct source documents."""
+    from predictron_engine.extraction.evidence_agreement import (
+        compute_agreement_ratio,
     )
-    return round(corroborated / len(matched), 4)
+
+    return compute_agreement_ratio(matched)
 
 
 def _count_conflicts(matched: list[EvidenceItem]) -> int:

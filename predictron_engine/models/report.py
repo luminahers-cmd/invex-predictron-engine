@@ -218,6 +218,28 @@ class Observation(BaseModel):
     )
 
 
+# Observation categories signalling conflicting or negative signals.
+# Shared by the confidence engine and decision calibration so conflict
+# detection stays consistent across pipeline stages.
+NEGATIVE_SIGNAL_CATEGORIES: frozenset[str] = frozenset({
+    "signal_conflict",
+    "nrr_churn_conflict",
+    "burn_runway_critical",
+    "growth_burn_concerning",
+    "funding_efficiency_weak",
+    "funding_valuation_inconsistent",
+    "customer_count_stage_below",
+    "team_revenue_inconsistent",
+    "valuation_weak_traction",
+    "high_arr_concentrated_customers",
+    "high_burn_low_growth",
+    "funding_without_execution",
+    "arr_burn_gap",
+    "rev_per_employee_low",
+    "nrr_churn_masking",
+})
+
+
 class ScoreResult(BaseModel):
     """A numerical score for a single analysis dimension."""
 

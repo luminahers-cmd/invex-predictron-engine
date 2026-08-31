@@ -16,7 +16,7 @@ The Predictron API is the backend intelligence layer behind **InveX AI**. It exp
 - [benchmarks/](benchmarks/) — Benchmark runner, report tools, validators, and expected output snapshots.
 - [docs/](docs/) — Architecture, design, reasoning, evidence, and benchmark methodology documentation.
 - [examples/](examples/) — Sample input and sample report artifacts.
-- [tests/](tests/) — Automated test suite (1884 tests).
+- [tests/](tests/) — Automated test suite (2854 tests).
 - [alembic/](alembic/) — Database migrations.
 - [assets/](assets/) — Images and static assets.
 - [.github/](.github/) — Pull request and issue templates.
@@ -107,6 +107,8 @@ Copy `.env` to the project root (a template is provided in the repository).
 | `RATE_LIMIT_REQUESTS` | No | `100` | Maximum requests per window |
 | `RATE_LIMIT_WINDOW_SECONDS` | No | `60` | Rate limit window in seconds |
 | `REQUEST_ID_HEADER` | No | `X-Request-ID` | Header name for request ID propagation |
+| `EVIDENCE_SEARCH_ENABLED` | No | `false` | Opt in to search-backed evidence discovery in the default evidence orchestrator |
+| `TAVILY_API_KEY` | No | `` | Tavily Search API key — required when `EVIDENCE_SEARCH_ENABLED=true` |
 
 ---
 
@@ -136,7 +138,7 @@ Current migration chain: `0001` (initial placeholder) → `0002` (analysis table
 ## Running Tests
 
 ```bash
-# Run the full test suite (1884 tests)
+# Run the full test suite (2854 tests)
 python -m pytest tests
 
 # Run with verbose output

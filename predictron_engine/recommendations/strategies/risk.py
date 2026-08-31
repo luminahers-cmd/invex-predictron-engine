@@ -7,6 +7,8 @@ and mitigation opportunities.
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from predictron_engine.knowledge.concepts import Priority, RecommendationCategory
 from predictron_engine.models.extracted_features import ExtractedFeatures
 from predictron_engine.models.report import (
@@ -20,6 +22,9 @@ from predictron_engine.recommendations.strategies.base import (
     filter_observations,
     observation_confidence,
 )
+
+if TYPE_CHECKING:
+    from predictron_engine.models.report import InvestmentReadiness, ScoreResult
 
 
 class RiskStrategy:
@@ -38,6 +43,8 @@ class RiskStrategy:
         features: ExtractedFeatures,
         observations: list[Observation],
         assessments: list[DimensionAssessment],
+        scores: list[ScoreResult] | None = None,
+        readiness: InvestmentReadiness | None = None,
     ) -> list[Recommendation]:
         recommendations: list[Recommendation] = []
         risk_obs = filter_observations(observations, self.domain)
@@ -48,9 +55,7 @@ class RiskStrategy:
 
         recommendations.extend(self._recommend_data_coverage(features, conf))
         recommendations.extend(
-            self._recommend_risk_review(
-                risk_obs, risk_assess, conf, assess_conf
-            )
+            self._recommend_risk_review(risk_obs, risk_assess, conf, assess_conf)
         )
         recommendations.extend(self._recommend_concentration(features))
         recommendations.extend(self._recommend_open_source(features))
@@ -59,9 +64,7 @@ class RiskStrategy:
         return recommendations
 
     @staticmethod
-    def _recommend_data_coverage(
-        features: ExtractedFeatures, conf: float
-    ) -> list[Recommendation]:
+    def _recommend_data_coverage(features: ExtractedFeatures, conf: float) -> list[Recommendation]:
         if features.data_completeness >= 0.3:
             return []
         return [
@@ -185,8 +188,7 @@ class RiskStrategy:
                 ),
                 confidence=0.6,
                 expected_impact=(
-                    "Clarifies competitive positioning against "
-                    "open-source alternatives."
+                    "Clarifies competitive positioning against open-source alternatives."
                 ),
                 action_items=[
                     "Audit open-source alternatives in the space",
@@ -206,8 +208,7 @@ class RiskStrategy:
             return []
         has_moat_signals = bool(
             features.switching_cost_signals
-            or features.network_effect_competition
-            == "strong_network_effects"
+            or features.network_effect_competition == "strong_network_effects"
         )
         if has_moat_signals:
             return []
@@ -228,8 +229,7 @@ class RiskStrategy:
                 ),
                 confidence=0.5,
                 expected_impact=(
-                    "Improves long-term defensibility and reduces "
-                    "competitive vulnerability."
+                    "Improves long-term defensibility and reduces competitive vulnerability."
                 ),
                 action_items=[
                     "Identify potential moat sources in the business model",
