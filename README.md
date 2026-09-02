@@ -16,7 +16,7 @@ The Predictron API is the backend intelligence layer behind **InveX AI**. It exp
 - [benchmarks/](benchmarks/) — Benchmark runner, report tools, validators, and expected output snapshots.
 - [docs/](docs/) — Architecture, design, reasoning, evidence, and benchmark methodology documentation.
 - [examples/](examples/) — Sample input and sample report artifacts.
-- [tests/](tests/) — Automated test suite (2854 tests).
+- [tests/](tests/) — Automated test suite (3044 tests).
 - [alembic/](alembic/) — Database migrations.
 - [assets/](assets/) — Images and static assets.
 - [.github/](.github/) — Pull request and issue templates.
@@ -93,10 +93,11 @@ Copy `.env` to the project root (a template is provided in the repository).
 |----------|----------|---------|-------------|
 | `APP_NAME` | No | `InveX AI Backend` | Application name used in responses and logging |
 | `APP_VERSION` | No | `1.0.0` | Application version returned by the health endpoint |
-| `DEBUG` | No | `false` | Enable debug-level logging |
-| `DATABASE_URL` | Yes | `postgresql+asyncpg://postgres:postgres@localhost:5432/invex` | PostgreSQL connection string (asyncpg driver) |
+| `ENVIRONMENT` | No | `development` | Runtime environment — `development` or `production`. In `production` the app **refuses to start** with an insecure `SECRET_KEY` |
+| `DEBUG` | No | `false` | Enable debug-level logging (never set `true` in production) |
+| `DATABASE_URL` | Yes | `postgresql+asyncpg://postgres@localhost:5432/invex` | PostgreSQL connection string (asyncpg driver). The default has **no embedded password** — set one per environment |
 | `DATABASE_ECHO` | No | `false` | Log all SQL statements |
-| `SECRET_KEY` | **Yes** | `CHANGE_ME_IN_PRODUCTION` | JWT signing key — **must be changed in production** |
+| `SECRET_KEY` | **Yes** | `CHANGE_ME_IN_PRODUCTION` | JWT signing key — **must be changed in production**; `ENVIRONMENT=production` hard-fails startup if left at the default |
 | `ACCESS_TOKEN_EXPIRE_MINUTES` | No | `60` | JWT token lifetime in minutes |
 | `ALGORITHM` | No | `HS256` | JWT signing algorithm |
 | `CORS_ORIGINS` | No | `["http://localhost:3000","https://*.vercel.app"]` | Allowed CORS origins (JSON array) |
@@ -106,6 +107,8 @@ Copy `.env` to the project root (a template is provided in the repository).
 | `RATE_LIMIT_ENABLED` | No | `true` | Enable or disable rate limiting |
 | `RATE_LIMIT_REQUESTS` | No | `100` | Maximum requests per window |
 | `RATE_LIMIT_WINDOW_SECONDS` | No | `60` | Rate limit window in seconds |
+| `RATE_LIMIT_TRUSTED_PROXIES` | No | `[]` | List of trusted proxy IPs/CIDRs (JSON array). When non-empty, `X-Forwarded-For` is only honoured from these peers; spoofed headers from direct clients are ignored. Keep empty when not behind a proxy |
+| `RATE_LIMIT_MAX_TRACKED_CLIENTS` | No | `100000` | Upper bound on distinct tracked client keys — bounds rate-limiter memory |
 | `REQUEST_ID_HEADER` | No | `X-Request-ID` | Header name for request ID propagation |
 | `EVIDENCE_SEARCH_ENABLED` | No | `false` | Opt in to search-backed evidence discovery in the default evidence orchestrator |
 | `TAVILY_API_KEY` | No | `` | Tavily Search API key — required when `EVIDENCE_SEARCH_ENABLED=true` |
@@ -138,7 +141,7 @@ Current migration chain: `0001` (initial placeholder) → `0002` (analysis table
 ## Running Tests
 
 ```bash
-# Run the full test suite (2854 tests)
+# Run the full test suite (3044 tests)
 python -m pytest tests
 
 # Run with verbose output

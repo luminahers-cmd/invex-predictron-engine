@@ -41,6 +41,9 @@ async def lifespan(app: FastAPI):
     try:
         settings.validate_required()
     except RuntimeError as e:
+        if settings.is_production:
+            logger.critical("Refusing to start: production configuration invalid: %s", e)
+            raise
         logger.warning("Configuration issue: %s", e)
 
     engine = PredictronEngine()

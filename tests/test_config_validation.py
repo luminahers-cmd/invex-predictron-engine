@@ -43,3 +43,50 @@ class TestConfigValidation:
             settings.validate_required()
         msg = str(exc.value)
         assert "DATABASE_URL" in msg
+
+
+class TestProductionModeEnforcement:
+    """In production mode insecure defaults must fail startup validation."""
+
+    def test_insecure_secret_key_fails_in_production(self):
+        settings = Settings(
+            ENVIRONMENT="production",
+            SECRET_KEY="CHANGE_ME_IN_PRODUCTION",
+            DATABASE_URL="postgresql+asyncpg://user:pass@localhost/proddb",
+        )
+        with pytest.raises(RuntimeError, match="SECRET_KEY"):
+            settings.validate_required()
+
+    def test_empty_secret_key_fails_in_production(self):
+        settings = Settings(
+            ENVIRONMENT="production",
+            SECRET_KEY="",
+            DATABASE_URL="postgresql+asyncpg://user:pass@localhost/proddb",
+        )
+        with pytest.raises(RuntimeError, match="SECRET_KEY"):
+            settings.validate_required()
+
+    def test_strong_secret_key_passes_in_production(self):
+        settings = Settings(
+            ENVIRONMENT="production",
+            SECRET_KEY="a-long-random-production-secret",
+            DATABASE_URL="postgresql+asyncpg://user:pass@localhost/proddb",
+        )
+        settings.validate_required()
+
+    def test_default_secret_key_only_warns_in_development(self):
+        settings = Settings(
+            ENVIRONMENT="development",
+            SECRET_KEY="CHANGE_ME_IN_PRODUCTION",
+            DATABASE_URL="postgresql+asyncpg://user:pass@localhost/devdb",
+        )
+        settings.validate_required()
+
+    def test_invalid_environment_is_rejected(self):
+        settings = Settings(
+            ENVIRONMENT="staging",
+            SECRET_KEY="some-secret",
+            DATABASE_URL="postgresql+asyncpg://user:pass@localhost/devdb",
+        )
+        with pytest.raises(RuntimeError, match="ENVIRONMENT"):
+            settings.validate_required()
