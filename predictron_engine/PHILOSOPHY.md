@@ -1,7 +1,7 @@
 # Predictron Engine — Design Philosophy
 
-> **Version:** 0.6.5
-> **Last updated:** 2026-07-12
+> **Version:** 0.12.1 (matches `predictron_engine/version.py`)
+> **Last updated:** 2026-09-02
 
 This document captures the foundational beliefs that guide every design decision
 in the Predictron Engine. It is not a coding standard — those live in
