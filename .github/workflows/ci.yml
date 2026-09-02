@@ -40,4 +40,20 @@ jobs:
         # cannot run in CI yet: benchmark_runner drives live web collection
         # through the real evidence orchestrator, so outputs are
         # non-reproducible offline and would not match these snapshots.
-        run: python -m benchmarks.benchmark_report --diff 0.12.0 0.13.0
+        # The pair is auto-discovered from the committed tree so a newly
+        # committed snapshot is diffed without editing this workflow.
+        run: |
+          set -euo pipefail
+          readarray -t sorted < <(git ls-tree -r --name-only HEAD benchmarks/expected_outputs/ \
+            | grep 'snapshot_v.*\.json$' | sort -V)
+          total=${#sorted[@]}
+          if [ "$total" -lt 2 ]; then
+            echo "Expected at least 2 committed snapshots, found $total"
+            exit 0
+          fi
+          prev=${sorted[$((total - 2))]##*/}
+          last=${sorted[$((total - 1))]##*/}
+          prev=${prev#snapshot_v}; prev=${prev%.json}
+          last=${last#snapshot_v}; last=${last%.json}
+          echo "Diffing committed snapshots: $prev -> $last"
+          python -m benchmarks.benchmark_report --diff "$prev" "$last"

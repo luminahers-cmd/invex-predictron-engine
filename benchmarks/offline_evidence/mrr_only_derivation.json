@@ -1,0 +1,380 @@
+{
+  "bundle": {
+    "attempted_pages": 8,
+    "collected_at": "2026-01-01T00:00:00Z",
+    "documents": [
+      {
+        "content_type": "text/html; charset=utf-8",
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "id": "75a75f50-25a6-528a-be7b-de9addcee596",
+        "metadata": {
+          "authority_score": 0.9521,
+          "canonical_url": "https://submetrics.example.com/",
+          "content_hash": "c506f74fec4074d121405f101aa3f06b322f0086b88a57781848b73e0e321676",
+          "document_type": "homepage",
+          "duplicate_of": null,
+          "heading_count": 0,
+          "is_duplicate": false,
+          "language": "en",
+          "list_count": 0,
+          "priority": 1,
+          "provenance": [
+            {
+              "document_id": "75a75f50-25a6-528a-be7b-de9addcee596",
+              "document_type": "homepage",
+              "duplicate_of": null,
+              "fetched_at": "2026-01-01T00:00:00Z",
+              "final_url": "https://submetrics.example.com/",
+              "freshness_days": 0,
+              "is_duplicate": false,
+              "is_official": false,
+              "source_provider": "evidence",
+              "trust_level": "unknown",
+              "trust_score": 0.7058,
+              "url": "https://submetrics.example.com/"
+            }
+          ],
+          "quality_score": 0.5205,
+          "source_provider": "evidence",
+          "table_count": 0,
+          "trust_level": "unknown",
+          "trust_score": {
+            "factors": [
+              {
+                "explanation": "",
+                "name": "authority",
+                "value": 0.9521,
+                "weight": 0.3
+              },
+              {
+                "explanation": "0d old",
+                "name": "freshness",
+                "value": 1.0,
+                "weight": 0.15
+              },
+              {
+                "explanation": "",
+                "name": "quality",
+                "value": 0.5205,
+                "weight": 0.25
+              },
+              {
+                "explanation": "",
+                "name": "source_type",
+                "value": 0.2,
+                "weight": 0.2
+              },
+              {
+                "explanation": "",
+                "name": "duplicate_penalty",
+                "value": 1.0,
+                "weight": 0.1
+              }
+            ],
+            "freshness_days": 0,
+            "overall": 0.7058,
+            "source_trust_level": "unknown"
+          },
+          "word_count": 56
+        },
+        "original_url": "https://submetrics.example.com/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "status": "success",
+        "text": "SubMetrics\n\nSubMetrics provides subscription analytics for B2B SaaS companies. The platform tracks MRR, churn, and expansion revenue across billing systems. Currently generating $85K MRR from 120 subscription customers on a $499/month plan. Founded in 2023, team of 8 based in Denver. Raised $2M seed from angel investors. Pre-revenue on enterprise tier, currently focused on product-market fit.",
+        "title": "SubMetrics \u2014 home",
+        "truncated": false,
+        "url": "https://submetrics.example.com/"
+      }
+    ],
+    "duration_ms": 0,
+    "intelligence": {
+      "average_authority": 0.9521,
+      "average_quality": 0.5205,
+      "classification_confidence": 1.0,
+      "document_type_distribution": {
+        "homepage": 1
+      },
+      "documents_classified": 1,
+      "documents_input": 8,
+      "duplicates_removed": 7,
+      "processing_duration_ms": 0,
+      "trust_summary": {
+        "average_trust_score": 0.7058,
+        "high_trust_count": 1,
+        "low_trust_count": 0,
+        "medium_trust_count": 0,
+        "source_trust_levels": {
+          "unknown": 1
+        },
+        "total_documents": 1,
+        "trust_score_range": [
+          0.7058,
+          0.7058
+        ],
+        "unknown_trust_count": 0
+      }
+    },
+    "providers": [
+      {
+        "attempted_pages": 8,
+        "documents": 8,
+        "duration_ms": 0,
+        "failure_reason": null,
+        "provider": "website",
+        "success": true
+      }
+    ],
+    "sources": [
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://submetrics.example.com/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://submetrics.example.com/"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://submetrics.example.com/about",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://submetrics.example.com/about"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://submetrics.example.com/about-us",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://submetrics.example.com/about-us"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://submetrics.example.com/company",
+        "page_type": "company",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://submetrics.example.com/company"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://submetrics.example.com/platform",
+        "page_type": "platform",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://submetrics.example.com/platform"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://submetrics.example.com/products",
+        "page_type": "products",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://submetrics.example.com/products"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://submetrics.example.com/services",
+        "page_type": "services",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://submetrics.example.com/services"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://submetrics.example.com/technology",
+        "page_type": "technology",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://submetrics.example.com/technology"
+      }
+    ],
+    "startup_name": "SubMetrics",
+    "total_pages": 1,
+    "trust_summary": {
+      "average_trust_score": 0.7058,
+      "high_trust_count": 1,
+      "low_trust_count": 0,
+      "medium_trust_count": 0,
+      "source_trust_levels": {
+        "unknown": 1
+      },
+      "total_documents": 1,
+      "trust_score_range": [
+        0.7058,
+        0.7058
+      ],
+      "unknown_trust_count": 0
+    },
+    "website": "https://submetrics.example.com/"
+  },
+  "name": "mrr_only_derivation",
+  "raw_documents": [
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "75a75f50-25a6-528a-be7b-de9addcee596",
+      "metadata": null,
+      "original_url": "https://submetrics.example.com/",
+      "page_type": "homepage",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "SubMetrics\n\nSubMetrics provides subscription analytics for B2B SaaS companies. The platform tracks MRR, churn, and expansion revenue across billing systems. Currently generating $85K MRR from 120 subscription customers on a $499/month plan. Founded in 2023, team of 8 based in Denver. Raised $2M seed from angel investors. Pre-revenue on enterprise tier, currently focused on product-market fit.",
+      "title": "SubMetrics \u2014 home",
+      "truncated": false,
+      "url": "https://submetrics.example.com/"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "7c05e86d-6d75-56cc-b692-e12dc51e6ff2",
+      "metadata": null,
+      "original_url": "https://submetrics.example.com/about",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "SubMetrics\n\nSubMetrics provides subscription analytics for B2B SaaS companies. The platform tracks MRR, churn, and expansion revenue across billing systems. Currently generating $85K MRR from 120 subscription customers on a $499/month plan. Founded in 2023, team of 8 based in Denver. Raised $2M seed from angel investors. Pre-revenue on enterprise tier, currently focused on product-market fit.",
+      "title": "SubMetrics \u2014 about",
+      "truncated": false,
+      "url": "https://submetrics.example.com/about"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "23c9f97f-7023-5810-8c2e-ee8c3f2c45db",
+      "metadata": null,
+      "original_url": "https://submetrics.example.com/about-us",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "SubMetrics\n\nSubMetrics provides subscription analytics for B2B SaaS companies. The platform tracks MRR, churn, and expansion revenue across billing systems. Currently generating $85K MRR from 120 subscription customers on a $499/month plan. Founded in 2023, team of 8 based in Denver. Raised $2M seed from angel investors. Pre-revenue on enterprise tier, currently focused on product-market fit.",
+      "title": "SubMetrics \u2014 about-us",
+      "truncated": false,
+      "url": "https://submetrics.example.com/about-us"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "3f59a5fe-b49d-5d6c-bd4d-cd901f639e13",
+      "metadata": null,
+      "original_url": "https://submetrics.example.com/company",
+      "page_type": "company",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "SubMetrics\n\nSubMetrics provides subscription analytics for B2B SaaS companies. The platform tracks MRR, churn, and expansion revenue across billing systems. Currently generating $85K MRR from 120 subscription customers on a $499/month plan. Founded in 2023, team of 8 based in Denver. Raised $2M seed from angel investors. Pre-revenue on enterprise tier, currently focused on product-market fit.",
+      "title": "SubMetrics \u2014 company",
+      "truncated": false,
+      "url": "https://submetrics.example.com/company"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "2427a7c7-e7b4-5c2c-ba5f-5f954581f5fd",
+      "metadata": null,
+      "original_url": "https://submetrics.example.com/platform",
+      "page_type": "platform",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "SubMetrics\n\nSubMetrics provides subscription analytics for B2B SaaS companies. The platform tracks MRR, churn, and expansion revenue across billing systems. Currently generating $85K MRR from 120 subscription customers on a $499/month plan. Founded in 2023, team of 8 based in Denver. Raised $2M seed from angel investors. Pre-revenue on enterprise tier, currently focused on product-market fit.",
+      "title": "SubMetrics \u2014 platform",
+      "truncated": false,
+      "url": "https://submetrics.example.com/platform"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "2b08d3e1-5344-5488-8db5-12e423cd7de6",
+      "metadata": null,
+      "original_url": "https://submetrics.example.com/products",
+      "page_type": "products",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "SubMetrics\n\nSubMetrics provides subscription analytics for B2B SaaS companies. The platform tracks MRR, churn, and expansion revenue across billing systems. Currently generating $85K MRR from 120 subscription customers on a $499/month plan. Founded in 2023, team of 8 based in Denver. Raised $2M seed from angel investors. Pre-revenue on enterprise tier, currently focused on product-market fit.",
+      "title": "SubMetrics \u2014 products",
+      "truncated": false,
+      "url": "https://submetrics.example.com/products"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "327baff2-bf1a-53b7-bc24-8b20087af59f",
+      "metadata": null,
+      "original_url": "https://submetrics.example.com/services",
+      "page_type": "services",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "SubMetrics\n\nSubMetrics provides subscription analytics for B2B SaaS companies. The platform tracks MRR, churn, and expansion revenue across billing systems. Currently generating $85K MRR from 120 subscription customers on a $499/month plan. Founded in 2023, team of 8 based in Denver. Raised $2M seed from angel investors. Pre-revenue on enterprise tier, currently focused on product-market fit.",
+      "title": "SubMetrics \u2014 services",
+      "truncated": false,
+      "url": "https://submetrics.example.com/services"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "015477b4-adbb-5836-af24-3f675aed79f0",
+      "metadata": null,
+      "original_url": "https://submetrics.example.com/technology",
+      "page_type": "technology",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "SubMetrics\n\nSubMetrics provides subscription analytics for B2B SaaS companies. The platform tracks MRR, churn, and expansion revenue across billing systems. Currently generating $85K MRR from 120 subscription customers on a $499/month plan. Founded in 2023, team of 8 based in Denver. Raised $2M seed from angel investors. Pre-revenue on enterprise tier, currently focused on product-market fit.",
+      "title": "SubMetrics \u2014 technology",
+      "truncated": false,
+      "url": "https://submetrics.example.com/technology"
+    }
+  ],
+  "schema_version": 1
+}

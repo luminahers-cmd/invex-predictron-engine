@@ -1,0 +1,380 @@
+{
+  "bundle": {
+    "attempted_pages": 8,
+    "collected_at": "2026-01-01T00:00:00Z",
+    "documents": [
+      {
+        "content_type": "text/html; charset=utf-8",
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "id": "4534832a-c7ed-5369-b6c6-d195ed8b546d",
+        "metadata": {
+          "authority_score": 0.951,
+          "canonical_url": "https://datapipe.example.com/",
+          "content_hash": "8bb8da7274fd3493e97dcb8b98be2b8c31b96af8e0c89ba5c17b28dd2350bdaa",
+          "document_type": "homepage",
+          "duplicate_of": null,
+          "heading_count": 0,
+          "is_duplicate": false,
+          "language": "en",
+          "list_count": 0,
+          "priority": 1,
+          "provenance": [
+            {
+              "document_id": "4534832a-c7ed-5369-b6c6-d195ed8b546d",
+              "document_type": "homepage",
+              "duplicate_of": null,
+              "fetched_at": "2026-01-01T00:00:00Z",
+              "final_url": "https://datapipe.example.com/",
+              "freshness_days": 0,
+              "is_duplicate": false,
+              "is_official": false,
+              "source_provider": "evidence",
+              "trust_level": "unknown",
+              "trust_score": 0.7027,
+              "url": "https://datapipe.example.com/"
+            }
+          ],
+          "quality_score": 0.5096,
+          "source_provider": "evidence",
+          "table_count": 0,
+          "trust_level": "unknown",
+          "trust_score": {
+            "factors": [
+              {
+                "explanation": "",
+                "name": "authority",
+                "value": 0.951,
+                "weight": 0.3
+              },
+              {
+                "explanation": "0d old",
+                "name": "freshness",
+                "value": 1.0,
+                "weight": 0.15
+              },
+              {
+                "explanation": "",
+                "name": "quality",
+                "value": 0.5096,
+                "weight": 0.25
+              },
+              {
+                "explanation": "",
+                "name": "source_type",
+                "value": 0.2,
+                "weight": 0.2
+              },
+              {
+                "explanation": "",
+                "name": "duplicate_penalty",
+                "value": 1.0,
+                "weight": 0.1
+              }
+            ],
+            "freshness_days": 0,
+            "overall": 0.7027,
+            "source_trust_level": "unknown"
+          },
+          "word_count": 61
+        },
+        "original_url": "https://datapipe.example.com/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "status": "success",
+        "text": "DataPipe\n\nDataPipe provides automated data pipeline orchestration for analytics teams. The platform handles ETL, data quality monitoring, and warehouse optimization. Currently generating $6M ARR from 35 enterprise customers with average contract value of $171,000. Team of 15 engineers and 5 sales professionals based in New York. ARR per employee is exceptionally high at $300K. Raised $15M Series A. Founded in 2021.",
+        "title": "DataPipe \u2014 home",
+        "truncated": false,
+        "url": "https://datapipe.example.com/"
+      }
+    ],
+    "duration_ms": 0,
+    "intelligence": {
+      "average_authority": 0.951,
+      "average_quality": 0.5096,
+      "classification_confidence": 1.0,
+      "document_type_distribution": {
+        "homepage": 1
+      },
+      "documents_classified": 1,
+      "documents_input": 8,
+      "duplicates_removed": 7,
+      "processing_duration_ms": 0,
+      "trust_summary": {
+        "average_trust_score": 0.7027,
+        "high_trust_count": 1,
+        "low_trust_count": 0,
+        "medium_trust_count": 0,
+        "source_trust_levels": {
+          "unknown": 1
+        },
+        "total_documents": 1,
+        "trust_score_range": [
+          0.7027,
+          0.7027
+        ],
+        "unknown_trust_count": 0
+      }
+    },
+    "providers": [
+      {
+        "attempted_pages": 8,
+        "documents": 8,
+        "duration_ms": 0,
+        "failure_reason": null,
+        "provider": "website",
+        "success": true
+      }
+    ],
+    "sources": [
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://datapipe.example.com/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://datapipe.example.com/"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://datapipe.example.com/about",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://datapipe.example.com/about"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://datapipe.example.com/about-us",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://datapipe.example.com/about-us"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://datapipe.example.com/company",
+        "page_type": "company",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://datapipe.example.com/company"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://datapipe.example.com/platform",
+        "page_type": "platform",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://datapipe.example.com/platform"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://datapipe.example.com/products",
+        "page_type": "products",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://datapipe.example.com/products"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://datapipe.example.com/services",
+        "page_type": "services",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://datapipe.example.com/services"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://datapipe.example.com/technology",
+        "page_type": "technology",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://datapipe.example.com/technology"
+      }
+    ],
+    "startup_name": "DataPipe",
+    "total_pages": 1,
+    "trust_summary": {
+      "average_trust_score": 0.7027,
+      "high_trust_count": 1,
+      "low_trust_count": 0,
+      "medium_trust_count": 0,
+      "source_trust_levels": {
+        "unknown": 1
+      },
+      "total_documents": 1,
+      "trust_score_range": [
+        0.7027,
+        0.7027
+      ],
+      "unknown_trust_count": 0
+    },
+    "website": "https://datapipe.example.com/"
+  },
+  "name": "revenue_team_efficiency",
+  "raw_documents": [
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "4534832a-c7ed-5369-b6c6-d195ed8b546d",
+      "metadata": null,
+      "original_url": "https://datapipe.example.com/",
+      "page_type": "homepage",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "DataPipe\n\nDataPipe provides automated data pipeline orchestration for analytics teams. The platform handles ETL, data quality monitoring, and warehouse optimization. Currently generating $6M ARR from 35 enterprise customers with average contract value of $171,000. Team of 15 engineers and 5 sales professionals based in New York. ARR per employee is exceptionally high at $300K. Raised $15M Series A. Founded in 2021.",
+      "title": "DataPipe \u2014 home",
+      "truncated": false,
+      "url": "https://datapipe.example.com/"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "025f9ee5-2fea-53a1-9cc8-45a9a97c176c",
+      "metadata": null,
+      "original_url": "https://datapipe.example.com/about",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "DataPipe\n\nDataPipe provides automated data pipeline orchestration for analytics teams. The platform handles ETL, data quality monitoring, and warehouse optimization. Currently generating $6M ARR from 35 enterprise customers with average contract value of $171,000. Team of 15 engineers and 5 sales professionals based in New York. ARR per employee is exceptionally high at $300K. Raised $15M Series A. Founded in 2021.",
+      "title": "DataPipe \u2014 about",
+      "truncated": false,
+      "url": "https://datapipe.example.com/about"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "7567bea0-3470-5224-837a-9a7594aae8f1",
+      "metadata": null,
+      "original_url": "https://datapipe.example.com/about-us",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "DataPipe\n\nDataPipe provides automated data pipeline orchestration for analytics teams. The platform handles ETL, data quality monitoring, and warehouse optimization. Currently generating $6M ARR from 35 enterprise customers with average contract value of $171,000. Team of 15 engineers and 5 sales professionals based in New York. ARR per employee is exceptionally high at $300K. Raised $15M Series A. Founded in 2021.",
+      "title": "DataPipe \u2014 about-us",
+      "truncated": false,
+      "url": "https://datapipe.example.com/about-us"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "2147a32e-6e11-5f5a-8c92-714de7120c8c",
+      "metadata": null,
+      "original_url": "https://datapipe.example.com/company",
+      "page_type": "company",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "DataPipe\n\nDataPipe provides automated data pipeline orchestration for analytics teams. The platform handles ETL, data quality monitoring, and warehouse optimization. Currently generating $6M ARR from 35 enterprise customers with average contract value of $171,000. Team of 15 engineers and 5 sales professionals based in New York. ARR per employee is exceptionally high at $300K. Raised $15M Series A. Founded in 2021.",
+      "title": "DataPipe \u2014 company",
+      "truncated": false,
+      "url": "https://datapipe.example.com/company"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "a6d0f7a1-be8f-56a8-b50c-a45828593543",
+      "metadata": null,
+      "original_url": "https://datapipe.example.com/platform",
+      "page_type": "platform",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "DataPipe\n\nDataPipe provides automated data pipeline orchestration for analytics teams. The platform handles ETL, data quality monitoring, and warehouse optimization. Currently generating $6M ARR from 35 enterprise customers with average contract value of $171,000. Team of 15 engineers and 5 sales professionals based in New York. ARR per employee is exceptionally high at $300K. Raised $15M Series A. Founded in 2021.",
+      "title": "DataPipe \u2014 platform",
+      "truncated": false,
+      "url": "https://datapipe.example.com/platform"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "488e1d6b-81a7-54a8-804a-4f067a31c617",
+      "metadata": null,
+      "original_url": "https://datapipe.example.com/products",
+      "page_type": "products",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "DataPipe\n\nDataPipe provides automated data pipeline orchestration for analytics teams. The platform handles ETL, data quality monitoring, and warehouse optimization. Currently generating $6M ARR from 35 enterprise customers with average contract value of $171,000. Team of 15 engineers and 5 sales professionals based in New York. ARR per employee is exceptionally high at $300K. Raised $15M Series A. Founded in 2021.",
+      "title": "DataPipe \u2014 products",
+      "truncated": false,
+      "url": "https://datapipe.example.com/products"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "75c5ef7a-251d-5df5-8b30-1476ff73e6b5",
+      "metadata": null,
+      "original_url": "https://datapipe.example.com/services",
+      "page_type": "services",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "DataPipe\n\nDataPipe provides automated data pipeline orchestration for analytics teams. The platform handles ETL, data quality monitoring, and warehouse optimization. Currently generating $6M ARR from 35 enterprise customers with average contract value of $171,000. Team of 15 engineers and 5 sales professionals based in New York. ARR per employee is exceptionally high at $300K. Raised $15M Series A. Founded in 2021.",
+      "title": "DataPipe \u2014 services",
+      "truncated": false,
+      "url": "https://datapipe.example.com/services"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "7c8e611d-c2f2-5dbc-83bc-602438c2b49c",
+      "metadata": null,
+      "original_url": "https://datapipe.example.com/technology",
+      "page_type": "technology",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "DataPipe\n\nDataPipe provides automated data pipeline orchestration for analytics teams. The platform handles ETL, data quality monitoring, and warehouse optimization. Currently generating $6M ARR from 35 enterprise customers with average contract value of $171,000. Team of 15 engineers and 5 sales professionals based in New York. ARR per employee is exceptionally high at $300K. Raised $15M Series A. Founded in 2021.",
+      "title": "DataPipe \u2014 technology",
+      "truncated": false,
+      "url": "https://datapipe.example.com/technology"
+    }
+  ],
+  "schema_version": 1
+}

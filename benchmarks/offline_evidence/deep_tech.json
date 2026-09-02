@@ -1,0 +1,380 @@
+{
+  "bundle": {
+    "attempted_pages": 8,
+    "collected_at": "2026-01-01T00:00:00Z",
+    "documents": [
+      {
+        "content_type": "text/html; charset=utf-8",
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "id": "5660674e-5aed-587e-8860-7fb6063170ad",
+        "metadata": {
+          "authority_score": 0.9521,
+          "canonical_url": "https://qubitshield.example.com/",
+          "content_hash": "880416d652e6a8f626bf40af2fb2b595e399882f80d878340790dc880f7b0d00",
+          "document_type": "homepage",
+          "duplicate_of": null,
+          "heading_count": 0,
+          "is_duplicate": false,
+          "language": "en",
+          "list_count": 0,
+          "priority": 1,
+          "provenance": [
+            {
+              "document_id": "5660674e-5aed-587e-8860-7fb6063170ad",
+              "document_type": "homepage",
+              "duplicate_of": null,
+              "fetched_at": "2026-01-01T00:00:00Z",
+              "final_url": "https://qubitshield.example.com/",
+              "freshness_days": 0,
+              "is_duplicate": false,
+              "is_official": false,
+              "source_provider": "evidence",
+              "trust_level": "unknown",
+              "trust_score": 0.706,
+              "url": "https://qubitshield.example.com/"
+            }
+          ],
+          "quality_score": 0.5214,
+          "source_provider": "evidence",
+          "table_count": 0,
+          "trust_level": "unknown",
+          "trust_score": {
+            "factors": [
+              {
+                "explanation": "",
+                "name": "authority",
+                "value": 0.9521,
+                "weight": 0.3
+              },
+              {
+                "explanation": "0d old",
+                "name": "freshness",
+                "value": 1.0,
+                "weight": 0.15
+              },
+              {
+                "explanation": "",
+                "name": "quality",
+                "value": 0.5214,
+                "weight": 0.25
+              },
+              {
+                "explanation": "",
+                "name": "source_type",
+                "value": 0.2,
+                "weight": 0.2
+              },
+              {
+                "explanation": "",
+                "name": "duplicate_penalty",
+                "value": 1.0,
+                "weight": 0.1
+              }
+            ],
+            "freshness_days": 0,
+            "overall": 0.706,
+            "source_trust_level": "unknown"
+          },
+          "word_count": 87
+        },
+        "original_url": "https://qubitshield.example.com/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "status": "success",
+        "text": "QubitShield\n\nQubitShield develops quantum error correction software for superconducting quantum processors. The proprietary decoder algorithm achieves a 40% improvement in logical qubit fidelity compared to baseline surface codes. The company licenses software to quantum computing hardware manufacturers and cloud quantum providers. 3 peer-reviewed publications in Nature Physics and PRX Quantum. Pre-revenue, currently running pilot evaluations with 2 quantum hardware companies. Seed stage with $5M raised from deep-tech focused VCs. Founded in 2023 by a team of 3 quantum physicists from MIT. Based in Boston, team of 12.",
+        "title": "QubitShield \u2014 home",
+        "truncated": false,
+        "url": "https://qubitshield.example.com/"
+      }
+    ],
+    "duration_ms": 0,
+    "intelligence": {
+      "average_authority": 0.9521,
+      "average_quality": 0.5214,
+      "classification_confidence": 1.0,
+      "document_type_distribution": {
+        "homepage": 1
+      },
+      "documents_classified": 1,
+      "documents_input": 8,
+      "duplicates_removed": 7,
+      "processing_duration_ms": 0,
+      "trust_summary": {
+        "average_trust_score": 0.706,
+        "high_trust_count": 1,
+        "low_trust_count": 0,
+        "medium_trust_count": 0,
+        "source_trust_levels": {
+          "unknown": 1
+        },
+        "total_documents": 1,
+        "trust_score_range": [
+          0.706,
+          0.706
+        ],
+        "unknown_trust_count": 0
+      }
+    },
+    "providers": [
+      {
+        "attempted_pages": 8,
+        "documents": 8,
+        "duration_ms": 0,
+        "failure_reason": null,
+        "provider": "website",
+        "success": true
+      }
+    ],
+    "sources": [
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://qubitshield.example.com/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://qubitshield.example.com/"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://qubitshield.example.com/about",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://qubitshield.example.com/about"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://qubitshield.example.com/about-us",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://qubitshield.example.com/about-us"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://qubitshield.example.com/company",
+        "page_type": "company",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://qubitshield.example.com/company"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://qubitshield.example.com/platform",
+        "page_type": "platform",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://qubitshield.example.com/platform"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://qubitshield.example.com/products",
+        "page_type": "products",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://qubitshield.example.com/products"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://qubitshield.example.com/services",
+        "page_type": "services",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://qubitshield.example.com/services"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://qubitshield.example.com/technology",
+        "page_type": "technology",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://qubitshield.example.com/technology"
+      }
+    ],
+    "startup_name": "QubitShield",
+    "total_pages": 1,
+    "trust_summary": {
+      "average_trust_score": 0.706,
+      "high_trust_count": 1,
+      "low_trust_count": 0,
+      "medium_trust_count": 0,
+      "source_trust_levels": {
+        "unknown": 1
+      },
+      "total_documents": 1,
+      "trust_score_range": [
+        0.706,
+        0.706
+      ],
+      "unknown_trust_count": 0
+    },
+    "website": "https://qubitshield.example.com/"
+  },
+  "name": "deep_tech",
+  "raw_documents": [
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "5660674e-5aed-587e-8860-7fb6063170ad",
+      "metadata": null,
+      "original_url": "https://qubitshield.example.com/",
+      "page_type": "homepage",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "QubitShield\n\nQubitShield develops quantum error correction software for superconducting quantum processors. The proprietary decoder algorithm achieves a 40% improvement in logical qubit fidelity compared to baseline surface codes. The company licenses software to quantum computing hardware manufacturers and cloud quantum providers. 3 peer-reviewed publications in Nature Physics and PRX Quantum. Pre-revenue, currently running pilot evaluations with 2 quantum hardware companies. Seed stage with $5M raised from deep-tech focused VCs. Founded in 2023 by a team of 3 quantum physicists from MIT. Based in Boston, team of 12.",
+      "title": "QubitShield \u2014 home",
+      "truncated": false,
+      "url": "https://qubitshield.example.com/"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "8892943f-68a3-5c58-9e20-5a5a223466ff",
+      "metadata": null,
+      "original_url": "https://qubitshield.example.com/about",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "QubitShield\n\nQubitShield develops quantum error correction software for superconducting quantum processors. The proprietary decoder algorithm achieves a 40% improvement in logical qubit fidelity compared to baseline surface codes. The company licenses software to quantum computing hardware manufacturers and cloud quantum providers. 3 peer-reviewed publications in Nature Physics and PRX Quantum. Pre-revenue, currently running pilot evaluations with 2 quantum hardware companies. Seed stage with $5M raised from deep-tech focused VCs. Founded in 2023 by a team of 3 quantum physicists from MIT. Based in Boston, team of 12.",
+      "title": "QubitShield \u2014 about",
+      "truncated": false,
+      "url": "https://qubitshield.example.com/about"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "6f368d0f-4a62-5db8-968c-005288a23ada",
+      "metadata": null,
+      "original_url": "https://qubitshield.example.com/about-us",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "QubitShield\n\nQubitShield develops quantum error correction software for superconducting quantum processors. The proprietary decoder algorithm achieves a 40% improvement in logical qubit fidelity compared to baseline surface codes. The company licenses software to quantum computing hardware manufacturers and cloud quantum providers. 3 peer-reviewed publications in Nature Physics and PRX Quantum. Pre-revenue, currently running pilot evaluations with 2 quantum hardware companies. Seed stage with $5M raised from deep-tech focused VCs. Founded in 2023 by a team of 3 quantum physicists from MIT. Based in Boston, team of 12.",
+      "title": "QubitShield \u2014 about-us",
+      "truncated": false,
+      "url": "https://qubitshield.example.com/about-us"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "76b0807a-fdb1-582a-af66-c997fff7cd8f",
+      "metadata": null,
+      "original_url": "https://qubitshield.example.com/company",
+      "page_type": "company",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "QubitShield\n\nQubitShield develops quantum error correction software for superconducting quantum processors. The proprietary decoder algorithm achieves a 40% improvement in logical qubit fidelity compared to baseline surface codes. The company licenses software to quantum computing hardware manufacturers and cloud quantum providers. 3 peer-reviewed publications in Nature Physics and PRX Quantum. Pre-revenue, currently running pilot evaluations with 2 quantum hardware companies. Seed stage with $5M raised from deep-tech focused VCs. Founded in 2023 by a team of 3 quantum physicists from MIT. Based in Boston, team of 12.",
+      "title": "QubitShield \u2014 company",
+      "truncated": false,
+      "url": "https://qubitshield.example.com/company"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "65459abb-ae10-57b4-9132-ef9530946763",
+      "metadata": null,
+      "original_url": "https://qubitshield.example.com/platform",
+      "page_type": "platform",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "QubitShield\n\nQubitShield develops quantum error correction software for superconducting quantum processors. The proprietary decoder algorithm achieves a 40% improvement in logical qubit fidelity compared to baseline surface codes. The company licenses software to quantum computing hardware manufacturers and cloud quantum providers. 3 peer-reviewed publications in Nature Physics and PRX Quantum. Pre-revenue, currently running pilot evaluations with 2 quantum hardware companies. Seed stage with $5M raised from deep-tech focused VCs. Founded in 2023 by a team of 3 quantum physicists from MIT. Based in Boston, team of 12.",
+      "title": "QubitShield \u2014 platform",
+      "truncated": false,
+      "url": "https://qubitshield.example.com/platform"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "df3c603d-0fc7-5717-9e2d-e3ee26344036",
+      "metadata": null,
+      "original_url": "https://qubitshield.example.com/products",
+      "page_type": "products",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "QubitShield\n\nQubitShield develops quantum error correction software for superconducting quantum processors. The proprietary decoder algorithm achieves a 40% improvement in logical qubit fidelity compared to baseline surface codes. The company licenses software to quantum computing hardware manufacturers and cloud quantum providers. 3 peer-reviewed publications in Nature Physics and PRX Quantum. Pre-revenue, currently running pilot evaluations with 2 quantum hardware companies. Seed stage with $5M raised from deep-tech focused VCs. Founded in 2023 by a team of 3 quantum physicists from MIT. Based in Boston, team of 12.",
+      "title": "QubitShield \u2014 products",
+      "truncated": false,
+      "url": "https://qubitshield.example.com/products"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "2badf735-25d5-5248-95b9-af8f8c8d1f77",
+      "metadata": null,
+      "original_url": "https://qubitshield.example.com/services",
+      "page_type": "services",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "QubitShield\n\nQubitShield develops quantum error correction software for superconducting quantum processors. The proprietary decoder algorithm achieves a 40% improvement in logical qubit fidelity compared to baseline surface codes. The company licenses software to quantum computing hardware manufacturers and cloud quantum providers. 3 peer-reviewed publications in Nature Physics and PRX Quantum. Pre-revenue, currently running pilot evaluations with 2 quantum hardware companies. Seed stage with $5M raised from deep-tech focused VCs. Founded in 2023 by a team of 3 quantum physicists from MIT. Based in Boston, team of 12.",
+      "title": "QubitShield \u2014 services",
+      "truncated": false,
+      "url": "https://qubitshield.example.com/services"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "67dd3f9e-bbfc-55ad-9ee6-3627a215eaf8",
+      "metadata": null,
+      "original_url": "https://qubitshield.example.com/technology",
+      "page_type": "technology",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "QubitShield\n\nQubitShield develops quantum error correction software for superconducting quantum processors. The proprietary decoder algorithm achieves a 40% improvement in logical qubit fidelity compared to baseline surface codes. The company licenses software to quantum computing hardware manufacturers and cloud quantum providers. 3 peer-reviewed publications in Nature Physics and PRX Quantum. Pre-revenue, currently running pilot evaluations with 2 quantum hardware companies. Seed stage with $5M raised from deep-tech focused VCs. Founded in 2023 by a team of 3 quantum physicists from MIT. Based in Boston, team of 12.",
+      "title": "QubitShield \u2014 technology",
+      "truncated": false,
+      "url": "https://qubitshield.example.com/technology"
+    }
+  ],
+  "schema_version": 1
+}

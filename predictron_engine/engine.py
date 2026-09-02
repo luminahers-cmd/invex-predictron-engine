@@ -48,6 +48,7 @@ from predictron_engine.evidence.evidence_engine import DefaultEvidenceEngine
 from predictron_engine.evidence.models import EvidenceBundle
 from predictron_engine.evidence.orchestrator import EvidenceOrchestrator
 from predictron_engine.evidence.runner import (
+    EvidenceCollectorFactory,
     EvidenceOrchestratorProtocol,
     collect_evidence_sync,
 )
@@ -72,6 +73,23 @@ from predictron_engine.version import ENGINE_VERSION
 logger = logging.getLogger(__name__)
 
 __all__ = ["PredictronEngine", "ENGINE_VERSION"]
+
+
+def _default_evidence_collector_factory() -> EvidenceOrchestratorProtocol:
+    """Build a fresh default evidence orchestrator per analysis.
+
+    Returning a *fresh* :class:`EvidenceOrchestrator` for every collection
+    gives each concurrent analysis its own providers and HTTP clients, each
+    bound to its own event loop. This is what lets the runner drop the
+    global serializing lock for the production default path while remaining
+    concurrency-safe. The factory resolves ``EvidenceOrchestrator``
+    lazily at call time so tests that monkeypatch the engine's default
+    orchestrator continue to take effect.
+
+    Returns:
+        A newly constructed default evidence orchestrator.
+    """
+    return EvidenceOrchestrator()
 
 
 def _evidence_metadata(bundle: EvidenceBundle) -> EvidenceCollectionMetadata:
@@ -116,7 +134,11 @@ class PredictronEngine:
         self._normalizer = normalizer or DefaultNormalizer()
         self._collector = collector or DefaultDataCollector()
         self._extractor = extractor or CompositeExtractor()
-        self._evidence_collector = evidence_collector or EvidenceOrchestrator()
+        self._evidence_collector: EvidenceOrchestratorProtocol | EvidenceCollectorFactory = (
+            evidence_collector
+            if evidence_collector is not None
+            else _default_evidence_collector_factory
+        )
         self._evidence = evidence or DefaultEvidenceEngine()
         self._reasoning = reasoning or DefaultReasoningEngine()
         self._evaluation = evaluation or CompositeEvaluator()
@@ -132,6 +154,7 @@ class PredictronEngine:
         self,
         request: StartupAnalysisRequest,
         request_id: str | None = None,
+        evidence_bundle: EvidenceBundle | None = None,
     ) -> Report:
         """Execute the full analysis pipeline and return a structured Report.
 
@@ -145,6 +168,11 @@ class PredictronEngine:
         request_id:
             Optional correlation id for logging and tracing. A random id
             is generated when omitted.
+        evidence_bundle:
+            Optional pre-built evidence bundle.  When supplied, Stage 3
+            (website evidence collection) is skipped and this bundle is
+            used directly.  This enables deterministic offline replay
+            without modifying any production scoring or reasoning logic.
         """
         start_time = time.perf_counter()
         request_id = request_id or uuid.uuid4().hex
@@ -157,7 +185,8 @@ class PredictronEngine:
         collected_data = self._collector.collect(startup)
 
         # Stage 3: Collect website evidence (best-effort, never fatal)
-        evidence_bundle = self._collect_evidence(startup, request_id)
+        if evidence_bundle is None:
+            evidence_bundle = self._collect_evidence(startup, request_id)
 
         context = AnalysisContext(
             request_id=request_id,

@@ -1,0 +1,380 @@
+{
+  "bundle": {
+    "attempted_pages": 8,
+    "collected_at": "2026-01-01T00:00:00Z",
+    "documents": [
+      {
+        "content_type": "text/html; charset=utf-8",
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "id": "d99194aa-099e-50e9-9a36-08b441000e41",
+        "metadata": {
+          "authority_score": 0.9502,
+          "canonical_url": "https://carbonlens.example.com/",
+          "content_hash": "c4e9cb9d2fdf7db493f2cdf3e55682e35d5a070acdc68a9f45418534411c2d61",
+          "document_type": "homepage",
+          "duplicate_of": null,
+          "heading_count": 0,
+          "is_duplicate": false,
+          "language": "en",
+          "list_count": 0,
+          "priority": 1,
+          "provenance": [
+            {
+              "document_id": "d99194aa-099e-50e9-9a36-08b441000e41",
+              "document_type": "homepage",
+              "duplicate_of": null,
+              "fetched_at": "2026-01-01T00:00:00Z",
+              "final_url": "https://carbonlens.example.com/",
+              "freshness_days": 0,
+              "is_duplicate": false,
+              "is_official": false,
+              "source_provider": "evidence",
+              "trust_level": "unknown",
+              "trust_score": 0.7006,
+              "url": "https://carbonlens.example.com/"
+            }
+          ],
+          "quality_score": 0.5021,
+          "source_provider": "evidence",
+          "table_count": 0,
+          "trust_level": "unknown",
+          "trust_score": {
+            "factors": [
+              {
+                "explanation": "",
+                "name": "authority",
+                "value": 0.9502,
+                "weight": 0.3
+              },
+              {
+                "explanation": "0d old",
+                "name": "freshness",
+                "value": 1.0,
+                "weight": 0.15
+              },
+              {
+                "explanation": "",
+                "name": "quality",
+                "value": 0.5021,
+                "weight": 0.25
+              },
+              {
+                "explanation": "",
+                "name": "source_type",
+                "value": 0.2,
+                "weight": 0.2
+              },
+              {
+                "explanation": "",
+                "name": "duplicate_penalty",
+                "value": 1.0,
+                "weight": 0.1
+              }
+            ],
+            "freshness_days": 0,
+            "overall": 0.7006,
+            "source_trust_level": "unknown"
+          },
+          "word_count": 82
+        },
+        "original_url": "https://carbonlens.example.com/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "status": "success",
+        "text": "CarbonLens\n\nCarbonLens provides enterprise-grade carbon accounting and emissions tracking software for Scope 1, 2, and 3 emissions. The platform integrates with ERP systems, supply chain tools, and IoT sensors to automate emissions data collection and reporting. Aligned with GHG Protocol and SEC climate disclosure requirements. Serving 60 enterprise clients across manufacturing, logistics, and energy sectors. ARR of $3.5M with 95% gross retention. Raised $8M seed from climate-focused VCs. Founded in 2022, team of 28, headquartered in Berlin with operations in the US.",
+        "title": "CarbonLens \u2014 home",
+        "truncated": false,
+        "url": "https://carbonlens.example.com/"
+      }
+    ],
+    "duration_ms": 0,
+    "intelligence": {
+      "average_authority": 0.9502,
+      "average_quality": 0.5021,
+      "classification_confidence": 1.0,
+      "document_type_distribution": {
+        "homepage": 1
+      },
+      "documents_classified": 1,
+      "documents_input": 8,
+      "duplicates_removed": 7,
+      "processing_duration_ms": 0,
+      "trust_summary": {
+        "average_trust_score": 0.7006,
+        "high_trust_count": 1,
+        "low_trust_count": 0,
+        "medium_trust_count": 0,
+        "source_trust_levels": {
+          "unknown": 1
+        },
+        "total_documents": 1,
+        "trust_score_range": [
+          0.7006,
+          0.7006
+        ],
+        "unknown_trust_count": 0
+      }
+    },
+    "providers": [
+      {
+        "attempted_pages": 8,
+        "documents": 8,
+        "duration_ms": 0,
+        "failure_reason": null,
+        "provider": "website",
+        "success": true
+      }
+    ],
+    "sources": [
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://carbonlens.example.com/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://carbonlens.example.com/"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://carbonlens.example.com/about",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://carbonlens.example.com/about"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://carbonlens.example.com/about-us",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://carbonlens.example.com/about-us"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://carbonlens.example.com/company",
+        "page_type": "company",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://carbonlens.example.com/company"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://carbonlens.example.com/platform",
+        "page_type": "platform",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://carbonlens.example.com/platform"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://carbonlens.example.com/products",
+        "page_type": "products",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://carbonlens.example.com/products"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://carbonlens.example.com/services",
+        "page_type": "services",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://carbonlens.example.com/services"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://carbonlens.example.com/technology",
+        "page_type": "technology",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://carbonlens.example.com/technology"
+      }
+    ],
+    "startup_name": "CarbonLens",
+    "total_pages": 1,
+    "trust_summary": {
+      "average_trust_score": 0.7006,
+      "high_trust_count": 1,
+      "low_trust_count": 0,
+      "medium_trust_count": 0,
+      "source_trust_levels": {
+        "unknown": 1
+      },
+      "total_documents": 1,
+      "trust_score_range": [
+        0.7006,
+        0.7006
+      ],
+      "unknown_trust_count": 0
+    },
+    "website": "https://carbonlens.example.com/"
+  },
+  "name": "climate_tech",
+  "raw_documents": [
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "d99194aa-099e-50e9-9a36-08b441000e41",
+      "metadata": null,
+      "original_url": "https://carbonlens.example.com/",
+      "page_type": "homepage",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "CarbonLens\n\nCarbonLens provides enterprise-grade carbon accounting and emissions tracking software for Scope 1, 2, and 3 emissions. The platform integrates with ERP systems, supply chain tools, and IoT sensors to automate emissions data collection and reporting. Aligned with GHG Protocol and SEC climate disclosure requirements. Serving 60 enterprise clients across manufacturing, logistics, and energy sectors. ARR of $3.5M with 95% gross retention. Raised $8M seed from climate-focused VCs. Founded in 2022, team of 28, headquartered in Berlin with operations in the US.",
+      "title": "CarbonLens \u2014 home",
+      "truncated": false,
+      "url": "https://carbonlens.example.com/"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "cadaa2e6-9cb2-50c1-a6a9-ae1e925387d3",
+      "metadata": null,
+      "original_url": "https://carbonlens.example.com/about",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "CarbonLens\n\nCarbonLens provides enterprise-grade carbon accounting and emissions tracking software for Scope 1, 2, and 3 emissions. The platform integrates with ERP systems, supply chain tools, and IoT sensors to automate emissions data collection and reporting. Aligned with GHG Protocol and SEC climate disclosure requirements. Serving 60 enterprise clients across manufacturing, logistics, and energy sectors. ARR of $3.5M with 95% gross retention. Raised $8M seed from climate-focused VCs. Founded in 2022, team of 28, headquartered in Berlin with operations in the US.",
+      "title": "CarbonLens \u2014 about",
+      "truncated": false,
+      "url": "https://carbonlens.example.com/about"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "682d7ebe-66e0-53e7-9565-c449de61b583",
+      "metadata": null,
+      "original_url": "https://carbonlens.example.com/about-us",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "CarbonLens\n\nCarbonLens provides enterprise-grade carbon accounting and emissions tracking software for Scope 1, 2, and 3 emissions. The platform integrates with ERP systems, supply chain tools, and IoT sensors to automate emissions data collection and reporting. Aligned with GHG Protocol and SEC climate disclosure requirements. Serving 60 enterprise clients across manufacturing, logistics, and energy sectors. ARR of $3.5M with 95% gross retention. Raised $8M seed from climate-focused VCs. Founded in 2022, team of 28, headquartered in Berlin with operations in the US.",
+      "title": "CarbonLens \u2014 about-us",
+      "truncated": false,
+      "url": "https://carbonlens.example.com/about-us"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "710b375c-29ad-57ee-b6a6-a0a0934c07b5",
+      "metadata": null,
+      "original_url": "https://carbonlens.example.com/company",
+      "page_type": "company",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "CarbonLens\n\nCarbonLens provides enterprise-grade carbon accounting and emissions tracking software for Scope 1, 2, and 3 emissions. The platform integrates with ERP systems, supply chain tools, and IoT sensors to automate emissions data collection and reporting. Aligned with GHG Protocol and SEC climate disclosure requirements. Serving 60 enterprise clients across manufacturing, logistics, and energy sectors. ARR of $3.5M with 95% gross retention. Raised $8M seed from climate-focused VCs. Founded in 2022, team of 28, headquartered in Berlin with operations in the US.",
+      "title": "CarbonLens \u2014 company",
+      "truncated": false,
+      "url": "https://carbonlens.example.com/company"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "e6bc9ab3-3b2b-57f4-96de-36fa8d01bf4b",
+      "metadata": null,
+      "original_url": "https://carbonlens.example.com/platform",
+      "page_type": "platform",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "CarbonLens\n\nCarbonLens provides enterprise-grade carbon accounting and emissions tracking software for Scope 1, 2, and 3 emissions. The platform integrates with ERP systems, supply chain tools, and IoT sensors to automate emissions data collection and reporting. Aligned with GHG Protocol and SEC climate disclosure requirements. Serving 60 enterprise clients across manufacturing, logistics, and energy sectors. ARR of $3.5M with 95% gross retention. Raised $8M seed from climate-focused VCs. Founded in 2022, team of 28, headquartered in Berlin with operations in the US.",
+      "title": "CarbonLens \u2014 platform",
+      "truncated": false,
+      "url": "https://carbonlens.example.com/platform"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "a27808a3-21eb-5648-bf7c-9d43a21cd2c1",
+      "metadata": null,
+      "original_url": "https://carbonlens.example.com/products",
+      "page_type": "products",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "CarbonLens\n\nCarbonLens provides enterprise-grade carbon accounting and emissions tracking software for Scope 1, 2, and 3 emissions. The platform integrates with ERP systems, supply chain tools, and IoT sensors to automate emissions data collection and reporting. Aligned with GHG Protocol and SEC climate disclosure requirements. Serving 60 enterprise clients across manufacturing, logistics, and energy sectors. ARR of $3.5M with 95% gross retention. Raised $8M seed from climate-focused VCs. Founded in 2022, team of 28, headquartered in Berlin with operations in the US.",
+      "title": "CarbonLens \u2014 products",
+      "truncated": false,
+      "url": "https://carbonlens.example.com/products"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "38a3f5d4-decc-5f5d-aed0-6583a708a3b4",
+      "metadata": null,
+      "original_url": "https://carbonlens.example.com/services",
+      "page_type": "services",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "CarbonLens\n\nCarbonLens provides enterprise-grade carbon accounting and emissions tracking software for Scope 1, 2, and 3 emissions. The platform integrates with ERP systems, supply chain tools, and IoT sensors to automate emissions data collection and reporting. Aligned with GHG Protocol and SEC climate disclosure requirements. Serving 60 enterprise clients across manufacturing, logistics, and energy sectors. ARR of $3.5M with 95% gross retention. Raised $8M seed from climate-focused VCs. Founded in 2022, team of 28, headquartered in Berlin with operations in the US.",
+      "title": "CarbonLens \u2014 services",
+      "truncated": false,
+      "url": "https://carbonlens.example.com/services"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "4f84199c-d555-5713-b82d-3d9489350671",
+      "metadata": null,
+      "original_url": "https://carbonlens.example.com/technology",
+      "page_type": "technology",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "CarbonLens\n\nCarbonLens provides enterprise-grade carbon accounting and emissions tracking software for Scope 1, 2, and 3 emissions. The platform integrates with ERP systems, supply chain tools, and IoT sensors to automate emissions data collection and reporting. Aligned with GHG Protocol and SEC climate disclosure requirements. Serving 60 enterprise clients across manufacturing, logistics, and energy sectors. ARR of $3.5M with 95% gross retention. Raised $8M seed from climate-focused VCs. Founded in 2022, team of 28, headquartered in Berlin with operations in the US.",
+      "title": "CarbonLens \u2014 technology",
+      "truncated": false,
+      "url": "https://carbonlens.example.com/technology"
+    }
+  ],
+  "schema_version": 1
+}

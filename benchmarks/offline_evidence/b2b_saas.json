@@ -1,0 +1,380 @@
+{
+  "bundle": {
+    "attempted_pages": 8,
+    "collected_at": "2026-01-01T00:00:00Z",
+    "documents": [
+      {
+        "content_type": "text/html; charset=utf-8",
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "id": "ff1fd2e0-d942-5301-b3e7-e2754010a33b",
+        "metadata": {
+          "authority_score": 0.9513,
+          "canonical_url": "https://analytixcloud.example.com/",
+          "content_hash": "1c7fc657a5707bc4c7889467019962a33709f67815d30e7195e5aa8ff633a56c",
+          "document_type": "homepage",
+          "duplicate_of": null,
+          "heading_count": 0,
+          "is_duplicate": false,
+          "language": "en",
+          "list_count": 0,
+          "priority": 1,
+          "provenance": [
+            {
+              "document_id": "ff1fd2e0-d942-5301-b3e7-e2754010a33b",
+              "document_type": "homepage",
+              "duplicate_of": null,
+              "fetched_at": "2026-01-01T00:00:00Z",
+              "final_url": "https://analytixcloud.example.com/",
+              "freshness_days": 0,
+              "is_duplicate": false,
+              "is_official": false,
+              "source_provider": "evidence",
+              "trust_level": "unknown",
+              "trust_score": 0.7037,
+              "url": "https://analytixcloud.example.com/"
+            }
+          ],
+          "quality_score": 0.5134,
+          "source_provider": "evidence",
+          "table_count": 0,
+          "trust_level": "unknown",
+          "trust_score": {
+            "factors": [
+              {
+                "explanation": "",
+                "name": "authority",
+                "value": 0.9513,
+                "weight": 0.3
+              },
+              {
+                "explanation": "0d old",
+                "name": "freshness",
+                "value": 1.0,
+                "weight": 0.15
+              },
+              {
+                "explanation": "",
+                "name": "quality",
+                "value": 0.5134,
+                "weight": 0.25
+              },
+              {
+                "explanation": "",
+                "name": "source_type",
+                "value": 0.2,
+                "weight": 0.2
+              },
+              {
+                "explanation": "",
+                "name": "duplicate_penalty",
+                "value": 1.0,
+                "weight": 0.1
+              }
+            ],
+            "freshness_days": 0,
+            "overall": 0.7037,
+            "source_trust_level": "unknown"
+          },
+          "word_count": 81
+        },
+        "original_url": "https://analytixcloud.example.com/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "status": "success",
+        "text": "Analytix Cloud\n\nAnalytix Cloud is a B2B SaaS platform providing real-time analytics and business intelligence for mid-market enterprises. The platform integrates with existing data warehouses and delivers automated insight generation through proprietary query optimization. Revenue is subscription-based with annual contracts averaging $48,000 ARR. The company has 85 enterprise clients and has achieved $4.2M ARR with 140% net revenue retention. Founded in 2021, the team of 35 engineers and sales professionals operates from San Francisco with a remote engineering hub in Austin.",
+        "title": "Analytix Cloud \u2014 home",
+        "truncated": false,
+        "url": "https://analytixcloud.example.com/"
+      }
+    ],
+    "duration_ms": 0,
+    "intelligence": {
+      "average_authority": 0.9513,
+      "average_quality": 0.5134,
+      "classification_confidence": 1.0,
+      "document_type_distribution": {
+        "homepage": 1
+      },
+      "documents_classified": 1,
+      "documents_input": 8,
+      "duplicates_removed": 7,
+      "processing_duration_ms": 0,
+      "trust_summary": {
+        "average_trust_score": 0.7037,
+        "high_trust_count": 1,
+        "low_trust_count": 0,
+        "medium_trust_count": 0,
+        "source_trust_levels": {
+          "unknown": 1
+        },
+        "total_documents": 1,
+        "trust_score_range": [
+          0.7037,
+          0.7037
+        ],
+        "unknown_trust_count": 0
+      }
+    },
+    "providers": [
+      {
+        "attempted_pages": 8,
+        "documents": 8,
+        "duration_ms": 0,
+        "failure_reason": null,
+        "provider": "website",
+        "success": true
+      }
+    ],
+    "sources": [
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://analytixcloud.example.com/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://analytixcloud.example.com/"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://analytixcloud.example.com/about",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://analytixcloud.example.com/about"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://analytixcloud.example.com/about-us",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://analytixcloud.example.com/about-us"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://analytixcloud.example.com/company",
+        "page_type": "company",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://analytixcloud.example.com/company"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://analytixcloud.example.com/platform",
+        "page_type": "platform",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://analytixcloud.example.com/platform"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://analytixcloud.example.com/products",
+        "page_type": "products",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://analytixcloud.example.com/products"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://analytixcloud.example.com/services",
+        "page_type": "services",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://analytixcloud.example.com/services"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://analytixcloud.example.com/technology",
+        "page_type": "technology",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://analytixcloud.example.com/technology"
+      }
+    ],
+    "startup_name": "Analytix Cloud",
+    "total_pages": 1,
+    "trust_summary": {
+      "average_trust_score": 0.7037,
+      "high_trust_count": 1,
+      "low_trust_count": 0,
+      "medium_trust_count": 0,
+      "source_trust_levels": {
+        "unknown": 1
+      },
+      "total_documents": 1,
+      "trust_score_range": [
+        0.7037,
+        0.7037
+      ],
+      "unknown_trust_count": 0
+    },
+    "website": "https://analytixcloud.example.com/"
+  },
+  "name": "b2b_saas",
+  "raw_documents": [
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "ff1fd2e0-d942-5301-b3e7-e2754010a33b",
+      "metadata": null,
+      "original_url": "https://analytixcloud.example.com/",
+      "page_type": "homepage",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "Analytix Cloud\n\nAnalytix Cloud is a B2B SaaS platform providing real-time analytics and business intelligence for mid-market enterprises. The platform integrates with existing data warehouses and delivers automated insight generation through proprietary query optimization. Revenue is subscription-based with annual contracts averaging $48,000 ARR. The company has 85 enterprise clients and has achieved $4.2M ARR with 140% net revenue retention. Founded in 2021, the team of 35 engineers and sales professionals operates from San Francisco with a remote engineering hub in Austin.",
+      "title": "Analytix Cloud \u2014 home",
+      "truncated": false,
+      "url": "https://analytixcloud.example.com/"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "cf945f48-bf78-5dd6-a89e-60c9f48d743f",
+      "metadata": null,
+      "original_url": "https://analytixcloud.example.com/about",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "Analytix Cloud\n\nAnalytix Cloud is a B2B SaaS platform providing real-time analytics and business intelligence for mid-market enterprises. The platform integrates with existing data warehouses and delivers automated insight generation through proprietary query optimization. Revenue is subscription-based with annual contracts averaging $48,000 ARR. The company has 85 enterprise clients and has achieved $4.2M ARR with 140% net revenue retention. Founded in 2021, the team of 35 engineers and sales professionals operates from San Francisco with a remote engineering hub in Austin.",
+      "title": "Analytix Cloud \u2014 about",
+      "truncated": false,
+      "url": "https://analytixcloud.example.com/about"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "82d55930-56dc-55a6-9ca1-79af2c35e4a2",
+      "metadata": null,
+      "original_url": "https://analytixcloud.example.com/about-us",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "Analytix Cloud\n\nAnalytix Cloud is a B2B SaaS platform providing real-time analytics and business intelligence for mid-market enterprises. The platform integrates with existing data warehouses and delivers automated insight generation through proprietary query optimization. Revenue is subscription-based with annual contracts averaging $48,000 ARR. The company has 85 enterprise clients and has achieved $4.2M ARR with 140% net revenue retention. Founded in 2021, the team of 35 engineers and sales professionals operates from San Francisco with a remote engineering hub in Austin.",
+      "title": "Analytix Cloud \u2014 about-us",
+      "truncated": false,
+      "url": "https://analytixcloud.example.com/about-us"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "44e6560f-375a-59e0-b46f-020dded8dcb5",
+      "metadata": null,
+      "original_url": "https://analytixcloud.example.com/company",
+      "page_type": "company",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "Analytix Cloud\n\nAnalytix Cloud is a B2B SaaS platform providing real-time analytics and business intelligence for mid-market enterprises. The platform integrates with existing data warehouses and delivers automated insight generation through proprietary query optimization. Revenue is subscription-based with annual contracts averaging $48,000 ARR. The company has 85 enterprise clients and has achieved $4.2M ARR with 140% net revenue retention. Founded in 2021, the team of 35 engineers and sales professionals operates from San Francisco with a remote engineering hub in Austin.",
+      "title": "Analytix Cloud \u2014 company",
+      "truncated": false,
+      "url": "https://analytixcloud.example.com/company"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "4f0fffd9-eeb7-5a45-8cca-4bd9eff765e9",
+      "metadata": null,
+      "original_url": "https://analytixcloud.example.com/platform",
+      "page_type": "platform",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "Analytix Cloud\n\nAnalytix Cloud is a B2B SaaS platform providing real-time analytics and business intelligence for mid-market enterprises. The platform integrates with existing data warehouses and delivers automated insight generation through proprietary query optimization. Revenue is subscription-based with annual contracts averaging $48,000 ARR. The company has 85 enterprise clients and has achieved $4.2M ARR with 140% net revenue retention. Founded in 2021, the team of 35 engineers and sales professionals operates from San Francisco with a remote engineering hub in Austin.",
+      "title": "Analytix Cloud \u2014 platform",
+      "truncated": false,
+      "url": "https://analytixcloud.example.com/platform"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "88c3808e-3a01-5c60-a826-84135bbffe64",
+      "metadata": null,
+      "original_url": "https://analytixcloud.example.com/products",
+      "page_type": "products",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "Analytix Cloud\n\nAnalytix Cloud is a B2B SaaS platform providing real-time analytics and business intelligence for mid-market enterprises. The platform integrates with existing data warehouses and delivers automated insight generation through proprietary query optimization. Revenue is subscription-based with annual contracts averaging $48,000 ARR. The company has 85 enterprise clients and has achieved $4.2M ARR with 140% net revenue retention. Founded in 2021, the team of 35 engineers and sales professionals operates from San Francisco with a remote engineering hub in Austin.",
+      "title": "Analytix Cloud \u2014 products",
+      "truncated": false,
+      "url": "https://analytixcloud.example.com/products"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "5e127696-3527-5e2f-b6ef-e8dd91cce82e",
+      "metadata": null,
+      "original_url": "https://analytixcloud.example.com/services",
+      "page_type": "services",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "Analytix Cloud\n\nAnalytix Cloud is a B2B SaaS platform providing real-time analytics and business intelligence for mid-market enterprises. The platform integrates with existing data warehouses and delivers automated insight generation through proprietary query optimization. Revenue is subscription-based with annual contracts averaging $48,000 ARR. The company has 85 enterprise clients and has achieved $4.2M ARR with 140% net revenue retention. Founded in 2021, the team of 35 engineers and sales professionals operates from San Francisco with a remote engineering hub in Austin.",
+      "title": "Analytix Cloud \u2014 services",
+      "truncated": false,
+      "url": "https://analytixcloud.example.com/services"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "8af5f52e-adcf-50cf-a0d6-0a53529dcca2",
+      "metadata": null,
+      "original_url": "https://analytixcloud.example.com/technology",
+      "page_type": "technology",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "Analytix Cloud\n\nAnalytix Cloud is a B2B SaaS platform providing real-time analytics and business intelligence for mid-market enterprises. The platform integrates with existing data warehouses and delivers automated insight generation through proprietary query optimization. Revenue is subscription-based with annual contracts averaging $48,000 ARR. The company has 85 enterprise clients and has achieved $4.2M ARR with 140% net revenue retention. Founded in 2021, the team of 35 engineers and sales professionals operates from San Francisco with a remote engineering hub in Austin.",
+      "title": "Analytix Cloud \u2014 technology",
+      "truncated": false,
+      "url": "https://analytixcloud.example.com/technology"
+    }
+  ],
+  "schema_version": 1
+}

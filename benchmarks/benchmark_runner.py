@@ -1,8 +1,15 @@
 """Benchmark runner — executes startup cases through the Predictron Engine.
 
-Runs every benchmark case through the complete analysis pipeline and
-captures the full output for each stage. Produces structured results
-that can be used for regression comparison and report generation.
+Runs every benchmark case through the COMPLETE production pipeline
+(:meth:`PredictronEngine.analyze`) — including evidence collection,
+contradiction detection, decision confidence, calibration, and
+synthesis — and captures the full output for each case.  Produces
+structured results that can be used for regression comparison and
+report generation.
+
+The runner no longer manually orchestrates pipeline stages.  It
+delegates entirely to the engine so benchmark results are
+guaranteed to reflect the same logical pipeline as production.
 
 Usage:
     python -m benchmarks.benchmark_runner
@@ -27,17 +34,90 @@ from benchmarks.startup_cases.cases import (
     get_case_by_id,
 )
 from predictron_engine.engine import ENGINE_VERSION, PredictronEngine
+from predictron_engine.evidence.models import EvidenceBundle
+from predictron_engine.evidence.orchestrator import EvidenceOrchestrator
+from predictron_engine.evidence.replay.dataset import (
+    load_corpus,
+    rebuild_bundle,
+)
+from predictron_engine.evidence.replay.provider import ReplayEvidenceProvider
 from predictron_engine.models.report import Report
 
 logger = logging.getLogger(__name__)
 
 BENCHMARKS_DIR = Path(__file__).parent
 EXPECTED_OUTPUTS_DIR = BENCHMARKS_DIR / "expected_outputs"
+OFFLINE_EVIDENCE_DIR = BENCHMARKS_DIR / "offline_evidence"
+
+
+def load_case_evidence_bundle(case_id: str) -> EvidenceBundle | None:
+    """Load an offline evidence corpus for a benchmark case.
+
+    Looks for ``benchmarks/offline_evidence/{case_id}.json``.  Returns
+    ``None`` when no corpus file exists for the case, so the caller
+    falls through to normal evidence collection.
+
+    The returned bundle is a raw deserialized corpus — it has NOT been
+    enriched by Document Intelligence.  When the bundle is injected into
+    ``PredictronEngine.analyze(evidence_bundle=...)``, the engine uses
+    it directly (bypassing the orchestrator).  For full enrichment, use
+    :func:`build_replay_engine` instead, which routes through the
+    orchestrator's replay provider and Document Intelligence.
+    """
+    corpus_path = OFFLINE_EVIDENCE_DIR / f"{case_id}.json"
+    if not corpus_path.exists():
+        return None
+    try:
+        document = load_corpus(corpus_path)
+        return rebuild_bundle(document)
+    except Exception:  # noqa: BLE001 — corpus load must not crash benchmarks
+        logger.warning("Failed to load corpus for %s", case_id, exc_info=True)
+        return None
+
+
+def build_replay_engine(case_id: str) -> PredictronEngine | None:
+    """Build an engine wired to replay a specific case's evidence corpus.
+
+    Returns ``None`` when no corpus file exists for the case.
+
+    The engine's EvidenceOrchestrator receives a ReplayEvidenceProvider
+    that replays the corpus through the normal orchestrator pipeline —
+    including Document Intelligence enrichment, deduplication, and
+    provenance — so the replay path exercises the exact same code as a
+    live run.  The provider is a first-class EvidenceProvider that
+    satisfies the EvidenceOrchestrator protocol.
+    """
+    corpus_path = OFFLINE_EVIDENCE_DIR / f"{case_id}.json"
+    if not corpus_path.exists():
+        return None
+    provider = ReplayEvidenceProvider(corpus_path)
+    orchestrator = EvidenceOrchestrator(providers=[provider])
+    return PredictronEngine(evidence_collector=orchestrator)
+
+
+def load_all_case_evidence_bundles() -> dict[str, EvidenceBundle]:
+    """Load offline evidence corpora for all benchmark cases.
+
+    Returns a mapping of case_id to EvidenceBundle for every case that
+    has a committed corpus file under ``benchmarks/offline_evidence/``.
+    Cases without a corpus file are omitted.
+    """
+    bundles: dict[str, EvidenceBundle] = {}
+    for case in BENCHMARK_CASES:
+        bundle = load_case_evidence_bundle(case["id"])
+        if bundle is not None:
+            bundles[case["id"]] = bundle
+    return bundles
 
 
 @dataclass
 class CaseResult:
-    """Result of running a single benchmark case through the engine."""
+    """Result of running a single benchmark case through the engine.
+
+    Captures the complete pipeline output including decision confidence,
+    calibration, synthesis, and timing — not just the subset the old
+    manual pipeline exposed.
+    """
 
     case_id: str
     case_label: str
@@ -49,7 +129,13 @@ class CaseResult:
     stage_timings: dict[str, float] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        """Serialize the case result for JSON output."""
+        """Serialize the case result for JSON output.
+
+        Includes every artifact the Report carries: dimension scores,
+        overall score, readiness, decision, decision confidence,
+        uncertainty, calibration summary, synthesis, recommendations,
+        evidence trust, and contradiction information.
+        """
         if self.report is None:
             return {
                 "case_id": self.case_id,
@@ -60,7 +146,7 @@ class CaseResult:
             }
 
         r = self.report
-        return {
+        result: dict[str, Any] = {
             "case_id": self.case_id,
             "case_label": self.case_label,
             "success": self.success,
@@ -228,6 +314,9 @@ class CaseResult:
                     "priority": rec.priority,
                     "title": rec.title,
                     "confidence": rec.confidence,
+                    "expected_confidence": getattr(rec, "expected_confidence", None),
+                    "expected_uncertainty": getattr(rec, "expected_uncertainty", None),
+                    "recommended_action": getattr(rec, "recommended_action", None),
                 }
                 for rec in r.recommendations
             ],
@@ -251,8 +340,82 @@ class CaseResult:
                 if r.investment_decision
                 else None
             ),
+            "decision_confidence": (
+                {
+                    "confidence": r.decision_confidence.confidence,
+                    "level": r.decision_confidence.level.value,
+                    "uncertainty_score": r.decision_confidence.uncertainty_score,
+                    "supporting_factors": r.decision_confidence.supporting_factors,
+                    "weakening_factors": r.decision_confidence.weakening_factors,
+                }
+                if r.decision_confidence
+                else None
+            ),
+            "calibration_summary": (
+                {
+                    "confidence": r.calibration_summary.confidence,
+                    "level": r.calibration_summary.level.value,
+                    "uncertainty_score": r.calibration_summary.uncertainty_score,
+                    "recommended_action": r.calibration_summary.recommended_action,
+                    "strong_factor_count": r.calibration_summary.strong_factor_count,
+                    "weak_factor_count": r.calibration_summary.weak_factor_count,
+                    "observation_count": r.calibration_summary.observation_count,
+                    "assessed_dimension_count": r.calibration_summary.assessed_dimension_count,
+                    "evidence_document_count": r.calibration_summary.evidence_document_count,
+                }
+                if r.calibration_summary
+                else None
+            ),
+            "decision_synthesis": (
+                {
+                    "overall_confidence": r.decision_synthesis.overall_confidence,
+                    "uncertainty_score": r.decision_synthesis.uncertainty_score,
+                    "confidence_level": r.decision_synthesis.confidence_level,
+                    "recommended_action": r.decision_synthesis.recommended_action,
+                    "risk_count": len(r.decision_synthesis.risks),
+                    "opportunity_count": len(r.decision_synthesis.opportunities),
+                    "scenario_count": len(r.decision_synthesis.scenarios),
+                    "trade_off_count": len(r.decision_synthesis.trade_offs),
+                    "prioritized_recommendation_count": len(
+                        r.decision_synthesis.prioritized_recommendations
+                    ),
+                }
+                if r.decision_synthesis
+                else None
+            ),
+            "investment_readiness": (
+                {
+                    "readiness_score": r.investment_readiness.readiness_score,
+                }
+                if r.investment_readiness
+                else None
+            ),
+            "signal_relationships": [
+                {
+                    "source_dimension": sr.source_dimension,
+                    "target_dimension": sr.target_dimension,
+                    "relationship_type": sr.relationship_type,
+                    "description": sr.description,
+                    "confidence": sr.confidence,
+                }
+                for sr in r.signal_relationships
+            ],
+            "evidence_collection": (
+                {
+                    "website": r.analysis_metadata.evidence_collection.website,
+                    "pages_discovered": r.analysis_metadata.evidence_collection.pages_discovered,
+                    "pages_fetched": r.analysis_metadata.evidence_collection.pages_fetched,
+                    "successful_sources": (
+                        r.analysis_metadata.evidence_collection.successful_sources
+                    ),
+                    "failed_sources": r.analysis_metadata.evidence_collection.failed_sources,
+                }
+                if r.analysis_metadata.evidence_collection
+                else None
+            ),
             "stage_timings": self.stage_timings,
         }
+        return result
 
 
 def _build_request(case: dict[str, Any]) -> StartupAnalysisRequest:
@@ -270,115 +433,66 @@ def _build_request(case: dict[str, Any]) -> StartupAnalysisRequest:
     return StartupAnalysisRequest(**kwargs)
 
 
-def _run_with_stage_timings(
-    engine: PredictronEngine, request: StartupAnalysisRequest
+def _run_with_engine(
+    engine: PredictronEngine,
+    request: StartupAnalysisRequest,
+    evidence_bundle: EvidenceBundle | None = None,
 ) -> tuple[Report, dict[str, float]]:
-    """Run the engine and capture per-stage timing breakdowns.
+    """Run the engine via the production analyze() entry point.
 
-    This manually executes each pipeline stage with timing instrumentation
-    to provide visibility into which stages consume the most time.
+    This ensures the benchmark exercises the EXACT same pipeline as
+    production, including evidence collection, contradiction detection,
+    decision confidence, calibration, and synthesis.
+
+    Parameters
+    ----------
+    engine:
+        The PredictronEngine instance.
+    request:
+        The analysis request.
+    evidence_bundle:
+        Optional pre-built evidence bundle for offline replay.  When
+        supplied, Stage 3 (website evidence collection) is skipped.
     """
     timings: dict[str, float] = {}
     start = time.perf_counter()
 
-    startup = engine._normalizer.normalize(request)
-    timings["normalize"] = _elapsed(start)
-
-    t = time.perf_counter()
-    collected_data = engine._collector.collect(startup)
-    timings["collect"] = _elapsed(t)
-
-    t = time.perf_counter()
-    features = engine._extractor.extract(startup, collected_data)
-    timings["extract"] = _elapsed(t)
-
-    t = time.perf_counter()
-    evidence_set = engine._evidence.gather(features)
-    timings["evidence"] = _elapsed(t)
-
-    t = time.perf_counter()
-    observations = engine._reasoning.reason(features, evidence_set.items)
-    timings["reasoning"] = _elapsed(t)
-
-    t = time.perf_counter()
-    evaluation_result = engine._evaluation.evaluate(
-        features, observations, evidence_set.items
+    report = engine.analyze(
+        request,
+        evidence_bundle=evidence_bundle,
     )
-    timings["evaluation"] = _elapsed(t)
-
-    t = time.perf_counter()
-    scores = engine._scoring.score(features, observations)
-    timings["scoring"] = _elapsed(t)
-
-    t = time.perf_counter()
-    from predictron_engine.evaluation.investment_readiness import (
-        compute_investment_readiness,
-    )
-    assessments = evaluation_result.assessments
-    investment_readiness = compute_investment_readiness(
-        features, observations, scores, assessments,
-    )
-    timings["investment_readiness"] = _elapsed(t)
-
-    t = time.perf_counter()
-    recs = engine._recommendations.recommend(
-        features, observations, scores, assessments
-    )
-    timings["recommendations"] = _elapsed(t)
-
-    t = time.perf_counter()
-    conf = engine._confidence.assess(
-        features, observations, scores, assessments
-    )
-    timings["confidence"] = _elapsed(t)
-
-    t = time.perf_counter()
-    decision = engine._decision.decide(
-        features,
-        observations,
-        scores,
-        conf,
-        assessments,
-        investment_readiness.signal_relationships,
-    )
-    timings["decision"] = _elapsed(t)
-
-    t = time.perf_counter()
-    report = engine._report_builder.build(
-        startup,
-        features,
-        evidence_set.items,
-        observations,
-        scores,
-        recs,
-        conf,
-        assessments,
-        decision,
-        investment_readiness,
-    )
-    timings["report_builder"] = _elapsed(t)
 
     total = (time.perf_counter() - start) * 1000
-    report.analysis_metadata.processing_time_ms = round(total, 2)
     timings["total"] = round(total, 2)
 
     return report, timings
 
 
-def _elapsed(start: float) -> float:
-    """Return elapsed milliseconds since start."""
-    return round((time.perf_counter() - start) * 1000, 2)
-
-
 def run_benchmark(
     case_ids: list[str] | None = None,
     engine: PredictronEngine | None = None,
+    evidence_bundles: dict[str, EvidenceBundle] | None = None,
+    offline_required_cases: set[str] | None = None,
 ) -> list[CaseResult]:
     """Run benchmark cases through the engine and return results.
+
+    Executes the full production pipeline via ``engine.analyze()``,
+    including evidence collection, contradiction detection, decision
+    confidence, calibration, and synthesis.
 
     Args:
         case_ids: Specific case IDs to run. If None, runs all cases.
         engine: Engine instance to use. If None, creates a default engine.
+        evidence_bundles: Optional mapping of case_id to pre-built
+            EvidenceBundle for deterministic offline replay.  Cases not
+            present in the mapping fall through to normal evidence
+            collection (best-effort website crawl).
+        offline_required_cases: Set of case IDs that MUST be replayed
+            from ``evidence_bundles``.  When a case in this set has no
+            provided bundle, it is recorded as a failure (with a clear
+            error) instead of silently falling back to live website
+            collection.  This keeps ``--offline-replay`` deterministic
+            and network-free even for cases missing a corpus.
 
     Returns:
         List of CaseResult objects with full output capture.
@@ -405,7 +519,19 @@ def run_benchmark(
 
         try:
             request = _build_request(case)
-            report, stage_timings = _run_with_stage_timings(engine, request)
+            bundle = (evidence_bundles or {}).get(case_id)
+            if (
+                bundle is None
+                and offline_required_cases
+                and case_id in offline_required_cases
+            ):
+                raise RuntimeError(
+                    f"--offline-replay requested for case {case_id!r} but no "
+                    f"offline corpus exists at "
+                    f"{OFFLINE_EVIDENCE_DIR / (case_id + '.json')}. "
+                    f"Refusing to fall back to live website collection."
+                )
+            report, stage_timings = _run_with_engine(engine, request, bundle)
 
             result = CaseResult(
                 case_id=case_id,
@@ -512,6 +638,18 @@ def _print_case_summary(result: CaseResult) -> None:
     print(f"    Scores: {len(r.scores)} | Overall: {r.overall_score:.1f}")
     print(f"    Recommendations: {len(r.recommendations)}")
     print(f"    Overall confidence: {r.overall_confidence:.2f}")
+    if r.decision_confidence is not None:
+        print(
+            f"    Decision confidence: {r.decision_confidence.confidence:.2f} "
+            f"({r.decision_confidence.level.value})"
+        )
+    if r.calibration_summary is not None:
+        print(f"    Calibration: {r.calibration_summary.recommended_action}")
+    if r.decision_synthesis is not None:
+        print(
+            f"    Synthesis: {len(r.decision_synthesis.risks)} risks, "
+            f"{len(r.decision_synthesis.opportunities)} opportunities"
+        )
     print(f"    Processing time: {result.processing_time_ms:.1f}ms")
 
 
@@ -554,6 +692,15 @@ def main() -> None:
         action="store_true",
         help="Output results as JSON to stdout",
     )
+    parser.add_argument(
+        "--offline-replay",
+        action="store_true",
+        help=(
+            "Use offline evidence replay for cases with committed corpora "
+            "under benchmarks/offline_evidence/.  Cases without a corpus "
+            "fall through to normal evidence collection."
+        ),
+    )
 
     args = parser.parse_args()
 
@@ -576,10 +723,38 @@ def main() -> None:
 
     case_ids = args.case if args.case else None
 
+    offline_required_cases: set[str] | None = None
+    if args.offline_replay:
+        replay_bundles = load_all_case_evidence_bundles()
+        missing = [
+            c["id"]
+            for c in BENCHMARK_CASES
+            if (case_ids is None or c["id"] in case_ids)
+            and c["id"] not in replay_bundles
+        ]
+        if missing:
+            logger.warning(
+                "Offline replay: %d case(s) have no corpus and will be "
+                "reported as FAILED (no silent live fallback): %s",
+                len(missing),
+                ", ".join(sorted(missing)),
+            )
+        offline_required_cases = set(replay_bundles)
+        logger.info(
+            "Offline replay enabled: %d case corpus files loaded",
+            len(replay_bundles),
+        )
+    else:
+        replay_bundles = None
+
     print(f"Predictron Engine Benchmark Suite (v{ENGINE_VERSION})")
     print("=" * 60)
 
-    results = run_benchmark(case_ids=case_ids)
+    results = run_benchmark(
+        case_ids=case_ids,
+        evidence_bundles=replay_bundles,
+        offline_required_cases=offline_required_cases,
+    )
 
     if args.json:
         output = {

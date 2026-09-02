@@ -1,0 +1,380 @@
+{
+  "bundle": {
+    "attempted_pages": 8,
+    "collected_at": "2026-01-01T00:00:00Z",
+    "documents": [
+      {
+        "content_type": "text/html; charset=utf-8",
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "id": "6aa30e5d-4b76-5ab2-8b9a-2563b1be8626",
+        "metadata": {
+          "authority_score": 0.9519,
+          "canonical_url": "https://skillforge.example.com/",
+          "content_hash": "f4020e30b7f913818876f5e007fd4caecf1513083a982cb3bd24319ce47b6333",
+          "document_type": "homepage",
+          "duplicate_of": null,
+          "heading_count": 0,
+          "is_duplicate": false,
+          "language": "en",
+          "list_count": 0,
+          "priority": 1,
+          "provenance": [
+            {
+              "document_id": "6aa30e5d-4b76-5ab2-8b9a-2563b1be8626",
+              "document_type": "homepage",
+              "duplicate_of": null,
+              "fetched_at": "2026-01-01T00:00:00Z",
+              "final_url": "https://skillforge.example.com/",
+              "freshness_days": 0,
+              "is_duplicate": false,
+              "is_official": false,
+              "source_provider": "evidence",
+              "trust_level": "unknown",
+              "trust_score": 0.7052,
+              "url": "https://skillforge.example.com/"
+            }
+          ],
+          "quality_score": 0.5187,
+          "source_provider": "evidence",
+          "table_count": 0,
+          "trust_level": "unknown",
+          "trust_score": {
+            "factors": [
+              {
+                "explanation": "",
+                "name": "authority",
+                "value": 0.9519,
+                "weight": 0.3
+              },
+              {
+                "explanation": "0d old",
+                "name": "freshness",
+                "value": 1.0,
+                "weight": 0.15
+              },
+              {
+                "explanation": "",
+                "name": "quality",
+                "value": 0.5187,
+                "weight": 0.25
+              },
+              {
+                "explanation": "",
+                "name": "source_type",
+                "value": 0.2,
+                "weight": 0.2
+              },
+              {
+                "explanation": "",
+                "name": "duplicate_penalty",
+                "value": 1.0,
+                "weight": 0.1
+              }
+            ],
+            "freshness_days": 0,
+            "overall": 0.7052,
+            "source_trust_level": "unknown"
+          },
+          "word_count": 80
+        },
+        "original_url": "https://skillforge.example.com/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "status": "success",
+        "text": "SkillForge\n\nSkillForge is a B2B EdTech platform providing AI-personalized corporate training programs for technology skills. The platform generates adaptive learning paths based on role requirements and individual skill gaps. Content library covers 200+ technology topics with hands-on labs. Serving 45 enterprise clients with 12,000 active learners. ACV of $35,000 with 90% gross retention. Raised $6M seed round. Founded in 2022, team of 22 based in New York. Previously operated as a consulting firm for 3 years before pivoting to SaaS.",
+        "title": "SkillForge \u2014 home",
+        "truncated": false,
+        "url": "https://skillforge.example.com/"
+      }
+    ],
+    "duration_ms": 0,
+    "intelligence": {
+      "average_authority": 0.9519,
+      "average_quality": 0.5187,
+      "classification_confidence": 1.0,
+      "document_type_distribution": {
+        "homepage": 1
+      },
+      "documents_classified": 1,
+      "documents_input": 8,
+      "duplicates_removed": 7,
+      "processing_duration_ms": 0,
+      "trust_summary": {
+        "average_trust_score": 0.7052,
+        "high_trust_count": 1,
+        "low_trust_count": 0,
+        "medium_trust_count": 0,
+        "source_trust_levels": {
+          "unknown": 1
+        },
+        "total_documents": 1,
+        "trust_score_range": [
+          0.7052,
+          0.7052
+        ],
+        "unknown_trust_count": 0
+      }
+    },
+    "providers": [
+      {
+        "attempted_pages": 8,
+        "documents": 8,
+        "duration_ms": 0,
+        "failure_reason": null,
+        "provider": "website",
+        "success": true
+      }
+    ],
+    "sources": [
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://skillforge.example.com/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://skillforge.example.com/"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://skillforge.example.com/about",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://skillforge.example.com/about"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://skillforge.example.com/about-us",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://skillforge.example.com/about-us"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://skillforge.example.com/company",
+        "page_type": "company",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://skillforge.example.com/company"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://skillforge.example.com/platform",
+        "page_type": "platform",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://skillforge.example.com/platform"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://skillforge.example.com/products",
+        "page_type": "products",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://skillforge.example.com/products"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://skillforge.example.com/services",
+        "page_type": "services",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://skillforge.example.com/services"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://skillforge.example.com/technology",
+        "page_type": "technology",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://skillforge.example.com/technology"
+      }
+    ],
+    "startup_name": "SkillForge",
+    "total_pages": 1,
+    "trust_summary": {
+      "average_trust_score": 0.7052,
+      "high_trust_count": 1,
+      "low_trust_count": 0,
+      "medium_trust_count": 0,
+      "source_trust_levels": {
+        "unknown": 1
+      },
+      "total_documents": 1,
+      "trust_score_range": [
+        0.7052,
+        0.7052
+      ],
+      "unknown_trust_count": 0
+    },
+    "website": "https://skillforge.example.com/"
+  },
+  "name": "edtech",
+  "raw_documents": [
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "6aa30e5d-4b76-5ab2-8b9a-2563b1be8626",
+      "metadata": null,
+      "original_url": "https://skillforge.example.com/",
+      "page_type": "homepage",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "SkillForge\n\nSkillForge is a B2B EdTech platform providing AI-personalized corporate training programs for technology skills. The platform generates adaptive learning paths based on role requirements and individual skill gaps. Content library covers 200+ technology topics with hands-on labs. Serving 45 enterprise clients with 12,000 active learners. ACV of $35,000 with 90% gross retention. Raised $6M seed round. Founded in 2022, team of 22 based in New York. Previously operated as a consulting firm for 3 years before pivoting to SaaS.",
+      "title": "SkillForge \u2014 home",
+      "truncated": false,
+      "url": "https://skillforge.example.com/"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "7bb02526-7661-5067-bcd4-a7ad916a4068",
+      "metadata": null,
+      "original_url": "https://skillforge.example.com/about",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "SkillForge\n\nSkillForge is a B2B EdTech platform providing AI-personalized corporate training programs for technology skills. The platform generates adaptive learning paths based on role requirements and individual skill gaps. Content library covers 200+ technology topics with hands-on labs. Serving 45 enterprise clients with 12,000 active learners. ACV of $35,000 with 90% gross retention. Raised $6M seed round. Founded in 2022, team of 22 based in New York. Previously operated as a consulting firm for 3 years before pivoting to SaaS.",
+      "title": "SkillForge \u2014 about",
+      "truncated": false,
+      "url": "https://skillforge.example.com/about"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "21581ef4-d0c0-55d0-b97f-0e508159d771",
+      "metadata": null,
+      "original_url": "https://skillforge.example.com/about-us",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "SkillForge\n\nSkillForge is a B2B EdTech platform providing AI-personalized corporate training programs for technology skills. The platform generates adaptive learning paths based on role requirements and individual skill gaps. Content library covers 200+ technology topics with hands-on labs. Serving 45 enterprise clients with 12,000 active learners. ACV of $35,000 with 90% gross retention. Raised $6M seed round. Founded in 2022, team of 22 based in New York. Previously operated as a consulting firm for 3 years before pivoting to SaaS.",
+      "title": "SkillForge \u2014 about-us",
+      "truncated": false,
+      "url": "https://skillforge.example.com/about-us"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "a9f859ae-e62a-5b13-9e62-fdaf30160541",
+      "metadata": null,
+      "original_url": "https://skillforge.example.com/company",
+      "page_type": "company",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "SkillForge\n\nSkillForge is a B2B EdTech platform providing AI-personalized corporate training programs for technology skills. The platform generates adaptive learning paths based on role requirements and individual skill gaps. Content library covers 200+ technology topics with hands-on labs. Serving 45 enterprise clients with 12,000 active learners. ACV of $35,000 with 90% gross retention. Raised $6M seed round. Founded in 2022, team of 22 based in New York. Previously operated as a consulting firm for 3 years before pivoting to SaaS.",
+      "title": "SkillForge \u2014 company",
+      "truncated": false,
+      "url": "https://skillforge.example.com/company"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "b5dd8088-2ce9-5625-a466-2d256e134b31",
+      "metadata": null,
+      "original_url": "https://skillforge.example.com/platform",
+      "page_type": "platform",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "SkillForge\n\nSkillForge is a B2B EdTech platform providing AI-personalized corporate training programs for technology skills. The platform generates adaptive learning paths based on role requirements and individual skill gaps. Content library covers 200+ technology topics with hands-on labs. Serving 45 enterprise clients with 12,000 active learners. ACV of $35,000 with 90% gross retention. Raised $6M seed round. Founded in 2022, team of 22 based in New York. Previously operated as a consulting firm for 3 years before pivoting to SaaS.",
+      "title": "SkillForge \u2014 platform",
+      "truncated": false,
+      "url": "https://skillforge.example.com/platform"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "39bb3bed-a171-5980-aa4f-7e71fa57e700",
+      "metadata": null,
+      "original_url": "https://skillforge.example.com/products",
+      "page_type": "products",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "SkillForge\n\nSkillForge is a B2B EdTech platform providing AI-personalized corporate training programs for technology skills. The platform generates adaptive learning paths based on role requirements and individual skill gaps. Content library covers 200+ technology topics with hands-on labs. Serving 45 enterprise clients with 12,000 active learners. ACV of $35,000 with 90% gross retention. Raised $6M seed round. Founded in 2022, team of 22 based in New York. Previously operated as a consulting firm for 3 years before pivoting to SaaS.",
+      "title": "SkillForge \u2014 products",
+      "truncated": false,
+      "url": "https://skillforge.example.com/products"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "4f334bc8-73d1-55d0-ac79-8f93848f8904",
+      "metadata": null,
+      "original_url": "https://skillforge.example.com/services",
+      "page_type": "services",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "SkillForge\n\nSkillForge is a B2B EdTech platform providing AI-personalized corporate training programs for technology skills. The platform generates adaptive learning paths based on role requirements and individual skill gaps. Content library covers 200+ technology topics with hands-on labs. Serving 45 enterprise clients with 12,000 active learners. ACV of $35,000 with 90% gross retention. Raised $6M seed round. Founded in 2022, team of 22 based in New York. Previously operated as a consulting firm for 3 years before pivoting to SaaS.",
+      "title": "SkillForge \u2014 services",
+      "truncated": false,
+      "url": "https://skillforge.example.com/services"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "886c6de2-a85e-5134-a832-f295d8cce2f3",
+      "metadata": null,
+      "original_url": "https://skillforge.example.com/technology",
+      "page_type": "technology",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "SkillForge\n\nSkillForge is a B2B EdTech platform providing AI-personalized corporate training programs for technology skills. The platform generates adaptive learning paths based on role requirements and individual skill gaps. Content library covers 200+ technology topics with hands-on labs. Serving 45 enterprise clients with 12,000 active learners. ACV of $35,000 with 90% gross retention. Raised $6M seed round. Founded in 2022, team of 22 based in New York. Previously operated as a consulting firm for 3 years before pivoting to SaaS.",
+      "title": "SkillForge \u2014 technology",
+      "truncated": false,
+      "url": "https://skillforge.example.com/technology"
+    }
+  ],
+  "schema_version": 1
+}

@@ -1,0 +1,380 @@
+{
+  "bundle": {
+    "attempted_pages": 8,
+    "collected_at": "2026-01-01T00:00:00Z",
+    "documents": [
+      {
+        "content_type": "text/html; charset=utf-8",
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "id": "bec4e329-5e53-5577-ad29-d1217db9f69b",
+        "metadata": {
+          "authority_score": 0.9521,
+          "canonical_url": "https://medvisionai.example.com/",
+          "content_hash": "da23df6585673f59fcca57c33cfbcd32679b1022002c89fc3fa0f7abe1d38cbb",
+          "document_type": "homepage",
+          "duplicate_of": null,
+          "heading_count": 0,
+          "is_duplicate": false,
+          "language": "en",
+          "list_count": 0,
+          "priority": 1,
+          "provenance": [
+            {
+              "document_id": "bec4e329-5e53-5577-ad29-d1217db9f69b",
+              "document_type": "homepage",
+              "duplicate_of": null,
+              "fetched_at": "2026-01-01T00:00:00Z",
+              "final_url": "https://medvisionai.example.com/",
+              "freshness_days": 0,
+              "is_duplicate": false,
+              "is_official": false,
+              "source_provider": "evidence",
+              "trust_level": "unknown",
+              "trust_score": 0.7059,
+              "url": "https://medvisionai.example.com/"
+            }
+          ],
+          "quality_score": 0.5212,
+          "source_provider": "evidence",
+          "table_count": 0,
+          "trust_level": "unknown",
+          "trust_score": {
+            "factors": [
+              {
+                "explanation": "",
+                "name": "authority",
+                "value": 0.9521,
+                "weight": 0.3
+              },
+              {
+                "explanation": "0d old",
+                "name": "freshness",
+                "value": 1.0,
+                "weight": 0.15
+              },
+              {
+                "explanation": "",
+                "name": "quality",
+                "value": 0.5212,
+                "weight": 0.25
+              },
+              {
+                "explanation": "",
+                "name": "source_type",
+                "value": 0.2,
+                "weight": 0.2
+              },
+              {
+                "explanation": "",
+                "name": "duplicate_penalty",
+                "value": 1.0,
+                "weight": 0.1
+              }
+            ],
+            "freshness_days": 0,
+            "overall": 0.7059,
+            "source_trust_level": "unknown"
+          },
+          "word_count": 83
+        },
+        "original_url": "https://medvisionai.example.com/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "status": "success",
+        "text": "MedVision AI\n\nMedVision AI develops FDA-cleared AI diagnostic tools for medical imaging. The platform analyzes X-rays, MRIs, and CT scans to assist radiologists in detecting anomalies with 97.3% sensitivity. The company holds 3 patents on its convolutional neural network architecture and has completed clinical trials across 12 hospital systems. Revenue model is per-study licensing with enterprise hospital contracts. Currently generating $2.8M ARR from 40 hospital clients. Series A funded with $12M raised from healthcare-focused VCs. Based in Boston with regulatory and clinical teams.",
+        "title": "MedVision AI \u2014 home",
+        "truncated": false,
+        "url": "https://medvisionai.example.com/"
+      }
+    ],
+    "duration_ms": 0,
+    "intelligence": {
+      "average_authority": 0.9521,
+      "average_quality": 0.5212,
+      "classification_confidence": 1.0,
+      "document_type_distribution": {
+        "homepage": 1
+      },
+      "documents_classified": 1,
+      "documents_input": 8,
+      "duplicates_removed": 7,
+      "processing_duration_ms": 0,
+      "trust_summary": {
+        "average_trust_score": 0.7059,
+        "high_trust_count": 1,
+        "low_trust_count": 0,
+        "medium_trust_count": 0,
+        "source_trust_levels": {
+          "unknown": 1
+        },
+        "total_documents": 1,
+        "trust_score_range": [
+          0.7059,
+          0.7059
+        ],
+        "unknown_trust_count": 0
+      }
+    },
+    "providers": [
+      {
+        "attempted_pages": 8,
+        "documents": 8,
+        "duration_ms": 0,
+        "failure_reason": null,
+        "provider": "website",
+        "success": true
+      }
+    ],
+    "sources": [
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://medvisionai.example.com/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://medvisionai.example.com/"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://medvisionai.example.com/about",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://medvisionai.example.com/about"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://medvisionai.example.com/about-us",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://medvisionai.example.com/about-us"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://medvisionai.example.com/company",
+        "page_type": "company",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://medvisionai.example.com/company"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://medvisionai.example.com/platform",
+        "page_type": "platform",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://medvisionai.example.com/platform"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://medvisionai.example.com/products",
+        "page_type": "products",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://medvisionai.example.com/products"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://medvisionai.example.com/services",
+        "page_type": "services",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://medvisionai.example.com/services"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://medvisionai.example.com/technology",
+        "page_type": "technology",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://medvisionai.example.com/technology"
+      }
+    ],
+    "startup_name": "MedVision AI",
+    "total_pages": 1,
+    "trust_summary": {
+      "average_trust_score": 0.7059,
+      "high_trust_count": 1,
+      "low_trust_count": 0,
+      "medium_trust_count": 0,
+      "source_trust_levels": {
+        "unknown": 1
+      },
+      "total_documents": 1,
+      "trust_score_range": [
+        0.7059,
+        0.7059
+      ],
+      "unknown_trust_count": 0
+    },
+    "website": "https://medvisionai.example.com/"
+  },
+  "name": "healthcare_ai",
+  "raw_documents": [
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "bec4e329-5e53-5577-ad29-d1217db9f69b",
+      "metadata": null,
+      "original_url": "https://medvisionai.example.com/",
+      "page_type": "homepage",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "MedVision AI\n\nMedVision AI develops FDA-cleared AI diagnostic tools for medical imaging. The platform analyzes X-rays, MRIs, and CT scans to assist radiologists in detecting anomalies with 97.3% sensitivity. The company holds 3 patents on its convolutional neural network architecture and has completed clinical trials across 12 hospital systems. Revenue model is per-study licensing with enterprise hospital contracts. Currently generating $2.8M ARR from 40 hospital clients. Series A funded with $12M raised from healthcare-focused VCs. Based in Boston with regulatory and clinical teams.",
+      "title": "MedVision AI \u2014 home",
+      "truncated": false,
+      "url": "https://medvisionai.example.com/"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "3af3e00a-e7c1-5287-9cc7-496785d98b26",
+      "metadata": null,
+      "original_url": "https://medvisionai.example.com/about",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "MedVision AI\n\nMedVision AI develops FDA-cleared AI diagnostic tools for medical imaging. The platform analyzes X-rays, MRIs, and CT scans to assist radiologists in detecting anomalies with 97.3% sensitivity. The company holds 3 patents on its convolutional neural network architecture and has completed clinical trials across 12 hospital systems. Revenue model is per-study licensing with enterprise hospital contracts. Currently generating $2.8M ARR from 40 hospital clients. Series A funded with $12M raised from healthcare-focused VCs. Based in Boston with regulatory and clinical teams.",
+      "title": "MedVision AI \u2014 about",
+      "truncated": false,
+      "url": "https://medvisionai.example.com/about"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "205ad6dd-9d3f-51f2-a101-6c405105c36d",
+      "metadata": null,
+      "original_url": "https://medvisionai.example.com/about-us",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "MedVision AI\n\nMedVision AI develops FDA-cleared AI diagnostic tools for medical imaging. The platform analyzes X-rays, MRIs, and CT scans to assist radiologists in detecting anomalies with 97.3% sensitivity. The company holds 3 patents on its convolutional neural network architecture and has completed clinical trials across 12 hospital systems. Revenue model is per-study licensing with enterprise hospital contracts. Currently generating $2.8M ARR from 40 hospital clients. Series A funded with $12M raised from healthcare-focused VCs. Based in Boston with regulatory and clinical teams.",
+      "title": "MedVision AI \u2014 about-us",
+      "truncated": false,
+      "url": "https://medvisionai.example.com/about-us"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "6ac9a9f6-032b-5f56-908a-67c816d23dd7",
+      "metadata": null,
+      "original_url": "https://medvisionai.example.com/company",
+      "page_type": "company",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "MedVision AI\n\nMedVision AI develops FDA-cleared AI diagnostic tools for medical imaging. The platform analyzes X-rays, MRIs, and CT scans to assist radiologists in detecting anomalies with 97.3% sensitivity. The company holds 3 patents on its convolutional neural network architecture and has completed clinical trials across 12 hospital systems. Revenue model is per-study licensing with enterprise hospital contracts. Currently generating $2.8M ARR from 40 hospital clients. Series A funded with $12M raised from healthcare-focused VCs. Based in Boston with regulatory and clinical teams.",
+      "title": "MedVision AI \u2014 company",
+      "truncated": false,
+      "url": "https://medvisionai.example.com/company"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "208e8420-ccf0-5552-82a4-ca26df2bcf86",
+      "metadata": null,
+      "original_url": "https://medvisionai.example.com/platform",
+      "page_type": "platform",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "MedVision AI\n\nMedVision AI develops FDA-cleared AI diagnostic tools for medical imaging. The platform analyzes X-rays, MRIs, and CT scans to assist radiologists in detecting anomalies with 97.3% sensitivity. The company holds 3 patents on its convolutional neural network architecture and has completed clinical trials across 12 hospital systems. Revenue model is per-study licensing with enterprise hospital contracts. Currently generating $2.8M ARR from 40 hospital clients. Series A funded with $12M raised from healthcare-focused VCs. Based in Boston with regulatory and clinical teams.",
+      "title": "MedVision AI \u2014 platform",
+      "truncated": false,
+      "url": "https://medvisionai.example.com/platform"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "bf075c01-37f1-5fd9-95ba-5f7d8c0b5253",
+      "metadata": null,
+      "original_url": "https://medvisionai.example.com/products",
+      "page_type": "products",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "MedVision AI\n\nMedVision AI develops FDA-cleared AI diagnostic tools for medical imaging. The platform analyzes X-rays, MRIs, and CT scans to assist radiologists in detecting anomalies with 97.3% sensitivity. The company holds 3 patents on its convolutional neural network architecture and has completed clinical trials across 12 hospital systems. Revenue model is per-study licensing with enterprise hospital contracts. Currently generating $2.8M ARR from 40 hospital clients. Series A funded with $12M raised from healthcare-focused VCs. Based in Boston with regulatory and clinical teams.",
+      "title": "MedVision AI \u2014 products",
+      "truncated": false,
+      "url": "https://medvisionai.example.com/products"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "b594214a-242b-552c-891a-14db1da92033",
+      "metadata": null,
+      "original_url": "https://medvisionai.example.com/services",
+      "page_type": "services",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "MedVision AI\n\nMedVision AI develops FDA-cleared AI diagnostic tools for medical imaging. The platform analyzes X-rays, MRIs, and CT scans to assist radiologists in detecting anomalies with 97.3% sensitivity. The company holds 3 patents on its convolutional neural network architecture and has completed clinical trials across 12 hospital systems. Revenue model is per-study licensing with enterprise hospital contracts. Currently generating $2.8M ARR from 40 hospital clients. Series A funded with $12M raised from healthcare-focused VCs. Based in Boston with regulatory and clinical teams.",
+      "title": "MedVision AI \u2014 services",
+      "truncated": false,
+      "url": "https://medvisionai.example.com/services"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "ca514b51-4cb6-5ab1-b856-c820845d8cbb",
+      "metadata": null,
+      "original_url": "https://medvisionai.example.com/technology",
+      "page_type": "technology",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "MedVision AI\n\nMedVision AI develops FDA-cleared AI diagnostic tools for medical imaging. The platform analyzes X-rays, MRIs, and CT scans to assist radiologists in detecting anomalies with 97.3% sensitivity. The company holds 3 patents on its convolutional neural network architecture and has completed clinical trials across 12 hospital systems. Revenue model is per-study licensing with enterprise hospital contracts. Currently generating $2.8M ARR from 40 hospital clients. Series A funded with $12M raised from healthcare-focused VCs. Based in Boston with regulatory and clinical teams.",
+      "title": "MedVision AI \u2014 technology",
+      "truncated": false,
+      "url": "https://medvisionai.example.com/technology"
+    }
+  ],
+  "schema_version": 1
+}

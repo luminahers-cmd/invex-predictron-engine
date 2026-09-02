@@ -1,0 +1,380 @@
+{
+  "bundle": {
+    "attempted_pages": 8,
+    "collected_at": "2026-01-01T00:00:00Z",
+    "documents": [
+      {
+        "content_type": "text/html; charset=utf-8",
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "id": "35962f6a-8c4d-5ef9-a80f-afa03dca3503",
+        "metadata": {
+          "authority_score": 0.9516,
+          "canonical_url": "https://fitsocial.example.com/",
+          "content_hash": "bf4af28e16b6c96dcf3b8ee6df20e01b2c35ab998e6f534faa57f03001e2b3bc",
+          "document_type": "homepage",
+          "duplicate_of": null,
+          "heading_count": 0,
+          "is_duplicate": false,
+          "language": "en",
+          "list_count": 0,
+          "priority": 1,
+          "provenance": [
+            {
+              "document_id": "35962f6a-8c4d-5ef9-a80f-afa03dca3503",
+              "document_type": "homepage",
+              "duplicate_of": null,
+              "fetched_at": "2026-01-01T00:00:00Z",
+              "final_url": "https://fitsocial.example.com/",
+              "freshness_days": 0,
+              "is_duplicate": false,
+              "is_official": false,
+              "source_provider": "evidence",
+              "trust_level": "unknown",
+              "trust_score": 0.7046,
+              "url": "https://fitsocial.example.com/"
+            }
+          ],
+          "quality_score": 0.5164,
+          "source_provider": "evidence",
+          "table_count": 0,
+          "trust_level": "unknown",
+          "trust_score": {
+            "factors": [
+              {
+                "explanation": "",
+                "name": "authority",
+                "value": 0.9516,
+                "weight": 0.3
+              },
+              {
+                "explanation": "0d old",
+                "name": "freshness",
+                "value": 1.0,
+                "weight": 0.15
+              },
+              {
+                "explanation": "",
+                "name": "quality",
+                "value": 0.5164,
+                "weight": 0.25
+              },
+              {
+                "explanation": "",
+                "name": "source_type",
+                "value": 0.2,
+                "weight": 0.2
+              },
+              {
+                "explanation": "",
+                "name": "duplicate_penalty",
+                "value": 1.0,
+                "weight": 0.1
+              }
+            ],
+            "freshness_days": 0,
+            "overall": 0.7046,
+            "source_trust_level": "unknown"
+          },
+          "word_count": 76
+        },
+        "original_url": "https://fitsocial.example.com/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "status": "success",
+        "text": "FitSocial\n\nFitSocial is a consumer mobile application that combines fitness tracking with social networking. Users log workouts, share progress, and participate in community challenges. Monetization is through a freemium model with a $9.99/month premium subscription and sponsored brand partnerships. Currently has 420,000 monthly active users with 38,000 premium subscribers. Retention at D30 is 42%. Available on iOS and Android. Founded in 2022, team of 18, based in Los Angeles. Pre-seed stage with $1.5M raised from angels.",
+        "title": "FitSocial \u2014 home",
+        "truncated": false,
+        "url": "https://fitsocial.example.com/"
+      }
+    ],
+    "duration_ms": 0,
+    "intelligence": {
+      "average_authority": 0.9516,
+      "average_quality": 0.5164,
+      "classification_confidence": 1.0,
+      "document_type_distribution": {
+        "homepage": 1
+      },
+      "documents_classified": 1,
+      "documents_input": 8,
+      "duplicates_removed": 7,
+      "processing_duration_ms": 0,
+      "trust_summary": {
+        "average_trust_score": 0.7046,
+        "high_trust_count": 1,
+        "low_trust_count": 0,
+        "medium_trust_count": 0,
+        "source_trust_levels": {
+          "unknown": 1
+        },
+        "total_documents": 1,
+        "trust_score_range": [
+          0.7046,
+          0.7046
+        ],
+        "unknown_trust_count": 0
+      }
+    },
+    "providers": [
+      {
+        "attempted_pages": 8,
+        "documents": 8,
+        "duration_ms": 0,
+        "failure_reason": null,
+        "provider": "website",
+        "success": true
+      }
+    ],
+    "sources": [
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://fitsocial.example.com/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://fitsocial.example.com/"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://fitsocial.example.com/about",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://fitsocial.example.com/about"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://fitsocial.example.com/about-us",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://fitsocial.example.com/about-us"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://fitsocial.example.com/company",
+        "page_type": "company",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://fitsocial.example.com/company"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://fitsocial.example.com/platform",
+        "page_type": "platform",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://fitsocial.example.com/platform"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://fitsocial.example.com/products",
+        "page_type": "products",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://fitsocial.example.com/products"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://fitsocial.example.com/services",
+        "page_type": "services",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://fitsocial.example.com/services"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://fitsocial.example.com/technology",
+        "page_type": "technology",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://fitsocial.example.com/technology"
+      }
+    ],
+    "startup_name": "FitSocial",
+    "total_pages": 1,
+    "trust_summary": {
+      "average_trust_score": 0.7046,
+      "high_trust_count": 1,
+      "low_trust_count": 0,
+      "medium_trust_count": 0,
+      "source_trust_levels": {
+        "unknown": 1
+      },
+      "total_documents": 1,
+      "trust_score_range": [
+        0.7046,
+        0.7046
+      ],
+      "unknown_trust_count": 0
+    },
+    "website": "https://fitsocial.example.com/"
+  },
+  "name": "consumer_app",
+  "raw_documents": [
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "35962f6a-8c4d-5ef9-a80f-afa03dca3503",
+      "metadata": null,
+      "original_url": "https://fitsocial.example.com/",
+      "page_type": "homepage",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "FitSocial\n\nFitSocial is a consumer mobile application that combines fitness tracking with social networking. Users log workouts, share progress, and participate in community challenges. Monetization is through a freemium model with a $9.99/month premium subscription and sponsored brand partnerships. Currently has 420,000 monthly active users with 38,000 premium subscribers. Retention at D30 is 42%. Available on iOS and Android. Founded in 2022, team of 18, based in Los Angeles. Pre-seed stage with $1.5M raised from angels.",
+      "title": "FitSocial \u2014 home",
+      "truncated": false,
+      "url": "https://fitsocial.example.com/"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "d7246068-57bc-5cb5-8cf1-1ad195f62a74",
+      "metadata": null,
+      "original_url": "https://fitsocial.example.com/about",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "FitSocial\n\nFitSocial is a consumer mobile application that combines fitness tracking with social networking. Users log workouts, share progress, and participate in community challenges. Monetization is through a freemium model with a $9.99/month premium subscription and sponsored brand partnerships. Currently has 420,000 monthly active users with 38,000 premium subscribers. Retention at D30 is 42%. Available on iOS and Android. Founded in 2022, team of 18, based in Los Angeles. Pre-seed stage with $1.5M raised from angels.",
+      "title": "FitSocial \u2014 about",
+      "truncated": false,
+      "url": "https://fitsocial.example.com/about"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "b3f12713-59e7-5b76-8496-907f17a929d4",
+      "metadata": null,
+      "original_url": "https://fitsocial.example.com/about-us",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "FitSocial\n\nFitSocial is a consumer mobile application that combines fitness tracking with social networking. Users log workouts, share progress, and participate in community challenges. Monetization is through a freemium model with a $9.99/month premium subscription and sponsored brand partnerships. Currently has 420,000 monthly active users with 38,000 premium subscribers. Retention at D30 is 42%. Available on iOS and Android. Founded in 2022, team of 18, based in Los Angeles. Pre-seed stage with $1.5M raised from angels.",
+      "title": "FitSocial \u2014 about-us",
+      "truncated": false,
+      "url": "https://fitsocial.example.com/about-us"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "8f208b06-45f9-51b4-a321-15c76b6e2b3a",
+      "metadata": null,
+      "original_url": "https://fitsocial.example.com/company",
+      "page_type": "company",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "FitSocial\n\nFitSocial is a consumer mobile application that combines fitness tracking with social networking. Users log workouts, share progress, and participate in community challenges. Monetization is through a freemium model with a $9.99/month premium subscription and sponsored brand partnerships. Currently has 420,000 monthly active users with 38,000 premium subscribers. Retention at D30 is 42%. Available on iOS and Android. Founded in 2022, team of 18, based in Los Angeles. Pre-seed stage with $1.5M raised from angels.",
+      "title": "FitSocial \u2014 company",
+      "truncated": false,
+      "url": "https://fitsocial.example.com/company"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "8cd1cf8d-b0c5-5874-b0ec-1a1937ab6323",
+      "metadata": null,
+      "original_url": "https://fitsocial.example.com/platform",
+      "page_type": "platform",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "FitSocial\n\nFitSocial is a consumer mobile application that combines fitness tracking with social networking. Users log workouts, share progress, and participate in community challenges. Monetization is through a freemium model with a $9.99/month premium subscription and sponsored brand partnerships. Currently has 420,000 monthly active users with 38,000 premium subscribers. Retention at D30 is 42%. Available on iOS and Android. Founded in 2022, team of 18, based in Los Angeles. Pre-seed stage with $1.5M raised from angels.",
+      "title": "FitSocial \u2014 platform",
+      "truncated": false,
+      "url": "https://fitsocial.example.com/platform"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "fa2cdfe0-4e3d-5fea-bbee-ca3b2556fe89",
+      "metadata": null,
+      "original_url": "https://fitsocial.example.com/products",
+      "page_type": "products",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "FitSocial\n\nFitSocial is a consumer mobile application that combines fitness tracking with social networking. Users log workouts, share progress, and participate in community challenges. Monetization is through a freemium model with a $9.99/month premium subscription and sponsored brand partnerships. Currently has 420,000 monthly active users with 38,000 premium subscribers. Retention at D30 is 42%. Available on iOS and Android. Founded in 2022, team of 18, based in Los Angeles. Pre-seed stage with $1.5M raised from angels.",
+      "title": "FitSocial \u2014 products",
+      "truncated": false,
+      "url": "https://fitsocial.example.com/products"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "99a49fc9-89b9-5c03-9935-612afec9ad65",
+      "metadata": null,
+      "original_url": "https://fitsocial.example.com/services",
+      "page_type": "services",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "FitSocial\n\nFitSocial is a consumer mobile application that combines fitness tracking with social networking. Users log workouts, share progress, and participate in community challenges. Monetization is through a freemium model with a $9.99/month premium subscription and sponsored brand partnerships. Currently has 420,000 monthly active users with 38,000 premium subscribers. Retention at D30 is 42%. Available on iOS and Android. Founded in 2022, team of 18, based in Los Angeles. Pre-seed stage with $1.5M raised from angels.",
+      "title": "FitSocial \u2014 services",
+      "truncated": false,
+      "url": "https://fitsocial.example.com/services"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "7edc7c18-07e1-53bf-9b09-2488f4bb12b6",
+      "metadata": null,
+      "original_url": "https://fitsocial.example.com/technology",
+      "page_type": "technology",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "FitSocial\n\nFitSocial is a consumer mobile application that combines fitness tracking with social networking. Users log workouts, share progress, and participate in community challenges. Monetization is through a freemium model with a $9.99/month premium subscription and sponsored brand partnerships. Currently has 420,000 monthly active users with 38,000 premium subscribers. Retention at D30 is 42%. Available on iOS and Android. Founded in 2022, team of 18, based in Los Angeles. Pre-seed stage with $1.5M raised from angels.",
+      "title": "FitSocial \u2014 technology",
+      "truncated": false,
+      "url": "https://fitsocial.example.com/technology"
+    }
+  ],
+  "schema_version": 1
+}

@@ -1,0 +1,380 @@
+{
+  "bundle": {
+    "attempted_pages": 8,
+    "collected_at": "2026-01-01T00:00:00Z",
+    "documents": [
+      {
+        "content_type": "text/html; charset=utf-8",
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "id": "59a24b05-72dc-53ac-a6c1-cf3ea9398872",
+        "metadata": {
+          "authority_score": 0.9526,
+          "canonical_url": "https://autoware.example.com/",
+          "content_hash": "9091687dfeda0b3b0d71aef994bdd7160e0ef9c95b1d5f9e5f82aa28990aaf7a",
+          "document_type": "homepage",
+          "duplicate_of": null,
+          "heading_count": 0,
+          "is_duplicate": false,
+          "language": "en",
+          "list_count": 0,
+          "priority": 1,
+          "provenance": [
+            {
+              "document_id": "59a24b05-72dc-53ac-a6c1-cf3ea9398872",
+              "document_type": "homepage",
+              "duplicate_of": null,
+              "fetched_at": "2026-01-01T00:00:00Z",
+              "final_url": "https://autoware.example.com/",
+              "freshness_days": 0,
+              "is_duplicate": false,
+              "is_official": false,
+              "source_provider": "evidence",
+              "trust_level": "unknown",
+              "trust_score": 0.7072,
+              "url": "https://autoware.example.com/"
+            }
+          ],
+          "quality_score": 0.5257,
+          "source_provider": "evidence",
+          "table_count": 0,
+          "trust_level": "unknown",
+          "trust_score": {
+            "factors": [
+              {
+                "explanation": "",
+                "name": "authority",
+                "value": 0.9526,
+                "weight": 0.3
+              },
+              {
+                "explanation": "0d old",
+                "name": "freshness",
+                "value": 1.0,
+                "weight": 0.15
+              },
+              {
+                "explanation": "",
+                "name": "quality",
+                "value": 0.5257,
+                "weight": 0.25
+              },
+              {
+                "explanation": "",
+                "name": "source_type",
+                "value": 0.2,
+                "weight": 0.2
+              },
+              {
+                "explanation": "",
+                "name": "duplicate_penalty",
+                "value": 1.0,
+                "weight": 0.1
+              }
+            ],
+            "freshness_days": 0,
+            "overall": 0.7072,
+            "source_trust_level": "unknown"
+          },
+          "word_count": 85
+        },
+        "original_url": "https://autoware.example.com/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "status": "success",
+        "text": "AutoWare Robotics\n\nAutoWare Robotics builds autonomous mobile robots for warehouse and fulfillment center operations. The robots use LiDAR-based SLAM navigation and handle goods-to-person picking, inventory scanning, and pallet transport. The company offers a Robotics-as-a-Service model with per-robot monthly fees covering hardware, maintenance, and software updates. Current fleet of 800 deployed robots across 15 customer facilities. Revenue model generates $6.4M ARR from RaaS contracts. Hardware costs funded through $52M in total funding including a Series B. Founded in 2019, team of 110 in Munich and Detroit.",
+        "title": "AutoWare Robotics \u2014 home",
+        "truncated": false,
+        "url": "https://autoware.example.com/"
+      }
+    ],
+    "duration_ms": 0,
+    "intelligence": {
+      "average_authority": 0.9526,
+      "average_quality": 0.5257,
+      "classification_confidence": 1.0,
+      "document_type_distribution": {
+        "homepage": 1
+      },
+      "documents_classified": 1,
+      "documents_input": 8,
+      "duplicates_removed": 7,
+      "processing_duration_ms": 0,
+      "trust_summary": {
+        "average_trust_score": 0.7072,
+        "high_trust_count": 1,
+        "low_trust_count": 0,
+        "medium_trust_count": 0,
+        "source_trust_levels": {
+          "unknown": 1
+        },
+        "total_documents": 1,
+        "trust_score_range": [
+          0.7072,
+          0.7072
+        ],
+        "unknown_trust_count": 0
+      }
+    },
+    "providers": [
+      {
+        "attempted_pages": 8,
+        "documents": 8,
+        "duration_ms": 0,
+        "failure_reason": null,
+        "provider": "website",
+        "success": true
+      }
+    ],
+    "sources": [
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://autoware.example.com/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://autoware.example.com/"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://autoware.example.com/about",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://autoware.example.com/about"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://autoware.example.com/about-us",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://autoware.example.com/about-us"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://autoware.example.com/company",
+        "page_type": "company",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://autoware.example.com/company"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://autoware.example.com/platform",
+        "page_type": "platform",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://autoware.example.com/platform"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://autoware.example.com/products",
+        "page_type": "products",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://autoware.example.com/products"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://autoware.example.com/services",
+        "page_type": "services",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://autoware.example.com/services"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://autoware.example.com/technology",
+        "page_type": "technology",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://autoware.example.com/technology"
+      }
+    ],
+    "startup_name": "AutoWare Robotics",
+    "total_pages": 1,
+    "trust_summary": {
+      "average_trust_score": 0.7072,
+      "high_trust_count": 1,
+      "low_trust_count": 0,
+      "medium_trust_count": 0,
+      "source_trust_levels": {
+        "unknown": 1
+      },
+      "total_documents": 1,
+      "trust_score_range": [
+        0.7072,
+        0.7072
+      ],
+      "unknown_trust_count": 0
+    },
+    "website": "https://autoware.example.com/"
+  },
+  "name": "robotics",
+  "raw_documents": [
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "59a24b05-72dc-53ac-a6c1-cf3ea9398872",
+      "metadata": null,
+      "original_url": "https://autoware.example.com/",
+      "page_type": "homepage",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "AutoWare Robotics\n\nAutoWare Robotics builds autonomous mobile robots for warehouse and fulfillment center operations. The robots use LiDAR-based SLAM navigation and handle goods-to-person picking, inventory scanning, and pallet transport. The company offers a Robotics-as-a-Service model with per-robot monthly fees covering hardware, maintenance, and software updates. Current fleet of 800 deployed robots across 15 customer facilities. Revenue model generates $6.4M ARR from RaaS contracts. Hardware costs funded through $52M in total funding including a Series B. Founded in 2019, team of 110 in Munich and Detroit.",
+      "title": "AutoWare Robotics \u2014 home",
+      "truncated": false,
+      "url": "https://autoware.example.com/"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "f69617bd-45c4-5a7b-85ac-f30cf07d94a9",
+      "metadata": null,
+      "original_url": "https://autoware.example.com/about",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "AutoWare Robotics\n\nAutoWare Robotics builds autonomous mobile robots for warehouse and fulfillment center operations. The robots use LiDAR-based SLAM navigation and handle goods-to-person picking, inventory scanning, and pallet transport. The company offers a Robotics-as-a-Service model with per-robot monthly fees covering hardware, maintenance, and software updates. Current fleet of 800 deployed robots across 15 customer facilities. Revenue model generates $6.4M ARR from RaaS contracts. Hardware costs funded through $52M in total funding including a Series B. Founded in 2019, team of 110 in Munich and Detroit.",
+      "title": "AutoWare Robotics \u2014 about",
+      "truncated": false,
+      "url": "https://autoware.example.com/about"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "b6809483-64a2-5ed9-8129-bb8957c5cfe1",
+      "metadata": null,
+      "original_url": "https://autoware.example.com/about-us",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "AutoWare Robotics\n\nAutoWare Robotics builds autonomous mobile robots for warehouse and fulfillment center operations. The robots use LiDAR-based SLAM navigation and handle goods-to-person picking, inventory scanning, and pallet transport. The company offers a Robotics-as-a-Service model with per-robot monthly fees covering hardware, maintenance, and software updates. Current fleet of 800 deployed robots across 15 customer facilities. Revenue model generates $6.4M ARR from RaaS contracts. Hardware costs funded through $52M in total funding including a Series B. Founded in 2019, team of 110 in Munich and Detroit.",
+      "title": "AutoWare Robotics \u2014 about-us",
+      "truncated": false,
+      "url": "https://autoware.example.com/about-us"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "a49f9900-5ddd-53ca-9a1d-33e1cd3aac7e",
+      "metadata": null,
+      "original_url": "https://autoware.example.com/company",
+      "page_type": "company",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "AutoWare Robotics\n\nAutoWare Robotics builds autonomous mobile robots for warehouse and fulfillment center operations. The robots use LiDAR-based SLAM navigation and handle goods-to-person picking, inventory scanning, and pallet transport. The company offers a Robotics-as-a-Service model with per-robot monthly fees covering hardware, maintenance, and software updates. Current fleet of 800 deployed robots across 15 customer facilities. Revenue model generates $6.4M ARR from RaaS contracts. Hardware costs funded through $52M in total funding including a Series B. Founded in 2019, team of 110 in Munich and Detroit.",
+      "title": "AutoWare Robotics \u2014 company",
+      "truncated": false,
+      "url": "https://autoware.example.com/company"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "34e451d3-0c77-546c-8a31-57e46ee9050b",
+      "metadata": null,
+      "original_url": "https://autoware.example.com/platform",
+      "page_type": "platform",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "AutoWare Robotics\n\nAutoWare Robotics builds autonomous mobile robots for warehouse and fulfillment center operations. The robots use LiDAR-based SLAM navigation and handle goods-to-person picking, inventory scanning, and pallet transport. The company offers a Robotics-as-a-Service model with per-robot monthly fees covering hardware, maintenance, and software updates. Current fleet of 800 deployed robots across 15 customer facilities. Revenue model generates $6.4M ARR from RaaS contracts. Hardware costs funded through $52M in total funding including a Series B. Founded in 2019, team of 110 in Munich and Detroit.",
+      "title": "AutoWare Robotics \u2014 platform",
+      "truncated": false,
+      "url": "https://autoware.example.com/platform"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "730e4793-6be9-5f08-90d9-d1ce745a91f9",
+      "metadata": null,
+      "original_url": "https://autoware.example.com/products",
+      "page_type": "products",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "AutoWare Robotics\n\nAutoWare Robotics builds autonomous mobile robots for warehouse and fulfillment center operations. The robots use LiDAR-based SLAM navigation and handle goods-to-person picking, inventory scanning, and pallet transport. The company offers a Robotics-as-a-Service model with per-robot monthly fees covering hardware, maintenance, and software updates. Current fleet of 800 deployed robots across 15 customer facilities. Revenue model generates $6.4M ARR from RaaS contracts. Hardware costs funded through $52M in total funding including a Series B. Founded in 2019, team of 110 in Munich and Detroit.",
+      "title": "AutoWare Robotics \u2014 products",
+      "truncated": false,
+      "url": "https://autoware.example.com/products"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "1ba25994-7b35-500f-9da9-128e4647eede",
+      "metadata": null,
+      "original_url": "https://autoware.example.com/services",
+      "page_type": "services",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "AutoWare Robotics\n\nAutoWare Robotics builds autonomous mobile robots for warehouse and fulfillment center operations. The robots use LiDAR-based SLAM navigation and handle goods-to-person picking, inventory scanning, and pallet transport. The company offers a Robotics-as-a-Service model with per-robot monthly fees covering hardware, maintenance, and software updates. Current fleet of 800 deployed robots across 15 customer facilities. Revenue model generates $6.4M ARR from RaaS contracts. Hardware costs funded through $52M in total funding including a Series B. Founded in 2019, team of 110 in Munich and Detroit.",
+      "title": "AutoWare Robotics \u2014 services",
+      "truncated": false,
+      "url": "https://autoware.example.com/services"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "41cd2301-77a4-5ada-9cf4-9e4c335e0eea",
+      "metadata": null,
+      "original_url": "https://autoware.example.com/technology",
+      "page_type": "technology",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "AutoWare Robotics\n\nAutoWare Robotics builds autonomous mobile robots for warehouse and fulfillment center operations. The robots use LiDAR-based SLAM navigation and handle goods-to-person picking, inventory scanning, and pallet transport. The company offers a Robotics-as-a-Service model with per-robot monthly fees covering hardware, maintenance, and software updates. Current fleet of 800 deployed robots across 15 customer facilities. Revenue model generates $6.4M ARR from RaaS contracts. Hardware costs funded through $52M in total funding including a Series B. Founded in 2019, team of 110 in Munich and Detroit.",
+      "title": "AutoWare Robotics \u2014 technology",
+      "truncated": false,
+      "url": "https://autoware.example.com/technology"
+    }
+  ],
+  "schema_version": 1
+}

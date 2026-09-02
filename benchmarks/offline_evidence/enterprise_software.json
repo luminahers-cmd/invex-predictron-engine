@@ -1,0 +1,380 @@
+{
+  "bundle": {
+    "attempted_pages": 8,
+    "collected_at": "2026-01-01T00:00:00Z",
+    "documents": [
+      {
+        "content_type": "text/html; charset=utf-8",
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "id": "44888b24-c650-5310-adaa-e464b7577629",
+        "metadata": {
+          "authority_score": 0.9513,
+          "canonical_url": "https://complianceos.example.com/",
+          "content_hash": "f0136c37e544b9e022c43ae9cb5d44cd705325f16f0c3f65f44338cda02e16f1",
+          "document_type": "homepage",
+          "duplicate_of": null,
+          "heading_count": 0,
+          "is_duplicate": false,
+          "language": "en",
+          "list_count": 0,
+          "priority": 1,
+          "provenance": [
+            {
+              "document_id": "44888b24-c650-5310-adaa-e464b7577629",
+              "document_type": "homepage",
+              "duplicate_of": null,
+              "fetched_at": "2026-01-01T00:00:00Z",
+              "final_url": "https://complianceos.example.com/",
+              "freshness_days": 0,
+              "is_duplicate": false,
+              "is_official": false,
+              "source_provider": "evidence",
+              "trust_level": "unknown",
+              "trust_score": 0.7037,
+              "url": "https://complianceos.example.com/"
+            }
+          ],
+          "quality_score": 0.5132,
+          "source_provider": "evidence",
+          "table_count": 0,
+          "trust_level": "unknown",
+          "trust_score": {
+            "factors": [
+              {
+                "explanation": "",
+                "name": "authority",
+                "value": 0.9513,
+                "weight": 0.3
+              },
+              {
+                "explanation": "0d old",
+                "name": "freshness",
+                "value": 1.0,
+                "weight": 0.15
+              },
+              {
+                "explanation": "",
+                "name": "quality",
+                "value": 0.5132,
+                "weight": 0.25
+              },
+              {
+                "explanation": "",
+                "name": "source_type",
+                "value": 0.2,
+                "weight": 0.2
+              },
+              {
+                "explanation": "",
+                "name": "duplicate_penalty",
+                "value": 1.0,
+                "weight": 0.1
+              }
+            ],
+            "freshness_days": 0,
+            "overall": 0.7037,
+            "source_trust_level": "unknown"
+          },
+          "word_count": 74
+        },
+        "original_url": "https://complianceos.example.com/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "status": "success",
+        "text": "ComplianceOS\n\nComplianceOS is an enterprise compliance management platform that automates regulatory tracking, policy management, and audit preparation for financial services companies. The platform covers SOC 2, PCI DSS, GDPR, and CCPA compliance workflows with automated evidence collection and control monitoring. Serving 95 financial institutions including 8 top-20 US banks. ACV of $120,000 with 98% gross retention. Series C stage with $85M raised. Team of 200 across New York, Charlotte, and remote. Founded in 2018.",
+        "title": "ComplianceOS \u2014 home",
+        "truncated": false,
+        "url": "https://complianceos.example.com/"
+      }
+    ],
+    "duration_ms": 0,
+    "intelligence": {
+      "average_authority": 0.9513,
+      "average_quality": 0.5132,
+      "classification_confidence": 1.0,
+      "document_type_distribution": {
+        "homepage": 1
+      },
+      "documents_classified": 1,
+      "documents_input": 8,
+      "duplicates_removed": 7,
+      "processing_duration_ms": 0,
+      "trust_summary": {
+        "average_trust_score": 0.7037,
+        "high_trust_count": 1,
+        "low_trust_count": 0,
+        "medium_trust_count": 0,
+        "source_trust_levels": {
+          "unknown": 1
+        },
+        "total_documents": 1,
+        "trust_score_range": [
+          0.7037,
+          0.7037
+        ],
+        "unknown_trust_count": 0
+      }
+    },
+    "providers": [
+      {
+        "attempted_pages": 8,
+        "documents": 8,
+        "duration_ms": 0,
+        "failure_reason": null,
+        "provider": "website",
+        "success": true
+      }
+    ],
+    "sources": [
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://complianceos.example.com/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://complianceos.example.com/"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://complianceos.example.com/about",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://complianceos.example.com/about"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://complianceos.example.com/about-us",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://complianceos.example.com/about-us"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://complianceos.example.com/company",
+        "page_type": "company",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://complianceos.example.com/company"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://complianceos.example.com/platform",
+        "page_type": "platform",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://complianceos.example.com/platform"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://complianceos.example.com/products",
+        "page_type": "products",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://complianceos.example.com/products"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://complianceos.example.com/services",
+        "page_type": "services",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://complianceos.example.com/services"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://complianceos.example.com/technology",
+        "page_type": "technology",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://complianceos.example.com/technology"
+      }
+    ],
+    "startup_name": "ComplianceOS",
+    "total_pages": 1,
+    "trust_summary": {
+      "average_trust_score": 0.7037,
+      "high_trust_count": 1,
+      "low_trust_count": 0,
+      "medium_trust_count": 0,
+      "source_trust_levels": {
+        "unknown": 1
+      },
+      "total_documents": 1,
+      "trust_score_range": [
+        0.7037,
+        0.7037
+      ],
+      "unknown_trust_count": 0
+    },
+    "website": "https://complianceos.example.com/"
+  },
+  "name": "enterprise_software",
+  "raw_documents": [
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "44888b24-c650-5310-adaa-e464b7577629",
+      "metadata": null,
+      "original_url": "https://complianceos.example.com/",
+      "page_type": "homepage",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "ComplianceOS\n\nComplianceOS is an enterprise compliance management platform that automates regulatory tracking, policy management, and audit preparation for financial services companies. The platform covers SOC 2, PCI DSS, GDPR, and CCPA compliance workflows with automated evidence collection and control monitoring. Serving 95 financial institutions including 8 top-20 US banks. ACV of $120,000 with 98% gross retention. Series C stage with $85M raised. Team of 200 across New York, Charlotte, and remote. Founded in 2018.",
+      "title": "ComplianceOS \u2014 home",
+      "truncated": false,
+      "url": "https://complianceos.example.com/"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "92903341-155d-5f13-a83d-f568a4219ace",
+      "metadata": null,
+      "original_url": "https://complianceos.example.com/about",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "ComplianceOS\n\nComplianceOS is an enterprise compliance management platform that automates regulatory tracking, policy management, and audit preparation for financial services companies. The platform covers SOC 2, PCI DSS, GDPR, and CCPA compliance workflows with automated evidence collection and control monitoring. Serving 95 financial institutions including 8 top-20 US banks. ACV of $120,000 with 98% gross retention. Series C stage with $85M raised. Team of 200 across New York, Charlotte, and remote. Founded in 2018.",
+      "title": "ComplianceOS \u2014 about",
+      "truncated": false,
+      "url": "https://complianceos.example.com/about"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "2514c307-7a21-5d96-8f45-295eb18be45c",
+      "metadata": null,
+      "original_url": "https://complianceos.example.com/about-us",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "ComplianceOS\n\nComplianceOS is an enterprise compliance management platform that automates regulatory tracking, policy management, and audit preparation for financial services companies. The platform covers SOC 2, PCI DSS, GDPR, and CCPA compliance workflows with automated evidence collection and control monitoring. Serving 95 financial institutions including 8 top-20 US banks. ACV of $120,000 with 98% gross retention. Series C stage with $85M raised. Team of 200 across New York, Charlotte, and remote. Founded in 2018.",
+      "title": "ComplianceOS \u2014 about-us",
+      "truncated": false,
+      "url": "https://complianceos.example.com/about-us"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "15846aec-f806-5c88-93a0-f0f76dbf5f28",
+      "metadata": null,
+      "original_url": "https://complianceos.example.com/company",
+      "page_type": "company",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "ComplianceOS\n\nComplianceOS is an enterprise compliance management platform that automates regulatory tracking, policy management, and audit preparation for financial services companies. The platform covers SOC 2, PCI DSS, GDPR, and CCPA compliance workflows with automated evidence collection and control monitoring. Serving 95 financial institutions including 8 top-20 US banks. ACV of $120,000 with 98% gross retention. Series C stage with $85M raised. Team of 200 across New York, Charlotte, and remote. Founded in 2018.",
+      "title": "ComplianceOS \u2014 company",
+      "truncated": false,
+      "url": "https://complianceos.example.com/company"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "423c4007-17f0-58b1-a985-f631eb32123c",
+      "metadata": null,
+      "original_url": "https://complianceos.example.com/platform",
+      "page_type": "platform",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "ComplianceOS\n\nComplianceOS is an enterprise compliance management platform that automates regulatory tracking, policy management, and audit preparation for financial services companies. The platform covers SOC 2, PCI DSS, GDPR, and CCPA compliance workflows with automated evidence collection and control monitoring. Serving 95 financial institutions including 8 top-20 US banks. ACV of $120,000 with 98% gross retention. Series C stage with $85M raised. Team of 200 across New York, Charlotte, and remote. Founded in 2018.",
+      "title": "ComplianceOS \u2014 platform",
+      "truncated": false,
+      "url": "https://complianceos.example.com/platform"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "e86949dd-2a12-5e0f-9a99-a0ff455a0c14",
+      "metadata": null,
+      "original_url": "https://complianceos.example.com/products",
+      "page_type": "products",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "ComplianceOS\n\nComplianceOS is an enterprise compliance management platform that automates regulatory tracking, policy management, and audit preparation for financial services companies. The platform covers SOC 2, PCI DSS, GDPR, and CCPA compliance workflows with automated evidence collection and control monitoring. Serving 95 financial institutions including 8 top-20 US banks. ACV of $120,000 with 98% gross retention. Series C stage with $85M raised. Team of 200 across New York, Charlotte, and remote. Founded in 2018.",
+      "title": "ComplianceOS \u2014 products",
+      "truncated": false,
+      "url": "https://complianceos.example.com/products"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "0d071ed7-e407-584f-b9c2-221e35596efa",
+      "metadata": null,
+      "original_url": "https://complianceos.example.com/services",
+      "page_type": "services",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "ComplianceOS\n\nComplianceOS is an enterprise compliance management platform that automates regulatory tracking, policy management, and audit preparation for financial services companies. The platform covers SOC 2, PCI DSS, GDPR, and CCPA compliance workflows with automated evidence collection and control monitoring. Serving 95 financial institutions including 8 top-20 US banks. ACV of $120,000 with 98% gross retention. Series C stage with $85M raised. Team of 200 across New York, Charlotte, and remote. Founded in 2018.",
+      "title": "ComplianceOS \u2014 services",
+      "truncated": false,
+      "url": "https://complianceos.example.com/services"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "699a3823-f5fb-5d11-98aa-9da116a9f2f7",
+      "metadata": null,
+      "original_url": "https://complianceos.example.com/technology",
+      "page_type": "technology",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "ComplianceOS\n\nComplianceOS is an enterprise compliance management platform that automates regulatory tracking, policy management, and audit preparation for financial services companies. The platform covers SOC 2, PCI DSS, GDPR, and CCPA compliance workflows with automated evidence collection and control monitoring. Serving 95 financial institutions including 8 top-20 US banks. ACV of $120,000 with 98% gross retention. Series C stage with $85M raised. Team of 200 across New York, Charlotte, and remote. Founded in 2018.",
+      "title": "ComplianceOS \u2014 technology",
+      "truncated": false,
+      "url": "https://complianceos.example.com/technology"
+    }
+  ],
+  "schema_version": 1
+}

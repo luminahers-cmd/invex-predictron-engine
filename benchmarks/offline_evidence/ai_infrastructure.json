@@ -1,0 +1,380 @@
+{
+  "bundle": {
+    "attempted_pages": 8,
+    "collected_at": "2026-01-01T00:00:00Z",
+    "documents": [
+      {
+        "content_type": "text/html; charset=utf-8",
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "id": "e57ea620-03c3-5836-ac24-35ab59ff3e2a",
+        "metadata": {
+          "authority_score": 0.9525,
+          "canonical_url": "https://inferencelabs.example.com/",
+          "content_hash": "3e07284f775fd039e97acead7af8dc45ff5a9b9aaf625ca7c01e3d38cf3e19a2",
+          "document_type": "homepage",
+          "duplicate_of": null,
+          "heading_count": 0,
+          "is_duplicate": false,
+          "language": "en",
+          "list_count": 0,
+          "priority": 1,
+          "provenance": [
+            {
+              "document_id": "e57ea620-03c3-5836-ac24-35ab59ff3e2a",
+              "document_type": "homepage",
+              "duplicate_of": null,
+              "fetched_at": "2026-01-01T00:00:00Z",
+              "final_url": "https://inferencelabs.example.com/",
+              "freshness_days": 0,
+              "is_duplicate": false,
+              "is_official": false,
+              "source_provider": "evidence",
+              "trust_level": "unknown",
+              "trust_score": 0.707,
+              "url": "https://inferencelabs.example.com/"
+            }
+          ],
+          "quality_score": 0.525,
+          "source_provider": "evidence",
+          "table_count": 0,
+          "trust_level": "unknown",
+          "trust_score": {
+            "factors": [
+              {
+                "explanation": "",
+                "name": "authority",
+                "value": 0.9525,
+                "weight": 0.3
+              },
+              {
+                "explanation": "0d old",
+                "name": "freshness",
+                "value": 1.0,
+                "weight": 0.15
+              },
+              {
+                "explanation": "",
+                "name": "quality",
+                "value": 0.525,
+                "weight": 0.25
+              },
+              {
+                "explanation": "",
+                "name": "source_type",
+                "value": 0.2,
+                "weight": 0.2
+              },
+              {
+                "explanation": "",
+                "name": "duplicate_penalty",
+                "value": 1.0,
+                "weight": 0.1
+              }
+            ],
+            "freshness_days": 0,
+            "overall": 0.707,
+            "source_trust_level": "unknown"
+          },
+          "word_count": 80
+        },
+        "original_url": "https://inferencelabs.example.com/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "status": "success",
+        "text": "Inference Labs\n\nInference Labs provides GPU-optimized model serving infrastructure for teams deploying large language models in production. The platform handles auto-scaling, model versioning, A/B testing, and cost optimization across multi-cloud GPU clusters. Supports PyTorch, TensorFlow, and ONNX models. Processing over 2 billion inference requests daily for 150 enterprise customers. Usage-based pricing with average customer spend of $18,000/month. Raised $65M Series A. Founded in 2023 by former infrastructure leads from major AI labs. Team of 75 in San Francisco and Toronto.",
+        "title": "Inference Labs \u2014 home",
+        "truncated": false,
+        "url": "https://inferencelabs.example.com/"
+      }
+    ],
+    "duration_ms": 0,
+    "intelligence": {
+      "average_authority": 0.9525,
+      "average_quality": 0.525,
+      "classification_confidence": 1.0,
+      "document_type_distribution": {
+        "homepage": 1
+      },
+      "documents_classified": 1,
+      "documents_input": 8,
+      "duplicates_removed": 7,
+      "processing_duration_ms": 0,
+      "trust_summary": {
+        "average_trust_score": 0.707,
+        "high_trust_count": 1,
+        "low_trust_count": 0,
+        "medium_trust_count": 0,
+        "source_trust_levels": {
+          "unknown": 1
+        },
+        "total_documents": 1,
+        "trust_score_range": [
+          0.707,
+          0.707
+        ],
+        "unknown_trust_count": 0
+      }
+    },
+    "providers": [
+      {
+        "attempted_pages": 8,
+        "documents": 8,
+        "duration_ms": 0,
+        "failure_reason": null,
+        "provider": "website",
+        "success": true
+      }
+    ],
+    "sources": [
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://inferencelabs.example.com/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://inferencelabs.example.com/"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://inferencelabs.example.com/about",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://inferencelabs.example.com/about"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://inferencelabs.example.com/about-us",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://inferencelabs.example.com/about-us"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://inferencelabs.example.com/company",
+        "page_type": "company",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://inferencelabs.example.com/company"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://inferencelabs.example.com/platform",
+        "page_type": "platform",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://inferencelabs.example.com/platform"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://inferencelabs.example.com/products",
+        "page_type": "products",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://inferencelabs.example.com/products"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://inferencelabs.example.com/services",
+        "page_type": "services",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://inferencelabs.example.com/services"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://inferencelabs.example.com/technology",
+        "page_type": "technology",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://inferencelabs.example.com/technology"
+      }
+    ],
+    "startup_name": "Inference Labs",
+    "total_pages": 1,
+    "trust_summary": {
+      "average_trust_score": 0.707,
+      "high_trust_count": 1,
+      "low_trust_count": 0,
+      "medium_trust_count": 0,
+      "source_trust_levels": {
+        "unknown": 1
+      },
+      "total_documents": 1,
+      "trust_score_range": [
+        0.707,
+        0.707
+      ],
+      "unknown_trust_count": 0
+    },
+    "website": "https://inferencelabs.example.com/"
+  },
+  "name": "ai_infrastructure",
+  "raw_documents": [
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "e57ea620-03c3-5836-ac24-35ab59ff3e2a",
+      "metadata": null,
+      "original_url": "https://inferencelabs.example.com/",
+      "page_type": "homepage",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "Inference Labs\n\nInference Labs provides GPU-optimized model serving infrastructure for teams deploying large language models in production. The platform handles auto-scaling, model versioning, A/B testing, and cost optimization across multi-cloud GPU clusters. Supports PyTorch, TensorFlow, and ONNX models. Processing over 2 billion inference requests daily for 150 enterprise customers. Usage-based pricing with average customer spend of $18,000/month. Raised $65M Series A. Founded in 2023 by former infrastructure leads from major AI labs. Team of 75 in San Francisco and Toronto.",
+      "title": "Inference Labs \u2014 home",
+      "truncated": false,
+      "url": "https://inferencelabs.example.com/"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "e07205c0-c5ba-551a-8ed5-556497f05859",
+      "metadata": null,
+      "original_url": "https://inferencelabs.example.com/about",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "Inference Labs\n\nInference Labs provides GPU-optimized model serving infrastructure for teams deploying large language models in production. The platform handles auto-scaling, model versioning, A/B testing, and cost optimization across multi-cloud GPU clusters. Supports PyTorch, TensorFlow, and ONNX models. Processing over 2 billion inference requests daily for 150 enterprise customers. Usage-based pricing with average customer spend of $18,000/month. Raised $65M Series A. Founded in 2023 by former infrastructure leads from major AI labs. Team of 75 in San Francisco and Toronto.",
+      "title": "Inference Labs \u2014 about",
+      "truncated": false,
+      "url": "https://inferencelabs.example.com/about"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "86d9cb1e-fb4f-598f-aa4d-d514bac3838e",
+      "metadata": null,
+      "original_url": "https://inferencelabs.example.com/about-us",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "Inference Labs\n\nInference Labs provides GPU-optimized model serving infrastructure for teams deploying large language models in production. The platform handles auto-scaling, model versioning, A/B testing, and cost optimization across multi-cloud GPU clusters. Supports PyTorch, TensorFlow, and ONNX models. Processing over 2 billion inference requests daily for 150 enterprise customers. Usage-based pricing with average customer spend of $18,000/month. Raised $65M Series A. Founded in 2023 by former infrastructure leads from major AI labs. Team of 75 in San Francisco and Toronto.",
+      "title": "Inference Labs \u2014 about-us",
+      "truncated": false,
+      "url": "https://inferencelabs.example.com/about-us"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "e76aa671-ec0f-50c0-afc0-ffc8e4425d8c",
+      "metadata": null,
+      "original_url": "https://inferencelabs.example.com/company",
+      "page_type": "company",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "Inference Labs\n\nInference Labs provides GPU-optimized model serving infrastructure for teams deploying large language models in production. The platform handles auto-scaling, model versioning, A/B testing, and cost optimization across multi-cloud GPU clusters. Supports PyTorch, TensorFlow, and ONNX models. Processing over 2 billion inference requests daily for 150 enterprise customers. Usage-based pricing with average customer spend of $18,000/month. Raised $65M Series A. Founded in 2023 by former infrastructure leads from major AI labs. Team of 75 in San Francisco and Toronto.",
+      "title": "Inference Labs \u2014 company",
+      "truncated": false,
+      "url": "https://inferencelabs.example.com/company"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "7b503927-1c14-579d-a5e4-de55e97832df",
+      "metadata": null,
+      "original_url": "https://inferencelabs.example.com/platform",
+      "page_type": "platform",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "Inference Labs\n\nInference Labs provides GPU-optimized model serving infrastructure for teams deploying large language models in production. The platform handles auto-scaling, model versioning, A/B testing, and cost optimization across multi-cloud GPU clusters. Supports PyTorch, TensorFlow, and ONNX models. Processing over 2 billion inference requests daily for 150 enterprise customers. Usage-based pricing with average customer spend of $18,000/month. Raised $65M Series A. Founded in 2023 by former infrastructure leads from major AI labs. Team of 75 in San Francisco and Toronto.",
+      "title": "Inference Labs \u2014 platform",
+      "truncated": false,
+      "url": "https://inferencelabs.example.com/platform"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "3c0f33e7-bc2f-5bef-a0b4-dfc2793ad685",
+      "metadata": null,
+      "original_url": "https://inferencelabs.example.com/products",
+      "page_type": "products",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "Inference Labs\n\nInference Labs provides GPU-optimized model serving infrastructure for teams deploying large language models in production. The platform handles auto-scaling, model versioning, A/B testing, and cost optimization across multi-cloud GPU clusters. Supports PyTorch, TensorFlow, and ONNX models. Processing over 2 billion inference requests daily for 150 enterprise customers. Usage-based pricing with average customer spend of $18,000/month. Raised $65M Series A. Founded in 2023 by former infrastructure leads from major AI labs. Team of 75 in San Francisco and Toronto.",
+      "title": "Inference Labs \u2014 products",
+      "truncated": false,
+      "url": "https://inferencelabs.example.com/products"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "a54bda3c-f70c-5a3c-9164-3b976aebd536",
+      "metadata": null,
+      "original_url": "https://inferencelabs.example.com/services",
+      "page_type": "services",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "Inference Labs\n\nInference Labs provides GPU-optimized model serving infrastructure for teams deploying large language models in production. The platform handles auto-scaling, model versioning, A/B testing, and cost optimization across multi-cloud GPU clusters. Supports PyTorch, TensorFlow, and ONNX models. Processing over 2 billion inference requests daily for 150 enterprise customers. Usage-based pricing with average customer spend of $18,000/month. Raised $65M Series A. Founded in 2023 by former infrastructure leads from major AI labs. Team of 75 in San Francisco and Toronto.",
+      "title": "Inference Labs \u2014 services",
+      "truncated": false,
+      "url": "https://inferencelabs.example.com/services"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "5572945e-a4d2-5b0f-98b9-ed594c925d23",
+      "metadata": null,
+      "original_url": "https://inferencelabs.example.com/technology",
+      "page_type": "technology",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "Inference Labs\n\nInference Labs provides GPU-optimized model serving infrastructure for teams deploying large language models in production. The platform handles auto-scaling, model versioning, A/B testing, and cost optimization across multi-cloud GPU clusters. Supports PyTorch, TensorFlow, and ONNX models. Processing over 2 billion inference requests daily for 150 enterprise customers. Usage-based pricing with average customer spend of $18,000/month. Raised $65M Series A. Founded in 2023 by former infrastructure leads from major AI labs. Team of 75 in San Francisco and Toronto.",
+      "title": "Inference Labs \u2014 technology",
+      "truncated": false,
+      "url": "https://inferencelabs.example.com/technology"
+    }
+  ],
+  "schema_version": 1
+}

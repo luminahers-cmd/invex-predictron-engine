@@ -1,0 +1,380 @@
+{
+  "bundle": {
+    "attempted_pages": 8,
+    "collected_at": "2026-01-01T00:00:00Z",
+    "documents": [
+      {
+        "content_type": "text/html; charset=utf-8",
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "id": "d9d31d3d-c955-5735-b87b-71e11965d504",
+        "metadata": {
+          "authority_score": 0.9521,
+          "canonical_url": "https://supplyhub.example.com/",
+          "content_hash": "0800effca9920ca46634f21130f2fb6d98588582b58aac84c835a5bf5def2101",
+          "document_type": "homepage",
+          "duplicate_of": null,
+          "heading_count": 0,
+          "is_duplicate": false,
+          "language": "en",
+          "list_count": 0,
+          "priority": 1,
+          "provenance": [
+            {
+              "document_id": "d9d31d3d-c955-5735-b87b-71e11965d504",
+              "document_type": "homepage",
+              "duplicate_of": null,
+              "fetched_at": "2026-01-01T00:00:00Z",
+              "final_url": "https://supplyhub.example.com/",
+              "freshness_days": 0,
+              "is_duplicate": false,
+              "is_official": false,
+              "source_provider": "evidence",
+              "trust_level": "unknown",
+              "trust_score": 0.7058,
+              "url": "https://supplyhub.example.com/"
+            }
+          ],
+          "quality_score": 0.5208,
+          "source_provider": "evidence",
+          "table_count": 0,
+          "trust_level": "unknown",
+          "trust_score": {
+            "factors": [
+              {
+                "explanation": "",
+                "name": "authority",
+                "value": 0.9521,
+                "weight": 0.3
+              },
+              {
+                "explanation": "0d old",
+                "name": "freshness",
+                "value": 1.0,
+                "weight": 0.15
+              },
+              {
+                "explanation": "",
+                "name": "quality",
+                "value": 0.5208,
+                "weight": 0.25
+              },
+              {
+                "explanation": "",
+                "name": "source_type",
+                "value": 0.2,
+                "weight": 0.2
+              },
+              {
+                "explanation": "",
+                "name": "duplicate_penalty",
+                "value": 1.0,
+                "weight": 0.1
+              }
+            ],
+            "freshness_days": 0,
+            "overall": 0.7058,
+            "source_trust_level": "unknown"
+          },
+          "word_count": 75
+        },
+        "original_url": "https://supplyhub.example.com/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "status": "success",
+        "text": "SupplyHub\n\nSupplyHub operates a two-sided B2B marketplace connecting industrial equipment manufacturers with small and mid-size manufacturing facilities. The platform handles quoting, procurement, and logistics for MRO supplies across North America. Marketplace take rate is 12% on transactions. Currently facilitating $180M in GMV annually with 2,400 supplier listings and 8,500 active buyer accounts. Revenue of $21.6M with unit economics showing LTV/CAC of 4.2x. Raised $30M Series A. Founded in 2020, team of 65 based in Chicago.",
+        "title": "SupplyHub \u2014 home",
+        "truncated": false,
+        "url": "https://supplyhub.example.com/"
+      }
+    ],
+    "duration_ms": 0,
+    "intelligence": {
+      "average_authority": 0.9521,
+      "average_quality": 0.5208,
+      "classification_confidence": 1.0,
+      "document_type_distribution": {
+        "homepage": 1
+      },
+      "documents_classified": 1,
+      "documents_input": 8,
+      "duplicates_removed": 7,
+      "processing_duration_ms": 0,
+      "trust_summary": {
+        "average_trust_score": 0.7058,
+        "high_trust_count": 1,
+        "low_trust_count": 0,
+        "medium_trust_count": 0,
+        "source_trust_levels": {
+          "unknown": 1
+        },
+        "total_documents": 1,
+        "trust_score_range": [
+          0.7058,
+          0.7058
+        ],
+        "unknown_trust_count": 0
+      }
+    },
+    "providers": [
+      {
+        "attempted_pages": 8,
+        "documents": 8,
+        "duration_ms": 0,
+        "failure_reason": null,
+        "provider": "website",
+        "success": true
+      }
+    ],
+    "sources": [
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://supplyhub.example.com/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://supplyhub.example.com/"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://supplyhub.example.com/about",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://supplyhub.example.com/about"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://supplyhub.example.com/about-us",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://supplyhub.example.com/about-us"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://supplyhub.example.com/company",
+        "page_type": "company",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://supplyhub.example.com/company"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://supplyhub.example.com/platform",
+        "page_type": "platform",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://supplyhub.example.com/platform"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://supplyhub.example.com/products",
+        "page_type": "products",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://supplyhub.example.com/products"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://supplyhub.example.com/services",
+        "page_type": "services",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://supplyhub.example.com/services"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://supplyhub.example.com/technology",
+        "page_type": "technology",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://supplyhub.example.com/technology"
+      }
+    ],
+    "startup_name": "SupplyHub",
+    "total_pages": 1,
+    "trust_summary": {
+      "average_trust_score": 0.7058,
+      "high_trust_count": 1,
+      "low_trust_count": 0,
+      "medium_trust_count": 0,
+      "source_trust_levels": {
+        "unknown": 1
+      },
+      "total_documents": 1,
+      "trust_score_range": [
+        0.7058,
+        0.7058
+      ],
+      "unknown_trust_count": 0
+    },
+    "website": "https://supplyhub.example.com/"
+  },
+  "name": "marketplace",
+  "raw_documents": [
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "d9d31d3d-c955-5735-b87b-71e11965d504",
+      "metadata": null,
+      "original_url": "https://supplyhub.example.com/",
+      "page_type": "homepage",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "SupplyHub\n\nSupplyHub operates a two-sided B2B marketplace connecting industrial equipment manufacturers with small and mid-size manufacturing facilities. The platform handles quoting, procurement, and logistics for MRO supplies across North America. Marketplace take rate is 12% on transactions. Currently facilitating $180M in GMV annually with 2,400 supplier listings and 8,500 active buyer accounts. Revenue of $21.6M with unit economics showing LTV/CAC of 4.2x. Raised $30M Series A. Founded in 2020, team of 65 based in Chicago.",
+      "title": "SupplyHub \u2014 home",
+      "truncated": false,
+      "url": "https://supplyhub.example.com/"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "ab5067d0-b3e1-56f6-ad48-abeae54b76e4",
+      "metadata": null,
+      "original_url": "https://supplyhub.example.com/about",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "SupplyHub\n\nSupplyHub operates a two-sided B2B marketplace connecting industrial equipment manufacturers with small and mid-size manufacturing facilities. The platform handles quoting, procurement, and logistics for MRO supplies across North America. Marketplace take rate is 12% on transactions. Currently facilitating $180M in GMV annually with 2,400 supplier listings and 8,500 active buyer accounts. Revenue of $21.6M with unit economics showing LTV/CAC of 4.2x. Raised $30M Series A. Founded in 2020, team of 65 based in Chicago.",
+      "title": "SupplyHub \u2014 about",
+      "truncated": false,
+      "url": "https://supplyhub.example.com/about"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "fb8287fe-24ab-5f04-bb54-0321d53d82c2",
+      "metadata": null,
+      "original_url": "https://supplyhub.example.com/about-us",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "SupplyHub\n\nSupplyHub operates a two-sided B2B marketplace connecting industrial equipment manufacturers with small and mid-size manufacturing facilities. The platform handles quoting, procurement, and logistics for MRO supplies across North America. Marketplace take rate is 12% on transactions. Currently facilitating $180M in GMV annually with 2,400 supplier listings and 8,500 active buyer accounts. Revenue of $21.6M with unit economics showing LTV/CAC of 4.2x. Raised $30M Series A. Founded in 2020, team of 65 based in Chicago.",
+      "title": "SupplyHub \u2014 about-us",
+      "truncated": false,
+      "url": "https://supplyhub.example.com/about-us"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "b109da39-41a9-57b2-8bad-50d0cc04f30b",
+      "metadata": null,
+      "original_url": "https://supplyhub.example.com/company",
+      "page_type": "company",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "SupplyHub\n\nSupplyHub operates a two-sided B2B marketplace connecting industrial equipment manufacturers with small and mid-size manufacturing facilities. The platform handles quoting, procurement, and logistics for MRO supplies across North America. Marketplace take rate is 12% on transactions. Currently facilitating $180M in GMV annually with 2,400 supplier listings and 8,500 active buyer accounts. Revenue of $21.6M with unit economics showing LTV/CAC of 4.2x. Raised $30M Series A. Founded in 2020, team of 65 based in Chicago.",
+      "title": "SupplyHub \u2014 company",
+      "truncated": false,
+      "url": "https://supplyhub.example.com/company"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "3db9c67c-9a5a-5bc4-9a16-b2ba5ee0c175",
+      "metadata": null,
+      "original_url": "https://supplyhub.example.com/platform",
+      "page_type": "platform",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "SupplyHub\n\nSupplyHub operates a two-sided B2B marketplace connecting industrial equipment manufacturers with small and mid-size manufacturing facilities. The platform handles quoting, procurement, and logistics for MRO supplies across North America. Marketplace take rate is 12% on transactions. Currently facilitating $180M in GMV annually with 2,400 supplier listings and 8,500 active buyer accounts. Revenue of $21.6M with unit economics showing LTV/CAC of 4.2x. Raised $30M Series A. Founded in 2020, team of 65 based in Chicago.",
+      "title": "SupplyHub \u2014 platform",
+      "truncated": false,
+      "url": "https://supplyhub.example.com/platform"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "a100201a-4382-50a1-b0ad-a959f3fd1fb7",
+      "metadata": null,
+      "original_url": "https://supplyhub.example.com/products",
+      "page_type": "products",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "SupplyHub\n\nSupplyHub operates a two-sided B2B marketplace connecting industrial equipment manufacturers with small and mid-size manufacturing facilities. The platform handles quoting, procurement, and logistics for MRO supplies across North America. Marketplace take rate is 12% on transactions. Currently facilitating $180M in GMV annually with 2,400 supplier listings and 8,500 active buyer accounts. Revenue of $21.6M with unit economics showing LTV/CAC of 4.2x. Raised $30M Series A. Founded in 2020, team of 65 based in Chicago.",
+      "title": "SupplyHub \u2014 products",
+      "truncated": false,
+      "url": "https://supplyhub.example.com/products"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "e0df67d7-ba41-585f-adad-a4ef01ab8e03",
+      "metadata": null,
+      "original_url": "https://supplyhub.example.com/services",
+      "page_type": "services",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "SupplyHub\n\nSupplyHub operates a two-sided B2B marketplace connecting industrial equipment manufacturers with small and mid-size manufacturing facilities. The platform handles quoting, procurement, and logistics for MRO supplies across North America. Marketplace take rate is 12% on transactions. Currently facilitating $180M in GMV annually with 2,400 supplier listings and 8,500 active buyer accounts. Revenue of $21.6M with unit economics showing LTV/CAC of 4.2x. Raised $30M Series A. Founded in 2020, team of 65 based in Chicago.",
+      "title": "SupplyHub \u2014 services",
+      "truncated": false,
+      "url": "https://supplyhub.example.com/services"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "e48f740f-6388-577c-8866-71eb0391565f",
+      "metadata": null,
+      "original_url": "https://supplyhub.example.com/technology",
+      "page_type": "technology",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "SupplyHub\n\nSupplyHub operates a two-sided B2B marketplace connecting industrial equipment manufacturers with small and mid-size manufacturing facilities. The platform handles quoting, procurement, and logistics for MRO supplies across North America. Marketplace take rate is 12% on transactions. Currently facilitating $180M in GMV annually with 2,400 supplier listings and 8,500 active buyer accounts. Revenue of $21.6M with unit economics showing LTV/CAC of 4.2x. Raised $30M Series A. Founded in 2020, team of 65 based in Chicago.",
+      "title": "SupplyHub \u2014 technology",
+      "truncated": false,
+      "url": "https://supplyhub.example.com/technology"
+    }
+  ],
+  "schema_version": 1
+}

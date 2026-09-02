@@ -1,0 +1,380 @@
+{
+  "bundle": {
+    "attempted_pages": 8,
+    "collected_at": "2026-01-01T00:00:00Z",
+    "documents": [
+      {
+        "content_type": "text/html; charset=utf-8",
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "id": "476b1e38-c854-5f8c-b6ba-d5d855837120",
+        "metadata": {
+          "authority_score": 0.9514,
+          "canonical_url": "https://paybridge.example.com/",
+          "content_hash": "6a7dbb8d3e869a214aba5145d441970100f1e4cb8c18bb2de25aae78e214f1f6",
+          "document_type": "homepage",
+          "duplicate_of": null,
+          "heading_count": 0,
+          "is_duplicate": false,
+          "language": "en",
+          "list_count": 0,
+          "priority": 1,
+          "provenance": [
+            {
+              "document_id": "476b1e38-c854-5f8c-b6ba-d5d855837120",
+              "document_type": "homepage",
+              "duplicate_of": null,
+              "fetched_at": "2026-01-01T00:00:00Z",
+              "final_url": "https://paybridge.example.com/",
+              "freshness_days": 0,
+              "is_duplicate": false,
+              "is_official": false,
+              "source_provider": "evidence",
+              "trust_level": "unknown",
+              "trust_score": 0.7038,
+              "url": "https://paybridge.example.com/"
+            }
+          ],
+          "quality_score": 0.5136,
+          "source_provider": "evidence",
+          "table_count": 0,
+          "trust_level": "unknown",
+          "trust_score": {
+            "factors": [
+              {
+                "explanation": "",
+                "name": "authority",
+                "value": 0.9514,
+                "weight": 0.3
+              },
+              {
+                "explanation": "0d old",
+                "name": "freshness",
+                "value": 1.0,
+                "weight": 0.15
+              },
+              {
+                "explanation": "",
+                "name": "quality",
+                "value": 0.5136,
+                "weight": 0.25
+              },
+              {
+                "explanation": "",
+                "name": "source_type",
+                "value": 0.2,
+                "weight": 0.2
+              },
+              {
+                "explanation": "",
+                "name": "duplicate_penalty",
+                "value": 1.0,
+                "weight": 0.1
+              }
+            ],
+            "freshness_days": 0,
+            "overall": 0.7038,
+            "source_trust_level": "unknown"
+          },
+          "word_count": 71
+        },
+        "original_url": "https://paybridge.example.com/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "status": "success",
+        "text": "PayBridge\n\nPayBridge provides embedded payment infrastructure for marketplace and platform businesses. The API-first solution handles split payments, escrow, KYC compliance, and multi-currency settlement across 35 countries. Processing $2.1B in annual payment volume with a take rate of 0.8%. The company serves 280 marketplace clients including 12 in the Fortune 500. Founded in 2019, team of 120 across London, Singapore, and New York. Raised $45M Series B from Tier 1 fintech investors.",
+        "title": "PayBridge \u2014 home",
+        "truncated": false,
+        "url": "https://paybridge.example.com/"
+      }
+    ],
+    "duration_ms": 0,
+    "intelligence": {
+      "average_authority": 0.9514,
+      "average_quality": 0.5136,
+      "classification_confidence": 1.0,
+      "document_type_distribution": {
+        "homepage": 1
+      },
+      "documents_classified": 1,
+      "documents_input": 8,
+      "duplicates_removed": 7,
+      "processing_duration_ms": 0,
+      "trust_summary": {
+        "average_trust_score": 0.7038,
+        "high_trust_count": 1,
+        "low_trust_count": 0,
+        "medium_trust_count": 0,
+        "source_trust_levels": {
+          "unknown": 1
+        },
+        "total_documents": 1,
+        "trust_score_range": [
+          0.7038,
+          0.7038
+        ],
+        "unknown_trust_count": 0
+      }
+    },
+    "providers": [
+      {
+        "attempted_pages": 8,
+        "documents": 8,
+        "duration_ms": 0,
+        "failure_reason": null,
+        "provider": "website",
+        "success": true
+      }
+    ],
+    "sources": [
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://paybridge.example.com/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://paybridge.example.com/"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://paybridge.example.com/about",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://paybridge.example.com/about"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://paybridge.example.com/about-us",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://paybridge.example.com/about-us"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://paybridge.example.com/company",
+        "page_type": "company",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://paybridge.example.com/company"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://paybridge.example.com/platform",
+        "page_type": "platform",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://paybridge.example.com/platform"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://paybridge.example.com/products",
+        "page_type": "products",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://paybridge.example.com/products"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://paybridge.example.com/services",
+        "page_type": "services",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://paybridge.example.com/services"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://paybridge.example.com/technology",
+        "page_type": "technology",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://paybridge.example.com/technology"
+      }
+    ],
+    "startup_name": "PayBridge",
+    "total_pages": 1,
+    "trust_summary": {
+      "average_trust_score": 0.7038,
+      "high_trust_count": 1,
+      "low_trust_count": 0,
+      "medium_trust_count": 0,
+      "source_trust_levels": {
+        "unknown": 1
+      },
+      "total_documents": 1,
+      "trust_score_range": [
+        0.7038,
+        0.7038
+      ],
+      "unknown_trust_count": 0
+    },
+    "website": "https://paybridge.example.com/"
+  },
+  "name": "fintech",
+  "raw_documents": [
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "476b1e38-c854-5f8c-b6ba-d5d855837120",
+      "metadata": null,
+      "original_url": "https://paybridge.example.com/",
+      "page_type": "homepage",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "PayBridge\n\nPayBridge provides embedded payment infrastructure for marketplace and platform businesses. The API-first solution handles split payments, escrow, KYC compliance, and multi-currency settlement across 35 countries. Processing $2.1B in annual payment volume with a take rate of 0.8%. The company serves 280 marketplace clients including 12 in the Fortune 500. Founded in 2019, team of 120 across London, Singapore, and New York. Raised $45M Series B from Tier 1 fintech investors.",
+      "title": "PayBridge \u2014 home",
+      "truncated": false,
+      "url": "https://paybridge.example.com/"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "4745cef1-c654-5471-bb35-1e10ed5b2e0f",
+      "metadata": null,
+      "original_url": "https://paybridge.example.com/about",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "PayBridge\n\nPayBridge provides embedded payment infrastructure for marketplace and platform businesses. The API-first solution handles split payments, escrow, KYC compliance, and multi-currency settlement across 35 countries. Processing $2.1B in annual payment volume with a take rate of 0.8%. The company serves 280 marketplace clients including 12 in the Fortune 500. Founded in 2019, team of 120 across London, Singapore, and New York. Raised $45M Series B from Tier 1 fintech investors.",
+      "title": "PayBridge \u2014 about",
+      "truncated": false,
+      "url": "https://paybridge.example.com/about"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "3562d31a-2d2e-55a0-ac16-ee62e66f97d5",
+      "metadata": null,
+      "original_url": "https://paybridge.example.com/about-us",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "PayBridge\n\nPayBridge provides embedded payment infrastructure for marketplace and platform businesses. The API-first solution handles split payments, escrow, KYC compliance, and multi-currency settlement across 35 countries. Processing $2.1B in annual payment volume with a take rate of 0.8%. The company serves 280 marketplace clients including 12 in the Fortune 500. Founded in 2019, team of 120 across London, Singapore, and New York. Raised $45M Series B from Tier 1 fintech investors.",
+      "title": "PayBridge \u2014 about-us",
+      "truncated": false,
+      "url": "https://paybridge.example.com/about-us"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "33183b07-4565-533c-880b-bb67b73d51ee",
+      "metadata": null,
+      "original_url": "https://paybridge.example.com/company",
+      "page_type": "company",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "PayBridge\n\nPayBridge provides embedded payment infrastructure for marketplace and platform businesses. The API-first solution handles split payments, escrow, KYC compliance, and multi-currency settlement across 35 countries. Processing $2.1B in annual payment volume with a take rate of 0.8%. The company serves 280 marketplace clients including 12 in the Fortune 500. Founded in 2019, team of 120 across London, Singapore, and New York. Raised $45M Series B from Tier 1 fintech investors.",
+      "title": "PayBridge \u2014 company",
+      "truncated": false,
+      "url": "https://paybridge.example.com/company"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "f0979ccc-1c81-5362-a523-e125e6788ed6",
+      "metadata": null,
+      "original_url": "https://paybridge.example.com/platform",
+      "page_type": "platform",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "PayBridge\n\nPayBridge provides embedded payment infrastructure for marketplace and platform businesses. The API-first solution handles split payments, escrow, KYC compliance, and multi-currency settlement across 35 countries. Processing $2.1B in annual payment volume with a take rate of 0.8%. The company serves 280 marketplace clients including 12 in the Fortune 500. Founded in 2019, team of 120 across London, Singapore, and New York. Raised $45M Series B from Tier 1 fintech investors.",
+      "title": "PayBridge \u2014 platform",
+      "truncated": false,
+      "url": "https://paybridge.example.com/platform"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "d07fb218-a129-5dd1-97ac-447df56bdd06",
+      "metadata": null,
+      "original_url": "https://paybridge.example.com/products",
+      "page_type": "products",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "PayBridge\n\nPayBridge provides embedded payment infrastructure for marketplace and platform businesses. The API-first solution handles split payments, escrow, KYC compliance, and multi-currency settlement across 35 countries. Processing $2.1B in annual payment volume with a take rate of 0.8%. The company serves 280 marketplace clients including 12 in the Fortune 500. Founded in 2019, team of 120 across London, Singapore, and New York. Raised $45M Series B from Tier 1 fintech investors.",
+      "title": "PayBridge \u2014 products",
+      "truncated": false,
+      "url": "https://paybridge.example.com/products"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "7996bfe4-1055-5408-bdb3-09ea4bb0cc95",
+      "metadata": null,
+      "original_url": "https://paybridge.example.com/services",
+      "page_type": "services",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "PayBridge\n\nPayBridge provides embedded payment infrastructure for marketplace and platform businesses. The API-first solution handles split payments, escrow, KYC compliance, and multi-currency settlement across 35 countries. Processing $2.1B in annual payment volume with a take rate of 0.8%. The company serves 280 marketplace clients including 12 in the Fortune 500. Founded in 2019, team of 120 across London, Singapore, and New York. Raised $45M Series B from Tier 1 fintech investors.",
+      "title": "PayBridge \u2014 services",
+      "truncated": false,
+      "url": "https://paybridge.example.com/services"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "85bf5899-bc7d-5fb9-8ad7-801a52420c96",
+      "metadata": null,
+      "original_url": "https://paybridge.example.com/technology",
+      "page_type": "technology",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "PayBridge\n\nPayBridge provides embedded payment infrastructure for marketplace and platform businesses. The API-first solution handles split payments, escrow, KYC compliance, and multi-currency settlement across 35 countries. Processing $2.1B in annual payment volume with a take rate of 0.8%. The company serves 280 marketplace clients including 12 in the Fortune 500. Founded in 2019, team of 120 across London, Singapore, and New York. Raised $45M Series B from Tier 1 fintech investors.",
+      "title": "PayBridge \u2014 technology",
+      "truncated": false,
+      "url": "https://paybridge.example.com/technology"
+    }
+  ],
+  "schema_version": 1
+}

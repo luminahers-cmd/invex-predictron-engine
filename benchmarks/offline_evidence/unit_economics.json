@@ -1,0 +1,380 @@
+{
+  "bundle": {
+    "attempted_pages": 8,
+    "collected_at": "2026-01-01T00:00:00Z",
+    "documents": [
+      {
+        "content_type": "text/html; charset=utf-8",
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "id": "2ed17329-265f-5f89-a30f-9a14eb22e1a8",
+        "metadata": {
+          "authority_score": 0.9514,
+          "canonical_url": "https://retentionai.example.com/",
+          "content_hash": "8e6ef88a4857913ef2569eb978965d31749d879cf5177dfb5df2ac3514d0bca6",
+          "document_type": "homepage",
+          "duplicate_of": null,
+          "heading_count": 0,
+          "is_duplicate": false,
+          "language": "en",
+          "list_count": 0,
+          "priority": 1,
+          "provenance": [
+            {
+              "document_id": "2ed17329-265f-5f89-a30f-9a14eb22e1a8",
+              "document_type": "homepage",
+              "duplicate_of": null,
+              "fetched_at": "2026-01-01T00:00:00Z",
+              "final_url": "https://retentionai.example.com/",
+              "freshness_days": 0,
+              "is_duplicate": false,
+              "is_official": false,
+              "source_provider": "evidence",
+              "trust_level": "unknown",
+              "trust_score": 0.704,
+              "url": "https://retentionai.example.com/"
+            }
+          ],
+          "quality_score": 0.5142,
+          "source_provider": "evidence",
+          "table_count": 0,
+          "trust_level": "unknown",
+          "trust_score": {
+            "factors": [
+              {
+                "explanation": "",
+                "name": "authority",
+                "value": 0.9514,
+                "weight": 0.3
+              },
+              {
+                "explanation": "0d old",
+                "name": "freshness",
+                "value": 1.0,
+                "weight": 0.15
+              },
+              {
+                "explanation": "",
+                "name": "quality",
+                "value": 0.5142,
+                "weight": 0.25
+              },
+              {
+                "explanation": "",
+                "name": "source_type",
+                "value": 0.2,
+                "weight": 0.2
+              },
+              {
+                "explanation": "",
+                "name": "duplicate_penalty",
+                "value": 1.0,
+                "weight": 0.1
+              }
+            ],
+            "freshness_days": 0,
+            "overall": 0.704,
+            "source_trust_level": "unknown"
+          },
+          "word_count": 58
+        },
+        "original_url": "https://retentionai.example.com/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "status": "success",
+        "text": "RetentionAI\n\nRetentionAI provides an AI-powered SaaS platform for customer retention analytics, serving subscription-based businesses. The platform predicts churn risk and recommends intervention strategies. CAC is $2,400 with LTV of $18,000. Currently serving 80 subscription businesses with $2.4M ARR. Monthly burn rate of $200K with $4M in total funding. Team of 18 based in Chicago. Founded in 2022. Net revenue retention of 125%.",
+        "title": "RetentionAI — home",
+        "truncated": false,
+        "url": "https://retentionai.example.com/"
+      }
+    ],
+    "duration_ms": 0,
+    "intelligence": {
+      "average_authority": 0.9514,
+      "average_quality": 0.5142,
+      "classification_confidence": 1.0,
+      "document_type_distribution": {
+        "homepage": 1
+      },
+      "documents_classified": 1,
+      "documents_input": 8,
+      "duplicates_removed": 7,
+      "processing_duration_ms": 0,
+      "trust_summary": {
+        "average_trust_score": 0.704,
+        "high_trust_count": 1,
+        "low_trust_count": 0,
+        "medium_trust_count": 0,
+        "source_trust_levels": {
+          "unknown": 1
+        },
+        "total_documents": 1,
+        "trust_score_range": [
+          0.704,
+          0.704
+        ],
+        "unknown_trust_count": 0
+      }
+    },
+    "providers": [
+      {
+        "attempted_pages": 8,
+        "documents": 8,
+        "duration_ms": 0,
+        "failure_reason": null,
+        "provider": "website",
+        "success": true
+      }
+    ],
+    "sources": [
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://retentionai.example.com/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://retentionai.example.com/"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://retentionai.example.com/about",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://retentionai.example.com/about"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://retentionai.example.com/about-us",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://retentionai.example.com/about-us"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://retentionai.example.com/company",
+        "page_type": "company",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://retentionai.example.com/company"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://retentionai.example.com/platform",
+        "page_type": "platform",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://retentionai.example.com/platform"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://retentionai.example.com/products",
+        "page_type": "products",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://retentionai.example.com/products"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://retentionai.example.com/services",
+        "page_type": "services",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://retentionai.example.com/services"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://retentionai.example.com/technology",
+        "page_type": "technology",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://retentionai.example.com/technology"
+      }
+    ],
+    "startup_name": "RetentionAI",
+    "total_pages": 1,
+    "trust_summary": {
+      "average_trust_score": 0.704,
+      "high_trust_count": 1,
+      "low_trust_count": 0,
+      "medium_trust_count": 0,
+      "source_trust_levels": {
+        "unknown": 1
+      },
+      "total_documents": 1,
+      "trust_score_range": [
+        0.704,
+        0.704
+      ],
+      "unknown_trust_count": 0
+    },
+    "website": "https://retentionai.example.com/"
+  },
+  "name": "unit_economics",
+  "raw_documents": [
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "2ed17329-265f-5f89-a30f-9a14eb22e1a8",
+      "metadata": null,
+      "original_url": "https://retentionai.example.com/",
+      "page_type": "homepage",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "RetentionAI\n\nRetentionAI provides an AI-powered SaaS platform for customer retention analytics, serving subscription-based businesses. The platform predicts churn risk and recommends intervention strategies. CAC is $2,400 with LTV of $18,000. Currently serving 80 subscription businesses with $2.4M ARR. Monthly burn rate of $200K with $4M in total funding. Team of 18 based in Chicago. Founded in 2022. Net revenue retention of 125%.",
+      "title": "RetentionAI — home",
+      "truncated": false,
+      "url": "https://retentionai.example.com/"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "fac99c72-c594-5bac-a2d1-1cddb153f748",
+      "metadata": null,
+      "original_url": "https://retentionai.example.com/about",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "RetentionAI\n\nRetentionAI provides an AI-powered SaaS platform for customer retention analytics, serving subscription-based businesses. The platform predicts churn risk and recommends intervention strategies. CAC is $2,400 with LTV of $18,000. Currently serving 80 subscription businesses with $2.4M ARR. Monthly burn rate of $200K with $4M in total funding. Team of 18 based in Chicago. Founded in 2022. Net revenue retention of 125%.",
+      "title": "RetentionAI — about",
+      "truncated": false,
+      "url": "https://retentionai.example.com/about"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "d77e00dd-70da-5c42-89b6-1eb98fe8321d",
+      "metadata": null,
+      "original_url": "https://retentionai.example.com/about-us",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "RetentionAI\n\nRetentionAI provides an AI-powered SaaS platform for customer retention analytics, serving subscription-based businesses. The platform predicts churn risk and recommends intervention strategies. CAC is $2,400 with LTV of $18,000. Currently serving 80 subscription businesses with $2.4M ARR. Monthly burn rate of $200K with $4M in total funding. Team of 18 based in Chicago. Founded in 2022. Net revenue retention of 125%.",
+      "title": "RetentionAI — about-us",
+      "truncated": false,
+      "url": "https://retentionai.example.com/about-us"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "ab28f604-9a6e-50a2-a4d6-7b3761283bd1",
+      "metadata": null,
+      "original_url": "https://retentionai.example.com/company",
+      "page_type": "company",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "RetentionAI\n\nRetentionAI provides an AI-powered SaaS platform for customer retention analytics, serving subscription-based businesses. The platform predicts churn risk and recommends intervention strategies. CAC is $2,400 with LTV of $18,000. Currently serving 80 subscription businesses with $2.4M ARR. Monthly burn rate of $200K with $4M in total funding. Team of 18 based in Chicago. Founded in 2022. Net revenue retention of 125%.",
+      "title": "RetentionAI — company",
+      "truncated": false,
+      "url": "https://retentionai.example.com/company"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "93372fe9-69e3-5bd4-9393-4aac58407a31",
+      "metadata": null,
+      "original_url": "https://retentionai.example.com/platform",
+      "page_type": "platform",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "RetentionAI\n\nRetentionAI provides an AI-powered SaaS platform for customer retention analytics, serving subscription-based businesses. The platform predicts churn risk and recommends intervention strategies. CAC is $2,400 with LTV of $18,000. Currently serving 80 subscription businesses with $2.4M ARR. Monthly burn rate of $200K with $4M in total funding. Team of 18 based in Chicago. Founded in 2022. Net revenue retention of 125%.",
+      "title": "RetentionAI — platform",
+      "truncated": false,
+      "url": "https://retentionai.example.com/platform"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "a1f5ea2f-a9a3-5e2f-8057-f75f2d5879ff",
+      "metadata": null,
+      "original_url": "https://retentionai.example.com/products",
+      "page_type": "products",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "RetentionAI\n\nRetentionAI provides an AI-powered SaaS platform for customer retention analytics, serving subscription-based businesses. The platform predicts churn risk and recommends intervention strategies. CAC is $2,400 with LTV of $18,000. Currently serving 80 subscription businesses with $2.4M ARR. Monthly burn rate of $200K with $4M in total funding. Team of 18 based in Chicago. Founded in 2022. Net revenue retention of 125%.",
+      "title": "RetentionAI — products",
+      "truncated": false,
+      "url": "https://retentionai.example.com/products"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "6c3d19cd-1c9a-541e-a3c8-a1fe20c23374",
+      "metadata": null,
+      "original_url": "https://retentionai.example.com/services",
+      "page_type": "services",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "RetentionAI\n\nRetentionAI provides an AI-powered SaaS platform for customer retention analytics, serving subscription-based businesses. The platform predicts churn risk and recommends intervention strategies. CAC is $2,400 with LTV of $18,000. Currently serving 80 subscription businesses with $2.4M ARR. Monthly burn rate of $200K with $4M in total funding. Team of 18 based in Chicago. Founded in 2022. Net revenue retention of 125%.",
+      "title": "RetentionAI — services",
+      "truncated": false,
+      "url": "https://retentionai.example.com/services"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "53d8ad3b-4a98-5b93-a3af-0d279f75cde0",
+      "metadata": null,
+      "original_url": "https://retentionai.example.com/technology",
+      "page_type": "technology",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "RetentionAI\n\nRetentionAI provides an AI-powered SaaS platform for customer retention analytics, serving subscription-based businesses. The platform predicts churn risk and recommends intervention strategies. CAC is $2,400 with LTV of $18,000. Currently serving 80 subscription businesses with $2.4M ARR. Monthly burn rate of $200K with $4M in total funding. Team of 18 based in Chicago. Founded in 2022. Net revenue retention of 125%.",
+      "title": "RetentionAI — technology",
+      "truncated": false,
+      "url": "https://retentionai.example.com/technology"
+    }
+  ],
+  "schema_version": 1
+}

@@ -1101,12 +1101,12 @@ BENCHMARK_CASES: list[dict[str, Any]] = [
             "startup_name": "RetentionAI",
             "website": "https://retentionai.example.com",
             "description": (
-                "RetentionAI provides AI-powered customer retention "
-                "analytics for subscription businesses. The platform "
-                "predicts churn risk and recommends intervention strategies. "
-                "CAC is $2,400 with LTV of $18,000. Currently serving "
-                "80 subscription businesses with $2.4M ARR. Monthly "
-                "burn rate of $200K with $4M in total funding. "
+                "RetentionAI provides an AI-powered SaaS platform for "
+                "customer retention analytics, serving subscription-based "
+                "businesses. The platform predicts churn risk and recommends "
+                "intervention strategies. CAC is $2,400 with LTV of $18,000. "
+                "Currently serving 80 subscription businesses with $2.4M ARR. "
+                "Monthly burn rate of $200K with $4M in total funding. "
                 "Team of 18 based in Chicago. Founded in 2022. "
                 "Net revenue retention of 125%."
             ),
@@ -1159,14 +1159,14 @@ BENCHMARK_CASES: list[dict[str, Any]] = [
             "startup_name": "LeanStack",
             "website": "https://leanstack.example.com",
             "description": (
-                "LeanStack provides serverless deployment tooling for "
-                "startup engineering teams. The CLI-based platform "
-                "automates infrastructure provisioning, CI/CD pipelines, "
-                "and cost optimization across AWS and GCP. Currently "
-                "generating $3.2M ARR from 200 developer teams paying "
-                "$1,333/month on average. Total funding of only $1.5M "
-                "from a seed round. Team of 12 based in Portland. "
-                "Founded in 2022 by two ex-AWS engineers. "
+                "LeanStack is a SaaS platform providing serverless "
+                "deployment tooling for startup engineering teams. "
+                "The CLI-based platform automates infrastructure "
+                "provisioning, CI/CD pipelines, and cost optimization "
+                "across AWS and GCP. Currently generating $3.2M ARR from "
+                "200 developer teams paying $1,333/month on average. Total "
+                "funding of only $1.5M from a seed round. Team of 12 based "
+                "in Portland. Founded in 2022 by two ex-AWS engineers. "
                 "Monthly burn rate of $150K."
             ),
             "pitch_deck_url": None,

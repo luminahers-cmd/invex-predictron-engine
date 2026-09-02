@@ -1,0 +1,380 @@
+{
+  "bundle": {
+    "attempted_pages": 8,
+    "collected_at": "2026-01-01T00:00:00Z",
+    "documents": [
+      {
+        "content_type": "text/html; charset=utf-8",
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "id": "4d259bbf-aa34-5895-9b97-4a74e2ef2c17",
+        "metadata": {
+          "authority_score": 0.9521,
+          "canonical_url": "https://leanstack.example.com/",
+          "content_hash": "b2a2e49be8a07ef10e771c18dce7fd8b2a33122e554a19847d35a5e97413b4a7",
+          "document_type": "homepage",
+          "duplicate_of": null,
+          "heading_count": 0,
+          "is_duplicate": false,
+          "language": "en",
+          "list_count": 0,
+          "priority": 1,
+          "provenance": [
+            {
+              "document_id": "4d259bbf-aa34-5895-9b97-4a74e2ef2c17",
+              "document_type": "homepage",
+              "duplicate_of": null,
+              "fetched_at": "2026-01-01T00:00:00Z",
+              "final_url": "https://leanstack.example.com/",
+              "freshness_days": 0,
+              "is_duplicate": false,
+              "is_official": false,
+              "source_provider": "evidence",
+              "trust_level": "unknown",
+              "trust_score": 0.7059,
+              "url": "https://leanstack.example.com/"
+            }
+          ],
+          "quality_score": 0.5211,
+          "source_provider": "evidence",
+          "table_count": 0,
+          "trust_level": "unknown",
+          "trust_score": {
+            "factors": [
+              {
+                "explanation": "",
+                "name": "authority",
+                "value": 0.9521,
+                "weight": 0.3
+              },
+              {
+                "explanation": "0d old",
+                "name": "freshness",
+                "value": 1.0,
+                "weight": 0.15
+              },
+              {
+                "explanation": "",
+                "name": "quality",
+                "value": 0.5211,
+                "weight": 0.25
+              },
+              {
+                "explanation": "",
+                "name": "source_type",
+                "value": 0.2,
+                "weight": 0.2
+              },
+              {
+                "explanation": "",
+                "name": "duplicate_penalty",
+                "value": 1.0,
+                "weight": 0.1
+              }
+            ],
+            "freshness_days": 0,
+            "overall": 0.7059,
+            "source_trust_level": "unknown"
+          },
+          "word_count": 64
+        },
+        "original_url": "https://leanstack.example.com/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "status": "success",
+        "text": "LeanStack\n\nLeanStack is a SaaS platform providing serverless deployment tooling for startup engineering teams. The CLI-based platform automates infrastructure provisioning, CI/CD pipelines, and cost optimization across AWS and GCP. Currently generating $3.2M ARR from 200 developer teams paying $1,333/month on average. Total funding of only $1.5M from a seed round. Team of 12 based in Portland. Founded in 2022 by two ex-AWS engineers. Monthly burn rate of $150K.",
+        "title": "LeanStack — home",
+        "truncated": false,
+        "url": "https://leanstack.example.com/"
+      }
+    ],
+    "duration_ms": 0,
+    "intelligence": {
+      "average_authority": 0.9521,
+      "average_quality": 0.5211,
+      "classification_confidence": 1.0,
+      "document_type_distribution": {
+        "homepage": 1
+      },
+      "documents_classified": 1,
+      "documents_input": 8,
+      "duplicates_removed": 7,
+      "processing_duration_ms": 0,
+      "trust_summary": {
+        "average_trust_score": 0.7059,
+        "high_trust_count": 1,
+        "low_trust_count": 0,
+        "medium_trust_count": 0,
+        "source_trust_levels": {
+          "unknown": 1
+        },
+        "total_documents": 1,
+        "trust_score_range": [
+          0.7059,
+          0.7059
+        ],
+        "unknown_trust_count": 0
+      }
+    },
+    "providers": [
+      {
+        "attempted_pages": 8,
+        "documents": 8,
+        "duration_ms": 0,
+        "failure_reason": null,
+        "provider": "website",
+        "success": true
+      }
+    ],
+    "sources": [
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://leanstack.example.com/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://leanstack.example.com/"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://leanstack.example.com/about",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://leanstack.example.com/about"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://leanstack.example.com/about-us",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://leanstack.example.com/about-us"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://leanstack.example.com/company",
+        "page_type": "company",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://leanstack.example.com/company"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://leanstack.example.com/platform",
+        "page_type": "platform",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://leanstack.example.com/platform"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://leanstack.example.com/products",
+        "page_type": "products",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://leanstack.example.com/products"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://leanstack.example.com/services",
+        "page_type": "services",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://leanstack.example.com/services"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://leanstack.example.com/technology",
+        "page_type": "technology",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://leanstack.example.com/technology"
+      }
+    ],
+    "startup_name": "LeanStack",
+    "total_pages": 1,
+    "trust_summary": {
+      "average_trust_score": 0.7059,
+      "high_trust_count": 1,
+      "low_trust_count": 0,
+      "medium_trust_count": 0,
+      "source_trust_levels": {
+        "unknown": 1
+      },
+      "total_documents": 1,
+      "trust_score_range": [
+        0.7059,
+        0.7059
+      ],
+      "unknown_trust_count": 0
+    },
+    "website": "https://leanstack.example.com/"
+  },
+  "name": "funding_efficiency",
+  "raw_documents": [
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "4d259bbf-aa34-5895-9b97-4a74e2ef2c17",
+      "metadata": null,
+      "original_url": "https://leanstack.example.com/",
+      "page_type": "homepage",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "LeanStack\n\nLeanStack is a SaaS platform providing serverless deployment tooling for startup engineering teams. The CLI-based platform automates infrastructure provisioning, CI/CD pipelines, and cost optimization across AWS and GCP. Currently generating $3.2M ARR from 200 developer teams paying $1,333/month on average. Total funding of only $1.5M from a seed round. Team of 12 based in Portland. Founded in 2022 by two ex-AWS engineers. Monthly burn rate of $150K.",
+      "title": "LeanStack — home",
+      "truncated": false,
+      "url": "https://leanstack.example.com/"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "812da4db-655e-5967-9a5b-a097cb60c89b",
+      "metadata": null,
+      "original_url": "https://leanstack.example.com/about",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "LeanStack\n\nLeanStack is a SaaS platform providing serverless deployment tooling for startup engineering teams. The CLI-based platform automates infrastructure provisioning, CI/CD pipelines, and cost optimization across AWS and GCP. Currently generating $3.2M ARR from 200 developer teams paying $1,333/month on average. Total funding of only $1.5M from a seed round. Team of 12 based in Portland. Founded in 2022 by two ex-AWS engineers. Monthly burn rate of $150K.",
+      "title": "LeanStack — about",
+      "truncated": false,
+      "url": "https://leanstack.example.com/about"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "88122335-22fe-593a-a9c2-32cb621b709b",
+      "metadata": null,
+      "original_url": "https://leanstack.example.com/about-us",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "LeanStack\n\nLeanStack is a SaaS platform providing serverless deployment tooling for startup engineering teams. The CLI-based platform automates infrastructure provisioning, CI/CD pipelines, and cost optimization across AWS and GCP. Currently generating $3.2M ARR from 200 developer teams paying $1,333/month on average. Total funding of only $1.5M from a seed round. Team of 12 based in Portland. Founded in 2022 by two ex-AWS engineers. Monthly burn rate of $150K.",
+      "title": "LeanStack — about-us",
+      "truncated": false,
+      "url": "https://leanstack.example.com/about-us"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "5ca8c8bd-090d-5f95-a9c5-e96e9bd8f321",
+      "metadata": null,
+      "original_url": "https://leanstack.example.com/company",
+      "page_type": "company",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "LeanStack\n\nLeanStack is a SaaS platform providing serverless deployment tooling for startup engineering teams. The CLI-based platform automates infrastructure provisioning, CI/CD pipelines, and cost optimization across AWS and GCP. Currently generating $3.2M ARR from 200 developer teams paying $1,333/month on average. Total funding of only $1.5M from a seed round. Team of 12 based in Portland. Founded in 2022 by two ex-AWS engineers. Monthly burn rate of $150K.",
+      "title": "LeanStack — company",
+      "truncated": false,
+      "url": "https://leanstack.example.com/company"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "85e3929d-b022-54fe-aa87-3edb607b605a",
+      "metadata": null,
+      "original_url": "https://leanstack.example.com/platform",
+      "page_type": "platform",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "LeanStack\n\nLeanStack is a SaaS platform providing serverless deployment tooling for startup engineering teams. The CLI-based platform automates infrastructure provisioning, CI/CD pipelines, and cost optimization across AWS and GCP. Currently generating $3.2M ARR from 200 developer teams paying $1,333/month on average. Total funding of only $1.5M from a seed round. Team of 12 based in Portland. Founded in 2022 by two ex-AWS engineers. Monthly burn rate of $150K.",
+      "title": "LeanStack — platform",
+      "truncated": false,
+      "url": "https://leanstack.example.com/platform"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "e6aec27c-7371-5cfe-a8e1-d3abadcdfff7",
+      "metadata": null,
+      "original_url": "https://leanstack.example.com/products",
+      "page_type": "products",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "LeanStack\n\nLeanStack is a SaaS platform providing serverless deployment tooling for startup engineering teams. The CLI-based platform automates infrastructure provisioning, CI/CD pipelines, and cost optimization across AWS and GCP. Currently generating $3.2M ARR from 200 developer teams paying $1,333/month on average. Total funding of only $1.5M from a seed round. Team of 12 based in Portland. Founded in 2022 by two ex-AWS engineers. Monthly burn rate of $150K.",
+      "title": "LeanStack — products",
+      "truncated": false,
+      "url": "https://leanstack.example.com/products"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "416e454f-7d95-5583-9e83-2b9598451976",
+      "metadata": null,
+      "original_url": "https://leanstack.example.com/services",
+      "page_type": "services",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "LeanStack\n\nLeanStack is a SaaS platform providing serverless deployment tooling for startup engineering teams. The CLI-based platform automates infrastructure provisioning, CI/CD pipelines, and cost optimization across AWS and GCP. Currently generating $3.2M ARR from 200 developer teams paying $1,333/month on average. Total funding of only $1.5M from a seed round. Team of 12 based in Portland. Founded in 2022 by two ex-AWS engineers. Monthly burn rate of $150K.",
+      "title": "LeanStack — services",
+      "truncated": false,
+      "url": "https://leanstack.example.com/services"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "928bf887-a488-51dc-bb7f-84ad4f6d6896",
+      "metadata": null,
+      "original_url": "https://leanstack.example.com/technology",
+      "page_type": "technology",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "LeanStack\n\nLeanStack is a SaaS platform providing serverless deployment tooling for startup engineering teams. The CLI-based platform automates infrastructure provisioning, CI/CD pipelines, and cost optimization across AWS and GCP. Currently generating $3.2M ARR from 200 developer teams paying $1,333/month on average. Total funding of only $1.5M from a seed round. Team of 12 based in Portland. Founded in 2022 by two ex-AWS engineers. Monthly burn rate of $150K.",
+      "title": "LeanStack — technology",
+      "truncated": false,
+      "url": "https://leanstack.example.com/technology"
+    }
+  ],
+  "schema_version": 1
+}

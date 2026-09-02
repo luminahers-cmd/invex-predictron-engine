@@ -1,0 +1,380 @@
+{
+  "bundle": {
+    "attempted_pages": 8,
+    "collected_at": "2026-01-01T00:00:00Z",
+    "documents": [
+      {
+        "content_type": "text/html; charset=utf-8",
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "id": "2d321c4f-f4b6-5ee7-912c-a2c6c36b4827",
+        "metadata": {
+          "authority_score": 0.9537,
+          "canonical_url": "https://glucopulse.example.com/",
+          "content_hash": "c5816de241ab9ac09f98a3b1caf617ccfc8d3fcc234360e898dd88e41a1a0da6",
+          "document_type": "homepage",
+          "duplicate_of": null,
+          "heading_count": 0,
+          "is_duplicate": false,
+          "language": "en",
+          "list_count": 0,
+          "priority": 1,
+          "provenance": [
+            {
+              "document_id": "2d321c4f-f4b6-5ee7-912c-a2c6c36b4827",
+              "document_type": "homepage",
+              "duplicate_of": null,
+              "fetched_at": "2026-01-01T00:00:00Z",
+              "final_url": "https://glucopulse.example.com/",
+              "freshness_days": 0,
+              "is_duplicate": false,
+              "is_official": false,
+              "source_provider": "evidence",
+              "trust_level": "unknown",
+              "trust_score": 0.7103,
+              "url": "https://glucopulse.example.com/"
+            }
+          ],
+          "quality_score": 0.5368,
+          "source_provider": "evidence",
+          "table_count": 0,
+          "trust_level": "unknown",
+          "trust_score": {
+            "factors": [
+              {
+                "explanation": "",
+                "name": "authority",
+                "value": 0.9537,
+                "weight": 0.3
+              },
+              {
+                "explanation": "0d old",
+                "name": "freshness",
+                "value": 1.0,
+                "weight": 0.15
+              },
+              {
+                "explanation": "",
+                "name": "quality",
+                "value": 0.5368,
+                "weight": 0.25
+              },
+              {
+                "explanation": "",
+                "name": "source_type",
+                "value": 0.2,
+                "weight": 0.2
+              },
+              {
+                "explanation": "",
+                "name": "duplicate_penalty",
+                "value": 1.0,
+                "weight": 0.1
+              }
+            ],
+            "freshness_days": 0,
+            "overall": 0.7103,
+            "source_trust_level": "unknown"
+          },
+          "word_count": 74
+        },
+        "original_url": "https://glucopulse.example.com/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "status": "success",
+        "text": "GlucoPulse\n\nGlucoPulse develops a non-invasive continuous glucose monitoring wearable using photoplethysmography sensors. The device provides real-time glucose trend data to a companion mobile app with AI-powered dietary recommendations. FDA 510(k) clearance obtained. Direct-to-consumer pricing at $299 device plus $19/month subscription. 8,000 units shipped in first quarter since launch. Raised $18M Series A from digital health investors. Based in San Diego, team of 45 including hardware engineers, clinical specialists, and data scientists. Founded in 2021.",
+        "title": "GlucoPulse \u2014 home",
+        "truncated": false,
+        "url": "https://glucopulse.example.com/"
+      }
+    ],
+    "duration_ms": 0,
+    "intelligence": {
+      "average_authority": 0.9537,
+      "average_quality": 0.5368,
+      "classification_confidence": 1.0,
+      "document_type_distribution": {
+        "homepage": 1
+      },
+      "documents_classified": 1,
+      "documents_input": 8,
+      "duplicates_removed": 7,
+      "processing_duration_ms": 0,
+      "trust_summary": {
+        "average_trust_score": 0.7103,
+        "high_trust_count": 1,
+        "low_trust_count": 0,
+        "medium_trust_count": 0,
+        "source_trust_levels": {
+          "unknown": 1
+        },
+        "total_documents": 1,
+        "trust_score_range": [
+          0.7103,
+          0.7103
+        ],
+        "unknown_trust_count": 0
+      }
+    },
+    "providers": [
+      {
+        "attempted_pages": 8,
+        "documents": 8,
+        "duration_ms": 0,
+        "failure_reason": null,
+        "provider": "website",
+        "success": true
+      }
+    ],
+    "sources": [
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://glucopulse.example.com/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://glucopulse.example.com/"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://glucopulse.example.com/about",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://glucopulse.example.com/about"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://glucopulse.example.com/about-us",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://glucopulse.example.com/about-us"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://glucopulse.example.com/company",
+        "page_type": "company",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://glucopulse.example.com/company"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://glucopulse.example.com/platform",
+        "page_type": "platform",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://glucopulse.example.com/platform"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://glucopulse.example.com/products",
+        "page_type": "products",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://glucopulse.example.com/products"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://glucopulse.example.com/services",
+        "page_type": "services",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://glucopulse.example.com/services"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://glucopulse.example.com/technology",
+        "page_type": "technology",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://glucopulse.example.com/technology"
+      }
+    ],
+    "startup_name": "GlucoPulse",
+    "total_pages": 1,
+    "trust_summary": {
+      "average_trust_score": 0.7103,
+      "high_trust_count": 1,
+      "low_trust_count": 0,
+      "medium_trust_count": 0,
+      "source_trust_levels": {
+        "unknown": 1
+      },
+      "total_documents": 1,
+      "trust_score_range": [
+        0.7103,
+        0.7103
+      ],
+      "unknown_trust_count": 0
+    },
+    "website": "https://glucopulse.example.com/"
+  },
+  "name": "healthtech_device",
+  "raw_documents": [
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "2d321c4f-f4b6-5ee7-912c-a2c6c36b4827",
+      "metadata": null,
+      "original_url": "https://glucopulse.example.com/",
+      "page_type": "homepage",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "GlucoPulse\n\nGlucoPulse develops a non-invasive continuous glucose monitoring wearable using photoplethysmography sensors. The device provides real-time glucose trend data to a companion mobile app with AI-powered dietary recommendations. FDA 510(k) clearance obtained. Direct-to-consumer pricing at $299 device plus $19/month subscription. 8,000 units shipped in first quarter since launch. Raised $18M Series A from digital health investors. Based in San Diego, team of 45 including hardware engineers, clinical specialists, and data scientists. Founded in 2021.",
+      "title": "GlucoPulse \u2014 home",
+      "truncated": false,
+      "url": "https://glucopulse.example.com/"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "9f6ab586-5d3c-5c13-91f2-f63c5260f766",
+      "metadata": null,
+      "original_url": "https://glucopulse.example.com/about",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "GlucoPulse\n\nGlucoPulse develops a non-invasive continuous glucose monitoring wearable using photoplethysmography sensors. The device provides real-time glucose trend data to a companion mobile app with AI-powered dietary recommendations. FDA 510(k) clearance obtained. Direct-to-consumer pricing at $299 device plus $19/month subscription. 8,000 units shipped in first quarter since launch. Raised $18M Series A from digital health investors. Based in San Diego, team of 45 including hardware engineers, clinical specialists, and data scientists. Founded in 2021.",
+      "title": "GlucoPulse \u2014 about",
+      "truncated": false,
+      "url": "https://glucopulse.example.com/about"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "6cae5b28-9fcd-535c-bddf-d3e9f4cbed3a",
+      "metadata": null,
+      "original_url": "https://glucopulse.example.com/about-us",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "GlucoPulse\n\nGlucoPulse develops a non-invasive continuous glucose monitoring wearable using photoplethysmography sensors. The device provides real-time glucose trend data to a companion mobile app with AI-powered dietary recommendations. FDA 510(k) clearance obtained. Direct-to-consumer pricing at $299 device plus $19/month subscription. 8,000 units shipped in first quarter since launch. Raised $18M Series A from digital health investors. Based in San Diego, team of 45 including hardware engineers, clinical specialists, and data scientists. Founded in 2021.",
+      "title": "GlucoPulse \u2014 about-us",
+      "truncated": false,
+      "url": "https://glucopulse.example.com/about-us"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "6106a85e-353e-540b-9f77-7feda2c46122",
+      "metadata": null,
+      "original_url": "https://glucopulse.example.com/company",
+      "page_type": "company",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "GlucoPulse\n\nGlucoPulse develops a non-invasive continuous glucose monitoring wearable using photoplethysmography sensors. The device provides real-time glucose trend data to a companion mobile app with AI-powered dietary recommendations. FDA 510(k) clearance obtained. Direct-to-consumer pricing at $299 device plus $19/month subscription. 8,000 units shipped in first quarter since launch. Raised $18M Series A from digital health investors. Based in San Diego, team of 45 including hardware engineers, clinical specialists, and data scientists. Founded in 2021.",
+      "title": "GlucoPulse \u2014 company",
+      "truncated": false,
+      "url": "https://glucopulse.example.com/company"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "ebe4c355-bce1-572d-b824-b06f0f893892",
+      "metadata": null,
+      "original_url": "https://glucopulse.example.com/platform",
+      "page_type": "platform",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "GlucoPulse\n\nGlucoPulse develops a non-invasive continuous glucose monitoring wearable using photoplethysmography sensors. The device provides real-time glucose trend data to a companion mobile app with AI-powered dietary recommendations. FDA 510(k) clearance obtained. Direct-to-consumer pricing at $299 device plus $19/month subscription. 8,000 units shipped in first quarter since launch. Raised $18M Series A from digital health investors. Based in San Diego, team of 45 including hardware engineers, clinical specialists, and data scientists. Founded in 2021.",
+      "title": "GlucoPulse \u2014 platform",
+      "truncated": false,
+      "url": "https://glucopulse.example.com/platform"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "0bf05b21-eb51-5dc7-a218-f593b7a112f6",
+      "metadata": null,
+      "original_url": "https://glucopulse.example.com/products",
+      "page_type": "products",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "GlucoPulse\n\nGlucoPulse develops a non-invasive continuous glucose monitoring wearable using photoplethysmography sensors. The device provides real-time glucose trend data to a companion mobile app with AI-powered dietary recommendations. FDA 510(k) clearance obtained. Direct-to-consumer pricing at $299 device plus $19/month subscription. 8,000 units shipped in first quarter since launch. Raised $18M Series A from digital health investors. Based in San Diego, team of 45 including hardware engineers, clinical specialists, and data scientists. Founded in 2021.",
+      "title": "GlucoPulse \u2014 products",
+      "truncated": false,
+      "url": "https://glucopulse.example.com/products"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "a99cca83-353b-512d-9299-48481e398a41",
+      "metadata": null,
+      "original_url": "https://glucopulse.example.com/services",
+      "page_type": "services",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "GlucoPulse\n\nGlucoPulse develops a non-invasive continuous glucose monitoring wearable using photoplethysmography sensors. The device provides real-time glucose trend data to a companion mobile app with AI-powered dietary recommendations. FDA 510(k) clearance obtained. Direct-to-consumer pricing at $299 device plus $19/month subscription. 8,000 units shipped in first quarter since launch. Raised $18M Series A from digital health investors. Based in San Diego, team of 45 including hardware engineers, clinical specialists, and data scientists. Founded in 2021.",
+      "title": "GlucoPulse \u2014 services",
+      "truncated": false,
+      "url": "https://glucopulse.example.com/services"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "e580412d-fc3b-55d5-b78e-d2b47d685381",
+      "metadata": null,
+      "original_url": "https://glucopulse.example.com/technology",
+      "page_type": "technology",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "GlucoPulse\n\nGlucoPulse develops a non-invasive continuous glucose monitoring wearable using photoplethysmography sensors. The device provides real-time glucose trend data to a companion mobile app with AI-powered dietary recommendations. FDA 510(k) clearance obtained. Direct-to-consumer pricing at $299 device plus $19/month subscription. 8,000 units shipped in first quarter since launch. Raised $18M Series A from digital health investors. Based in San Diego, team of 45 including hardware engineers, clinical specialists, and data scientists. Founded in 2021.",
+      "title": "GlucoPulse \u2014 technology",
+      "truncated": false,
+      "url": "https://glucopulse.example.com/technology"
+    }
+  ],
+  "schema_version": 1
+}

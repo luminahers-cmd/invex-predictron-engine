@@ -1,0 +1,380 @@
+{
+  "bundle": {
+    "attempted_pages": 8,
+    "collected_at": "2026-01-01T00:00:00Z",
+    "documents": [
+      {
+        "content_type": "text/html; charset=utf-8",
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "id": "1fd2cb54-f143-5281-8505-7f77711bdf7a",
+        "metadata": {
+          "authority_score": 0.9521,
+          "canonical_url": "https://shipkit.dev/",
+          "content_hash": "449b779d570e3c31b9d5dc4b1ff5a5897a2bcbdf551d9ee1d96fed4bc9c9419d",
+          "document_type": "homepage",
+          "duplicate_of": null,
+          "heading_count": 0,
+          "is_duplicate": false,
+          "language": "en",
+          "list_count": 0,
+          "priority": 1,
+          "provenance": [
+            {
+              "document_id": "1fd2cb54-f143-5281-8505-7f77711bdf7a",
+              "document_type": "homepage",
+              "duplicate_of": null,
+              "fetched_at": "2026-01-01T00:00:00Z",
+              "final_url": "https://shipkit.dev/",
+              "freshness_days": 0,
+              "is_duplicate": false,
+              "is_official": false,
+              "source_provider": "evidence",
+              "trust_level": "unknown",
+              "trust_score": 0.7058,
+              "url": "https://shipkit.dev/"
+            }
+          ],
+          "quality_score": 0.5208,
+          "source_provider": "evidence",
+          "table_count": 0,
+          "trust_level": "unknown",
+          "trust_score": {
+            "factors": [
+              {
+                "explanation": "",
+                "name": "authority",
+                "value": 0.9521,
+                "weight": 0.3
+              },
+              {
+                "explanation": "0d old",
+                "name": "freshness",
+                "value": 1.0,
+                "weight": 0.15
+              },
+              {
+                "explanation": "",
+                "name": "quality",
+                "value": 0.5208,
+                "weight": 0.25
+              },
+              {
+                "explanation": "",
+                "name": "source_type",
+                "value": 0.2,
+                "weight": 0.2
+              },
+              {
+                "explanation": "",
+                "name": "duplicate_penalty",
+                "value": 1.0,
+                "weight": 0.1
+              }
+            ],
+            "freshness_days": 0,
+            "overall": 0.7058,
+            "source_trust_level": "unknown"
+          },
+          "word_count": 75
+        },
+        "original_url": "https://shipkit.dev/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "status": "success",
+        "text": "ShipKit\n\nShipKit is an open-source-first CI/CD platform designed for monorepo architectures. The platform provides incremental builds, intelligent test parallelization, and deployment orchestration for teams running microservices. The open-source core has 14,000 GitHub stars and 850 contributing developers. Commercial features include audit logging, SSO, and priority support. Currently converting 340 open-source users to paid plans at $299/month. Pre-revenue on commercial tier, currently in beta launch phase. Founded in 2023 by two ex-GitHub engineers based in Seattle.",
+        "title": "ShipKit \u2014 home",
+        "truncated": false,
+        "url": "https://shipkit.dev/"
+      }
+    ],
+    "duration_ms": 0,
+    "intelligence": {
+      "average_authority": 0.9521,
+      "average_quality": 0.5208,
+      "classification_confidence": 1.0,
+      "document_type_distribution": {
+        "homepage": 1
+      },
+      "documents_classified": 1,
+      "documents_input": 8,
+      "duplicates_removed": 7,
+      "processing_duration_ms": 0,
+      "trust_summary": {
+        "average_trust_score": 0.7058,
+        "high_trust_count": 1,
+        "low_trust_count": 0,
+        "medium_trust_count": 0,
+        "source_trust_levels": {
+          "unknown": 1
+        },
+        "total_documents": 1,
+        "trust_score_range": [
+          0.7058,
+          0.7058
+        ],
+        "unknown_trust_count": 0
+      }
+    },
+    "providers": [
+      {
+        "attempted_pages": 8,
+        "documents": 8,
+        "duration_ms": 0,
+        "failure_reason": null,
+        "provider": "website",
+        "success": true
+      }
+    ],
+    "sources": [
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://shipkit.dev/",
+        "page_type": "homepage",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://shipkit.dev/"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://shipkit.dev/about",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://shipkit.dev/about"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://shipkit.dev/about-us",
+        "page_type": "about",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://shipkit.dev/about-us"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://shipkit.dev/company",
+        "page_type": "company",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://shipkit.dev/company"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://shipkit.dev/platform",
+        "page_type": "platform",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://shipkit.dev/platform"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://shipkit.dev/products",
+        "page_type": "products",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://shipkit.dev/products"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://shipkit.dev/services",
+        "page_type": "services",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://shipkit.dev/services"
+      },
+      {
+        "error": null,
+        "fetched_at": "2026-01-01T00:00:00Z",
+        "http_status": 200,
+        "original_url": "https://shipkit.dev/technology",
+        "page_type": "technology",
+        "response_time_ms": 0,
+        "retrieval_method": "http_get",
+        "success": true,
+        "url": "https://shipkit.dev/technology"
+      }
+    ],
+    "startup_name": "ShipKit",
+    "total_pages": 1,
+    "trust_summary": {
+      "average_trust_score": 0.7058,
+      "high_trust_count": 1,
+      "low_trust_count": 0,
+      "medium_trust_count": 0,
+      "source_trust_levels": {
+        "unknown": 1
+      },
+      "total_documents": 1,
+      "trust_score_range": [
+        0.7058,
+        0.7058
+      ],
+      "unknown_trust_count": 0
+    },
+    "website": "https://shipkit.dev/"
+  },
+  "name": "devtools",
+  "raw_documents": [
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "1fd2cb54-f143-5281-8505-7f77711bdf7a",
+      "metadata": null,
+      "original_url": "https://shipkit.dev/",
+      "page_type": "homepage",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "ShipKit\n\nShipKit is an open-source-first CI/CD platform designed for monorepo architectures. The platform provides incremental builds, intelligent test parallelization, and deployment orchestration for teams running microservices. The open-source core has 14,000 GitHub stars and 850 contributing developers. Commercial features include audit logging, SSO, and priority support. Currently converting 340 open-source users to paid plans at $299/month. Pre-revenue on commercial tier, currently in beta launch phase. Founded in 2023 by two ex-GitHub engineers based in Seattle.",
+      "title": "ShipKit \u2014 home",
+      "truncated": false,
+      "url": "https://shipkit.dev/"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "f8355cb2-cc90-542c-9308-c466f75f17ea",
+      "metadata": null,
+      "original_url": "https://shipkit.dev/about",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "ShipKit\n\nShipKit is an open-source-first CI/CD platform designed for monorepo architectures. The platform provides incremental builds, intelligent test parallelization, and deployment orchestration for teams running microservices. The open-source core has 14,000 GitHub stars and 850 contributing developers. Commercial features include audit logging, SSO, and priority support. Currently converting 340 open-source users to paid plans at $299/month. Pre-revenue on commercial tier, currently in beta launch phase. Founded in 2023 by two ex-GitHub engineers based in Seattle.",
+      "title": "ShipKit \u2014 about",
+      "truncated": false,
+      "url": "https://shipkit.dev/about"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "d12a4eee-6074-540e-8732-60b09a41473e",
+      "metadata": null,
+      "original_url": "https://shipkit.dev/about-us",
+      "page_type": "about",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "ShipKit\n\nShipKit is an open-source-first CI/CD platform designed for monorepo architectures. The platform provides incremental builds, intelligent test parallelization, and deployment orchestration for teams running microservices. The open-source core has 14,000 GitHub stars and 850 contributing developers. Commercial features include audit logging, SSO, and priority support. Currently converting 340 open-source users to paid plans at $299/month. Pre-revenue on commercial tier, currently in beta launch phase. Founded in 2023 by two ex-GitHub engineers based in Seattle.",
+      "title": "ShipKit \u2014 about-us",
+      "truncated": false,
+      "url": "https://shipkit.dev/about-us"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "965c4a2f-af8c-543d-b3f3-0381639eb6aa",
+      "metadata": null,
+      "original_url": "https://shipkit.dev/company",
+      "page_type": "company",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "ShipKit\n\nShipKit is an open-source-first CI/CD platform designed for monorepo architectures. The platform provides incremental builds, intelligent test parallelization, and deployment orchestration for teams running microservices. The open-source core has 14,000 GitHub stars and 850 contributing developers. Commercial features include audit logging, SSO, and priority support. Currently converting 340 open-source users to paid plans at $299/month. Pre-revenue on commercial tier, currently in beta launch phase. Founded in 2023 by two ex-GitHub engineers based in Seattle.",
+      "title": "ShipKit \u2014 company",
+      "truncated": false,
+      "url": "https://shipkit.dev/company"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "5e55aa45-2049-5f1d-9afc-8e7afb3c3e30",
+      "metadata": null,
+      "original_url": "https://shipkit.dev/platform",
+      "page_type": "platform",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "ShipKit\n\nShipKit is an open-source-first CI/CD platform designed for monorepo architectures. The platform provides incremental builds, intelligent test parallelization, and deployment orchestration for teams running microservices. The open-source core has 14,000 GitHub stars and 850 contributing developers. Commercial features include audit logging, SSO, and priority support. Currently converting 340 open-source users to paid plans at $299/month. Pre-revenue on commercial tier, currently in beta launch phase. Founded in 2023 by two ex-GitHub engineers based in Seattle.",
+      "title": "ShipKit \u2014 platform",
+      "truncated": false,
+      "url": "https://shipkit.dev/platform"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "54665980-2e27-52c6-9498-fcaa4cce6768",
+      "metadata": null,
+      "original_url": "https://shipkit.dev/products",
+      "page_type": "products",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "ShipKit\n\nShipKit is an open-source-first CI/CD platform designed for monorepo architectures. The platform provides incremental builds, intelligent test parallelization, and deployment orchestration for teams running microservices. The open-source core has 14,000 GitHub stars and 850 contributing developers. Commercial features include audit logging, SSO, and priority support. Currently converting 340 open-source users to paid plans at $299/month. Pre-revenue on commercial tier, currently in beta launch phase. Founded in 2023 by two ex-GitHub engineers based in Seattle.",
+      "title": "ShipKit \u2014 products",
+      "truncated": false,
+      "url": "https://shipkit.dev/products"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "9dcd8332-e02d-550d-9971-5b0b4f901a98",
+      "metadata": null,
+      "original_url": "https://shipkit.dev/services",
+      "page_type": "services",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "ShipKit\n\nShipKit is an open-source-first CI/CD platform designed for monorepo architectures. The platform provides incremental builds, intelligent test parallelization, and deployment orchestration for teams running microservices. The open-source core has 14,000 GitHub stars and 850 contributing developers. Commercial features include audit logging, SSO, and priority support. Currently converting 340 open-source users to paid plans at $299/month. Pre-revenue on commercial tier, currently in beta launch phase. Founded in 2023 by two ex-GitHub engineers based in Seattle.",
+      "title": "ShipKit \u2014 services",
+      "truncated": false,
+      "url": "https://shipkit.dev/services"
+    },
+    {
+      "content_type": "text/html; charset=utf-8",
+      "error": null,
+      "fetched_at": "2026-01-01T00:00:00Z",
+      "http_status": 200,
+      "id": "87558af0-c076-5807-858d-c60cbfa3506a",
+      "metadata": null,
+      "original_url": "https://shipkit.dev/technology",
+      "page_type": "technology",
+      "response_time_ms": 0,
+      "retrieval_method": "http_get",
+      "status": "success",
+      "text": "ShipKit\n\nShipKit is an open-source-first CI/CD platform designed for monorepo architectures. The platform provides incremental builds, intelligent test parallelization, and deployment orchestration for teams running microservices. The open-source core has 14,000 GitHub stars and 850 contributing developers. Commercial features include audit logging, SSO, and priority support. Currently converting 340 open-source users to paid plans at $299/month. Pre-revenue on commercial tier, currently in beta launch phase. Founded in 2023 by two ex-GitHub engineers based in Seattle.",
+      "title": "ShipKit \u2014 technology",
+      "truncated": false,
+      "url": "https://shipkit.dev/technology"
+    }
+  ],
+  "schema_version": 1
+}
