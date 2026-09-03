@@ -14,19 +14,28 @@ collection infrastructure.
 
 ```
 predictron_engine/dataset/
-�"o�"?�"? __init__.py           # Public API surface
-�"o�"?�"? models.py             # Part A: Historical dataset record schema
-�"o�"?�"? outcomes.py           # Part B: Outcome tracking models
-�"o�"?�"? imports.py            # Part C: Pluggable import pipeline
-�"o�"?�"? evaluation.py         # Part D: Immutable evaluation storage
-�"o�"?�"? store.py              # JSON-file persistence backend
-�"o�"?�"? evaluation_pipeline.py # Part C: Evaluation orchestration
-�"o�"?�"? metrics.py            # Part D: Aggregate evaluation metrics
-�"o�"?�"? analysis.py           # Part B: Engine integration (AnalysisPipeline)
-�"o�"?�"? analysis_support.py   # Request building / report extraction helpers
-�"o�"?�"? validation.py         # Dataset integrity validation
-�"o�"?�"? reports.py            # Deterministic dataset JSON reports
-�""�"?�"? cli.py                # predictron-dataset command-line interface
+├── __init__.py           # Public API surface
+├── models.py             # Part A: Historical dataset record schema
+├── outcomes.py           # Part B: Outcome tracking models
+├── imports.py            # Part C: Pluggable import pipeline
+├── csv_import.py         # Part A: CSV import adapter
+├── evaluation.py         # Part D: Immutable evaluation storage
+├── store.py              # JSON-file persistence backend
+├── evaluation_pipeline.py # Part C: Evaluation orchestration
+├── metrics.py            # Part D: Aggregate evaluation metrics
+├── analysis.py           # Part B: Engine integration (AnalysisPipeline)
+├── analysis_support.py   # Request building / report extraction helpers
+├── validation.py         # Dataset integrity validation
+├── validation_utils.py   # Field-level validation utilities (Part B)
+├── provenance.py         # Field-level provenance tracking (Part D)
+├── dedup.py              # Deduplication logic (Part E)
+├── statistics.py         # Dataset statistics generation (Part F)
+├── reports.py            # Deterministic dataset JSON reports
+├── sources/              # Public dataset source adapters (Part C)
+│   ├── sec_edgar.py      # SEC EDGAR adapter
+│   ├── yc_oss.py         # Y Combinator OSS adapter
+│   └── gov_registries.py # Companies House / US state registry adapters
+└── cli.py                # predictron-dataset command-line interface
 ```
 
 ## Part A — Historical Dataset Schema
@@ -147,20 +156,24 @@ class RawImportRecord:
 
 #### Built-in Sources
 
-- `JsonFileSource`: Reads JSON arrays of record objects
+- `JsonFileSource` (`json_file`): Reads JSON arrays of record objects
+- `CsvFileSource` (`csv_file`): Reads CSV files with flexible column mapping
+- `SecEdgarSource` (`sec_edgar`): Parses SEC EDGAR company filing exports
+- `YcOssSource` (`yc_oss`): Parses Y Combinator OSS startup dataset CSV
+- `GovRegistrySource` (`gov_registries`): Parses government registry CSV exports (Companies House UK, US state registries)
 
 ### Creating a Custom Source
 
 Implement the `ImportSource` protocol:
 
 ```python
-class CsvFileSource:
+class MyCustomSource:
     @property
     def source_name(self) -> str:
-        return "csv_file"
+        return "my_custom"
 
     def read(self, path: str) -> list[RawImportRecord]:
-        # Parse CSV and yield RawImportRecords
+        # Parse source and yield RawImportRecords
         ...
 
     def validate(self, record: RawImportRecord) -> list[str]:
@@ -168,6 +181,15 @@ class CsvFileSource:
         if not record.startup_name:
             errors.append("startup_name is required")
         return errors
+
+# Register with the pipeline:
+from predictron_engine.dataset import ImportPipeline, ImportSourceRegistry
+
+registry = ImportSourceRegistry.default()
+registry.register(MyCustomSource())
+source = registry.get("my_custom")
+pipeline = ImportPipeline(source)
+result = pipeline.run("/path/to/my_data")
 ```
 
 ## Part D — Evaluation Storage

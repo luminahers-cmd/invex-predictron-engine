@@ -29,6 +29,7 @@ from predictron_engine.dataset.imports import (
     ImportSourceRegistry,
 )
 from predictron_engine.dataset.reports import DatasetReportBuilder
+from predictron_engine.dataset.statistics import compute_dataset_stats
 from predictron_engine.dataset.store import DatasetStore
 from predictron_engine.dataset.validation import ValidationReport, validate_dataset
 from predictron_engine.version import ENGINE_VERSION
@@ -45,9 +46,9 @@ def _json_out(data: object) -> None:
 
 
 def cmd_import(args: argparse.Namespace) -> int:
-    """Import records/outcomes from a JSON file into a store."""
+    """Import records/outcomes from a supported data file into a store."""
     store = _build_store(args)
-    source_name = getattr(args, "source", None) or "json_file"
+    source_name = getattr(args, "source", None) or _infer_source(args.file)
     registry = ImportSourceRegistry.default()
     source = registry.get(source_name)
     if source is None:
@@ -80,6 +81,38 @@ def cmd_import(args: argparse.Namespace) -> int:
             "file": args.file,
         }
     )
+    return 0
+
+
+def cmd_dedup(args: argparse.Namespace) -> int:
+    """Report duplicate startup records within the store."""
+    from predictron_engine.dataset.dedup import find_duplicates
+
+    store = _build_store(args)
+    records = [
+        store.load_record(rid)
+        for rid in store.list_records()
+    ]
+    valid = [r for r in records if r is not None]
+    report = find_duplicates(valid)
+    _json_out(
+        {
+            "group_count": report.group_count,
+            "duplicate_record_count": report.duplicate_record_count,
+            "method_counts": report.method_counts,
+            "groups": [
+                [r.record_id for r in group] for group in report.groups
+            ],
+        }
+    )
+    return 0
+
+
+def cmd_statistics(args: argparse.Namespace) -> int:
+    """Print dataset statistics: sectors, stages, years, countries, missing, duplicates."""
+    store = _build_store(args)
+    stats = compute_dataset_stats(store)
+    _json_out(stats.to_dict())
     return 0
 
 
@@ -184,6 +217,16 @@ def _build_engine() -> Any:
     return PredictronEngine()
 
 
+def _infer_source(path: str) -> str:
+    """Infer the import source adapter from the file extension."""
+    lower = path.lower()
+    if lower.endswith(".csv"):
+        return "csv_file"
+    if lower.endswith(".json"):
+        return "json_file"
+    return "json_file"
+
+
 def _add_common_args(parser: argparse.ArgumentParser) -> None:
     parser.add_argument(
         "--dataset",
@@ -202,11 +245,23 @@ def build_parser() -> argparse.ArgumentParser:
     sub = parser.add_subparsers(dest="command", required=True)
 
     # import
-    p_import = sub.add_parser("import", help="Import records/outcomes from JSON")
-    p_import.add_argument("file", type=str, help="Path to the JSON data file")
+    p_import = sub.add_parser("import", help="Import records/outcomes from a data file")
+    p_import.add_argument("file", type=str, help="Path to the data file (JSON/CSV)")
     _add_common_args(p_import)
     p_import.add_argument("--source", type=str, default=None)
     p_import.set_defaults(func=cmd_import)
+
+    # dedup
+    p_dedup = sub.add_parser("dedup", help="Report duplicate startup records")
+    _add_common_args(p_dedup)
+    p_dedup.set_defaults(func=cmd_dedup)
+
+    # statistics
+    p_stats = sub.add_parser(
+        "statistics", help="Print dataset statistics (sectors, stages, years, countries)"
+    )
+    _add_common_args(p_stats)
+    p_stats.set_defaults(func=cmd_statistics)
 
     # analyze
     p_analyze = sub.add_parser("analyze", help="Run the engine over records")

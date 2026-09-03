@@ -25,6 +25,10 @@ from predictron_engine.dataset.analysis import (
     AnalysisResult,
     AnalysisRun,
 )
+from predictron_engine.dataset.dedup import (
+    DeduplicationReport,
+    find_duplicates,
+)
 from predictron_engine.dataset.evaluation import (
     EvaluationMetadata,
     PredictionEvaluation,
@@ -55,12 +59,26 @@ from predictron_engine.dataset.outcomes import (
     OutcomeVerdict,
     StartupOutcome,
 )
+from predictron_engine.dataset.provenance import (
+    FieldProvenance,
+    ProvenanceTracker,
+)
 from predictron_engine.dataset.reports import DatasetReportBuilder
+from predictron_engine.dataset.statistics import (
+    DatasetStats,
+    MissingFieldReport,
+    compute_dataset_stats,
+)
 from predictron_engine.dataset.store import DatasetStore
 from predictron_engine.dataset.validation import (
     ValidationIssue,
     ValidationReport,
     validate_dataset,
+)
+from predictron_engine.dataset.validation_utils import (
+    validate_outcome_fields,
+    validate_record_completeness,
+    validate_record_fields,
 )
 
 __all__ = [
@@ -70,24 +88,34 @@ __all__ = [
     "BinaryLabel",
     "DatasetRecord",
     "DatasetReportBuilder",
+    "DatasetStats",
     "DatasetStore",
+    "DeduplicationReport",
     "EvaluationBatchResult",
     "EvaluationMetadata",
     "EvaluationMetrics",
     "EvaluationPipeline",
+    "FieldProvenance",
     "FundingEvent",
     "ImportPipeline",
     "ImportSource",
     "ImportSourceRegistry",
+    "MissingFieldReport",
     "OutcomeRecord",
     "OutcomeStatus",
     "OutcomeVerdict",
     "PredictionEvaluation",
     "PredictionSummary",
+    "ProvenanceTracker",
     "RawImportRecord",
     "StartupOutcome",
     "ValidationIssue",
     "ValidationReport",
+    "compute_dataset_stats",
     "compute_evaluation_metrics",
+    "find_duplicates",
     "validate_dataset",
+    "validate_outcome_fields",
+    "validate_record_completeness",
+    "validate_record_fields",
 ]

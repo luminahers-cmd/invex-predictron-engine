@@ -247,25 +247,42 @@ class ImportPipeline:
     instances, and returns the results for storage by the DatasetStore.
     """
 
-    def __init__(self, source: ImportSource) -> None:
+    def __init__(
+        self,
+        source: ImportSource,
+        *,
+        track_provenance: bool = True,
+    ) -> None:
         self._source = source
+        self._track_provenance = track_provenance
 
     @property
     def source_name(self) -> str:
         return self._source.source_name
 
-    def run(self, path: str) -> ImportResult:
+    def run(
+        self,
+        path: str,
+        *,
+        retrieval_date: datetime | None = None,
+    ) -> ImportResult:
         """Execute the full import pipeline.
 
         Parameters
         ----------
         path :
             Path to the data source.
+        retrieval_date :
+            Override the retrieval date recorded in field provenance.
+            Defaults to the current UTC time.
 
         Returns
         -------
         ImportResult with imported records and any errors.
         """
+        from predictron_engine.dataset.provenance import ProvenanceTracker
+
+        tracker = ProvenanceTracker(retrieval_date)
         result = ImportResult()
         raw_records = self._source.read(path)
 
@@ -277,6 +294,12 @@ class ImportPipeline:
                 continue
 
             dataset_record = self._normalize_dataset(raw)
+
+            if self._track_provenance:
+                dataset_record = self._attach_provenance(
+                    tracker, raw, dataset_record
+                )
+
             outcome_record = self._normalize_outcome(raw, dataset_record.record_id)
 
             result.imported_records.append(dataset_record)
@@ -284,6 +307,31 @@ class ImportPipeline:
             result.records_imported += 1
 
         return result
+
+    @staticmethod
+    def _attach_provenance(
+        tracker: object,
+        raw: RawImportRecord,
+        record: DatasetRecord,
+    ) -> DatasetRecord:
+        """Attach field-level provenance to an imported record.
+
+        Provenance is stored under ``analysis_metadata["provenance"]``
+        without mutating any other fields.
+        """
+        from predictron_engine.dataset.provenance import ProvenanceTracker
+
+        if not isinstance(tracker, ProvenanceTracker):
+            return record
+        tracked_fields = (
+            "startup_name",
+            "website",
+            "analysis_date",
+            "engine_version",
+            "benchmark_version",
+        )
+        provenance = tracker.build_provenance(raw, list(tracked_fields))
+        return tracker.attach_to_record(record, provenance)
 
     def _normalize_dataset(self, raw: RawImportRecord) -> DatasetRecord:
         """Normalize a raw record into a DatasetRecord."""
@@ -398,7 +446,18 @@ class ImportSourceRegistry:
 
     @classmethod
     def default(cls) -> ImportSourceRegistry:
-        """Create a registry with the built-in JsonFileSource."""
+        """Create a registry with all built-in source adapters."""
+        from predictron_engine.dataset.csv_import import CsvFileSource
+        from predictron_engine.dataset.sources import (
+            GovRegistrySource,
+            SecEdgarSource,
+            YcOssSource,
+        )
+
         registry = cls()
         registry.register(JsonFileSource())
+        registry.register(CsvFileSource())
+        registry.register(SecEdgarSource())
+        registry.register(YcOssSource())
+        registry.register(GovRegistrySource())
         return registry
