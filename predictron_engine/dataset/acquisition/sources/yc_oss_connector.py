@@ -1,0 +1,87 @@
+"""YC OSS (Y Combinator Open Source Startups) acquisition connector.
+
+Downloads and normalizes the Y Combinator OSS dataset.  The dataset
+is a publicly available CSV published by Y Combinator / Mozilla.
+
+Source: https://data.world/ycombinator/open-source-startups
+License: Community-maintained public dataset.
+"""
+
+from __future__ import annotations
+
+import shutil
+from pathlib import Path
+
+from predictron_engine.dataset.acquisition.sources.base import (
+    FetchResult,
+    SourceDescriptor,
+)
+from predictron_engine.dataset.acquisition.state import compute_file_hash
+from predictron_engine.dataset.imports import RawImportRecord
+from predictron_engine.dataset.sources.yc_oss import YcOssSource
+
+
+class YcOssConnector:
+    """Acquisition connector for the Y Combinator OSS dataset.
+
+    Reads a local CSV export of the YC OSS dataset.
+    """
+
+    def __init__(self) -> None:
+        self._parser = YcOssSource()
+
+    @property
+    def descriptor(self) -> SourceDescriptor:
+        return SourceDescriptor(
+            name="yc_oss",
+            description="Y Combinator Open Source Startups dataset",
+            source_url="https://data.world/ycombinator/open-source-startups",
+            reliability="high",
+            update_frequency="quarterly",
+            requires_download=False,
+            default_rate_limit=0.0,
+            tags=["yc", "startups", "public"],
+        )
+
+    def discover(self, config: dict[str, object] | None = None) -> list[str]:
+        """Discover available YC OSS CSV files."""
+        if config and "file_path" in config:
+            p = Path(str(config["file_path"]))
+            if p.exists():
+                return [str(p)]
+            return []
+        return []
+
+    def fetch(
+        self,
+        target: str,
+        dest_dir: str,
+        *,
+        config: dict[str, object] | None = None,
+    ) -> FetchResult:
+        """Fetch a YC OSS file.  Copies local file to dest_dir."""
+        src = Path(target)
+        if not src.exists():
+            msg = f"File not found: {target}"
+            raise FileNotFoundError(msg)
+
+        dest = Path(dest_dir)
+        dest.mkdir(parents=True, exist_ok=True)
+        dest_file = dest / src.name
+        shutil.copy2(src, dest_file)
+
+        file_hash = compute_file_hash(dest_file)
+        return FetchResult(
+            file_path=str(dest_file),
+            file_hash=file_hash,
+            file_size=dest_file.stat().st_size,
+            source_version=f"yc_oss_{file_hash[:8]}",
+        )
+
+    def normalize(self, file_path: str) -> list[RawImportRecord]:
+        """Normalize a YC OSS CSV file into RawImportRecords."""
+        return self._parser.read(file_path)
+
+    def checkpoint(self, file_path: str) -> str:
+        """Compute checkpoint key from file content hash."""
+        return compute_file_hash(file_path)

@@ -20,6 +20,14 @@ validation : Dataset validation (Part F).
 cli : Command-line interface (Part A).
 """
 
+from predictron_engine.dataset.acquisition import (
+    AcquireOptions,
+    AcquisitionManager,
+    AcquisitionMetrics,
+    AcquisitionResult,
+    AcquisitionScheduler,
+    SourceConnectorRegistry,
+)
 from predictron_engine.dataset.analysis import (
     AnalysisPipeline,
     AnalysisResult,
@@ -82,6 +90,11 @@ from predictron_engine.dataset.validation_utils import (
 )
 
 __all__ = [
+    "AcquireOptions",
+    "AcquisitionManager",
+    "AcquisitionMetrics",
+    "AcquisitionResult",
+    "AcquisitionScheduler",
     "AnalysisPipeline",
     "AnalysisResult",
     "AnalysisRun",
@@ -108,6 +121,7 @@ __all__ = [
     "PredictionSummary",
     "ProvenanceTracker",
     "RawImportRecord",
+    "SourceConnectorRegistry",
     "StartupOutcome",
     "ValidationIssue",
     "ValidationReport",

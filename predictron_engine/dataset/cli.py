@@ -84,6 +84,120 @@ def cmd_import(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_acquire(args: argparse.Namespace) -> int:
+    """Acquire data from a source into the dataset store."""
+    from datetime import UTC, datetime
+
+    from predictron_engine.dataset.acquisition import (
+        AcquireOptions,
+        AcquisitionManager,
+    )
+
+    store = _build_store(args)
+    manager = AcquisitionManager(store)
+
+    since: datetime | None = None
+    since_str = getattr(args, "since", None)
+    if since_str:
+        try:
+            since = datetime.fromisoformat(since_str).replace(tzinfo=UTC)
+        except (ValueError, TypeError):
+            print(f"error: invalid --since date: {since_str}", file=sys.stderr)
+            return 1
+
+    options = AcquireOptions(
+        source_name=getattr(args, "source", None),
+        file_path=getattr(args, "file", None),
+        directory=getattr(args, "directory", None),
+        resume=getattr(args, "resume", False),
+        since=since,
+        limit=getattr(args, "limit", None),
+        dry_run=getattr(args, "dry_run", False),
+    )
+
+    if options.resume:
+        results = manager.resume(options.source_name)
+        for result in results:
+            _json_out(result.to_dict())
+        return 0
+
+    result = manager.acquire(options)
+    _json_out(result.to_dict())
+    return 0 if not result.metrics.errors else 1
+
+
+def cmd_acquire_status(args: argparse.Namespace) -> int:
+    """Show acquisition status."""
+    from predictron_engine.dataset.acquisition import AcquisitionManager
+
+    store = _build_store(args)
+    manager = AcquisitionManager(store)
+    _json_out(manager.status())
+    return 0
+
+
+def cmd_acquire_sources(args: argparse.Namespace) -> int:
+    """List available source connectors."""
+    from predictron_engine.dataset.acquisition.sources import (
+        SourceConnectorRegistry,
+    )
+
+    registry = SourceConnectorRegistry.default()
+    _json_out(registry.list_descriptors())
+    return 0
+
+
+def cmd_acquire_schedule(args: argparse.Namespace) -> int:
+    """Manage import schedules."""
+    from predictron_engine.dataset.acquisition.scheduler import (
+        AcquisitionScheduler,
+        ImportSchedule,
+    )
+
+    store = _build_store(args)
+    scheduler = AcquisitionScheduler(store._root)
+    scheduler.initialize()
+
+    subcmd = getattr(args, "schedule_action", "list")
+
+    if subcmd == "list":
+        schedules = scheduler.load_schedules()
+        _json_out([{
+            "source_name": s.source_name,
+            "frequency": s.frequency,
+            "enabled": s.enabled,
+            "last_run": s.last_run,
+            "next_run": s.next_run,
+            "priority": s.priority,
+        } for s in schedules])
+        return 0
+
+    if subcmd == "add":
+        source = getattr(args, "schedule_source", "")
+        freq = getattr(args, "frequency", "weekly")
+        if not source:
+            print("error: --schedule-source is required", file=sys.stderr)
+            return 1
+        scheduler.add_schedule(ImportSchedule(
+            source_name=source,
+            frequency=freq,
+        ))
+        _json_out({"added": source, "frequency": freq})
+        return 0
+
+    if subcmd == "remove":
+        source = getattr(args, "schedule_source", "")
+        if not source:
+            print("error: --schedule-source is required", file=sys.stderr)
+            return 1
+        removed = scheduler.remove_schedule(source)
+        _json_out({"removed": source, "found": removed})
+        return 0
+
+    print(f"error: unknown schedule action: {subcmd}", file=sys.stderr)
+    return 1
+
+
 def cmd_dedup(args: argparse.Namespace) -> int:
     """Report duplicate startup records within the store."""
     from predictron_engine.dataset.dedup import find_duplicates
@@ -292,6 +406,40 @@ def build_parser() -> argparse.ArgumentParser:
     _add_common_args(p_export)
     p_export.add_argument("--benchmark-version", type=str, default=None)
     p_export.set_defaults(func=cmd_export)
+
+    # acquire (main command)
+    p_acquire = sub.add_parser("acquire", help="Acquire data from public sources")
+    _add_common_args(p_acquire)
+    p_acquire.add_argument("--source", type=str, default=None)
+    p_acquire.add_argument("--file", type=str, default=None)
+    p_acquire.add_argument("--directory", type=str, default=None)
+    p_acquire.add_argument("--resume", action="store_true", default=False)
+    p_acquire.add_argument("--since", type=str, default=None)
+    p_acquire.add_argument("--limit", type=int, default=None)
+    p_acquire.add_argument("--dry-run", action="store_true", default=False)
+    p_acquire.set_defaults(func=cmd_acquire)
+
+    # acquire status
+    p_acq_status = sub.add_parser("acquire-status", help="Show acquisition status")
+    _add_common_args(p_acq_status)
+    p_acq_status.set_defaults(func=cmd_acquire_status)
+
+    # acquire sources
+    p_acq_sources = sub.add_parser("acquire-sources", help="List available source connectors")
+    p_acq_sources.set_defaults(func=cmd_acquire_sources)
+
+    # acquire schedule
+    p_acq_sched = sub.add_parser("acquire-schedule", help="Manage import schedules")
+    _add_common_args(p_acq_sched)
+    p_acq_sched.add_argument(
+        "schedule_action",
+        type=str,
+        choices=["list", "add", "remove"],
+        help="Schedule action",
+    )
+    p_acq_sched.add_argument("--schedule-source", type=str, default=None)
+    p_acq_sched.add_argument("--frequency", type=str, default="weekly")
+    p_acq_sched.set_defaults(func=cmd_acquire_schedule)
 
     return parser
 
