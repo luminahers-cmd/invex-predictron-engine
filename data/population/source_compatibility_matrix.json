@@ -1,0 +1,148 @@
+{
+  "project": "V5 Pilot Historical Dataset Population",
+  "generated_at": "2026-09-05T00:00:00Z",
+  "updated_at": "2026-09-05T12:00:00Z",
+  "objective": "Audit all existing connectors and identify immediately usable sources for ~1,000 company pilot",
+  "sources": [
+    {
+      "connector": "sec_edgar",
+      "source_name": "SEC EDGAR",
+      "source_url": "https://www.sec.gov/edgar/searchedgar/companysearch",
+      "immediately_usable": true,
+      "requires_api_key": false,
+      "requires_manual_download": false,
+      "requires_licensing_acceptance": false,
+      "requires_additional_implementation": false,
+      "auto_fetchable": true,
+      "data_format": "JSON",
+      "fields_available": [
+        "company_name",
+        "cik",
+        "sic_code",
+        "sic_description",
+        "state_of_incorporation",
+        "country",
+        "latest_filing_date",
+        "form_type"
+      ],
+      "fields_not_available": [
+        "website",
+        "incorporation_year",
+        "funding_stage"
+      ],
+      "notes": "SEC EDGAR public API (efts.sec.gov and data.sec.gov). Requires User-Agent header. Rate limit: 10 req/sec. Company tickers.json gives all registered companies. Submissions API gives SIC codes and state. country derived deterministically for records with a valid US state/territory code (United States); foreign/unmapped jurisdictions left unknown. Websites not provided by SEC.",
+      "estimated_records": "7000+ public companies",
+      "reliability": "high",
+      "update_frequency": "daily"
+    },
+    {
+      "connector": "companies_house",
+      "source_name": "UK Companies House",
+      "source_url": "https://download.companieshouse.gov.uk/",
+      "immediately_usable": false,
+      "requires_api_key": false,
+      "requires_manual_download": true,
+      "requires_licensing_acceptance": false,
+      "requires_additional_implementation": false,
+      "auto_fetchable": false,
+      "data_format": "CSV",
+      "fields_available": [
+        "company_name",
+        "company_number",
+        "company_status",
+        "country_of_origin",
+        "incorporation_date",
+        "sic_code_1"
+      ],
+      "fields_not_available": [
+        "website"
+      ],
+      "notes": "Bulk CSV downloads available at download.companieshouse.gov.uk. Files are large (100MB+ for full dataset). Would need manual download and selective import. Free and open data.",
+      "estimated_records": "millions of UK companies",
+      "reliability": "high",
+      "update_frequency": "daily",
+      "manual_download_url": "https://download.companieshouse.gov.uk/",
+      "expected_file_format": "CSV with columns: CompanyNumber, CompanyName, CompanyStatus, CountryOfOrigin, IncorporationDate, SICCode_1, etc."
+    },
+    {
+      "connector": "yc_oss",
+      "source_name": "Y Combinator Open Source Startups",
+      "source_url": "https://data.world/ycombinator/open-source-startups",
+      "immediately_usable": false,
+      "requires_api_key": true,
+      "requires_manual_download": true,
+      "requires_licensing_acceptance": true,
+      "requires_additional_implementation": false,
+      "auto_fetchable": false,
+      "data_format": "CSV",
+      "fields_available": [
+        "company_name",
+        "website",
+        "description",
+        "region",
+        "industry",
+        "crunchbase_url"
+      ],
+      "fields_not_available": [
+        "incorporation_date",
+        "funding_stage"
+      ],
+      "notes": "Community-maintained dataset on data.world. Requires free data.world account for download. Contains YC-backed open source startups with websites. High quality but limited to ~1000 companies.",
+      "estimated_records": "~1000 YC companies",
+      "reliability": "high",
+      "update_frequency": "quarterly",
+      "manual_download_url": "https://data.world/ycombinator/open-source-startups",
+      "expected_file_format": "CSV with columns: Company, Website, Description, Region, Industry, CB_URL, etc."
+    },
+    {
+      "connector": "csv_export",
+      "source_name": "Generic CSV Export",
+      "source_url": "",
+      "immediately_usable": false,
+      "requires_api_key": false,
+      "requires_manual_download": true,
+      "requires_licensing_acceptance": false,
+      "requires_additional_implementation": false,
+      "auto_fetchable": false,
+      "data_format": "CSV",
+      "fields_available": "flexible",
+      "fields_not_available": [],
+      "notes": "Catch-all connector for any manually downloaded CSV. Can ingest any startup data CSV with flexible column mapping. Used for Crunchbase exports, PitchBook exports, Kaggle datasets, etc.",
+      "estimated_records": "depends on source",
+      "reliability": "medium",
+      "update_frequency": "static"
+    }
+  ],
+  "recommended_pilot_strategy": {
+    "primary_source": "sec_edgar",
+    "rationale": "Immediately usable, no API key required, public data, 7000+ companies available. Provides verified company names, CIKs, SIC codes, and state of incorporation.",
+    "supplementary_sources": [
+      "yc_oss (if data.world account available)",
+      "companies_house (if bulk CSV downloaded)"
+    ],
+    "expected_yield": "~1000 tech companies from SEC EDGAR with verified metadata",
+    "limitations": "Website field will be empty for SEC EDGAR companies (SEC does not publish company websites). Quality report will flag these as missing_required_field."
+  },
+  "pilot_result": {
+    "completed": true,
+    "companies_imported": 881,
+    "population_report": "data/population/reports/population_report_v5.json",
+    "validation_report": "data/population/reports/validation_report_v5.json",
+    "quality_report": "data/population/reports/quality_report_v5.json",
+    "pilot_review": "data/population/reports/pilot_review_v5.json",
+    "dataset_report": "data/population/reports/dataset_report_v5.json",
+    "validation_issues": 0,
+    "duplicate_records": 0,
+    "import_quality_score": 94.74,
+    "website_coverage_rate": 0.0,
+    "country_coverage_country_derived": "US states -> United States; foreign jurisdictions left unknown",
+    "notes": "881 operating companies within the 500-1,000 pilot target. Reaching ~1,000 requires a supplementary source (website enrichment via YC OSS / Companies House) or a non-overlapping second SEC batch."
+  },
+  "scaling_recommendations": [
+    "For 10,000+ companies: combine SEC EDGAR + Companies House + YC OSS + Crunchbase exports",
+    "Obtain data.world account for YC OSS dataset (free, immediate 1000 companies with websites)",
+    "Download Companies House bulk CSV for UK company coverage",
+    "Consider Crunchbase free tier or Kaggle datasets for enrichment",
+    "Website enrichment could be done via company CIK → SEC filing → website lookup (slower but automated)"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "batch_id": "batch-1788606082-sec_edgar",
+  "source_name": "sec_edgar",
+  "file_path": "data/population/sources/sec_edgar_companies_curated.json",
+  "file_hash": "6aa28e7ffa3353a3db354f8d108e60ee428e8fa87e0d54a2d1b40ccde9b226ad",
+  "source_version": "sec_edgar",
+  "imported_at": "2026-09-05T11:02:01.252030+00:00",
+  "record_count": 881,
+  "records": []
+}

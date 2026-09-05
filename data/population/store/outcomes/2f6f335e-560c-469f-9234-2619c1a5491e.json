@@ -1,0 +1,29 @@
+{
+  "outcome_id": "2f6f335e-560c-469f-9234-2619c1a5491e",
+  "record_id": "865cb560-6bc5-4aff-9010-d5252f1282de",
+  "outcome": {
+    "funding_rounds": [],
+    "total_funding_usd": null,
+    "acquisition": null,
+    "acquisition_price_usd": null,
+    "shutdown": null,
+    "shutdown_date": null,
+    "bankruptcy": null,
+    "bankruptcy_date": null,
+    "arr_milestones": [],
+    "employee_count_history": [],
+    "valuation_history": [],
+    "investors": [],
+    "exit_date": null,
+    "exit_type": null,
+    "latest_verification_date": null,
+    "status": "unknown"
+  },
+  "verdict": "unknown",
+  "verdict_reasoning": "",
+  "time_horizon_days": null,
+  "created_at": "2026-09-05T11:02:01.053381Z",
+  "updated_at": "2026-09-05T11:02:01.053388Z",
+  "notes": "",
+  "metadata": {}
+}

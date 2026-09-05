@@ -1,0 +1,78 @@
+{
+  "record_id": "6de0abe0-3109-4672-989f-7b8c160d606c",
+  "startup_name": "Sadot Group Inc.",
+  "website": "",
+  "analysis_date": "2026-08-25T00:00:00Z",
+  "engine_version": "0.12.1",
+  "benchmark_version": null,
+  "evidence_bundle_reference": null,
+  "prediction": {
+    "decision": "watch",
+    "confidence": 0.0,
+    "composite_score": 0.0,
+    "dimension_scores": {},
+    "investment_readiness_score": null,
+    "recommendation_count": 0
+  },
+  "funding_stage_at_analysis": "unknown",
+  "analysis_metadata": {
+    "source": "sec_edgar",
+    "sec_cik": "0001701756",
+    "state_of_incorporation": "NV",
+    "country": "United States",
+    "sic_code": "5810",
+    "sic_description": "Retail-Eating & Drinking Places",
+    "sector": "Retail-Eating & Drinking Places",
+    "latest_form_type": "S-1/A",
+    "provenance": {
+      "startup_name": {
+        "source": "sec_edgar",
+        "retrieval_date": "2026-09-05T11:01:22.164884Z"
+      },
+      "analysis_date": {
+        "source": "sec_edgar",
+        "retrieval_date": "2026-09-05T11:01:22.164884Z"
+      },
+      "metadata.source": {
+        "source": "sec_edgar",
+        "retrieval_date": "2026-09-05T11:01:22.164884Z"
+      },
+      "metadata.sec_cik": {
+        "source": "sec_edgar",
+        "retrieval_date": "2026-09-05T11:01:22.164884Z"
+      },
+      "metadata.state_of_incorporation": {
+        "source": "sec_edgar",
+        "retrieval_date": "2026-09-05T11:01:22.164884Z"
+      },
+      "metadata.country": {
+        "source": "sec_edgar",
+        "retrieval_date": "2026-09-05T11:01:22.164884Z"
+      },
+      "metadata.sic_code": {
+        "source": "sec_edgar",
+        "retrieval_date": "2026-09-05T11:01:22.164884Z"
+      },
+      "metadata.sic_description": {
+        "source": "sec_edgar",
+        "retrieval_date": "2026-09-05T11:01:22.164884Z"
+      },
+      "metadata.sector": {
+        "source": "sec_edgar",
+        "retrieval_date": "2026-09-05T11:01:22.164884Z"
+      },
+      "metadata.latest_form_type": {
+        "source": "sec_edgar",
+        "retrieval_date": "2026-09-05T11:01:22.164884Z"
+      },
+      "engine_version": {
+        "source": "sec_edgar/pipeline",
+        "retrieval_date": "2026-09-05T11:01:22.164884Z"
+      }
+    }
+  },
+  "tags": [
+    "sec_edgar"
+  ],
+  "source": "sec_edgar"
+}

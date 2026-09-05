@@ -1,0 +1,15 @@
+{
+  "sources": [
+    {
+      "name": "sec_edgar",
+      "file_paths": [
+        "data/population/sources/sec_edgar_companies_curated.json"
+      ],
+      "directories": [],
+      "enable_resume": true
+    }
+  ],
+  "idempotent": true,
+  "batch_size": 1000,
+  "checkpoint_every": 1
+}
