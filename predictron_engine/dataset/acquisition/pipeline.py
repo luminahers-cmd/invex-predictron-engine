@@ -275,8 +275,16 @@ class AcquisitionPipeline:
         import_pipeline: ImportPipeline,
         source_name: str,
     ) -> ImportResult:
-        """Process a batch of raw records through the import pipeline."""
+        """Process a batch of raw records through the import pipeline.
+
+        Mirrors :meth:`ImportPipeline.run` including field-level
+        provenance attachment, so records acquired here carry the same
+        audit trail as records imported directly.
+        """
+        from predictron_engine.dataset.provenance import ProvenanceTracker
+
         result = ImportResult()
+        tracker = ProvenanceTracker()
 
         for raw in raw_records:
             try:
@@ -294,6 +302,9 @@ class AcquisitionPipeline:
                 continue
 
             dataset_record = _normalize_dataset(raw, source_name)
+            dataset_record = _attach_provenance(
+                tracker, raw, dataset_record, source_name
+            )
             outcome_record = _normalize_outcome(raw, dataset_record.record_id)
 
             self._store.save_record(dataset_record)
@@ -351,6 +362,45 @@ class _PassthroughSource:
 
     def validate(self, record: RawImportRecord) -> list[str]:  # noqa: ARG002
         return []
+
+
+def _attach_provenance(
+    tracker: Any,
+    raw: RawImportRecord,
+    record: Any,
+    source_name: str,
+) -> Any:
+    """Attach field-level provenance to a normalized record.
+
+    Uses the same ProvenanceTracker mechanics as
+    :meth:`ImportPipeline._attach_provenance`.  When the pipeline
+    assigns a default engine version (raw did not supply one), that
+    value is attributed to the acquisition pipeline itself so the
+    provenance trail stays complete and honest.
+    """
+    from predictron_engine.dataset.provenance import ProvenanceTracker
+
+    if not isinstance(tracker, ProvenanceTracker):
+        return record
+
+    tracked_fields = (
+        "startup_name",
+        "website",
+        "analysis_date",
+        "engine_version",
+        "benchmark_version",
+    )
+    provenance = tracker.build_provenance(raw, list(tracked_fields))
+
+    engine_version = getattr(raw, "engine_version", "")
+    record_engine_version = getattr(record, "engine_version", "")
+    if not engine_version and record_engine_version:
+        provenance["engine_version"] = {
+            "source": f"{source_name}/pipeline",
+            "retrieval_date": tracker.retrieval_date,
+        }
+
+    return tracker.attach_to_record(record, provenance)
 
 
 _SOURCE_ADAPTER = _PassthroughSource("passthrough")

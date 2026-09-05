@@ -29,6 +29,7 @@ _SIC_CODE_FIELD = "sic_code"
 _SIC_DESCRIPTION_FIELD = "sic_description"
 _FILING_DATE_FIELD = "latest_filing_date"
 _FORM_TYPE_FIELD = "form_type"
+_COUNTRY_FIELD = "country"
 
 
 class SecEdgarSource:
@@ -90,6 +91,10 @@ class SecEdgarSource:
             state = item.get(_STATE_FIELD)
             if state:
                 metadata["state_of_incorporation"] = str(state)
+
+            country = item.get(_COUNTRY_FIELD)
+            if country:
+                metadata["country"] = str(country)
 
             sic_code = item.get(_SIC_CODE_FIELD)
             if sic_code:
