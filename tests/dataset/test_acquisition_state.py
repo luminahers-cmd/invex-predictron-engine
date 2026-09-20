@@ -2,15 +2,12 @@
 
 from __future__ import annotations
 
-import json
-import tempfile
 from pathlib import Path
 
 import pytest
 
 from predictron_engine.dataset.acquisition.state import (
     AcquisitionBatch,
-    AcquisitionRecord,
     AcquisitionStateManager,
     CheckpointData,
     compute_file_hash,

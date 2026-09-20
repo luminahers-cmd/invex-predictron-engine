@@ -55,6 +55,7 @@ class DatasetStats:
     record_count: int = 0
     startup_count: int = 0
     sectors: dict[str, int] = field(default_factory=dict)
+    industries: dict[str, int] = field(default_factory=dict)
     stages: dict[str, int] = field(default_factory=dict)
     years: dict[str, int] = field(default_factory=dict)
     countries: dict[str, int] = field(default_factory=dict)
@@ -73,6 +74,7 @@ class DatasetStats:
             "record_count": self.record_count,
             "startup_count": self.startup_count,
             "sectors": dict(sorted(self.sectors.items())),
+            "industries": dict(sorted(self.industries.items())),
             "stages": dict(sorted(self.stages.items())),
             "years": dict(sorted(self.years.items())),
             "countries": dict(sorted(self.countries.items())),
@@ -104,6 +106,7 @@ def compute_dataset_stats(store: DatasetStore) -> DatasetStats:
     )
 
     sectors: Counter[str] = Counter()
+    industries: Counter[str] = Counter()
     stages: Counter[str] = Counter()
     years: Counter[str] = Counter()
     countries: Counter[str] = Counter()
@@ -111,6 +114,7 @@ def compute_dataset_stats(store: DatasetStore) -> DatasetStats:
     missing_counts: Counter[str] = Counter()
     for record in records:
         _tally_sector(record, sectors)
+        _tally_industry(record, industries)
         _tally_stage(record, stages)
         _tally_year(record, years)
         _tally_country(record, countries)
@@ -119,6 +123,7 @@ def compute_dataset_stats(store: DatasetStore) -> DatasetStats:
             missing_counts[field_name] += 1
 
     stats.sectors = dict(sectors)
+    stats.industries = dict(industries)
     stats.stages = dict(stages)
     stats.years = dict(years)
     stats.countries = dict(countries)
@@ -155,6 +160,14 @@ def _tally_sector(
         counter[str(sector)] += 1
 
 
+def _tally_industry(
+    record: DatasetRecord, counter: Counter[str]
+) -> None:
+    for industry in record.profile.industries:
+        if industry:
+            counter[str(industry).strip().lower()] += 1
+
+
 def _tally_stage(
     record: DatasetRecord, counter: Counter[str]
 ) -> None:
@@ -174,7 +187,11 @@ def _tally_year(
 def _tally_country(
     record: DatasetRecord, counter: Counter[str]
 ) -> None:
-    country = record.analysis_metadata.get("country")
+    country = (
+        record.profile.country_code
+        or record.analysis_metadata.get("country")
+        or record.analysis_metadata.get("country_code")
+    )
     if country:
         counter[str(country)] += 1
     else:

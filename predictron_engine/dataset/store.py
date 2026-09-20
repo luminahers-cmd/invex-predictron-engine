@@ -4,6 +4,10 @@ Provides persistence for DatasetRecord, OutcomeRecord, and
 PredictionEvaluation instances using local JSON files.  The store
 is designed for offline analysis and does not require any external
 services.
+
+Since Project E4 the store also backs :mod:`signal timelines
+<predictron_engine.dataset.signals>` under a ``signals/`` directory —
+additively, without changing any existing record/outcome semantics.
 """
 
 from __future__ import annotations
@@ -11,11 +15,16 @@ from __future__ import annotations
 import json
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from predictron_engine.dataset.analysis import AnalysisRun
 from predictron_engine.dataset.evaluation import PredictionEvaluation
 from predictron_engine.dataset.models import DatasetRecord
 from predictron_engine.dataset.outcomes import OutcomeRecord
+
+if TYPE_CHECKING:
+    from predictron_engine.dataset.signals.model import CompanySignal
+    from predictron_engine.dataset.signals.timeline import CompanyTimeline
 
 
 class DatasetStore:
@@ -36,6 +45,8 @@ class DatasetStore:
                 {evaluation_id}.json
             runs/
                 {run_id}.json
+            signals/
+                {encoded_company_id}.json
             manifest.json
     """
 
@@ -45,6 +56,7 @@ class DatasetStore:
         self._outcomes_dir = self._root / "outcomes"
         self._evaluations_dir = self._root / "evaluations"
         self._runs_dir = self._root / "runs"
+        self._signals_dir = self._root / "signals"
         self._manifest_path = self._root / "manifest.json"
 
     def initialize(self) -> None:
@@ -53,6 +65,7 @@ class DatasetStore:
         self._outcomes_dir.mkdir(parents=True, exist_ok=True)
         self._evaluations_dir.mkdir(parents=True, exist_ok=True)
         self._runs_dir.mkdir(parents=True, exist_ok=True)
+        self._signals_dir.mkdir(parents=True, exist_ok=True)
         if not self._manifest_path.exists():
             self._write_manifest(
                 {
@@ -75,6 +88,19 @@ class DatasetStore:
             encoding="utf-8",
         )
         self._update_manifest("record_count", 1)
+        return path
+
+    def update_record(self, record: DatasetRecord) -> Path:
+        """Persist an updated DatasetRecord, preserving its ID.
+
+        Overwrites the stored representation of an existing record.  The
+        manifest count is not incremented — an update is not a new record.
+        """
+        path = self._records_dir / f"{record.record_id}.json"
+        path.write_text(
+            record.model_dump_json(indent=2),
+            encoding="utf-8",
+        )
         return path
 
     def load_record(self, record_id: str) -> DatasetRecord | None:
@@ -211,6 +237,50 @@ class DatasetStore:
     def count_runs(self) -> int:
         """Count stored analysis runs."""
         return len(self._list_run_ids())
+
+    # ---- Company signal timelines (Project E4) ----
+
+    def save_timeline(self, timeline: CompanyTimeline) -> Path:
+        """Persist a company signal timeline to disk.
+
+        Overwrites the stored timeline for the same company.  Timelines
+        are immutable once persisted; save a new one to update history.
+        """
+        from predictron_engine.dataset.signals.persistence import write_timeline
+
+        return write_timeline(self._root, timeline)
+
+    def load_timeline(self, company_id: str) -> CompanyTimeline | None:
+        """Load a company signal timeline by its canonical company id."""
+        from predictron_engine.dataset.signals.persistence import read_timeline
+
+        return read_timeline(self._root, company_id)
+
+    def save_signal(self, signal: CompanySignal) -> Path:
+        """Append a single signal to its company timeline on disk.
+
+        The signal is merged into the existing timeline (de-duplicated by
+        ``signal_id``) and the whole timeline is re-persisted sorted.
+        """
+        from predictron_engine.dataset.signals.persistence import read_timeline, write_timeline
+        from predictron_engine.dataset.signals.timeline import CompanyTimeline
+
+        existing = read_timeline(self._root, signal.company_id)
+        if existing is None:
+            timeline = CompanyTimeline.build(signal.company_id, [signal])
+        else:
+            timeline = existing.append(signal)
+        return write_timeline(self._root, timeline)
+
+    def list_signal_company_ids(self) -> list[str]:
+        """Return sorted company ids that have a stored signal timeline."""
+        from predictron_engine.dataset.signals.persistence import list_signal_company_ids
+
+        return list_signal_company_ids(self._root)
+
+    def count_signal_timelines(self) -> int:
+        """Count stored signal timelines."""
+        return len(self.list_signal_company_ids())
 
     # ---- Manifest ----
 

@@ -17,6 +17,7 @@ import io
 from pathlib import Path
 
 from predictron_engine.dataset.imports import RawImportRecord
+from predictron_engine.dataset.models import CompanyProfile
 
 # Expected columns in the YC OSS CSV export.
 _COMPANY_COLUMNS = ("company", "name", "startup_name")
@@ -86,6 +87,9 @@ class YcOssSource:
             metadata: dict[str, object] = {
                 "source": "yc_oss",
             }
+            desc = ""
+            region = ""
+            industry = ""
             if description_col:
                 desc = _clean(row.get(description_col, ""))
                 if desc:
@@ -104,6 +108,17 @@ class YcOssSource:
                 if cb:
                     metadata["crunchbase_url"] = cb
 
+            profile = CompanyProfile()
+            if industry:
+                profile.industries = [industry.lower().strip()]
+            if region:
+                from predictron_engine.dataset.enrichment import normalize_country_code
+
+                profile.country_code = normalize_country_code(region)
+                profile.headquarters = region
+            if desc:
+                profile.description = desc
+
             records.append(
                 RawImportRecord(
                     startup_name=company,
@@ -113,6 +128,7 @@ class YcOssSource:
                     metadata=metadata,
                     tags=["yc_oss"],
                     source="yc_oss",
+                    profile=profile,
                 )
             )
 

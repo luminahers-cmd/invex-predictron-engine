@@ -1,0 +1,652 @@
+{
+  "benchmark_version": "1.0",
+  "created_at": "2026-09-20T00:00:00Z",
+  "dataset_name": "predictron_cohort_starter",
+  "evaluation_horizon_days": null,
+  "notes": "Starter cohort: real analysis-time inputs from the committed benchmark cases and real committed evidence corpora, with the analysis pinned to the corpora's fixed retrieval instant. Outcomes are illustrative and NOT independently verified.",
+  "schema_version": 1,
+  "source_records": [
+    {
+      "analysis_timestamp": "2026-01-01T00:00:00Z",
+      "company_id": "ai_infrastructure",
+      "company_name": "Inference Labs",
+      "country": null,
+      "description": "Inference Labs provides GPU-optimized model serving infrastructure for teams deploying large language models in production. The platform handles auto-scaling, model versioning, A/B testing, and cost optimization across multi-cloud GPU clusters. Supports PyTorch, TensorFlow, and ONNX models. Processing over 2 billion inference requests daily for 150 enterprise customers. Usage-based pricing with average customer spend of $18,000/month. Raised $65M Series A. Founded in 2023 by former infrastructure leads from major AI labs. Team of 75 in San Francisco and Toronto.",
+      "evaluation_horizon_days": null,
+      "evidence_corpus": "ai_infrastructure",
+      "founder_linkedin_urls": [],
+      "metadata": {
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence"
+        ]
+      },
+      "outcome": {
+        "exit_value_usd": null,
+        "notes": "Illustrative placeholder outcome \u2014 not independently verified. Set verified=true with sources to treat as real ground truth.",
+        "outcome_events": [],
+        "sources": [
+          "benchmarks/startup_cases/cases.py"
+        ],
+        "status": "operating",
+        "verification_date": "2026-06-30",
+        "verified": false,
+        "verified_by": null
+      },
+      "pitch_deck_url": null,
+      "sector": "Infrastructure",
+      "stage": "Series A",
+      "website": "https://inferencelabs.example.com"
+    },
+    {
+      "analysis_timestamp": "2026-01-01T00:00:00Z",
+      "company_id": "b2b_saas",
+      "company_name": "Analytix Cloud",
+      "country": null,
+      "description": "Analytix Cloud is a B2B SaaS platform providing real-time analytics and business intelligence for mid-market enterprises. The platform integrates with existing data warehouses and delivers automated insight generation through proprietary query optimization. Revenue is subscription-based with annual contracts averaging $48,000 ARR. The company has 85 enterprise clients and has achieved $4.2M ARR with 140% net revenue retention. Founded in 2021, the team of 35 engineers and sales professionals operates from San Francisco with a remote engineering hub in Austin.",
+      "evaluation_horizon_days": null,
+      "evidence_corpus": "b2b_saas",
+      "founder_linkedin_urls": [],
+      "metadata": {
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence"
+        ]
+      },
+      "outcome": {
+        "exit_value_usd": 120000000.0,
+        "notes": "Illustrative placeholder outcome \u2014 not independently verified. Set verified=true with sources to treat as real ground truth.",
+        "outcome_events": [
+          {
+            "amount_nominal_units": null,
+            "description": "Illustrative placeholder outcome",
+            "kind": "acquisition",
+            "occurred_at": "2026-03-15",
+            "sources": [
+              "benchmarks/startup_cases/cases.py"
+            ],
+            "value_currency_usd": 120000000.0
+          }
+        ],
+        "sources": [
+          "benchmarks/startup_cases/cases.py"
+        ],
+        "status": "acquired",
+        "verification_date": "2026-06-30",
+        "verified": false,
+        "verified_by": null
+      },
+      "pitch_deck_url": null,
+      "sector": "SaaS",
+      "stage": "Series A",
+      "website": "https://analytixcloud.example.com"
+    },
+    {
+      "analysis_timestamp": "2026-01-01T00:00:00Z",
+      "company_id": "cash_burn_runway",
+      "company_name": "FlowState",
+      "country": null,
+      "description": "FlowState builds workflow automation for operations teams. The platform integrates with Slack, Notion, and Jira to eliminate manual status updates and reporting. Currently burning $350K per month across engineering and go-to-market. Company has $6M in total funding from a Series A round. Revenue of $1.8M ARR from 45 enterprise customers. Team of 25 based in Austin, founded in 2022. Currently at 8 months of runway.",
+      "evaluation_horizon_days": null,
+      "evidence_corpus": "cash_burn_runway",
+      "founder_linkedin_urls": [],
+      "metadata": {
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence"
+        ]
+      },
+      "outcome": null,
+      "pitch_deck_url": null,
+      "sector": "SaaS",
+      "stage": "Series A",
+      "website": "https://flowstate.example.com"
+    },
+    {
+      "analysis_timestamp": "2026-01-01T00:00:00Z",
+      "company_id": "climate_tech",
+      "company_name": "CarbonLens",
+      "country": null,
+      "description": "CarbonLens provides enterprise-grade carbon accounting and emissions tracking software for Scope 1, 2, and 3 emissions. The platform integrates with ERP systems, supply chain tools, and IoT sensors to automate emissions data collection and reporting. Aligned with GHG Protocol and SEC climate disclosure requirements. Serving 60 enterprise clients across manufacturing, logistics, and energy sectors. ARR of $3.5M with 95% gross retention. Raised $8M seed from climate-focused VCs. Founded in 2022, team of 28, headquartered in Berlin with operations in the US.",
+      "evaluation_horizon_days": null,
+      "evidence_corpus": "climate_tech",
+      "founder_linkedin_urls": [],
+      "metadata": {
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence"
+        ]
+      },
+      "outcome": {
+        "exit_value_usd": null,
+        "notes": "Illustrative placeholder outcome \u2014 not independently verified. Set verified=true with sources to treat as real ground truth.",
+        "outcome_events": [
+          {
+            "amount_nominal_units": 3000000.0,
+            "description": "Illustrative placeholder outcome",
+            "kind": "arr_milestone",
+            "occurred_at": "2026-04-01",
+            "sources": [
+              "benchmarks/startup_cases/cases.py"
+            ],
+            "value_currency_usd": null
+          }
+        ],
+        "sources": [
+          "benchmarks/startup_cases/cases.py"
+        ],
+        "status": "operating",
+        "verification_date": "2026-06-30",
+        "verified": false,
+        "verified_by": null
+      },
+      "pitch_deck_url": null,
+      "sector": "Climate",
+      "stage": "Seed",
+      "website": "https://carbonlens.example.com"
+    },
+    {
+      "analysis_timestamp": "2026-01-01T00:00:00Z",
+      "company_id": "consumer_app",
+      "company_name": "FitSocial",
+      "country": null,
+      "description": "FitSocial is a consumer mobile application that combines fitness tracking with social networking. Users log workouts, share progress, and participate in community challenges. Monetization is through a freemium model with a $9.99/month premium subscription and sponsored brand partnerships. Currently has 420,000 monthly active users with 38,000 premium subscribers. Retention at D30 is 42%. Available on iOS and Android. Founded in 2022, team of 18, based in Los Angeles. Pre-seed stage with $1.5M raised from angels.",
+      "evaluation_horizon_days": null,
+      "evidence_corpus": "consumer_app",
+      "founder_linkedin_urls": [],
+      "metadata": {
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence"
+        ]
+      },
+      "outcome": {
+        "exit_value_usd": null,
+        "notes": "Illustrative placeholder outcome \u2014 not independently verified. Set verified=true with sources to treat as real ground truth.",
+        "outcome_events": [
+          {
+            "amount_nominal_units": null,
+            "description": "Illustrative placeholder outcome",
+            "kind": "shutdown",
+            "occurred_at": "2026-03-01",
+            "sources": [
+              "benchmarks/startup_cases/cases.py"
+            ],
+            "value_currency_usd": null
+          }
+        ],
+        "sources": [
+          "benchmarks/startup_cases/cases.py"
+        ],
+        "status": "shutdown",
+        "verification_date": "2026-06-30",
+        "verified": false,
+        "verified_by": null
+      },
+      "pitch_deck_url": null,
+      "sector": "Consumer",
+      "stage": "Pre-Seed",
+      "website": "https://fitsocial.example.com"
+    },
+    {
+      "analysis_timestamp": "2026-01-01T00:00:00Z",
+      "company_id": "deep_tech",
+      "company_name": "QubitShield",
+      "country": null,
+      "description": "QubitShield develops quantum error correction software for superconducting quantum processors. The proprietary decoder algorithm achieves a 40% improvement in logical qubit fidelity compared to baseline surface codes. The company licenses software to quantum computing hardware manufacturers and cloud quantum providers. 3 peer-reviewed publications in Nature Physics and PRX Quantum. Pre-revenue, currently running pilot evaluations with 2 quantum hardware companies. Seed stage with $5M raised from deep-tech focused VCs. Founded in 2023 by a team of 3 quantum physicists from MIT. Based in Boston, team of 12.",
+      "evaluation_horizon_days": null,
+      "evidence_corpus": "deep_tech",
+      "founder_linkedin_urls": [],
+      "metadata": {
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence"
+        ]
+      },
+      "outcome": {
+        "exit_value_usd": null,
+        "notes": "Illustrative placeholder outcome \u2014 not independently verified. Set verified=true with sources to treat as real ground truth.",
+        "outcome_events": [
+          {
+            "amount_nominal_units": null,
+            "description": "Illustrative placeholder outcome",
+            "kind": "shutdown",
+            "occurred_at": "2026-03-01",
+            "sources": [
+              "benchmarks/startup_cases/cases.py"
+            ],
+            "value_currency_usd": null
+          }
+        ],
+        "sources": [
+          "benchmarks/startup_cases/cases.py"
+        ],
+        "status": "shutdown",
+        "verification_date": "2026-06-30",
+        "verified": false,
+        "verified_by": null
+      },
+      "pitch_deck_url": null,
+      "sector": "Deep Tech",
+      "stage": "Seed",
+      "website": "https://qubitshield.example.com"
+    },
+    {
+      "analysis_timestamp": "2026-01-01T00:00:00Z",
+      "company_id": "devtools",
+      "company_name": "ShipKit",
+      "country": null,
+      "description": "ShipKit is an open-source-first CI/CD platform designed for monorepo architectures. The platform provides incremental builds, intelligent test parallelization, and deployment orchestration for teams running microservices. The open-source core has 14,000 GitHub stars and 850 contributing developers. Commercial features include audit logging, SSO, and priority support. Currently converting 340 open-source users to paid plans at $299/month. Pre-revenue on commercial tier, currently in beta launch phase. Founded in 2023 by two ex-GitHub engineers based in Seattle.",
+      "evaluation_horizon_days": null,
+      "evidence_corpus": "devtools",
+      "founder_linkedin_urls": [],
+      "metadata": {
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence"
+        ]
+      },
+      "outcome": {
+        "exit_value_usd": null,
+        "notes": "Illustrative placeholder outcome \u2014 not independently verified. Set verified=true with sources to treat as real ground truth.",
+        "outcome_events": [],
+        "sources": [
+          "benchmarks/startup_cases/cases.py"
+        ],
+        "status": "operating",
+        "verification_date": "2026-06-30",
+        "verified": false,
+        "verified_by": null
+      },
+      "pitch_deck_url": null,
+      "sector": "SaaS",
+      "stage": "Pre-Seed",
+      "website": "https://shipkit.dev"
+    },
+    {
+      "analysis_timestamp": "2026-01-01T00:00:00Z",
+      "company_id": "edtech",
+      "company_name": "SkillForge",
+      "country": null,
+      "description": "SkillForge is a B2B EdTech platform providing AI-personalized corporate training programs for technology skills. The platform generates adaptive learning paths based on role requirements and individual skill gaps. Content library covers 200+ technology topics with hands-on labs. Serving 45 enterprise clients with 12,000 active learners. ACV of $35,000 with 90% gross retention. Raised $6M seed round. Founded in 2022, team of 22 based in New York. Previously operated as a consulting firm for 3 years before pivoting to SaaS.",
+      "evaluation_horizon_days": null,
+      "evidence_corpus": "edtech",
+      "founder_linkedin_urls": [],
+      "metadata": {
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence"
+        ]
+      },
+      "outcome": {
+        "exit_value_usd": 40000000.0,
+        "notes": "Illustrative placeholder outcome \u2014 not independently verified. Set verified=true with sources to treat as real ground truth.",
+        "outcome_events": [
+          {
+            "amount_nominal_units": null,
+            "description": "Illustrative placeholder outcome",
+            "kind": "acquisition",
+            "occurred_at": "2026-03-15",
+            "sources": [
+              "benchmarks/startup_cases/cases.py"
+            ],
+            "value_currency_usd": 40000000.0
+          }
+        ],
+        "sources": [
+          "benchmarks/startup_cases/cases.py"
+        ],
+        "status": "acquired",
+        "verification_date": "2026-06-30",
+        "verified": false,
+        "verified_by": null
+      },
+      "pitch_deck_url": null,
+      "sector": "EdTech",
+      "stage": "Seed",
+      "website": "https://skillforge.example.com"
+    },
+    {
+      "analysis_timestamp": "2026-01-01T00:00:00Z",
+      "company_id": "enterprise_software",
+      "company_name": "ComplianceOS",
+      "country": null,
+      "description": "ComplianceOS is an enterprise compliance management platform that automates regulatory tracking, policy management, and audit preparation for financial services companies. The platform covers SOC 2, PCI DSS, GDPR, and CCPA compliance workflows with automated evidence collection and control monitoring. Serving 95 financial institutions including 8 top-20 US banks. ACV of $120,000 with 98% gross retention. Series C stage with $85M raised. Team of 200 across New York, Charlotte, and remote. Founded in 2018.",
+      "evaluation_horizon_days": null,
+      "evidence_corpus": "enterprise_software",
+      "founder_linkedin_urls": [],
+      "metadata": {
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence"
+        ]
+      },
+      "outcome": {
+        "exit_value_usd": 80000000.0,
+        "notes": "Illustrative placeholder outcome \u2014 not independently verified. Set verified=true with sources to treat as real ground truth.",
+        "outcome_events": [
+          {
+            "amount_nominal_units": null,
+            "description": "Illustrative placeholder outcome",
+            "kind": "acquisition",
+            "occurred_at": "2026-03-15",
+            "sources": [
+              "benchmarks/startup_cases/cases.py"
+            ],
+            "value_currency_usd": 80000000.0
+          }
+        ],
+        "sources": [
+          "benchmarks/startup_cases/cases.py"
+        ],
+        "status": "acquired",
+        "verification_date": "2026-06-30",
+        "verified": false,
+        "verified_by": null
+      },
+      "pitch_deck_url": null,
+      "sector": "Enterprise",
+      "stage": "Series C",
+      "website": "https://complianceos.example.com"
+    },
+    {
+      "analysis_timestamp": "2026-01-01T00:00:00Z",
+      "company_id": "fintech",
+      "company_name": "PayBridge",
+      "country": null,
+      "description": "PayBridge provides embedded payment infrastructure for marketplace and platform businesses. The API-first solution handles split payments, escrow, KYC compliance, and multi-currency settlement across 35 countries. Processing $2.1B in annual payment volume with a take rate of 0.8%. The company serves 280 marketplace clients including 12 in the Fortune 500. Founded in 2019, team of 120 across London, Singapore, and New York. Raised $45M Series B from Tier 1 fintech investors.",
+      "evaluation_horizon_days": null,
+      "evidence_corpus": "fintech",
+      "founder_linkedin_urls": [],
+      "metadata": {
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence"
+        ]
+      },
+      "outcome": {
+        "exit_value_usd": null,
+        "notes": "Illustrative placeholder outcome \u2014 not independently verified. Set verified=true with sources to treat as real ground truth.",
+        "outcome_events": [
+          {
+            "amount_nominal_units": null,
+            "description": "Illustrative placeholder outcome",
+            "kind": "shutdown",
+            "occurred_at": "2026-03-01",
+            "sources": [
+              "benchmarks/startup_cases/cases.py"
+            ],
+            "value_currency_usd": null
+          }
+        ],
+        "sources": [
+          "benchmarks/startup_cases/cases.py"
+        ],
+        "status": "shutdown",
+        "verification_date": "2026-06-30",
+        "verified": false,
+        "verified_by": null
+      },
+      "pitch_deck_url": null,
+      "sector": "FinTech",
+      "stage": "Series B",
+      "website": "https://paybridge.example.com"
+    },
+    {
+      "analysis_timestamp": "2026-01-01T00:00:00Z",
+      "company_id": "funding_efficiency",
+      "company_name": "LeanStack",
+      "country": null,
+      "description": "LeanStack is a SaaS platform providing serverless deployment tooling for startup engineering teams. The CLI-based platform automates infrastructure provisioning, CI/CD pipelines, and cost optimization across AWS and GCP. Currently generating $3.2M ARR from 200 developer teams paying $1,333/month on average. Total funding of only $1.5M from a seed round. Team of 12 based in Portland. Founded in 2022 by two ex-AWS engineers. Monthly burn rate of $150K.",
+      "evaluation_horizon_days": null,
+      "evidence_corpus": "funding_efficiency",
+      "founder_linkedin_urls": [],
+      "metadata": {
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence"
+        ]
+      },
+      "outcome": null,
+      "pitch_deck_url": null,
+      "sector": "SaaS",
+      "stage": "Seed",
+      "website": "https://leanstack.example.com"
+    },
+    {
+      "analysis_timestamp": "2026-01-01T00:00:00Z",
+      "company_id": "healthcare_ai",
+      "company_name": "MedVision AI",
+      "country": null,
+      "description": "MedVision AI develops FDA-cleared AI diagnostic tools for medical imaging. The platform analyzes X-rays, MRIs, and CT scans to assist radiologists in detecting anomalies with 97.3% sensitivity. The company holds 3 patents on its convolutional neural network architecture and has completed clinical trials across 12 hospital systems. Revenue model is per-study licensing with enterprise hospital contracts. Currently generating $2.8M ARR from 40 hospital clients. Series A funded with $12M raised from healthcare-focused VCs. Based in Boston with regulatory and clinical teams.",
+      "evaluation_horizon_days": null,
+      "evidence_corpus": "healthcare_ai",
+      "founder_linkedin_urls": [],
+      "metadata": {
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence"
+        ]
+      },
+      "outcome": {
+        "exit_value_usd": null,
+        "notes": "Illustrative placeholder outcome \u2014 not independently verified. Set verified=true with sources to treat as real ground truth.",
+        "outcome_events": [
+          {
+            "amount_nominal_units": 5000000.0,
+            "description": "Illustrative placeholder outcome",
+            "kind": "arr_milestone",
+            "occurred_at": "2026-04-01",
+            "sources": [
+              "benchmarks/startup_cases/cases.py"
+            ],
+            "value_currency_usd": null
+          }
+        ],
+        "sources": [
+          "benchmarks/startup_cases/cases.py"
+        ],
+        "status": "operating",
+        "verification_date": "2026-06-30",
+        "verified": false,
+        "verified_by": null
+      },
+      "pitch_deck_url": null,
+      "sector": "Healthcare",
+      "stage": "Series A",
+      "website": "https://medvisionai.example.com"
+    },
+    {
+      "analysis_timestamp": "2026-01-01T00:00:00Z",
+      "company_id": "healthtech_device",
+      "company_name": "GlucoPulse",
+      "country": null,
+      "description": "GlucoPulse develops a non-invasive continuous glucose monitoring wearable using photoplethysmography sensors. The device provides real-time glucose trend data to a companion mobile app with AI-powered dietary recommendations. FDA 510(k) clearance obtained. Direct-to-consumer pricing at $299 device plus $19/month subscription. 8,000 units shipped in first quarter since launch. Raised $18M Series A from digital health investors. Based in San Diego, team of 45 including hardware engineers, clinical specialists, and data scientists. Founded in 2021.",
+      "evaluation_horizon_days": null,
+      "evidence_corpus": "healthtech_device",
+      "founder_linkedin_urls": [],
+      "metadata": {
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence"
+        ]
+      },
+      "outcome": {
+        "exit_value_usd": null,
+        "notes": "Illustrative placeholder outcome \u2014 not independently verified. Set verified=true with sources to treat as real ground truth.",
+        "outcome_events": [
+          {
+            "amount_nominal_units": 2000000.0,
+            "description": "Illustrative placeholder outcome",
+            "kind": "arr_milestone",
+            "occurred_at": "2026-04-01",
+            "sources": [
+              "benchmarks/startup_cases/cases.py"
+            ],
+            "value_currency_usd": null
+          }
+        ],
+        "sources": [
+          "benchmarks/startup_cases/cases.py"
+        ],
+        "status": "operating",
+        "verification_date": "2026-06-30",
+        "verified": false,
+        "verified_by": null
+      },
+      "pitch_deck_url": null,
+      "sector": "Healthcare",
+      "stage": "Series A",
+      "website": "https://glucopulse.example.com"
+    },
+    {
+      "analysis_timestamp": "2026-01-01T00:00:00Z",
+      "company_id": "marketplace",
+      "company_name": "SupplyHub",
+      "country": null,
+      "description": "SupplyHub operates a two-sided B2B marketplace connecting industrial equipment manufacturers with small and mid-size manufacturing facilities. The platform handles quoting, procurement, and logistics for MRO supplies across North America. Marketplace take rate is 12% on transactions. Currently facilitating $180M in GMV annually with 2,400 supplier listings and 8,500 active buyer accounts. Revenue of $21.6M with unit economics showing LTV/CAC of 4.2x. Raised $30M Series A. Founded in 2020, team of 65 based in Chicago.",
+      "evaluation_horizon_days": null,
+      "evidence_corpus": "marketplace",
+      "founder_linkedin_urls": [],
+      "metadata": {
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence"
+        ]
+      },
+      "outcome": {
+        "exit_value_usd": 200000000.0,
+        "notes": "Illustrative placeholder outcome \u2014 not independently verified. Set verified=true with sources to treat as real ground truth.",
+        "outcome_events": [
+          {
+            "amount_nominal_units": null,
+            "description": "Illustrative placeholder outcome",
+            "kind": "acquisition",
+            "occurred_at": "2026-03-15",
+            "sources": [
+              "benchmarks/startup_cases/cases.py"
+            ],
+            "value_currency_usd": 200000000.0
+          }
+        ],
+        "sources": [
+          "benchmarks/startup_cases/cases.py"
+        ],
+        "status": "acquired",
+        "verification_date": "2026-06-30",
+        "verified": false,
+        "verified_by": null
+      },
+      "pitch_deck_url": null,
+      "sector": "Marketplace",
+      "stage": "Series A",
+      "website": "https://supplyhub.example.com"
+    },
+    {
+      "analysis_timestamp": "2026-01-01T00:00:00Z",
+      "company_id": "mrr_only_derivation",
+      "company_name": "SubMetrics",
+      "country": null,
+      "description": "SubMetrics provides subscription analytics for B2B SaaS companies. The platform tracks MRR, churn, and expansion revenue across billing systems. Currently generating $85K MRR from 120 subscription customers on a $499/month plan. Founded in 2023, team of 8 based in Denver. Raised $2M seed from angel investors. Pre-revenue on enterprise tier, currently focused on product-market fit.",
+      "evaluation_horizon_days": null,
+      "evidence_corpus": "mrr_only_derivation",
+      "founder_linkedin_urls": [],
+      "metadata": {
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence"
+        ]
+      },
+      "outcome": null,
+      "pitch_deck_url": null,
+      "sector": "SaaS",
+      "stage": "Seed",
+      "website": "https://submetrics.example.com"
+    },
+    {
+      "analysis_timestamp": "2026-01-01T00:00:00Z",
+      "company_id": "revenue_team_efficiency",
+      "company_name": "DataPipe",
+      "country": null,
+      "description": "DataPipe provides automated data pipeline orchestration for analytics teams. The platform handles ETL, data quality monitoring, and warehouse optimization. Currently generating $6M ARR from 35 enterprise customers with average contract value of $171,000. Team of 15 engineers and 5 sales professionals based in New York. ARR per employee is exceptionally high at $300K. Raised $15M Series A. Founded in 2021.",
+      "evaluation_horizon_days": null,
+      "evidence_corpus": "revenue_team_efficiency",
+      "founder_linkedin_urls": [],
+      "metadata": {
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence"
+        ]
+      },
+      "outcome": null,
+      "pitch_deck_url": null,
+      "sector": "SaaS",
+      "stage": "Series A",
+      "website": "https://datapipe.example.com"
+    },
+    {
+      "analysis_timestamp": "2026-01-01T00:00:00Z",
+      "company_id": "robotics",
+      "company_name": "AutoWare Robotics",
+      "country": null,
+      "description": "AutoWare Robotics builds autonomous mobile robots for warehouse and fulfillment center operations. The robots use LiDAR-based SLAM navigation and handle goods-to-person picking, inventory scanning, and pallet transport. The company offers a Robotics-as-a-Service model with per-robot monthly fees covering hardware, maintenance, and software updates. Current fleet of 800 deployed robots across 15 customer facilities. Revenue model generates $6.4M ARR from RaaS contracts. Hardware costs funded through $52M in total funding including a Series B. Founded in 2019, team of 110 in Munich and Detroit.",
+      "evaluation_horizon_days": null,
+      "evidence_corpus": "robotics",
+      "founder_linkedin_urls": [],
+      "metadata": {
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence"
+        ]
+      },
+      "outcome": {
+        "exit_value_usd": null,
+        "notes": "Illustrative placeholder outcome \u2014 not independently verified. Set verified=true with sources to treat as real ground truth.",
+        "outcome_events": [
+          {
+            "amount_nominal_units": null,
+            "description": "Illustrative placeholder outcome",
+            "kind": "shutdown",
+            "occurred_at": "2026-03-01",
+            "sources": [
+              "benchmarks/startup_cases/cases.py"
+            ],
+            "value_currency_usd": null
+          }
+        ],
+        "sources": [
+          "benchmarks/startup_cases/cases.py"
+        ],
+        "status": "shutdown",
+        "verification_date": "2026-06-30",
+        "verified": false,
+        "verified_by": null
+      },
+      "pitch_deck_url": null,
+      "sector": "Robotics",
+      "stage": "Series B",
+      "website": "https://autoware.example.com"
+    },
+    {
+      "analysis_timestamp": "2026-01-01T00:00:00Z",
+      "company_id": "unit_economics",
+      "company_name": "RetentionAI",
+      "country": null,
+      "description": "RetentionAI provides an AI-powered SaaS platform for customer retention analytics, serving subscription-based businesses. The platform predicts churn risk and recommends intervention strategies. CAC is $2,400 with LTV of $18,000. Currently serving 80 subscription businesses with $2.4M ARR. Monthly burn rate of $200K with $4M in total funding. Team of 18 based in Chicago. Founded in 2022. Net revenue retention of 125%.",
+      "evaluation_horizon_days": null,
+      "evidence_corpus": "unit_economics",
+      "founder_linkedin_urls": [],
+      "metadata": {
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence"
+        ]
+      },
+      "outcome": null,
+      "pitch_deck_url": null,
+      "sector": "SaaS",
+      "stage": "Series A",
+      "website": "https://retentionai.example.com"
+    }
+  ]
+}

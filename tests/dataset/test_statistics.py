@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from predictron_engine.dataset.models import CompanyProfile
 from predictron_engine.dataset.statistics import compute_dataset_stats
 from predictron_engine.dataset.store import DatasetStore
 from tests.dataset.conftest import make_record
@@ -89,5 +90,39 @@ def test_stats_to_dict(tmp_path) -> None:
     d = stats.to_dict()
     assert "record_count" in d
     assert "sectors" in d
+    assert "industries" in d
     assert "duplicate_report" in d
     assert "missing_fields" in d
+
+
+def test_profile_industries_and_countries_tallied(tmp_path) -> None:
+    store = DatasetStore(tmp_path)
+    store.initialize()
+    store.save_record(
+        make_record(record_id="a").model_copy(
+            update={
+                "profile": CompanyProfile(
+                    industries=["Software", "ai"],
+                    country_code="US",
+                )
+            }
+        )
+    )
+    store.save_record(
+        make_record(record_id="b").model_copy(
+            update={
+                "profile": CompanyProfile(
+                    industries=["software"],
+                    country_code="GB",
+                )
+            }
+        )
+    )
+    stats = compute_dataset_stats(store)
+    # Two records with profile data; no unknown country.
+    assert stats.industries == {"software": 2, "ai": 1}
+    assert stats.countries == {"US": 1, "GB": 1}
+    # Fallback: records without profile country count as unknown.
+    store.save_record(make_record(record_id="c"))
+    stats = compute_dataset_stats(store)
+    assert stats.countries["unknown"] == 1

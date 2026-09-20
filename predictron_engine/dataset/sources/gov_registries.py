@@ -17,6 +17,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from predictron_engine.dataset.imports import RawImportRecord
+from predictron_engine.dataset.models import CompanyProfile
 
 
 class CompaniesHouseSource:
@@ -98,6 +99,20 @@ class CompaniesHouseSource:
             # Companies House does not publish websites directly; leave
             # website empty so the record is flagged as incomplete unless
             # enriched elsewhere.
+            profile = CompanyProfile(
+                country_code="GB",
+                legal_name=company_name.strip(),
+                status=(
+                    "dissolved"
+                    if company_status and company_status.lower() == "dissolved"
+                    else "active"
+                ),
+            )
+            if sic_code:
+                profile.industries = [str(sic_code).strip()]
+            if analysis_date:
+                profile.founded_year = analysis_date.year
+
             records.append(
                 RawImportRecord(
                     startup_name=company_name,
@@ -107,6 +122,7 @@ class CompaniesHouseSource:
                     metadata=metadata,
                     tags=["companies_house"],
                     source="companies_house",
+                    profile=profile,
                 )
             )
 
@@ -205,6 +221,16 @@ class UsStateRegistrySource:
                     except (ValueError, TypeError):
                         pass
 
+            profile = CompanyProfile(
+                legal_name=company_name.strip(),
+            )
+            if jurisdiction:
+                from predictron_engine.dataset.enrichment import normalize_country_code
+
+                profile.country_code = normalize_country_code(jurisdiction)
+            if analysis_date:
+                profile.founded_year = analysis_date.year
+
             records.append(
                 RawImportRecord(
                     startup_name=company_name,
@@ -214,6 +240,7 @@ class UsStateRegistrySource:
                     metadata=metadata,
                     tags=["us_state_registry"],
                     source="us_state_registry",
+                    profile=profile,
                 )
             )
 

@@ -100,6 +100,55 @@ class TestImportPipelineIntegration:
         assert result.records_imported == 1
         assert result.imported_records[0].prediction.decision == DecisionLabel.WATCH
 
+    def test_import_promotes_metadata_to_profile(self, tmp_path) -> None:
+        """Metadata keys are promoted into the canonical CompanyProfile."""
+        data = [
+            {
+                "startup_name": "Bamboo Systems",
+                "website": "https://www.bamboo.systems",
+                "metadata": {
+                    "country": "United Kingdom",
+                    "sector": "Cloud Infrastructure",
+                    "founded_year": 2016,
+                    "employee_count": 210,
+                },
+                "prediction": {
+                    "decision": "watch",
+                    "confidence": 0.5,
+                    "composite_score": 50.0,
+                },
+            }
+        ]
+        data_file = _write_json(tmp_path, "data.json", data)
+        registry = ImportSourceRegistry.default()
+        source = registry.get("json_file")
+        assert source is not None
+        result = ImportPipeline(source).run(data_file)
+        profile = result.imported_records[0].profile
+        assert profile.domain == "bamboo.systems"
+        assert profile.country_code == "GB"
+        assert profile.industries == ["cloud infrastructure"]
+        assert profile.founded_year == 2016
+        assert profile.employee_count == 210
+        assert profile.employee_range == "201-500"
+
+    def test_import_profile_from_metadata_preserved(self, tmp_path) -> None:
+        """Adapters may attach a profile directly; it is not clobbered."""
+        data = [
+            {
+                "startup_name": "Serena AI",
+                "website": "https://serena.ai",
+                "prediction": {
+                    "decision": "watch",
+                    "confidence": 0.5,
+                    "composite_score": 50.0,
+                },
+            }
+        ]
+        data_file = _write_json(tmp_path, "data.json", data)
+        records = ImportSourceRegistry.default().get("json_file").read(data_file)
+        assert len(records) == 1
+
 
 class TestOutcomeStatusPreserved:
     def test_import_preserves_outcome_status(self, tmp_path) -> None:

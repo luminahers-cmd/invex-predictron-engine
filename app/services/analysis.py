@@ -45,12 +45,16 @@ async def run_analysis(
     report = await asyncio.to_thread(engine.analyze, request)
     response = _report_to_response(request.startup_name, report)
 
+    persisted: AnalysisRequest | None = None
     try:
         persisted = await _persist_async(request, report, response, user_id=user_id)
         if persisted is not None and isinstance(getattr(persisted, "id", None), str):
             response.id = persisted.id
     except Exception:
         logger.warning("Persistence layer error (analysis still returned)", exc_info=True)
+
+    if persisted is not None:
+        await _ingest_company_hook(persisted, request, report, response, user_id=user_id)
 
     return response
 
@@ -80,6 +84,42 @@ async def _persist_async(
     except Exception:
         logger.warning("Failed to persist analysis", exc_info=True)
         return None
+
+
+async def _ingest_company_hook(
+    analysis: AnalysisRequest,
+    request: StartupAnalysisRequest,
+    report: Report,
+    response: StartupAnalysisResponse,
+    user_id: str | None = None,
+) -> None:
+    """Company Intelligence Hub hook — runs after analysis persistence.
+
+    This is the single integration point for CIH Phase 1. It is deliberately
+    small and additive: it resolves the company identity, upserts the
+    company, and appends one immutable snapshot. Failures are logged and
+    swallowed so a registry hiccup never masks a successful analysis.
+    """
+    from app.db.session import AsyncSessionLocal
+    from app.services.companies import (
+        CompanyIngestService,
+        build_snapshot_inputs,
+    )
+
+    try:
+        inputs = build_snapshot_inputs(request, report, response)
+        service = CompanyIngestService()
+        async with AsyncSessionLocal() as session:
+            await service.ingest_after_persist(
+                session, analysis=analysis, inputs=inputs, user_id=user_id
+            )
+            await session.commit()
+        logger.debug("Company registry ingest completed for analysis %s", analysis.id)
+    except Exception:
+        logger.warning(
+            "Company registry ingest failed (analysis still persisted)",
+            exc_info=True,
+        )
 
 
 def _report_to_response(

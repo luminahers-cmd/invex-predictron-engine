@@ -103,6 +103,10 @@ def _record_keys(record: DatasetRecord) -> list[str]:
     """Return normalized identity keys for a record."""
     keys: list[str] = []
 
+    # 0. Structured domain from profile (highest priority).
+    if record.profile.domain:
+        keys.append(f"domain:{record.profile.domain}")
+
     # 1. Normalized identifiers from metadata.
     metadata = record.analysis_metadata
     for key in _IDENTIFIER_METADATA_KEYS:
@@ -112,11 +116,15 @@ def _record_keys(record: DatasetRecord) -> list[str]:
             if normalized:
                 keys.append(f"id:{normalized}")
 
-    # 2. Normalized website.
+    # 2. Normalized website and domain derived from the website so a
+    # record without a profile still matches by canonical domain.
     if record.website:
         website_key = _normalize_website(record.website)
         if website_key:
             keys.append(f"site:{website_key}")
+        domain_key = _domain_from_website(record.website)
+        if domain_key:
+            keys.append(f"domain:{domain_key}")
 
     # 3. Normalized company name.
     if record.startup_name:
@@ -125,6 +133,13 @@ def _record_keys(record: DatasetRecord) -> list[str]:
             keys.append(f"name:{name_key}")
 
     return keys
+
+
+def _domain_from_website(url: str) -> str:
+    """Extract the canonical domain (host only) from a website URL."""
+    from predictron_engine.dataset.enrichment import extract_domain
+
+    return extract_domain(url) or ""
 
 
 def _normalize_website(url: str) -> str:
@@ -189,13 +204,15 @@ def _count_methods(groups: list[list[DatasetRecord]]) -> dict[str, int]:
     For each group, determine the first shared key type present across
     all group members and increment its counter.
     """
-    counts: dict[str, int] = {"identifier": 0, "website": 0, "name": 0}
+    counts: dict[str, int] = {"domain": 0, "identifier": 0, "website": 0, "name": 0}
     for group in groups:
         key_sets = [set(_record_keys(r)) for r in group]
         if not key_sets:
             continue
         common = set.intersection(*key_sets)
-        if any(k.startswith("id:") for k in common):
+        if any(k.startswith("domain:") for k in common):
+            counts["domain"] += 1
+        elif any(k.startswith("id:") for k in common):
             counts["identifier"] += 1
         elif any(k.startswith("site:") for k in common):
             counts["website"] += 1
@@ -225,13 +242,14 @@ def match_record_to_store(
     A tuple of the matched existing record (or None) and the method used.
     """
     keys = _record_keys(record)
-    for method_key in ("id:", "site:", "name:"):
+    for method_key in ("domain:", "id:", "site:", "name:"):
         for key in keys:
             if not key.startswith(method_key):
                 continue
             for candidate in existing:
                 if _record_keys(candidate) and key in _record_keys(candidate):
                     method = {
+                        "domain:": "domain",
                         "id:": "identifier",
                         "site:": "website",
                         "name:": "name",

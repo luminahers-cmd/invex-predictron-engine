@@ -33,6 +33,10 @@ def validate_record_fields(
       - prediction confidence is in [0, 1]
       - prediction composite_score is in [0, 100]
       - prediction dimension_scores values are in [0, 100]
+      - profile domain matches the website host when both are present
+      - profile industry tags are non-empty
+      - profile founded_year is in [1800, 2200]
+      - profile employee_count is non-negative
     """
     now = now or datetime.now(UTC)
     issues: list[ValidationIssue] = []
@@ -97,6 +101,37 @@ def validate_record_fields(
                     "invalid_dimension_score", rid,
                     detail=f"dimension '{dim}' score {score} outside [0, 100]",
                 ))
+
+    profile = record.profile
+    if profile is not None:
+        if profile.domain and record.website:
+            website_domain = _domain_from_website(record.website)
+            if website_domain and profile.domain != website_domain:
+                issues.append(ValidationIssue(
+                    "domain_mismatch", rid,
+                    detail=(
+                        f"profile.domain '{profile.domain}' does not match "
+                        f"website host '{website_domain}'"
+                    ),
+                ))
+        for idx, tag in enumerate(profile.industries):
+            if not tag or not str(tag).strip():
+                issues.append(ValidationIssue(
+                    "empty_industry", rid,
+                    detail=f"profile.industries[{idx}] is empty",
+                ))
+        if profile.founded_year is not None and (
+            profile.founded_year < 1800 or profile.founded_year > 2200
+        ):
+            issues.append(ValidationIssue(
+                "invalid_founded_year", rid,
+                detail=f"profile.founded_year {profile.founded_year} outside [1800, 2200]",
+            ))
+        if profile.employee_count is not None and profile.employee_count < 0:
+            issues.append(ValidationIssue(
+                "invalid_employee_count", rid,
+                detail=f"profile.employee_count {profile.employee_count} is negative",
+            ))
 
     return issues
 
@@ -265,7 +300,38 @@ def validate_record_completeness(
     else:
         missing.append("evidence_bundle_reference")
 
+    profile = record.profile
+    if profile is not None:
+        profile_fields = (
+            "profile.domain",
+            "profile.industries",
+            "profile.country_code",
+            "profile.headquarters",
+            "profile.founded_year",
+            "profile.employee_count",
+            "profile.description",
+        )
+        for field_name in profile_fields:
+            value = _profile_field_value(profile, field_name)
+            _check_field(value, field_name, missing, present)
+
     return missing, present
+
+
+def _profile_field_value(profile: object, field_name: str) -> object:
+    """Return the value of a dot-named profile field, or None."""
+    short = field_name.split("profile.")[-1]
+    value = getattr(profile, short, None)
+    if isinstance(value, list):
+        return value if value else None
+    return value
+
+
+def _domain_from_website(url: str) -> str:
+    """Extract the canonical domain (host only) from a website URL."""
+    from predictron_engine.dataset.enrichment import extract_domain
+
+    return extract_domain(url) or ""
 
 
 def _check_field(

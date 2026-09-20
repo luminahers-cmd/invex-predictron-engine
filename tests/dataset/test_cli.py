@@ -191,6 +191,120 @@ class TestCliAnalyze:
         assert store.count_runs() == 1
 
 
+class TestCliEntityResolve:
+    def test_entity_resolve_empty_store(self, tmp_path, capsys) -> None:
+        dataset = tmp_path / "ds"
+        store = DatasetStore(dataset)
+        store.initialize()
+        rc = cli.main(["entity-resolve", "--dataset", str(dataset)])
+        assert rc == 0
+        out = json.loads(capsys.readouterr().out)
+        assert out["report"]["identity_count"] == 0
+
+    def test_entity_resolve_single_record(self, tmp_path, capsys) -> None:
+        dataset = tmp_path / "ds"
+        store = DatasetStore(dataset)
+        store.initialize()
+        store.save_record(make_record())
+        rc = cli.main(["entity-resolve", "--dataset", str(dataset)])
+        assert rc == 0
+        out = json.loads(capsys.readouterr().out)
+        assert out["report"]["identity_count"] == 1
+
+    def test_entity_resolve_merges_duplicates(self, tmp_path, capsys) -> None:
+        dataset = tmp_path / "ds"
+        store = DatasetStore(dataset)
+        store.initialize()
+        r1 = make_record(startup_name="Acme Corp", website="https://acme.com", record_id="a")
+        r2 = make_record(startup_name="Acme Corporation", website="https://acme.com", record_id="b")
+        store.save_record(r1)
+        store.save_record(r2)
+        rc = cli.main(["entity-resolve", "--dataset", str(dataset)])
+        assert rc == 0
+        out = json.loads(capsys.readouterr().out)
+        assert out["report"]["identity_count"] == 1
+        assert out["report"]["identity_count"] < 2
+
+    def test_entity_resolve_output_structure(self, tmp_path, capsys) -> None:
+        dataset = tmp_path / "ds"
+        store = DatasetStore(dataset)
+        store.initialize()
+        store.save_record(make_record())
+        rc = cli.main(["entity-resolve", "--dataset", str(dataset)])
+        assert rc == 0
+        out = json.loads(capsys.readouterr().out)
+        assert "identities" in out
+        assert "report" in out
+        assert "duplicate_clusters" in out["report"]
+        assert "confidence_distribution" in out["report"]
+        assert "merge_statistics" in out["report"]
+
+
+class TestCliDuplicateReview:
+    def test_duplicate_review_empty_store(self, tmp_path, capsys) -> None:
+        dataset = tmp_path / "ds"
+        store = DatasetStore(dataset)
+        store.initialize()
+        rc = cli.main(["duplicate-review", "--dataset", str(dataset)])
+        assert rc == 0
+        out = json.loads(capsys.readouterr().out)
+        assert out["report_type"] == "duplicate_review_report"
+        assert out["counts"]["automatic"] == 0
+        assert out["counts"]["manual_review"] == 0
+
+    def test_duplicate_review_with_merges(self, tmp_path, capsys) -> None:
+        dataset = tmp_path / "ds"
+        store = DatasetStore(dataset)
+        store.initialize()
+        r1 = make_record(startup_name="Acme Corp", website="https://acme.com", record_id="a")
+        r2 = make_record(startup_name="Acme Corporation", website="https://acme.com", record_id="b")
+        store.save_record(r1)
+        store.save_record(r2)
+        rc = cli.main(["duplicate-review", "--dataset", str(dataset)])
+        assert rc == 0
+        out = json.loads(capsys.readouterr().out)
+        assert "automatic" in out
+        assert "manual_review" in out
+        assert "unrelated" in out
+
+    def test_duplicate_review_output_structure(self, tmp_path, capsys) -> None:
+        dataset = tmp_path / "ds"
+        store = DatasetStore(dataset)
+        store.initialize()
+        store.save_record(make_record())
+        rc = cli.main(["duplicate-review", "--dataset", str(dataset)])
+        assert rc == 0
+        out = json.loads(capsys.readouterr().out)
+        assert "counts" in out
+        assert "automatic" in out["counts"]
+        assert "manual_review" in out["counts"]
+        assert "unrelated" in out["counts"]
+
+
+class TestCliDedup:
+    def test_dedup_empty_store(self, tmp_path, capsys) -> None:
+        dataset = tmp_path / "ds"
+        store = DatasetStore(dataset)
+        store.initialize()
+        rc = cli.main(["dedup", "--dataset", str(dataset)])
+        assert rc == 0
+        out = json.loads(capsys.readouterr().out)
+        assert out["group_count"] == 0
+
+    def test_dedup_with_duplicates(self, tmp_path, capsys) -> None:
+        dataset = tmp_path / "ds"
+        store = DatasetStore(dataset)
+        store.initialize()
+        r1 = make_record(startup_name="Acme Corp", website="https://acme.com", record_id="a")
+        r2 = make_record(startup_name="Acme Corporation", website="https://acme.com", record_id="b")
+        store.save_record(r1)
+        store.save_record(r2)
+        rc = cli.main(["dedup", "--dataset", str(dataset)])
+        assert rc == 0
+        out = json.loads(capsys.readouterr().out)
+        assert out["group_count"] >= 1
+
+
 class TestCliParser:
     def test_no_command_raises(self) -> None:
         import pytest
@@ -210,3 +324,39 @@ class TestCliParser:
         assert sub is not None
         for cmd in ("import", "analyze", "evaluate", "verify", "stats", "export"):
             assert cmd in sub.choices
+
+    def test_parser_has_entity_resolve(self) -> None:
+        import argparse
+
+        parser = cli.build_parser()
+        sub = None
+        for action in parser._actions:
+            if isinstance(action, argparse._SubParsersAction):
+                sub = action
+                break
+        assert sub is not None
+        assert "entity-resolve" in sub.choices
+
+    def test_parser_has_duplicate_review(self) -> None:
+        import argparse
+
+        parser = cli.build_parser()
+        sub = None
+        for action in parser._actions:
+            if isinstance(action, argparse._SubParsersAction):
+                sub = action
+                break
+        assert sub is not None
+        assert "duplicate-review" in sub.choices
+
+    def test_parser_has_dedup(self) -> None:
+        import argparse
+
+        parser = cli.build_parser()
+        sub = None
+        for action in parser._actions:
+            if isinstance(action, argparse._SubParsersAction):
+                sub = action
+                break
+        assert sub is not None
+        assert "dedup" in sub.choices

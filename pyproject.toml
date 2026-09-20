@@ -7,6 +7,9 @@ license = { text = "MIT" }
 
 [project.scripts]
 predictron-dataset = "predictron_engine.dataset.cli:main"
+predictron-benchmark = "benchmarks.ground_truth_eval.cli:main"
+predictron-feature = "predictron_engine.feature_store.cli:main"
+predictron-decision = "predictron_engine.decision.cli:main"
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
@@ -29,7 +32,7 @@ select = ["E", "F", "I", "N", "W", "UP"]
 [tool.mypy]
 python_version = "3.12"
 strict = true
-files = ["predictron_engine", "app", "benchmarks"]
+files = ["predictron_engine", "app", "benchmarks", "predictron_sdk"]
 exclude = ["^alembic/"]
 
 [[tool.mypy.overrides]]

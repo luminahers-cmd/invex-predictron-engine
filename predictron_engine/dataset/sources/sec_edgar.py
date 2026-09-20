@@ -19,6 +19,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from predictron_engine.dataset.imports import RawImportRecord
+from predictron_engine.dataset.models import CompanyProfile
 
 # SEC EDGAR standard field name mappings
 _CIK_FIELD = "cik"
@@ -109,6 +110,19 @@ class SecEdgarSource:
             if form_type:
                 metadata["latest_form_type"] = str(form_type)
 
+            profile = CompanyProfile()
+            if sic_desc:
+                profile.industries = [str(sic_desc).lower().strip()]
+            if country:
+                from predictron_engine.dataset.enrichment import normalize_country_code
+
+                profile.country_code = normalize_country_code(str(country))
+            if state:
+                profile.region = str(state)
+                profile.headquarters = f"{state}, {country}" if country else str(state)
+            if company_name:
+                profile.legal_name = str(company_name).strip()
+
             analysis_date: datetime | None = None
             filing_date = item.get(_FILING_DATE_FIELD)
             if filing_date:
@@ -128,6 +142,7 @@ class SecEdgarSource:
                     metadata=metadata,
                     tags=["sec_edgar"],
                     source="sec_edgar",
+                    profile=profile,
                 )
             )
 

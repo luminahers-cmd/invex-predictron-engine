@@ -4,14 +4,12 @@ from __future__ import annotations
 
 import csv
 import json
-import tempfile
 from pathlib import Path
 
 import pytest
 
 from predictron_engine.dataset.acquisition.sources.base import (
     FetchResult,
-    SourceDescriptor,
 )
 from predictron_engine.dataset.acquisition.sources.companies_house_connector import (
     CompaniesHouseConnector,

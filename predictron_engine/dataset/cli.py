@@ -8,6 +8,14 @@ Provides commands for the historical startup dataset pipeline:
   verify    Validate dataset integrity
   stats     Print dataset summary, coverage, outcomes, and metrics
   export    Write a JSON dataset report to a file
+  graph-build    Build the company knowledge graph (Project E3)
+  graph-report   Emit graph report / statistics / relationship summary
+  graph-query    Run read-only graph queries
+  signal-import  Import company signals from a JSON file (Project E4)
+  signal-report  Emit a full company-signals report (Project E4)
+  timeline       Show company signal timeline(s) (Project E4)
+  trend-report   Emit a deterministic trend report (Project E4)
+  signal-validate Validate stored signal timelines (Project E4)
 
 All commands delegate to the existing dataset API.  No business logic is
 duplicated here.
@@ -19,6 +27,7 @@ import argparse
 import json
 import sys
 from collections.abc import Sequence
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, cast
 
@@ -126,6 +135,47 @@ def cmd_acquire(args: argparse.Namespace) -> int:
     return 0 if not result.metrics.errors else 1
 
 
+def cmd_populate(args: argparse.Namespace) -> int:
+    """Populate the dataset from configured sources."""
+    from predictron_engine.dataset.population import (
+        PopulateOptions,
+        PopulationOrchestrator,
+    )
+    from predictron_engine.dataset.population_config import load_config
+
+    store = _build_store(args)
+
+    config = None
+    config_path = getattr(args, "config", None)
+    if config_path:
+        config = load_config(config_path)
+
+    since: datetime | None = None
+    since_str = getattr(args, "since", None)
+    if since_str:
+        try:
+            since = datetime.fromisoformat(since_str).replace(tzinfo=UTC)
+        except (ValueError, TypeError):
+            print(f"error: invalid --since date: {since_str}", file=sys.stderr)
+            return 1
+
+    options = PopulateOptions(
+        source_names=getattr(args, "source", None) or [],
+        all_sources=getattr(args, "all", False),
+        resume=getattr(args, "resume", False),
+        limit=getattr(args, "limit", None),
+        dry_run=getattr(args, "dry_run", False),
+        report_path=getattr(args, "report", None),
+        since=since,
+        config=config,
+    )
+
+    orchestrator = PopulationOrchestrator(store, config=config)
+    report = orchestrator.populate(options)
+    _json_out(report.to_dict())
+    return 0 if report.counts["failed"] == 0 else 1
+
+
 def cmd_acquire_status(args: argparse.Namespace) -> int:
     """Show acquisition status."""
     from predictron_engine.dataset.acquisition import AcquisitionManager
@@ -219,6 +269,222 @@ def cmd_dedup(args: argparse.Namespace) -> int:
             ],
         }
     )
+    return 0
+
+
+def _load_all_records(store: DatasetStore) -> list[Any]:
+    """Load every record in a store deterministically, dropping gaps."""
+    records = [
+        store.load_record(rid)
+        for rid in store.list_records()
+    ]
+    return [r for r in records if r is not None]
+
+
+def cmd_entity_resolve(args: argparse.Namespace) -> int:
+    """Resolve stored records into canonical company identities."""
+    from predictron_engine.dataset.entity_resolution import EntityResolver
+
+    store = _build_store(args)
+    records = _load_all_records(store)
+    resolver = EntityResolver()
+    result = resolver.resolve(records)
+    _json_out(result.to_dict())
+    return 0
+
+
+def cmd_duplicate_review(args: argparse.Namespace) -> int:
+    """Classify resolved clusters and list manual-review candidates."""
+    from predictron_engine.dataset.duplicate_review import build_review_report
+    from predictron_engine.dataset.entity_resolution import EntityResolver
+
+    store = _build_store(args)
+    records = _load_all_records(store)
+    resolver = EntityResolver()
+    resolved = resolver.resolve(records)
+    report = build_review_report(resolved.report)
+    _json_out(report.to_dict())
+    return 0
+
+
+def cmd_enrich(args: argparse.Namespace) -> int:
+    """Enrich records with structured company profiles.
+
+    Promotes raw source metadata (industries, headquarters, country,
+    founding date, headcount, description) into canonical, queryable
+    profile fields on every stored DatasetRecord.  Idempotent and
+    non-destructive.
+    """
+    from predictron_engine.dataset.enrichment import EnrichmentService
+
+    store = _build_store(args)
+    service = EnrichmentService(store)
+    report = service.enrich_store()
+    _json_out(report.to_dict())
+    return 0
+
+
+def _build_graph_result(args: argparse.Namespace) -> Any:
+    """Build the company knowledge graph for a store."""
+    from predictron_engine.dataset.graph.builder import (
+        CompanyKnowledgeGraphBuilder,
+    )
+
+    store = _build_store(args)
+    records = _load_all_records(store)
+    outcomes: dict[str, Any] = {}
+    if getattr(args, "include_outcomes", False):
+        for outcome_id in store.list_outcomes():
+            outcome = store.load_outcome(outcome_id)
+            if outcome is not None:
+                outcomes[outcome.record_id] = outcome
+    return CompanyKnowledgeGraphBuilder().build(records, outcomes=outcomes)
+
+
+def _write_maybe(args: argparse.Namespace, data: dict[str, Any]) -> bool:
+    """Write ``data`` to ``--output`` when given; return True if written."""
+    output = getattr(args, "output", None)
+    if not output:
+        return False
+    path = Path(output)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        json.dumps(data, indent=2, default=str), encoding="utf-8"
+    )
+    print(path)
+    return True
+
+
+def cmd_graph_build(args: argparse.Namespace) -> int:
+    """Build the company knowledge graph from stored records."""
+    result = _build_graph_result(args)
+    data = result.report.to_dict()
+    data["identity_count"] = len(result.identities)
+    if not _write_maybe(args, data):
+        _json_out(data)
+    return 0 if not result.report.provenance_issues else 1
+
+
+def cmd_graph_report(args: argparse.Namespace) -> int:
+    """Emit a knowledge graph report document."""
+    from predictron_engine.dataset.graph.builder import (
+        CompanyKnowledgeGraphBuilder,
+    )
+    from predictron_engine.dataset.graph.reports import (
+        build_graph_report,
+        build_graph_statistics,
+        build_relationship_summary,
+    )
+
+    store = _build_store(args)
+    records = _load_all_records(store)
+    builder = CompanyKnowledgeGraphBuilder()
+    result = builder.build(records)
+    graph = result.graph
+
+    report_style = getattr(args, "report", "full")
+    if report_style == "statistics":
+        data = build_graph_statistics(graph)
+    elif report_style == "relationship":
+        data = build_relationship_summary(graph)
+    else:
+        data = build_graph_report(graph)
+    data["graph_key"] = result.report.graph_key
+    if not _write_maybe(args, data):
+        _json_out(data)
+    return 0
+
+
+def cmd_graph_query(args: argparse.Namespace) -> int:
+    """Run a read-only query against the company knowledge graph."""
+    from predictron_engine.dataset.graph.builder import (
+        CompanyKnowledgeGraphBuilder,
+    )
+    from predictron_engine.dataset.graph.metrics import compute_graph_metrics
+    from predictron_engine.dataset.graph.queries import GraphQueries
+
+    store = _build_store(args)
+    records = _load_all_records(store)
+    graph = CompanyKnowledgeGraphBuilder().build(records).graph
+    queries = GraphQueries(graph)
+
+    query = getattr(args, "query", "")
+    data: Any = None
+    if query in (
+        "companies-by-industry",
+        "companies-by-country",
+        "companies-using-technology",
+    ):
+        value = getattr(args, "value", None)
+        if not value:
+            print("error: --value is required", file=sys.stderr)
+            return 1
+        if query == "companies-by-industry":
+            data = queries.companies_by_industry(value)
+        elif query == "companies-by-country":
+            data = queries.companies_by_country(value)
+        else:
+            data = queries.companies_using_technology(value)
+    elif query == "neighbors":
+        node = getattr(args, "node", None)
+        if not node:
+            print("error: --node is required", file=sys.stderr)
+            return 1
+        node_id = queries.lookup(node)
+        if node_id is None:
+            print(f"error: node '{node}' not found", file=sys.stderr)
+            return 1
+        edge_type = _coerce_edge_type(getattr(args, "edge_type", None))
+        if getattr(args, "edge_type", None) and edge_type is None:
+            print(
+                f"error: unknown edge type '{getattr(args, 'edge_type')}'",
+                file=sys.stderr,
+            )
+            return 1
+        data = queries.neighbors(
+            node_id,
+            edge_type=edge_type,
+            bidirectional=not getattr(args, "directed", False),
+        )
+    elif query == "similar-companies":
+        node = getattr(args, "node", None)
+        if not node:
+            print("error: --node is required", file=sys.stderr)
+            return 1
+        node_id = queries.lookup(node)
+        if node_id is None:
+            print(f"error: node '{node}' not found", file=sys.stderr)
+            return 1
+        data = queries.similar_companies(
+            node_id, limit=getattr(args, "limit", 10) or 10
+        )
+    elif query == "shortest-path":
+        source = getattr(args, "source", None)
+        target = getattr(args, "target", None)
+        if not source or not target:
+            print("error: --source and --target are required", file=sys.stderr)
+            return 1
+        data = queries.shortest_path(
+            source,
+            target,
+            bidirectional=not getattr(args, "directed", False),
+        )
+    elif query == "connected-components":
+        components = queries.connected_components()
+        data = {
+            "component_count": len(components),
+            "components": [
+                {"size": len(component), "nodes": component}
+                for component in components
+            ],
+        }
+    elif query == "metrics":
+        data = compute_graph_metrics(graph).to_dict()
+    else:
+        print(f"error: unknown graph query: {query}", file=sys.stderr)
+        return 1
+
+    _json_out(data)
     return 0
 
 
@@ -341,6 +607,18 @@ def _infer_source(path: str) -> str:
     return "json_file"
 
 
+def _coerce_edge_type(value: str | None) -> Any:
+    """Coerce a CLI edge-type string to an EdgeType, or None when invalid."""
+    if not value:
+        return None
+    from predictron_engine.dataset.graph.model import EdgeType
+
+    try:
+        return EdgeType(value.strip().upper())
+    except ValueError:
+        return None
+
+
 def _add_common_args(parser: argparse.ArgumentParser) -> None:
     parser.add_argument(
         "--dataset",
@@ -369,6 +647,30 @@ def build_parser() -> argparse.ArgumentParser:
     p_dedup = sub.add_parser("dedup", help="Report duplicate startup records")
     _add_common_args(p_dedup)
     p_dedup.set_defaults(func=cmd_dedup)
+
+    # entity-resolve
+    p_entity = sub.add_parser(
+        "entity-resolve",
+        help="Resolve records into canonical company identities",
+    )
+    _add_common_args(p_entity)
+    p_entity.set_defaults(func=cmd_entity_resolve)
+
+    # duplicate-review
+    p_review = sub.add_parser(
+        "duplicate-review",
+        help="Classify clusters and list manual-review candidates",
+    )
+    _add_common_args(p_review)
+    p_review.set_defaults(func=cmd_duplicate_review)
+
+    # enrich
+    p_enrich = sub.add_parser(
+        "enrich",
+        help="Promote source metadata into structured company profiles",
+    )
+    _add_common_args(p_enrich)
+    p_enrich.set_defaults(func=cmd_enrich)
 
     # statistics
     p_stats = sub.add_parser(
@@ -419,6 +721,126 @@ def build_parser() -> argparse.ArgumentParser:
     p_acquire.add_argument("--dry-run", action="store_true", default=False)
     p_acquire.set_defaults(func=cmd_acquire)
 
+    # populate (main command, V4)
+    p_populate = sub.add_parser(
+        "populate", help="Populate the dataset from configured sources"
+    )
+    _add_common_args(p_populate)
+    p_populate.add_argument(
+        "--source", type=str, action="append", default=None,
+        help="Source connector(s) to populate (repeatable)",
+    )
+    p_populate.add_argument(
+        "--all", action="store_true", default=False,
+        help="Populate from all configured sources",
+    )
+    p_populate.add_argument(
+        "--resume", action="store_true", default=False,
+        help="Resume incomplete acquisitions from checkpoints",
+    )
+    p_populate.add_argument("--limit", type=int, default=None)
+    p_populate.add_argument("--dry-run", action="store_true", default=False)
+    p_populate.add_argument(
+        "--report", type=str, default=None,
+        help="Path to write the population JSON report",
+    )
+    p_populate.add_argument("--since", type=str, default=None)
+    p_populate.add_argument(
+        "--config", type=str, default=None,
+        help="Path to a population config JSON file",
+    )
+    p_populate.set_defaults(func=cmd_populate)
+
+    # graph-build
+    p_graph_build = sub.add_parser(
+        "graph-build",
+        help="Build the company knowledge graph from stored records",
+    )
+    _add_common_args(p_graph_build)
+    p_graph_build.add_argument(
+        "--include-outcomes",
+        action="store_true",
+        default=False,
+        help="Also derive investor/acquisition edges from outcome records",
+    )
+    p_graph_build.add_argument(
+        "--output", type=str, default=None,
+        help="Path to write the JSON build report",
+    )
+    p_graph_build.set_defaults(func=cmd_graph_build)
+
+    # graph-report
+    p_graph_report = sub.add_parser(
+        "graph-report",
+        help="Emit a knowledge graph report (full / statistics / relationship)",
+    )
+    _add_common_args(p_graph_report)
+    p_graph_report.add_argument(
+        "--report",
+        type=str,
+        choices=["full", "statistics", "relationship"],
+        default="full",
+        help="Report document to emit",
+    )
+    p_graph_report.add_argument(
+        "--output", type=str, default=None,
+        help="Path to write the JSON report",
+    )
+    p_graph_report.set_defaults(func=cmd_graph_report)
+
+    # graph-query
+    p_graph_query = sub.add_parser(
+        "graph-query",
+        help="Run a read-only query against the company knowledge graph",
+    )
+    _add_common_args(p_graph_query)
+    p_graph_query.add_argument(
+        "query",
+        type=str,
+        choices=[
+            "neighbors",
+            "shortest-path",
+            "connected-components",
+            "similar-companies",
+            "companies-by-industry",
+            "companies-by-country",
+            "companies-using-technology",
+            "metrics",
+        ],
+        help="Query to run",
+    )
+    p_graph_query.add_argument(
+        "--node", type=str, default=None,
+        help="Node ID or company/attribute label for neighbor/similar queries",
+    )
+    p_graph_query.add_argument(
+        "--edge-type", type=str, default=None,
+        help="Restrict neighbor results to one edge type",
+    )
+    p_graph_query.add_argument(
+        "--source", type=str, default=None,
+        help="Start node for shortest-path",
+    )
+    p_graph_query.add_argument(
+        "--target", type=str, default=None,
+        help="End node for shortest-path",
+    )
+    p_graph_query.add_argument(
+        "--value", type=str, default=None,
+        help="Industry / country / technology value for attribute queries",
+    )
+    p_graph_query.add_argument(
+        "--limit", type=int, default=10,
+        help="Maximum results for similar-companies",
+    )
+    p_graph_query.add_argument(
+        "--directed",
+        action="store_true",
+        default=False,
+        help="Treat edges as directed (default: traverse both directions)",
+    )
+    p_graph_query.set_defaults(func=cmd_graph_query)
+
     # acquire status
     p_acq_status = sub.add_parser("acquire-status", help="Show acquisition status")
     _add_common_args(p_acq_status)
@@ -440,6 +862,11 @@ def build_parser() -> argparse.ArgumentParser:
     p_acq_sched.add_argument("--schedule-source", type=str, default=None)
     p_acq_sched.add_argument("--frequency", type=str, default="weekly")
     p_acq_sched.set_defaults(func=cmd_acquire_schedule)
+
+    # signal-import / signal-report / timeline / trend-report / signal-validate
+    from predictron_engine.dataset.cli_signal import add_signal_subparsers
+
+    add_signal_subparsers(sub)
 
     return parser
 

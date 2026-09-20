@@ -1,0 +1,1129 @@
+{
+  "benchmark_version": "1.0",
+  "created_at": "2026-09-20T00:00:00Z",
+  "dataset_name": "predictron_cohort_starter",
+  "entries": [
+    {
+      "analysis_timestamp": "2026-01-01T00:00:00Z",
+      "company_id": "ai_infrastructure",
+      "company_name": "Inference Labs",
+      "country": null,
+      "evaluation_horizon_days": null,
+      "historical_evidence": {
+        "corpus_name": "ai_infrastructure",
+        "corpus_path": null,
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence",
+          "ai_infrastructure"
+        ]
+      },
+      "historical_prediction": {
+        "composite_score": 70.41,
+        "decision": "invest",
+        "dimension_scores": {
+          "business_model_viability": 83.4022,
+          "competitive_position": 50.0,
+          "founder_quality": 58.89544,
+          "market_opportunity": 71.3526,
+          "product_strength": 89.72824,
+          "team_execution": 73.12,
+          "traction_signals": 66.391
+        },
+        "overall_confidence": 0.6147,
+        "overall_score": 70.41,
+        "recommendation_categories": [
+          "due_diligence",
+          "follow_up",
+          "opportunity",
+          "risk_mitigation"
+        ]
+      },
+      "metadata": {
+        "builder": "scripts/build_cohort.py",
+        "evidence_scope": {
+          "as_of": "2026-01-01T00:00:00Z",
+          "dropped_documents": 0,
+          "dropped_sources": 0,
+          "earliest_dropped_fetched_at": null,
+          "latest_retained_fetched_at": "2026-01-01T00:00:00Z",
+          "retained_documents": 1,
+          "retained_sources": 8
+        },
+        "manifest_hash": "f8cfa720ebae52bf2ac9393dd952a1f609d9cbc0822982eaa606be8bc2778038"
+      },
+      "provenance": {
+        "collector": "scripts/build_cohort.py",
+        "is_example": true,
+        "notes": "Illustrative placeholder outcome \u2014 not independently verified. Set verified=true with sources to treat as real ground truth.",
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence",
+          "ai_infrastructure"
+        ],
+        "verified_by": null
+      },
+      "request": {
+        "description": "Inference Labs provides GPU-optimized model serving infrastructure for teams deploying large language models in production. The platform handles auto-scaling, model versioning, A/B testing, and cost optimization across multi-cloud GPU clusters. Supports PyTorch, TensorFlow, and ONNX models. Processing over 2 billion inference requests daily for 150 enterprise customers. Usage-based pricing with average customer spend of $18,000/month. Raised $65M Series A. Founded in 2023 by former infrastructure leads from major AI labs. Team of 75 in San Francisco and Toronto.",
+        "startup_name": "Inference Labs",
+        "website": "https://inferencelabs.example.com"
+      },
+      "sector": "Infrastructure",
+      "stage": "Series A",
+      "verified_outcome": {
+        "exit_value_usd": null,
+        "outcome_events": [],
+        "sources": [
+          "benchmarks/startup_cases/cases.py"
+        ],
+        "status": "operating",
+        "verification_date": "2026-06-30"
+      }
+    },
+    {
+      "analysis_timestamp": "2026-01-01T00:00:00Z",
+      "company_id": "b2b_saas",
+      "company_name": "Analytix Cloud",
+      "country": null,
+      "evaluation_horizon_days": null,
+      "historical_evidence": {
+        "corpus_name": "b2b_saas",
+        "corpus_path": null,
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence",
+          "b2b_saas"
+        ]
+      },
+      "historical_prediction": {
+        "composite_score": 69.72,
+        "decision": "invest",
+        "dimension_scores": {
+          "business_model_viability": 87.9208,
+          "competitive_position": 52.5,
+          "founder_quality": 49.9114,
+          "market_opportunity": 72.23859999999999,
+          "product_strength": 77.39512,
+          "team_execution": 69.12,
+          "traction_signals": 78.9722
+        },
+        "overall_confidence": 0.6149,
+        "overall_score": 69.72,
+        "recommendation_categories": [
+          "due_diligence",
+          "opportunity",
+          "risk_mitigation"
+        ]
+      },
+      "metadata": {
+        "builder": "scripts/build_cohort.py",
+        "evidence_scope": {
+          "as_of": "2026-01-01T00:00:00Z",
+          "dropped_documents": 0,
+          "dropped_sources": 0,
+          "earliest_dropped_fetched_at": null,
+          "latest_retained_fetched_at": "2026-01-01T00:00:00Z",
+          "retained_documents": 1,
+          "retained_sources": 8
+        },
+        "manifest_hash": "f8cfa720ebae52bf2ac9393dd952a1f609d9cbc0822982eaa606be8bc2778038"
+      },
+      "provenance": {
+        "collector": "scripts/build_cohort.py",
+        "is_example": true,
+        "notes": "Illustrative placeholder outcome \u2014 not independently verified. Set verified=true with sources to treat as real ground truth.",
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence",
+          "b2b_saas"
+        ],
+        "verified_by": null
+      },
+      "request": {
+        "description": "Analytix Cloud is a B2B SaaS platform providing real-time analytics and business intelligence for mid-market enterprises. The platform integrates with existing data warehouses and delivers automated insight generation through proprietary query optimization. Revenue is subscription-based with annual contracts averaging $48,000 ARR. The company has 85 enterprise clients and has achieved $4.2M ARR with 140% net revenue retention. Founded in 2021, the team of 35 engineers and sales professionals operates from San Francisco with a remote engineering hub in Austin.",
+        "startup_name": "Analytix Cloud",
+        "website": "https://analytixcloud.example.com"
+      },
+      "sector": "SaaS",
+      "stage": "Series A",
+      "verified_outcome": {
+        "exit_value_usd": 120000000.0,
+        "outcome_events": [
+          {
+            "amount_nominal_units": null,
+            "description": "Illustrative placeholder outcome",
+            "kind": "acquisition",
+            "occurred_at": "2026-03-15",
+            "sources": [
+              "benchmarks/startup_cases/cases.py"
+            ],
+            "value_currency_usd": 120000000.0
+          }
+        ],
+        "sources": [
+          "benchmarks/startup_cases/cases.py"
+        ],
+        "status": "acquired",
+        "verification_date": "2026-06-30"
+      }
+    },
+    {
+      "analysis_timestamp": "2026-01-01T00:00:00Z",
+      "company_id": "climate_tech",
+      "company_name": "CarbonLens",
+      "country": null,
+      "evaluation_horizon_days": null,
+      "historical_evidence": {
+        "corpus_name": "climate_tech",
+        "corpus_path": null,
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence",
+          "climate_tech"
+        ]
+      },
+      "historical_prediction": {
+        "composite_score": 68.31,
+        "decision": "invest",
+        "dimension_scores": {
+          "business_model_viability": 86.94619999999999,
+          "competitive_position": 52.5,
+          "founder_quality": 53.4554,
+          "market_opportunity": 70.9096,
+          "product_strength": 70.4666,
+          "team_execution": 72.12,
+          "traction_signals": 71.78083333333333
+        },
+        "overall_confidence": 0.6109,
+        "overall_score": 68.31,
+        "recommendation_categories": [
+          "due_diligence",
+          "follow_up",
+          "opportunity",
+          "risk_mitigation"
+        ]
+      },
+      "metadata": {
+        "builder": "scripts/build_cohort.py",
+        "evidence_scope": {
+          "as_of": "2026-01-01T00:00:00Z",
+          "dropped_documents": 0,
+          "dropped_sources": 0,
+          "earliest_dropped_fetched_at": null,
+          "latest_retained_fetched_at": "2026-01-01T00:00:00Z",
+          "retained_documents": 1,
+          "retained_sources": 8
+        },
+        "manifest_hash": "f8cfa720ebae52bf2ac9393dd952a1f609d9cbc0822982eaa606be8bc2778038"
+      },
+      "provenance": {
+        "collector": "scripts/build_cohort.py",
+        "is_example": true,
+        "notes": "Illustrative placeholder outcome \u2014 not independently verified. Set verified=true with sources to treat as real ground truth.",
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence",
+          "climate_tech"
+        ],
+        "verified_by": null
+      },
+      "request": {
+        "description": "CarbonLens provides enterprise-grade carbon accounting and emissions tracking software for Scope 1, 2, and 3 emissions. The platform integrates with ERP systems, supply chain tools, and IoT sensors to automate emissions data collection and reporting. Aligned with GHG Protocol and SEC climate disclosure requirements. Serving 60 enterprise clients across manufacturing, logistics, and energy sectors. ARR of $3.5M with 95% gross retention. Raised $8M seed from climate-focused VCs. Founded in 2022, team of 28, headquartered in Berlin with operations in the US.",
+        "startup_name": "CarbonLens",
+        "website": "https://carbonlens.example.com"
+      },
+      "sector": "Climate",
+      "stage": "Seed",
+      "verified_outcome": {
+        "exit_value_usd": null,
+        "outcome_events": [
+          {
+            "amount_nominal_units": 3000000.0,
+            "description": "Illustrative placeholder outcome",
+            "kind": "arr_milestone",
+            "occurred_at": "2026-04-01",
+            "sources": [
+              "benchmarks/startup_cases/cases.py"
+            ],
+            "value_currency_usd": null
+          }
+        ],
+        "sources": [
+          "benchmarks/startup_cases/cases.py"
+        ],
+        "status": "operating",
+        "verification_date": "2026-06-30"
+      }
+    },
+    {
+      "analysis_timestamp": "2026-01-01T00:00:00Z",
+      "company_id": "consumer_app",
+      "company_name": "FitSocial",
+      "country": null,
+      "evaluation_horizon_days": null,
+      "historical_evidence": {
+        "corpus_name": "consumer_app",
+        "corpus_path": null,
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence",
+          "consumer_app"
+        ]
+      },
+      "historical_prediction": {
+        "composite_score": 63.29,
+        "decision": "invest",
+        "dimension_scores": {
+          "business_model_viability": 82.339,
+          "competitive_position": 55.0,
+          "founder_quality": 48.1394,
+          "market_opportunity": 65.5936,
+          "product_strength": 63.29,
+          "team_execution": 66.05333333333334,
+          "traction_signals": 62.6255
+        },
+        "overall_confidence": 0.6017,
+        "overall_score": 63.29,
+        "recommendation_categories": [
+          "due_diligence",
+          "follow_up",
+          "opportunity",
+          "risk_mitigation"
+        ]
+      },
+      "metadata": {
+        "builder": "scripts/build_cohort.py",
+        "evidence_scope": {
+          "as_of": "2026-01-01T00:00:00Z",
+          "dropped_documents": 0,
+          "dropped_sources": 0,
+          "earliest_dropped_fetched_at": null,
+          "latest_retained_fetched_at": "2026-01-01T00:00:00Z",
+          "retained_documents": 1,
+          "retained_sources": 8
+        },
+        "manifest_hash": "f8cfa720ebae52bf2ac9393dd952a1f609d9cbc0822982eaa606be8bc2778038"
+      },
+      "provenance": {
+        "collector": "scripts/build_cohort.py",
+        "is_example": true,
+        "notes": "Illustrative placeholder outcome \u2014 not independently verified. Set verified=true with sources to treat as real ground truth.",
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence",
+          "consumer_app"
+        ],
+        "verified_by": null
+      },
+      "request": {
+        "description": "FitSocial is a consumer mobile application that combines fitness tracking with social networking. Users log workouts, share progress, and participate in community challenges. Monetization is through a freemium model with a $9.99/month premium subscription and sponsored brand partnerships. Currently has 420,000 monthly active users with 38,000 premium subscribers. Retention at D30 is 42%. Available on iOS and Android. Founded in 2022, team of 18, based in Los Angeles. Pre-seed stage with $1.5M raised from angels.",
+        "startup_name": "FitSocial",
+        "website": "https://fitsocial.example.com"
+      },
+      "sector": "Consumer",
+      "stage": "Pre-Seed",
+      "verified_outcome": {
+        "exit_value_usd": null,
+        "outcome_events": [
+          {
+            "amount_nominal_units": null,
+            "description": "Illustrative placeholder outcome",
+            "kind": "shutdown",
+            "occurred_at": "2026-03-01",
+            "sources": [
+              "benchmarks/startup_cases/cases.py"
+            ],
+            "value_currency_usd": null
+          }
+        ],
+        "sources": [
+          "benchmarks/startup_cases/cases.py"
+        ],
+        "status": "shutdown",
+        "verification_date": "2026-06-30"
+      }
+    },
+    {
+      "analysis_timestamp": "2026-01-01T00:00:00Z",
+      "company_id": "deep_tech",
+      "company_name": "QubitShield",
+      "country": null,
+      "evaluation_horizon_days": null,
+      "historical_evidence": {
+        "corpus_name": "deep_tech",
+        "corpus_path": null,
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence",
+          "deep_tech"
+        ]
+      },
+      "historical_prediction": {
+        "composite_score": 53.85,
+        "decision": "watch",
+        "dimension_scores": {
+          "business_model_viability": 47.9622,
+          "competitive_position": 52.5,
+          "founder_quality": 50.797399999999996,
+          "market_opportunity": 59.37388000000001,
+          "product_strength": 57.7968,
+          "team_execution": 60.053333333333335,
+          "traction_signals": 48.4495
+        },
+        "overall_confidence": 0.5378,
+        "overall_score": 53.85,
+        "recommendation_categories": [
+          "due_diligence",
+          "follow_up",
+          "opportunity",
+          "risk_mitigation"
+        ]
+      },
+      "metadata": {
+        "builder": "scripts/build_cohort.py",
+        "evidence_scope": {
+          "as_of": "2026-01-01T00:00:00Z",
+          "dropped_documents": 0,
+          "dropped_sources": 0,
+          "earliest_dropped_fetched_at": null,
+          "latest_retained_fetched_at": "2026-01-01T00:00:00Z",
+          "retained_documents": 1,
+          "retained_sources": 8
+        },
+        "manifest_hash": "f8cfa720ebae52bf2ac9393dd952a1f609d9cbc0822982eaa606be8bc2778038"
+      },
+      "provenance": {
+        "collector": "scripts/build_cohort.py",
+        "is_example": true,
+        "notes": "Illustrative placeholder outcome \u2014 not independently verified. Set verified=true with sources to treat as real ground truth.",
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence",
+          "deep_tech"
+        ],
+        "verified_by": null
+      },
+      "request": {
+        "description": "QubitShield develops quantum error correction software for superconducting quantum processors. The proprietary decoder algorithm achieves a 40% improvement in logical qubit fidelity compared to baseline surface codes. The company licenses software to quantum computing hardware manufacturers and cloud quantum providers. 3 peer-reviewed publications in Nature Physics and PRX Quantum. Pre-revenue, currently running pilot evaluations with 2 quantum hardware companies. Seed stage with $5M raised from deep-tech focused VCs. Founded in 2023 by a team of 3 quantum physicists from MIT. Based in Boston, team of 12.",
+        "startup_name": "QubitShield",
+        "website": "https://qubitshield.example.com"
+      },
+      "sector": "Deep Tech",
+      "stage": "Seed",
+      "verified_outcome": {
+        "exit_value_usd": null,
+        "outcome_events": [
+          {
+            "amount_nominal_units": null,
+            "description": "Illustrative placeholder outcome",
+            "kind": "shutdown",
+            "occurred_at": "2026-03-01",
+            "sources": [
+              "benchmarks/startup_cases/cases.py"
+            ],
+            "value_currency_usd": null
+          }
+        ],
+        "sources": [
+          "benchmarks/startup_cases/cases.py"
+        ],
+        "status": "shutdown",
+        "verification_date": "2026-06-30"
+      }
+    },
+    {
+      "analysis_timestamp": "2026-01-01T00:00:00Z",
+      "company_id": "devtools",
+      "company_name": "ShipKit",
+      "country": null,
+      "evaluation_horizon_days": null,
+      "historical_evidence": {
+        "corpus_name": "devtools",
+        "corpus_path": null,
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence",
+          "devtools"
+        ]
+      },
+      "historical_prediction": {
+        "composite_score": 64.15,
+        "decision": "watch",
+        "dimension_scores": {
+          "business_model_viability": 72.32719999999999,
+          "competitive_position": 50.0,
+          "founder_quality": 61.55344,
+          "market_opportunity": 58.204359999999994,
+          "product_strength": 76.82808,
+          "team_execution": 87.22,
+          "traction_signals": 42.912
+        },
+        "overall_confidence": 0.5868,
+        "overall_score": 64.15,
+        "recommendation_categories": [
+          "due_diligence",
+          "follow_up",
+          "opportunity",
+          "risk_mitigation"
+        ]
+      },
+      "metadata": {
+        "builder": "scripts/build_cohort.py",
+        "evidence_scope": {
+          "as_of": "2026-01-01T00:00:00Z",
+          "dropped_documents": 0,
+          "dropped_sources": 0,
+          "earliest_dropped_fetched_at": null,
+          "latest_retained_fetched_at": "2026-01-01T00:00:00Z",
+          "retained_documents": 1,
+          "retained_sources": 8
+        },
+        "manifest_hash": "f8cfa720ebae52bf2ac9393dd952a1f609d9cbc0822982eaa606be8bc2778038"
+      },
+      "provenance": {
+        "collector": "scripts/build_cohort.py",
+        "is_example": true,
+        "notes": "Illustrative placeholder outcome \u2014 not independently verified. Set verified=true with sources to treat as real ground truth.",
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence",
+          "devtools"
+        ],
+        "verified_by": null
+      },
+      "request": {
+        "description": "ShipKit is an open-source-first CI/CD platform designed for monorepo architectures. The platform provides incremental builds, intelligent test parallelization, and deployment orchestration for teams running microservices. The open-source core has 14,000 GitHub stars and 850 contributing developers. Commercial features include audit logging, SSO, and priority support. Currently converting 340 open-source users to paid plans at $299/month. Pre-revenue on commercial tier, currently in beta launch phase. Founded in 2023 by two ex-GitHub engineers based in Seattle.",
+        "startup_name": "ShipKit",
+        "website": "https://shipkit.dev"
+      },
+      "sector": "SaaS",
+      "stage": "Pre-Seed",
+      "verified_outcome": {
+        "exit_value_usd": null,
+        "outcome_events": [],
+        "sources": [
+          "benchmarks/startup_cases/cases.py"
+        ],
+        "status": "operating",
+        "verification_date": "2026-06-30"
+      }
+    },
+    {
+      "analysis_timestamp": "2026-01-01T00:00:00Z",
+      "company_id": "edtech",
+      "company_name": "SkillForge",
+      "country": null,
+      "evaluation_horizon_days": null,
+      "historical_evidence": {
+        "corpus_name": "edtech",
+        "corpus_path": null,
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence",
+          "edtech"
+        ]
+      },
+      "historical_prediction": {
+        "composite_score": 64.8,
+        "decision": "invest",
+        "dimension_scores": {
+          "business_model_viability": 85.17419999999998,
+          "competitive_position": 50.0,
+          "founder_quality": 53.4554,
+          "market_opportunity": 68.2516,
+          "product_strength": 60.27759999999999,
+          "team_execution": 72.12,
+          "traction_signals": 64.32366666666667
+        },
+        "overall_confidence": 0.6174,
+        "overall_score": 64.8,
+        "recommendation_categories": [
+          "due_diligence",
+          "follow_up",
+          "opportunity",
+          "risk_mitigation"
+        ]
+      },
+      "metadata": {
+        "builder": "scripts/build_cohort.py",
+        "evidence_scope": {
+          "as_of": "2026-01-01T00:00:00Z",
+          "dropped_documents": 0,
+          "dropped_sources": 0,
+          "earliest_dropped_fetched_at": null,
+          "latest_retained_fetched_at": "2026-01-01T00:00:00Z",
+          "retained_documents": 1,
+          "retained_sources": 8
+        },
+        "manifest_hash": "f8cfa720ebae52bf2ac9393dd952a1f609d9cbc0822982eaa606be8bc2778038"
+      },
+      "provenance": {
+        "collector": "scripts/build_cohort.py",
+        "is_example": true,
+        "notes": "Illustrative placeholder outcome \u2014 not independently verified. Set verified=true with sources to treat as real ground truth.",
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence",
+          "edtech"
+        ],
+        "verified_by": null
+      },
+      "request": {
+        "description": "SkillForge is a B2B EdTech platform providing AI-personalized corporate training programs for technology skills. The platform generates adaptive learning paths based on role requirements and individual skill gaps. Content library covers 200+ technology topics with hands-on labs. Serving 45 enterprise clients with 12,000 active learners. ACV of $35,000 with 90% gross retention. Raised $6M seed round. Founded in 2022, team of 22 based in New York. Previously operated as a consulting firm for 3 years before pivoting to SaaS.",
+        "startup_name": "SkillForge",
+        "website": "https://skillforge.example.com"
+      },
+      "sector": "EdTech",
+      "stage": "Seed",
+      "verified_outcome": {
+        "exit_value_usd": 40000000.0,
+        "outcome_events": [
+          {
+            "amount_nominal_units": null,
+            "description": "Illustrative placeholder outcome",
+            "kind": "acquisition",
+            "occurred_at": "2026-03-15",
+            "sources": [
+              "benchmarks/startup_cases/cases.py"
+            ],
+            "value_currency_usd": 40000000.0
+          }
+        ],
+        "sources": [
+          "benchmarks/startup_cases/cases.py"
+        ],
+        "status": "acquired",
+        "verification_date": "2026-06-30"
+      }
+    },
+    {
+      "analysis_timestamp": "2026-01-01T00:00:00Z",
+      "company_id": "enterprise_software",
+      "company_name": "ComplianceOS",
+      "country": null,
+      "evaluation_horizon_days": null,
+      "historical_evidence": {
+        "corpus_name": "enterprise_software",
+        "corpus_path": null,
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence",
+          "enterprise_software"
+        ]
+      },
+      "historical_prediction": {
+        "composite_score": 66.68,
+        "decision": "watch",
+        "dimension_scores": {
+          "business_model_viability": 81.7188,
+          "competitive_position": 58.5,
+          "founder_quality": 49.9114,
+          "market_opportunity": 70.9096,
+          "product_strength": 77.99759999999999,
+          "team_execution": 65.12,
+          "traction_signals": 62.6255
+        },
+        "overall_confidence": 0.6542,
+        "overall_score": 66.68,
+        "recommendation_categories": [
+          "due_diligence",
+          "follow_up",
+          "opportunity",
+          "risk_mitigation"
+        ]
+      },
+      "metadata": {
+        "builder": "scripts/build_cohort.py",
+        "evidence_scope": {
+          "as_of": "2026-01-01T00:00:00Z",
+          "dropped_documents": 0,
+          "dropped_sources": 0,
+          "earliest_dropped_fetched_at": null,
+          "latest_retained_fetched_at": "2026-01-01T00:00:00Z",
+          "retained_documents": 1,
+          "retained_sources": 8
+        },
+        "manifest_hash": "f8cfa720ebae52bf2ac9393dd952a1f609d9cbc0822982eaa606be8bc2778038"
+      },
+      "provenance": {
+        "collector": "scripts/build_cohort.py",
+        "is_example": true,
+        "notes": "Illustrative placeholder outcome \u2014 not independently verified. Set verified=true with sources to treat as real ground truth.",
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence",
+          "enterprise_software"
+        ],
+        "verified_by": null
+      },
+      "request": {
+        "description": "ComplianceOS is an enterprise compliance management platform that automates regulatory tracking, policy management, and audit preparation for financial services companies. The platform covers SOC 2, PCI DSS, GDPR, and CCPA compliance workflows with automated evidence collection and control monitoring. Serving 95 financial institutions including 8 top-20 US banks. ACV of $120,000 with 98% gross retention. Series C stage with $85M raised. Team of 200 across New York, Charlotte, and remote. Founded in 2018.",
+        "startup_name": "ComplianceOS",
+        "website": "https://complianceos.example.com"
+      },
+      "sector": "Enterprise",
+      "stage": "Series C",
+      "verified_outcome": {
+        "exit_value_usd": 80000000.0,
+        "outcome_events": [
+          {
+            "amount_nominal_units": null,
+            "description": "Illustrative placeholder outcome",
+            "kind": "acquisition",
+            "occurred_at": "2026-03-15",
+            "sources": [
+              "benchmarks/startup_cases/cases.py"
+            ],
+            "value_currency_usd": 80000000.0
+          }
+        ],
+        "sources": [
+          "benchmarks/startup_cases/cases.py"
+        ],
+        "status": "acquired",
+        "verification_date": "2026-06-30"
+      }
+    },
+    {
+      "analysis_timestamp": "2026-01-01T00:00:00Z",
+      "company_id": "fintech",
+      "company_name": "PayBridge",
+      "country": null,
+      "evaluation_horizon_days": null,
+      "historical_evidence": {
+        "corpus_name": "fintech",
+        "corpus_path": null,
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence",
+          "fintech"
+        ]
+      },
+      "historical_prediction": {
+        "composite_score": 64.85,
+        "decision": "watch",
+        "dimension_scores": {
+          "business_model_viability": 68.606,
+          "competitive_position": 50.0,
+          "founder_quality": 55.227399999999996,
+          "market_opportunity": 70.9096,
+          "product_strength": 76.36735999999999,
+          "team_execution": 70.24000000000001,
+          "traction_signals": 62.6255
+        },
+        "overall_confidence": 0.6001,
+        "overall_score": 64.85,
+        "recommendation_categories": [
+          "due_diligence",
+          "follow_up",
+          "opportunity",
+          "risk_mitigation"
+        ]
+      },
+      "metadata": {
+        "builder": "scripts/build_cohort.py",
+        "evidence_scope": {
+          "as_of": "2026-01-01T00:00:00Z",
+          "dropped_documents": 0,
+          "dropped_sources": 0,
+          "earliest_dropped_fetched_at": null,
+          "latest_retained_fetched_at": "2026-01-01T00:00:00Z",
+          "retained_documents": 1,
+          "retained_sources": 8
+        },
+        "manifest_hash": "f8cfa720ebae52bf2ac9393dd952a1f609d9cbc0822982eaa606be8bc2778038"
+      },
+      "provenance": {
+        "collector": "scripts/build_cohort.py",
+        "is_example": true,
+        "notes": "Illustrative placeholder outcome \u2014 not independently verified. Set verified=true with sources to treat as real ground truth.",
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence",
+          "fintech"
+        ],
+        "verified_by": null
+      },
+      "request": {
+        "description": "PayBridge provides embedded payment infrastructure for marketplace and platform businesses. The API-first solution handles split payments, escrow, KYC compliance, and multi-currency settlement across 35 countries. Processing $2.1B in annual payment volume with a take rate of 0.8%. The company serves 280 marketplace clients including 12 in the Fortune 500. Founded in 2019, team of 120 across London, Singapore, and New York. Raised $45M Series B from Tier 1 fintech investors.",
+        "startup_name": "PayBridge",
+        "website": "https://paybridge.example.com"
+      },
+      "sector": "FinTech",
+      "stage": "Series B",
+      "verified_outcome": {
+        "exit_value_usd": null,
+        "outcome_events": [
+          {
+            "amount_nominal_units": null,
+            "description": "Illustrative placeholder outcome",
+            "kind": "shutdown",
+            "occurred_at": "2026-03-01",
+            "sources": [
+              "benchmarks/startup_cases/cases.py"
+            ],
+            "value_currency_usd": null
+          }
+        ],
+        "sources": [
+          "benchmarks/startup_cases/cases.py"
+        ],
+        "status": "shutdown",
+        "verification_date": "2026-06-30"
+      }
+    },
+    {
+      "analysis_timestamp": "2026-01-01T00:00:00Z",
+      "company_id": "healthcare_ai",
+      "company_name": "MedVision AI",
+      "country": null,
+      "evaluation_horizon_days": null,
+      "historical_evidence": {
+        "corpus_name": "healthcare_ai",
+        "corpus_path": null,
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence",
+          "healthcare_ai"
+        ]
+      },
+      "historical_prediction": {
+        "composite_score": 70.77,
+        "decision": "invest",
+        "dimension_scores": {
+          "business_model_viability": 81.2758,
+          "competitive_position": 66.0,
+          "founder_quality": 49.940933333333334,
+          "market_opportunity": 73.5676,
+          "product_strength": 87.9208,
+          "team_execution": 66.72,
+          "traction_signals": 69.935
+        },
+        "overall_confidence": 0.6503,
+        "overall_score": 70.77,
+        "recommendation_categories": [
+          "due_diligence",
+          "follow_up",
+          "opportunity",
+          "risk_mitigation"
+        ]
+      },
+      "metadata": {
+        "builder": "scripts/build_cohort.py",
+        "evidence_scope": {
+          "as_of": "2026-01-01T00:00:00Z",
+          "dropped_documents": 0,
+          "dropped_sources": 0,
+          "earliest_dropped_fetched_at": null,
+          "latest_retained_fetched_at": "2026-01-01T00:00:00Z",
+          "retained_documents": 1,
+          "retained_sources": 8
+        },
+        "manifest_hash": "f8cfa720ebae52bf2ac9393dd952a1f609d9cbc0822982eaa606be8bc2778038"
+      },
+      "provenance": {
+        "collector": "scripts/build_cohort.py",
+        "is_example": true,
+        "notes": "Illustrative placeholder outcome \u2014 not independently verified. Set verified=true with sources to treat as real ground truth.",
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence",
+          "healthcare_ai"
+        ],
+        "verified_by": null
+      },
+      "request": {
+        "description": "MedVision AI develops FDA-cleared AI diagnostic tools for medical imaging. The platform analyzes X-rays, MRIs, and CT scans to assist radiologists in detecting anomalies with 97.3% sensitivity. The company holds 3 patents on its convolutional neural network architecture and has completed clinical trials across 12 hospital systems. Revenue model is per-study licensing with enterprise hospital contracts. Currently generating $2.8M ARR from 40 hospital clients. Series A funded with $12M raised from healthcare-focused VCs. Based in Boston with regulatory and clinical teams.",
+        "startup_name": "MedVision AI",
+        "website": "https://medvisionai.example.com"
+      },
+      "sector": "Healthcare",
+      "stage": "Series A",
+      "verified_outcome": {
+        "exit_value_usd": null,
+        "outcome_events": [
+          {
+            "amount_nominal_units": 5000000.0,
+            "description": "Illustrative placeholder outcome",
+            "kind": "arr_milestone",
+            "occurred_at": "2026-04-01",
+            "sources": [
+              "benchmarks/startup_cases/cases.py"
+            ],
+            "value_currency_usd": null
+          }
+        ],
+        "sources": [
+          "benchmarks/startup_cases/cases.py"
+        ],
+        "status": "operating",
+        "verification_date": "2026-06-30"
+      }
+    },
+    {
+      "analysis_timestamp": "2026-01-01T00:00:00Z",
+      "company_id": "healthtech_device",
+      "company_name": "GlucoPulse",
+      "country": null,
+      "evaluation_horizon_days": null,
+      "historical_evidence": {
+        "corpus_name": "healthtech_device",
+        "corpus_path": null,
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence",
+          "healthtech_device"
+        ]
+      },
+      "historical_prediction": {
+        "composite_score": 64.0,
+        "decision": "watch",
+        "dimension_scores": {
+          "business_model_viability": 74.89659999999999,
+          "competitive_position": 52.5,
+          "founder_quality": 61.48256,
+          "market_opportunity": 63.67984,
+          "product_strength": 74.41816,
+          "team_execution": 68.12,
+          "traction_signals": 52.8795
+        },
+        "overall_confidence": 0.6042,
+        "overall_score": 64.0,
+        "recommendation_categories": [
+          "due_diligence",
+          "follow_up",
+          "opportunity",
+          "risk_mitigation"
+        ]
+      },
+      "metadata": {
+        "builder": "scripts/build_cohort.py",
+        "evidence_scope": {
+          "as_of": "2026-01-01T00:00:00Z",
+          "dropped_documents": 0,
+          "dropped_sources": 0,
+          "earliest_dropped_fetched_at": null,
+          "latest_retained_fetched_at": "2026-01-01T00:00:00Z",
+          "retained_documents": 1,
+          "retained_sources": 8
+        },
+        "manifest_hash": "f8cfa720ebae52bf2ac9393dd952a1f609d9cbc0822982eaa606be8bc2778038"
+      },
+      "provenance": {
+        "collector": "scripts/build_cohort.py",
+        "is_example": true,
+        "notes": "Illustrative placeholder outcome \u2014 not independently verified. Set verified=true with sources to treat as real ground truth.",
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence",
+          "healthtech_device"
+        ],
+        "verified_by": null
+      },
+      "request": {
+        "description": "GlucoPulse develops a non-invasive continuous glucose monitoring wearable using photoplethysmography sensors. The device provides real-time glucose trend data to a companion mobile app with AI-powered dietary recommendations. FDA 510(k) clearance obtained. Direct-to-consumer pricing at $299 device plus $19/month subscription. 8,000 units shipped in first quarter since launch. Raised $18M Series A from digital health investors. Based in San Diego, team of 45 including hardware engineers, clinical specialists, and data scientists. Founded in 2021.",
+        "startup_name": "GlucoPulse",
+        "website": "https://glucopulse.example.com"
+      },
+      "sector": "Healthcare",
+      "stage": "Series A",
+      "verified_outcome": {
+        "exit_value_usd": null,
+        "outcome_events": [
+          {
+            "amount_nominal_units": 2000000.0,
+            "description": "Illustrative placeholder outcome",
+            "kind": "arr_milestone",
+            "occurred_at": "2026-04-01",
+            "sources": [
+              "benchmarks/startup_cases/cases.py"
+            ],
+            "value_currency_usd": null
+          }
+        ],
+        "sources": [
+          "benchmarks/startup_cases/cases.py"
+        ],
+        "status": "operating",
+        "verification_date": "2026-06-30"
+      }
+    },
+    {
+      "analysis_timestamp": "2026-01-01T00:00:00Z",
+      "company_id": "marketplace",
+      "company_name": "SupplyHub",
+      "country": null,
+      "evaluation_horizon_days": null,
+      "historical_evidence": {
+        "corpus_name": "marketplace",
+        "corpus_path": null,
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence",
+          "marketplace"
+        ]
+      },
+      "historical_prediction": {
+        "composite_score": 63.28,
+        "decision": "invest",
+        "dimension_scores": {
+          "business_model_viability": 70.378,
+          "competitive_position": 50.0,
+          "founder_quality": 49.9114,
+          "market_opportunity": 65.5936,
+          "product_strength": 60.9864,
+          "team_execution": 74.12,
+          "traction_signals": 72.00233333333333
+        },
+        "overall_confidence": 0.6081,
+        "overall_score": 63.28,
+        "recommendation_categories": [
+          "due_diligence",
+          "follow_up",
+          "opportunity",
+          "risk_mitigation"
+        ]
+      },
+      "metadata": {
+        "builder": "scripts/build_cohort.py",
+        "evidence_scope": {
+          "as_of": "2026-01-01T00:00:00Z",
+          "dropped_documents": 0,
+          "dropped_sources": 0,
+          "earliest_dropped_fetched_at": null,
+          "latest_retained_fetched_at": "2026-01-01T00:00:00Z",
+          "retained_documents": 1,
+          "retained_sources": 8
+        },
+        "manifest_hash": "f8cfa720ebae52bf2ac9393dd952a1f609d9cbc0822982eaa606be8bc2778038"
+      },
+      "provenance": {
+        "collector": "scripts/build_cohort.py",
+        "is_example": true,
+        "notes": "Illustrative placeholder outcome \u2014 not independently verified. Set verified=true with sources to treat as real ground truth.",
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence",
+          "marketplace"
+        ],
+        "verified_by": null
+      },
+      "request": {
+        "description": "SupplyHub operates a two-sided B2B marketplace connecting industrial equipment manufacturers with small and mid-size manufacturing facilities. The platform handles quoting, procurement, and logistics for MRO supplies across North America. Marketplace take rate is 12% on transactions. Currently facilitating $180M in GMV annually with 2,400 supplier listings and 8,500 active buyer accounts. Revenue of $21.6M with unit economics showing LTV/CAC of 4.2x. Raised $30M Series A. Founded in 2020, team of 65 based in Chicago.",
+        "startup_name": "SupplyHub",
+        "website": "https://supplyhub.example.com"
+      },
+      "sector": "Marketplace",
+      "stage": "Series A",
+      "verified_outcome": {
+        "exit_value_usd": 200000000.0,
+        "outcome_events": [
+          {
+            "amount_nominal_units": null,
+            "description": "Illustrative placeholder outcome",
+            "kind": "acquisition",
+            "occurred_at": "2026-03-15",
+            "sources": [
+              "benchmarks/startup_cases/cases.py"
+            ],
+            "value_currency_usd": 200000000.0
+          }
+        ],
+        "sources": [
+          "benchmarks/startup_cases/cases.py"
+        ],
+        "status": "acquired",
+        "verification_date": "2026-06-30"
+      }
+    },
+    {
+      "analysis_timestamp": "2026-01-01T00:00:00Z",
+      "company_id": "robotics",
+      "company_name": "AutoWare Robotics",
+      "country": null,
+      "evaluation_horizon_days": null,
+      "historical_evidence": {
+        "corpus_name": "robotics",
+        "corpus_path": null,
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence",
+          "robotics"
+        ]
+      },
+      "historical_prediction": {
+        "composite_score": 65.54,
+        "decision": "invest",
+        "dimension_scores": {
+          "business_model_viability": 75.16239999999999,
+          "competitive_position": 50.0,
+          "founder_quality": 53.4554,
+          "market_opportunity": 65.5936,
+          "product_strength": 70.66152,
+          "team_execution": 74.05333333333334,
+          "traction_signals": 69.86116666666668
+        },
+        "overall_confidence": 0.6007,
+        "overall_score": 65.54,
+        "recommendation_categories": [
+          "due_diligence",
+          "follow_up",
+          "opportunity",
+          "risk_mitigation"
+        ]
+      },
+      "metadata": {
+        "builder": "scripts/build_cohort.py",
+        "evidence_scope": {
+          "as_of": "2026-01-01T00:00:00Z",
+          "dropped_documents": 0,
+          "dropped_sources": 0,
+          "earliest_dropped_fetched_at": null,
+          "latest_retained_fetched_at": "2026-01-01T00:00:00Z",
+          "retained_documents": 1,
+          "retained_sources": 8
+        },
+        "manifest_hash": "f8cfa720ebae52bf2ac9393dd952a1f609d9cbc0822982eaa606be8bc2778038"
+      },
+      "provenance": {
+        "collector": "scripts/build_cohort.py",
+        "is_example": true,
+        "notes": "Illustrative placeholder outcome \u2014 not independently verified. Set verified=true with sources to treat as real ground truth.",
+        "sources": [
+          "benchmarks/startup_cases/cases.py",
+          "benchmarks/offline_evidence",
+          "robotics"
+        ],
+        "verified_by": null
+      },
+      "request": {
+        "description": "AutoWare Robotics builds autonomous mobile robots for warehouse and fulfillment center operations. The robots use LiDAR-based SLAM navigation and handle goods-to-person picking, inventory scanning, and pallet transport. The company offers a Robotics-as-a-Service model with per-robot monthly fees covering hardware, maintenance, and software updates. Current fleet of 800 deployed robots across 15 customer facilities. Revenue model generates $6.4M ARR from RaaS contracts. Hardware costs funded through $52M in total funding including a Series B. Founded in 2019, team of 110 in Munich and Detroit.",
+        "startup_name": "AutoWare Robotics",
+        "website": "https://autoware.example.com"
+      },
+      "sector": "Robotics",
+      "stage": "Series B",
+      "verified_outcome": {
+        "exit_value_usd": null,
+        "outcome_events": [
+          {
+            "amount_nominal_units": null,
+            "description": "Illustrative placeholder outcome",
+            "kind": "shutdown",
+            "occurred_at": "2026-03-01",
+            "sources": [
+              "benchmarks/startup_cases/cases.py"
+            ],
+            "value_currency_usd": null
+          }
+        ],
+        "sources": [
+          "benchmarks/startup_cases/cases.py"
+        ],
+        "status": "shutdown",
+        "verification_date": "2026-06-30"
+      }
+    }
+  ],
+  "schema_version": 1
+}

@@ -40,6 +40,98 @@ class DecisionLabel(str, Enum):
     PASS = "pass"
 
 
+class CompanyProfile(BaseModel):
+    """Structured, first-class company attributes for a dataset record.
+
+    Enrichment promotes raw source metadata (SEC EDGAR, Companies House,
+    YC OSS, CSV exports) into canonical, queryable profile fields so the
+    dataset can be filtered, grouped, and analyzed by domain, industry,
+    headquarters, founding date, and size.  Fields are mutable through
+    the enrichment pipeline and always default to empty/None — a missing
+    value simply means the source did not provide it.
+    """
+
+    domain: str | None = Field(
+        default=None,
+        description="Canonical domain, normalized (no scheme or www prefix)",
+    )
+    industries: list[str] = Field(
+        default_factory=list,
+        description="Normalized industry / sector tags",
+    )
+    headquarters: str | None = Field(
+        default=None,
+        description="Human-readable headquarters location",
+    )
+    country_code: str | None = Field(
+        default=None,
+        description="ISO 3166-1 alpha-2 country code (uppercase)",
+    )
+    city: str | None = Field(
+        default=None, description="Headquarters city"
+    )
+    region: str | None = Field(
+        default=None, description="State / region / province"
+    )
+    founded_year: int | None = Field(
+        default=None, ge=1800, le=2200, description="Founding / incorporation year"
+    )
+    founded_date: datetime | None = Field(
+        default=None, description="Founding / incorporation date"
+    )
+    employee_count: int | None = Field(
+        default=None, ge=0, description="Headcount if reported"
+    )
+    employee_range: str | None = Field(
+        default=None, description="Band like '1-10', '11-50', '51-200'"
+    )
+    description: str | None = Field(
+        default=None, description="Company description / tagline"
+    )
+    legal_name: str | None = Field(
+        default=None, description="Registered legal name if distinct"
+    )
+    status: str | None = Field(
+        default=None,
+        description="Registry status: 'active', 'dissolved', 'inactive', ...",
+    )
+
+    def populated_fields(self) -> list[str]:
+        """Return the profile fields that carry a non-empty value."""
+        fields: list[str] = []
+        if self.domain:
+            fields.append("domain")
+        if self.industries:
+            fields.append("industries")
+        if self.headquarters:
+            fields.append("headquarters")
+        if self.country_code:
+            fields.append("country_code")
+        if self.city:
+            fields.append("city")
+        if self.region:
+            fields.append("region")
+        if self.founded_year is not None:
+            fields.append("founded_year")
+        if self.founded_date is not None:
+            fields.append("founded_date")
+        if self.employee_count is not None:
+            fields.append("employee_count")
+        if self.employee_range:
+            fields.append("employee_range")
+        if self.description:
+            fields.append("description")
+        if self.legal_name:
+            fields.append("legal_name")
+        if self.status:
+            fields.append("status")
+        return fields
+
+    def is_empty(self) -> bool:
+        """Return True when no profile field carries a value."""
+        return not self.populated_fields()
+
+
 class PredictionSummary(BaseModel):
     """Compact prediction snapshot captured at analysis time.
 
@@ -110,6 +202,12 @@ class DatasetRecord(BaseModel):
     funding_stage_at_analysis: FundingStage = Field(
         default=FundingStage.UNKNOWN,
         description="Funding stage known at analysis time",
+    )
+    profile: CompanyProfile = Field(
+        default_factory=CompanyProfile,
+        description=(
+            "Structured company attributes enriched from source metadata"
+        ),
     )
     analysis_metadata: dict[str, Any] = Field(
         default_factory=dict,

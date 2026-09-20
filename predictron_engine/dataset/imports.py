@@ -15,7 +15,7 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import Protocol, runtime_checkable
 
-from predictron_engine.dataset.models import DatasetRecord
+from predictron_engine.dataset.models import CompanyProfile, DatasetRecord
 from predictron_engine.dataset.outcomes import OutcomeRecord
 
 
@@ -122,6 +122,7 @@ class RawImportRecord:
     metadata: dict[str, object] = field(default_factory=dict)
     tags: list[str] = field(default_factory=list)
     source: str = "unknown"
+    profile: CompanyProfile | None = None
 
 
 @runtime_checkable
@@ -335,6 +336,11 @@ class ImportPipeline:
 
     def _normalize_dataset(self, raw: RawImportRecord) -> DatasetRecord:
         """Normalize a raw record into a DatasetRecord."""
+        from predictron_engine.dataset.enrichment import (
+            merge_profiles,
+            profile_from_metadata,
+            profile_from_raw,
+        )
         from predictron_engine.dataset.models import (
             DecisionLabel,
             FundingStage,
@@ -375,6 +381,12 @@ class ImportPipeline:
             ),
         )
 
+        # Structured company profile: adapters may attach a profile
+        # directly; profile_from_metadata fills gaps from metadata keys so
+        # older connectors keep working unchanged.
+        profile = profile_from_raw(raw)
+        profile = merge_profiles(profile, profile_from_metadata(raw.metadata))
+
         return DatasetRecord(
             startup_name=raw.startup_name,
             website=raw.website,
@@ -383,6 +395,7 @@ class ImportPipeline:
             benchmark_version=raw.benchmark_version,
             prediction=prediction,
             funding_stage_at_analysis=funding_stage,
+            profile=profile,
             analysis_metadata=raw.metadata,
             tags=raw.tags,
             source=raw.source,
