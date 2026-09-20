@@ -1,4 +1,9 @@
-"""Shared fixtures for the API test package."""
+"""Shared fixtures for the API test package.
+
+``sqlite_engine`` / ``sqlite_session`` are provided by ``tests/conftest.py``
+(root) so the API suite reuses the real store against an isolated in-memory
+database.
+"""
 
 from __future__ import annotations
 

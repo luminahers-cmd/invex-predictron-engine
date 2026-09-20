@@ -1,7 +1,49 @@
 import pytest
 from httpx import ASGITransport, AsyncClient
+from sqlalchemy import event
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.pool import StaticPool
 
+from app.db.session import Base
 from app.main import app
+from app.models import AnalysisReport, AnalysisRequest, Company, CompanySnapshot  # noqa: F401
+
+
+def utc_now():
+    from datetime import UTC, datetime
+
+    return datetime.now(UTC)
+
+
+@pytest.fixture
+async def sqlite_engine():
+    """Fresh in-memory SQLite engine with all ORM tables created."""
+    engine = create_async_engine(
+        "sqlite+aiosqlite://",
+        poolclass=StaticPool,
+        connect_args={"check_same_thread": False},
+    )
+
+    @event.listens_for(engine.sync_engine, "connect")
+    def _enable_fk(dbapi_conn, _record):  # pragma: no cover - exercised via sqlite
+        cursor = dbapi_conn.cursor()
+        cursor.execute("PRAGMA foreign_keys=ON")
+        cursor.close()
+
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+    yield engine
+    await engine.dispose()
+
+
+@pytest.fixture
+async def sqlite_session(sqlite_engine):
+    """Async session bound to the isolated in-memory database."""
+    factory = async_sessionmaker(
+        sqlite_engine, class_=AsyncSession, expire_on_commit=False
+    )
+    async with factory() as session:
+        yield session
 
 
 @pytest.fixture

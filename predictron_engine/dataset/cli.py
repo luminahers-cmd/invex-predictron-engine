@@ -16,6 +16,9 @@ Provides commands for the historical startup dataset pipeline:
   timeline       Show company signal timeline(s) (Project E4)
   trend-report   Emit a deterministic trend report (Project E4)
   signal-validate Validate stored signal timelines (Project E4)
+  cohort-execute  Run a cohort manifest: freeze predictions, evaluate
+                  outcomes, and emit the validation report (Phase 4)
+  cohort-status   List frozen predictions from a PredictionStore (Phase 4)
 
 All commands delegate to the existing dataset API.  No business logic is
 duplicated here.
@@ -867,6 +870,11 @@ def build_parser() -> argparse.ArgumentParser:
     from predictron_engine.dataset.cli_signal import add_signal_subparsers
 
     add_signal_subparsers(sub)
+
+    # cohort-execute / cohort-status
+    from predictron_engine.dataset.cli_cohort import add_cohort_subparsers
+
+    add_cohort_subparsers(sub)
 
     return parser
 

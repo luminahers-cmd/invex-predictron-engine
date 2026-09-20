@@ -1,9 +1,8 @@
 """Shared fixtures for the CIH company test suite.
 
-The suite follows the repo's conventions in tests/conftest.py and
-tests/api/conftest.py. Store behavior is exercised against a real in-memory
-SQLite database (portable SQLAlchemy) and the API layer against the protocol
-contract plus a small test double.
+Store behavior is exercised against a real in-memory SQLite database
+(portable SQLAlchemy); the ``sqlite_engine``/``sqlite_session`` fixtures live
+in ``tests/conftest.py`` so the API tests can reuse them too.
 """
 
 from __future__ import annotations
@@ -11,12 +10,7 @@ from __future__ import annotations
 from datetime import UTC, datetime
 
 import pytest
-from sqlalchemy import event
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
-from sqlalchemy.pool import StaticPool
 
-from app.db.session import Base
-from app.models import AnalysisReport, AnalysisRequest, Company, CompanySnapshot  # noqa: F401
 from app.services.company_protocols import (
     CompanyPage,
     CompanyRecord,
@@ -28,37 +22,6 @@ from app.services.company_protocols import (
 
 def utc_now() -> datetime:
     return datetime.now(UTC)
-
-
-@pytest.fixture
-async def sqlite_engine():
-    """Fresh in-memory SQLite engine with all ORM tables created."""
-    engine = create_async_engine(
-        "sqlite+aiosqlite://",
-        poolclass=StaticPool,
-        connect_args={"check_same_thread": False},
-    )
-
-    @event.listens_for(engine.sync_engine, "connect")
-    def _enable_fk(dbapi_conn, _record):  # pragma: no cover - exercised via sqlite
-        cursor = dbapi_conn.cursor()
-        cursor.execute("PRAGMA foreign_keys=ON")
-        cursor.close()
-
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-    yield engine
-    await engine.dispose()
-
-
-@pytest.fixture
-async def sqlite_session(sqlite_engine):
-    """Async session bound to the isolated in-memory database."""
-    factory = async_sessionmaker(
-        sqlite_engine, class_=AsyncSession, expire_on_commit=False
-    )
-    async with factory() as session:
-        yield session
 
 
 class MemoryCompanyStore:

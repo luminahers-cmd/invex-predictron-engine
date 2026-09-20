@@ -259,7 +259,12 @@ class CompanyEvaluationService:
 
         existing = await self._existing_pairs(session, company_id)
         created = 0
-        for outcome in sorted(outcomes, key=lambda row: (row.occurred_at, row.id)):
+        # SQLite round-trips timestamps as naive; normalize before comparing so
+        # identity-mapped (aware) and freshly-loaded (naive) rows stay ordered.
+        sentinel = datetime.min.replace(tzinfo=UTC)
+        for outcome in sorted(
+            outcomes, key=lambda row: (as_utc(row.occurred_at) or sentinel, row.id)
+        ):
             outcome_record = outcome_record_from_row(outcome)
             outcome_time = as_utc(outcome.occurred_at)
             for snapshot in snapshots:

@@ -24,7 +24,7 @@ network: corpus loading goes through the offline replay layer
 
 from __future__ import annotations
 
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from typing import Any
 from uuid import uuid4
 
@@ -75,6 +75,14 @@ class TimeScopedPrediction(BaseModel):
     analysis_timestamp: datetime = Field(
         ..., description="UTC timestamp the prediction is pinned to"
     )
+    evaluation_horizon_days: int | None = Field(
+        default=None,
+        ge=0,
+        description=(
+            "Minimum days between the analysis and outcome observation that "
+            "the prediction is scoped to evaluate"
+        ),
+    )
     engine_version: str = Field(..., description="Engine version that produced the prediction")
     evidence_reference: str | None = Field(
         default=None, description="Offline corpus reference used (if any)"
@@ -90,6 +98,17 @@ class TimeScopedPrediction(BaseModel):
         description="When this artefact was recorded (informational only)",
     )
     metadata: dict[str, Any] = Field(default_factory=dict)
+
+    @property
+    def outcome_due_at(self) -> datetime | None:
+        """Earliest moment a matching outcome observation is due.
+
+        Derived from the pinned ``analysis_timestamp`` and the declared
+        ``evaluation_horizon_days``; returns ``None`` when no horizon is set.
+        """
+        if self.evaluation_horizon_days is None:
+            return None
+        return self.analysis_timestamp + timedelta(days=self.evaluation_horizon_days)
 
 
 def _as_utc(value: datetime) -> datetime:
@@ -126,7 +145,8 @@ def time_scope_bundle(
         (d for d in docs if _as_utc(d.fetched_at) <= as_of_utc), key=lambda d: d.id
     )
     retained_sources = sorted(
-        (s for s in sources if _as_utc(s.fetched_at) <= as_of_utc), key=lambda s: str(s.original_url)
+        (s for s in sources if _as_utc(s.fetched_at) <= as_of_utc),
+        key=lambda s: str(s.original_url),
     )
     dropped_documents = [d for d in docs if _as_utc(d.fetched_at) > as_of_utc]
     dropped_sources = [s for s in sources if _as_utc(s.fetched_at) > as_of_utc]
@@ -197,6 +217,7 @@ def record_pinned_prediction(
     company_name: str,
     evidence_bundle: Any | None = None,
     evidence_reference: str | None = None,
+    evaluation_horizon_days: int | None = None,
     metadata: dict[str, Any] | None = None,
 ) -> TimeScopedPrediction:
     """Record the engine's prediction pinned to ``analysis_timestamp``.
@@ -226,6 +247,7 @@ def record_pinned_prediction(
         company_id=company_id,
         company_name=company_name,
         analysis_timestamp=analysis_timestamp,
+        evaluation_horizon_days=evaluation_horizon_days,
         engine_version=_engine_version(report),
         evidence_reference=reference,
         prediction=prediction,
