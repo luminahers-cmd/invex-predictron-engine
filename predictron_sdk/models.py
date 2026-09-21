@@ -7,7 +7,7 @@ exact JSON shape the Predictron API expects.
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import date, datetime
 from enum import Enum
 from typing import Any
 
@@ -114,6 +114,20 @@ __all__ = [
     "BatchJobProgress",
     "BatchJobCancelled",
     "BatchEvent",
+    # Monitor (Phase 6)
+    "MonitorDistribution",
+    "MonitorHorizonPerformance",
+    "MonitorSectorPerformance",
+    "MonitorTimePoint",
+    "MonitorMetricTrend",
+    "MonitorHealthEntry",
+    "MonitorDriftSignal",
+    "MonitorReanalysisRecommendation",
+    "MonitorSummary",
+    "MonitorHealthList",
+    "MonitorDrift",
+    "MonitorTrends",
+    "MonitorReanalysis",
 ]
 
 
@@ -1165,3 +1179,157 @@ class BatchEvent(_Base):
     job_id: str = ""
     data: dict[str, Any] = Field(default_factory=dict)
     timestamp: str | None = None
+
+
+# ---------------------------------------------------------------------------
+# Monitoring (CIH Phase 6)
+# ---------------------------------------------------------------------------
+
+
+class MonitorDistribution(_Base):
+    """Label-universe frequency distribution of one analytic dimension."""
+
+    label: str = ""
+    universe: list[str] = Field(default_factory=list)
+    counts: dict[str, int] = Field(default_factory=dict)
+
+
+class MonitorHorizonPerformance(_Base):
+    """Per-horizon bucket performance."""
+
+    horizon_days: int = 0
+    forecasts: int = 0
+    evaluated: int = 0
+    scoreable: int = 0
+    accuracy: float | None = None
+
+
+class MonitorSectorPerformance(_Base):
+    """Per-sector bucket performance."""
+
+    sector: str = ""
+    evaluations: int = 0
+    scoreable: int = 0
+    accuracy: float | None = None
+
+
+class MonitorTimePoint(_Base):
+    """One anchor-ordered point in a metric time-series."""
+
+    anchor: date = Field(...)
+    value: float | None = None
+
+
+class MonitorMetricTrend(_Base):
+    """Deterministic trend over a metric time-series."""
+
+    metric: str = ""
+    direction: str = "flat"
+    from_value: float | None = None
+    to_value: float | None = None
+    series: list[MonitorTimePoint] = Field(default_factory=list)
+
+
+class MonitorHealthEntry(_Base):
+    """Derived health projection of one forecast."""
+
+    forecast_id: str = ""
+    company_id: str = ""
+    snapshot_id: str = ""
+    decision: str = ""
+    confidence: float = 0.0
+    status: str = ""
+    health: str = ""
+    analysis_timestamp: str | None = None
+    due_at: str | None = None
+    as_of: str | None = None
+    age_days: int = 0
+    days_until_due: float = 0.0
+    days_overdue: float = 0.0
+    outcome_id: str | None = None
+    outcome_verdict: str | None = None
+    evaluation_status: str = "pending"
+    evaluation_verdict: str | None = None
+
+
+class MonitorDriftSignal(_Base):
+    """One dimension of the deterministic drift report."""
+
+    signal: str = ""
+    from_value: float = 0.0
+    to_value: float = 0.0
+    delta: float = 0.0
+    magnitude: float = 0.0
+    direction: str = "flat"
+    severity: str = "low"
+    affected: bool = False
+    detail: dict[str, Any] = Field(default_factory=dict)
+
+
+class MonitorReanalysisRecommendation(_Base):
+    """Deterministic re-analysis recommendation for one frozen forecast."""
+
+    company_id: str = ""
+    forecast_id: str = ""
+    snapshot_id: str = ""
+    reasons: list[str] = Field(default_factory=list)
+    latest_outcome_at: str | None = None
+    latest_snapshot_at: str | None = None
+
+
+class MonitorSummary(_Base):
+    """Live monitoring summary over the caller's scope."""
+
+    scope: str = ""
+    period_kind: str = "daily"
+    anchor_date: date | None = None
+    generated_at: str | None = None
+    counts: dict[str, int] = Field(default_factory=dict)
+    metrics: dict[str, float | None] = Field(default_factory=dict)
+    distributions: dict[str, MonitorDistribution] = Field(default_factory=dict)
+    horizon_breakdown: dict[str, MonitorHorizonPerformance] = Field(
+        default_factory=dict
+    )
+    sector_breakdown: dict[str, MonitorSectorPerformance] = Field(
+        default_factory=dict
+    )
+    health: dict[str, int] = Field(default_factory=dict)
+
+
+class MonitorHealthList(_Base):
+    """Derived forecast-health rows plus their distribution."""
+
+    as_of: str | None = None
+    generated_at: str | None = None
+    scope: str = ""
+    entries: list[MonitorHealthEntry] = Field(default_factory=list)
+    distribution: dict[str, int] = Field(default_factory=dict)
+
+
+class MonitorDrift(_Base):
+    """Deterministic drift comparison between two snapshot populations."""
+
+    baseline_id: str = ""
+    comparison_id: str = ""
+    baseline_period: date | None = None
+    comparison_period: date | None = None
+    signals: list[MonitorDriftSignal] = Field(default_factory=list)
+
+
+class MonitorTrends(_Base):
+    """Dashboard-consumable time-series for the requested metrics."""
+
+    period_kind: str = "daily"
+    as_of: date | None = None
+    trends: list[MonitorMetricTrend] = Field(default_factory=list)
+
+
+class MonitorReanalysis(_Base):
+    """Deterministic re-analysis recommendations for the caller's scope."""
+
+    as_of: str | None = None
+    generated_at: str | None = None
+    scope: str = ""
+    recommendations: list[MonitorReanalysisRecommendation] = Field(
+        default_factory=list
+    )

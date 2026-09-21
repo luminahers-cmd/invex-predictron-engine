@@ -10,6 +10,7 @@ predictron-dataset = "predictron_engine.dataset.cli:main"
 predictron-benchmark = "benchmarks.ground_truth_eval.cli:main"
 predictron-feature = "predictron_engine.feature_store.cli:main"
 predictron-decision = "predictron_engine.decision.cli:main"
+predictron-monitor = "app.monitoring_cli:main"
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

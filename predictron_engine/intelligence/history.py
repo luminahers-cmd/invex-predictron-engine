@@ -29,11 +29,21 @@ def _overall(records: list[PerformanceSnapshot], metric: str) -> float:
     return round(float(sum(values)) / len(values), 4)
 
 
-def _direction(first: float, last: float) -> TrendDirection:
-    """Deterministic trend direction given endpoints."""
+def direction_between(first: float, last: float) -> TrendDirection:
+    """Deterministic trend direction between two endpoint values.
+
+    The canonical slope primitive for the analytics layer (reused by the
+    Phase 6 monitoring trends and the Sprint 9 ``compute_trend``).  ``FLAT``
+    on exact equality, otherwise ``UP`` when the last value is greater.
+    """
     if first == last:
         return TrendDirection.FLAT
     return TrendDirection.UP if last > first else TrendDirection.DOWN
+
+
+def _direction(first: float, last: float) -> TrendDirection:
+    """Backwards-compatible alias of :func:`direction_between`."""
+    return direction_between(first, last)
 
 
 def snapshot_from_report(

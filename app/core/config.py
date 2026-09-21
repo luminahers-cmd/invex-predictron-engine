@@ -34,6 +34,11 @@ class Settings(BaseSettings):
     FORECAST_ENABLED: bool = False
     FORECAST_DEFAULT_HORIZON_DAYS: int = 365
 
+    MONITOR_STALE_AFTER_DAYS: int = 365
+    MONITOR_REANALYSIS_SNAPSHOT_MAX_AGE_DAYS: int = 365
+    MONITOR_DEFAULT_ROLLING_WINDOW: int = 30
+    MONITOR_HISTORY_DIR: str = "data/monitor_history"
+
     model_config = {
         "env_file": ".env",
         "env_file_encoding": "utf-8",

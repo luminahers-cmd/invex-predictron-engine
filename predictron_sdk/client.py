@@ -12,6 +12,7 @@ resource objects:
 * ``client.analyze`` — legacy single-startup analysis.
 * ``client.health`` — health and readiness checks.
 * ``client.companies`` — Company Intelligence Hub profile endpoints.
+* ``client.monitor`` — continuous intelligence & drift detection.
 
 The client only talks to the API. No business logic is duplicated.
 """
@@ -64,6 +65,11 @@ from predictron_sdk.models import (
     FullComparison,
     Health,
     KnowledgeGraphSummary,
+    MonitorDrift,
+    MonitorHealthList,
+    MonitorReanalysis,
+    MonitorSummary,
+    MonitorTrends,
     PortfolioAnalysis,
     PortfolioRequest,
     Readiness,
@@ -95,6 +101,7 @@ __all__ = [
     "AnalyzeResource",
     "HealthResource",
     "CompaniesResource",
+    "MonitorResource",
     "make_bearer_client",
 ]
 
@@ -647,6 +654,70 @@ class CompaniesResource(_Resource):
 
 
 # ---------------------------------------------------------------------------
+# Continuous intelligence & drift detection (Phase 6)
+# ---------------------------------------------------------------------------
+
+
+class MonitorResource(_Resource):
+    """Continuous intelligence & drift-detection endpoints.
+
+    Read-only monitoring views over the live prediction ledger (summary,
+    health, stale, overdue, re-analysis) plus time-series trends and drift
+    over the recorded snapshot history.
+    """
+
+    def summary(self) -> MonitorSummary:
+        """Live monitoring summary over your forecasts and evaluations."""
+        return self._get_model("/monitor/summary", MonitorSummary)
+
+    def rollup(self) -> MonitorSummary:
+        """Rolling-window monitoring rollup (default window 30)."""
+        return self._get_model("/monitor/rollup", MonitorSummary)
+
+    def health(self) -> MonitorHealthList:
+        """Derived forecast-health rows (active due overdue stale resolved)."""
+        return self._get_model("/monitor/health", MonitorHealthList)
+
+    def stale(self) -> MonitorHealthList:
+        """Stale forecasts (frozen snapshot older than the named threshold)."""
+        return self._get_model("/monitor/stale", MonitorHealthList)
+
+    def overdue(self) -> MonitorHealthList:
+        """Overdue forecasts (due time passed with no outcome attached)."""
+        return self._get_model("/monitor/overdue", MonitorHealthList)
+
+    def reanalysis(self) -> MonitorReanalysis:
+        """Deterministic re-analysis recommendations for your scope."""
+        return self._get_model("/monitor/reanalysis", MonitorReanalysis)
+
+    def trends(self, *, period: str = "daily") -> MonitorTrends:
+        """Dashboard time-series over the recorded snapshot history."""
+        return self._get_model(
+            "/monitor/trends",
+            MonitorTrends,
+            params={"period": period},
+        )
+
+    def drift(
+        self,
+        *,
+        before_id: str | None = None,
+        after_id: str | None = None,
+        period: str = "daily",
+    ) -> MonitorDrift:
+        """Deterministic drift report between two recorded snapshots.
+
+        Without ids the latest two ``period`` snapshots are compared.
+        """
+        params = {"period": period}
+        if before_id is not None:
+            params["before_id"] = before_id
+        if after_id is not None:
+            params["after_id"] = after_id
+        return self._get_model("/monitor/drift", MonitorDrift, params=params)
+
+
+# ---------------------------------------------------------------------------
 # Batch processing
 # ---------------------------------------------------------------------------
 
@@ -852,6 +923,7 @@ class PredictronClient:
         self._analyze = AnalyzeResource(self)
         self._health = HealthResource(self)
         self._companies = CompaniesResource(self)
+        self._monitor = MonitorResource(self)
 
     # --- resources -------------------------------------------------------
 
@@ -887,6 +959,11 @@ class PredictronClient:
     def companies(self) -> CompaniesResource:
         """Company Intelligence Hub profile endpoints."""
         return self._companies
+
+    @property
+    def monitor(self) -> MonitorResource:
+        """Continuous intelligence & drift detection endpoints."""
+        return self._monitor
 
     @property
     def search_resource(self) -> SearchResource:
