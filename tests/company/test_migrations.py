@@ -221,7 +221,7 @@ def test_orm_models_share_migration_pk_columns():
     assert "company_id" in CompanySnapshot.__table__.columns
 
 
-def test_latest_migration_is_0007():
+def test_latest_migration_is_0008():
     import re
 
     files = (MIGRATION_PATH.parent).glob("*.py")
@@ -230,4 +230,4 @@ def test_latest_migration_is_0007():
         for f in files
         if f.name[0].isdigit()
     ]
-    assert max(revisions, key=int) == "0007"
+    assert max(revisions, key=int) == "0008"

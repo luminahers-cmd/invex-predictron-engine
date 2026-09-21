@@ -20,6 +20,7 @@ from app.models.analysis import AnalysisRequest
 from app.schemas.analysis import StartupAnalysisRequest, StartupAnalysisResponse
 
 if TYPE_CHECKING:
+    from app.services.companies import IngestResult
     from predictron_engine.engine import PredictronEngine
     from predictron_engine.models.report import Report
 
@@ -54,7 +55,16 @@ async def run_analysis(
         logger.warning("Persistence layer error (analysis still returned)", exc_info=True)
 
     if persisted is not None:
-        await _ingest_company_hook(persisted, request, report, response, user_id=user_id)
+        ingest = await _ingest_company_hook(
+            persisted, request, report, response, user_id=user_id
+        )
+        if ingest is not None:
+            response.forecast_id = await _register_forecast_hook(
+                company_id=ingest.company_id,
+                snapshot_id=ingest.snapshot_id,
+                engine_version=_report_engine_version(report),
+                user_id=user_id,
+            )
 
     return response
 
@@ -92,7 +102,7 @@ async def _ingest_company_hook(
     report: Report,
     response: StartupAnalysisResponse,
     user_id: str | None = None,
-) -> None:
+) -> IngestResult | None:
     """Company Intelligence Hub hook — runs after analysis persistence.
 
     This is the single integration point for CIH Phase 1. It is deliberately
@@ -110,16 +120,72 @@ async def _ingest_company_hook(
         inputs = build_snapshot_inputs(request, report, response)
         service = CompanyIngestService()
         async with AsyncSessionLocal() as session:
-            await service.ingest_after_persist(
+            ingest = await service.ingest_after_persist(
                 session, analysis=analysis, inputs=inputs, user_id=user_id
             )
             await session.commit()
         logger.debug("Company registry ingest completed for analysis %s", analysis.id)
+        return ingest
     except Exception:
         logger.warning(
             "Company registry ingest failed (analysis still persisted)",
             exc_info=True,
         )
+        return None
+
+
+async def _register_forecast_hook(
+    *,
+    company_id: str,
+    snapshot_id: str,
+    engine_version: str | None,
+    user_id: str | None = None,
+) -> str | None:
+    """Live Prediction Ledger hook — feature-flagged forecast registration.
+
+    No-op when ``FORECAST_ENABLED`` is false. When enabled, registers one
+    deterministic forecast for the just-ingested snapshot so the analysis
+    and the ledger agree on the same frozen prediction. Failures are logged
+    and swallowed so a ledger hiccup never masks a successful analysis.
+    Returns the registered forecast id, if any.
+    """
+    from app.core.config import get_settings
+
+    if not get_settings().FORECAST_ENABLED:
+        return None
+
+    from app.db.session import AsyncSessionLocal
+    from app.services.forecasts import ForecastService
+
+    try:
+        async with AsyncSessionLocal() as session:
+            result = await ForecastService().register(
+                session,
+                company_id=company_id,
+                snapshot_id=snapshot_id,
+                engine_version=engine_version,
+                user_id=user_id,
+            )
+            if result is None:
+                logger.warning(
+                    "Forecast registration skipped for snapshot %s", snapshot_id
+                )
+                return None
+            await session.commit()
+        return result.forecast.id
+    except Exception:
+        logger.warning(
+            "Forecast registration failed (analysis still returned)",
+            exc_info=True,
+        )
+        return None
+
+
+def _report_engine_version(report: Report) -> str | None:
+    """Read the engine version pinned on the report metadata, if present."""
+    metadata = getattr(report, "analysis_metadata", None)
+    version = getattr(metadata, "engine_version", None)
+    return str(version) if version else None
 
 
 def _report_to_response(

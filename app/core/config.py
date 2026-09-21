@@ -31,6 +31,9 @@ class Settings(BaseSettings):
 
     REQUEST_ID_HEADER: str = "X-Request-ID"
 
+    FORECAST_ENABLED: bool = False
+    FORECAST_DEFAULT_HORIZON_DAYS: int = 365
+
     model_config = {
         "env_file": ".env",
         "env_file_encoding": "utf-8",

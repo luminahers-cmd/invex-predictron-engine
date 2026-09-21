@@ -139,7 +139,7 @@ class TestNoExistingBehaviorChanged:
         expected_keys = {
             "startup_name", "venture_score", "market_score",
             "founder_score", "traction_score", "recommendations",
-            "confidence", "id",
+            "confidence", "id", "forecast_id",
         }
         assert set(data.keys()) == expected_keys
 

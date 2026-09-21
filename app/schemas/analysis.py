@@ -52,6 +52,13 @@ class StartupAnalysisResponse(BaseModel):
     traction_score: float = Field(..., ge=0, le=100)
     recommendations: list[str] = Field(default_factory=list)
     confidence: float = Field(..., ge=0, le=1, description="Model confidence level")
+    forecast_id: str | None = Field(
+        default=None,
+        description=(
+            "Deterministic live-prediction ledger forecast registered for this "
+            "analysis, when the ledger is enabled"
+        ),
+    )
 
 
 class AnalysisSummaryResponse(BaseModel):

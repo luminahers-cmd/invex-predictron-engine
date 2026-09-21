@@ -117,7 +117,8 @@ async def test_analyze_response_unchanged_by_persistence():
     assert "traction_score" in body
     assert "recommendations" in body
     assert "confidence" in body
-    assert len(body) == 8  # No extra fields added by persistence
+    assert "forecast_id" in body
+    assert len(body) == 9  # + forecast_id (Phase 5), no extra fields by persistence
 
 
 # ── GET /api/v1/analyze — retrieval endpoints ────────────────────────
