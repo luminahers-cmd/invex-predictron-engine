@@ -65,6 +65,15 @@ from predictron_sdk.models import (
     FullComparison,
     Health,
     KnowledgeGraphSummary,
+    LearningBias,
+    LearningConfidence,
+    LearningKnowledge,
+    LearningObservations,
+    LearningPatterns,
+    LearningRecommendations,
+    LearningReportDetail,
+    LearningReports,
+    LearningSummary,
     MonitorDrift,
     MonitorHealthList,
     MonitorReanalysis,
@@ -102,6 +111,7 @@ __all__ = [
     "HealthResource",
     "CompaniesResource",
     "MonitorResource",
+    "LearningResource",
     "make_bearer_client",
 ]
 
@@ -718,6 +728,88 @@ class MonitorResource(_Resource):
 
 
 # ---------------------------------------------------------------------------
+# Continuous learning intelligence (Phase 7)
+# ---------------------------------------------------------------------------
+
+
+class LearningResource(_Resource):
+    """Continuous learning intelligence endpoints.
+
+    Read-only learning views over the live evaluated prediction ledger
+    (summary, patterns, observations, confidence, bias, per-dimension
+    knowledge, recommendations) plus recorded learning-report history.
+    """
+
+    def summary(self) -> LearningSummary:
+        """Live learning summary over your evaluated population."""
+        return self._get_model("/learning/summary", LearningSummary)
+
+    def patterns(self) -> LearningPatterns:
+        """Per-dimension cohort patterns over your evaluated population."""
+        return self._get_model("/learning/patterns", LearningPatterns)
+
+    def observations(self) -> LearningObservations:
+        """Canonical observations about your evaluated population."""
+        return self._get_model("/learning/observations", LearningObservations)
+
+    def confidence(self) -> LearningConfidence:
+        """Population confidence statistics and calibration digest."""
+        return self._get_model("/learning/confidence", LearningConfidence)
+
+    def bias(self) -> LearningBias:
+        """Confidence-bias view plus the population metric surface."""
+        return self._get_model("/learning/bias", LearningBias)
+
+    def recommendations(self) -> LearningRecommendations:
+        """Deterministic rule-based recommendations for your population."""
+        return self._get_model("/learning/recommendations", LearningRecommendations)
+
+    def knowledge(self, dimension: str) -> LearningKnowledge:
+        """Per-dimension knowledge (sector/stage/country/technology/...)."""
+        return self._get_model(
+            f"/learning/knowledge/{dimension}", LearningKnowledge
+        )
+
+    def sector(self) -> LearningKnowledge:
+        """Sector knowledge (shortcut for ``knowledge("sector")``)."""
+        return self._get_model("/learning/sector", LearningKnowledge)
+
+    def technology(self) -> LearningKnowledge:
+        """Technology knowledge."""
+        return self._get_model("/learning/technology", LearningKnowledge)
+
+    def country(self) -> LearningKnowledge:
+        """Country knowledge."""
+        return self._get_model("/learning/country", LearningKnowledge)
+
+    def stage(self) -> LearningKnowledge:
+        """Stage knowledge."""
+        return self._get_model("/learning/stage", LearningKnowledge)
+
+    def founders(self) -> LearningKnowledge:
+        """Founder knowledge."""
+        return self._get_model("/learning/founders", LearningKnowledge)
+
+    def business_model(self) -> LearningKnowledge:
+        """Business-model knowledge."""
+        return self._get_model("/learning/business-model", LearningKnowledge)
+
+    def reports(self, *, period: str = "daily") -> LearningReports:
+        """Recorded learning snapshot headers."""
+        return self._get_model(
+            "/learning/reports",
+            LearningReports,
+            params={"period": period},
+        )
+
+    def report(self, snapshot_id: str) -> LearningReportDetail:
+        """Full recorded learning report for a snapshot id."""
+        return self._get_model(
+            f"/learning/reports/{snapshot_id}", LearningReportDetail
+        )
+
+
+# ---------------------------------------------------------------------------
 # Batch processing
 # ---------------------------------------------------------------------------
 
@@ -924,6 +1016,7 @@ class PredictronClient:
         self._health = HealthResource(self)
         self._companies = CompaniesResource(self)
         self._monitor = MonitorResource(self)
+        self._learning = LearningResource(self)
 
     # --- resources -------------------------------------------------------
 
@@ -964,6 +1057,11 @@ class PredictronClient:
     def monitor(self) -> MonitorResource:
         """Continuous intelligence & drift detection endpoints."""
         return self._monitor
+
+    @property
+    def learning(self) -> LearningResource:
+        """Continuous learning intelligence endpoints."""
+        return self._learning
 
     @property
     def search_resource(self) -> SearchResource:

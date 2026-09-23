@@ -2,7 +2,7 @@
 
 Uses a recording-op proxy to verify that upgrade() issues the expected
 DDL operations and that downgrade() issues the exact mirror image, plus
-revision wiring checks against the ORM metadata.
+revision wiring checks against the ORM metadata and migration ordering.
 """
 
 from __future__ import annotations
@@ -221,7 +221,7 @@ def test_orm_models_share_migration_pk_columns():
     assert "company_id" in CompanySnapshot.__table__.columns
 
 
-def test_latest_migration_is_0008():
+def test_latest_migration_is_0009():
     import re
 
     files = (MIGRATION_PATH.parent).glob("*.py")
@@ -230,4 +230,4 @@ def test_latest_migration_is_0008():
         for f in files
         if f.name[0].isdigit()
     ]
-    assert max(revisions, key=int) == "0008"
+    assert max(revisions, key=int) == "0009"

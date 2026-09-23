@@ -1,0 +1,2205 @@
+{
+  "kind": "learning_eval_run",
+  "record_hash": "8ce504e1bcf6997a3c1504b777d4e301be8c76f821def06bfaaf1d18f9ca6185",
+  "run": {
+    "patterns": {
+      "empty": {},
+      "imperfect_balanced": {
+        "business_model": {
+          "accuracy": 0.4,
+          "confidence_bias": 0.06,
+          "false_negative": 3,
+          "false_positive": 3,
+          "precision": 0.4,
+          "recommendation": "calibrate confidence downward for business_model category 'saas'",
+          "samples": 10,
+          "scoreable": 10,
+          "true_negative": 2,
+          "true_positive": 2
+        },
+        "country": {
+          "accuracy": 0.4,
+          "confidence_bias": 0.06,
+          "false_negative": 3,
+          "false_positive": 3,
+          "precision": 0.4,
+          "recommendation": "calibrate confidence downward for country category 'us'",
+          "samples": 10,
+          "scoreable": 10,
+          "true_negative": 2,
+          "true_positive": 2
+        },
+        "founder": {
+          "accuracy": 0.4,
+          "confidence_bias": 0.06,
+          "false_negative": 3,
+          "false_positive": 3,
+          "precision": 0.4,
+          "recommendation": "calibrate confidence downward for founder category 'team'",
+          "samples": 10,
+          "scoreable": 10,
+          "true_negative": 2,
+          "true_positive": 2
+        },
+        "sector": {
+          "accuracy": 0.4,
+          "confidence_bias": 0.06,
+          "false_negative": 3,
+          "false_positive": 3,
+          "precision": 0.4,
+          "recommendation": "calibrate confidence downward for sector category 'ai'",
+          "samples": 10,
+          "scoreable": 10,
+          "true_negative": 2,
+          "true_positive": 2
+        },
+        "stage": {
+          "accuracy": 0.4,
+          "confidence_bias": 0.06,
+          "false_negative": 3,
+          "false_positive": 3,
+          "precision": 0.4,
+          "recommendation": "calibrate confidence downward for stage category 'seed'",
+          "samples": 10,
+          "scoreable": 10,
+          "true_negative": 2,
+          "true_positive": 2
+        },
+        "technology": {
+          "accuracy": 0.4,
+          "confidence_bias": 0.06,
+          "false_negative": 3,
+          "false_positive": 3,
+          "precision": 0.4,
+          "recommendation": "calibrate confidence downward for technology category 'ml'",
+          "samples": 10,
+          "scoreable": 10,
+          "true_negative": 2,
+          "true_positive": 2
+        }
+      },
+      "mixed_bias": {
+        "business_model": {
+          "accuracy": 1.0,
+          "confidence_bias": 0.25,
+          "false_negative": 0,
+          "false_positive": 0,
+          "precision": 1.0,
+          "recommendation": "calibrate confidence downward for business_model category 'saas'",
+          "samples": 10,
+          "scoreable": 10,
+          "true_negative": 5,
+          "true_positive": 5
+        },
+        "country": {
+          "accuracy": 1.0,
+          "confidence_bias": 0.25,
+          "false_negative": 0,
+          "false_positive": 0,
+          "precision": 1.0,
+          "recommendation": "calibrate confidence downward for country category 'us'",
+          "samples": 10,
+          "scoreable": 10,
+          "true_negative": 5,
+          "true_positive": 5
+        },
+        "founder": {
+          "accuracy": 1.0,
+          "confidence_bias": 0.25,
+          "false_negative": 0,
+          "false_positive": 0,
+          "precision": 1.0,
+          "recommendation": "calibrate confidence downward for founder category 'team'",
+          "samples": 10,
+          "scoreable": 10,
+          "true_negative": 5,
+          "true_positive": 5
+        },
+        "sector": {
+          "accuracy": 1.0,
+          "confidence_bias": 0.25,
+          "false_negative": 0,
+          "false_positive": 0,
+          "precision": 1.0,
+          "recommendation": "calibrate confidence downward for sector category 'ai'",
+          "samples": 10,
+          "scoreable": 10,
+          "true_negative": 5,
+          "true_positive": 5
+        },
+        "stage": {
+          "accuracy": 1.0,
+          "confidence_bias": 0.25,
+          "false_negative": 0,
+          "false_positive": 0,
+          "precision": 1.0,
+          "recommendation": "calibrate confidence downward for stage category 'seed'",
+          "samples": 10,
+          "scoreable": 10,
+          "true_negative": 5,
+          "true_positive": 5
+        },
+        "technology": {
+          "accuracy": 1.0,
+          "confidence_bias": 0.25,
+          "false_negative": 0,
+          "false_positive": 0,
+          "precision": 1.0,
+          "recommendation": "calibrate confidence downward for technology category 'ml'",
+          "samples": 10,
+          "scoreable": 10,
+          "true_negative": 5,
+          "true_positive": 5
+        }
+      },
+      "overconfident": {
+        "business_model": {
+          "accuracy": 0.5,
+          "confidence_bias": 0.05,
+          "false_negative": 5,
+          "false_positive": 0,
+          "precision": null,
+          "recommendation": "calibrate confidence downward for business_model category 'saas'",
+          "samples": 10,
+          "scoreable": 10,
+          "true_negative": 5,
+          "true_positive": 0
+        },
+        "country": {
+          "accuracy": 0.5,
+          "confidence_bias": 0.05,
+          "false_negative": 5,
+          "false_positive": 0,
+          "precision": null,
+          "recommendation": "calibrate confidence downward for country category 'us'",
+          "samples": 10,
+          "scoreable": 10,
+          "true_negative": 5,
+          "true_positive": 0
+        },
+        "founder": {
+          "accuracy": 0.5,
+          "confidence_bias": 0.05,
+          "false_negative": 5,
+          "false_positive": 0,
+          "precision": null,
+          "recommendation": "calibrate confidence downward for founder category 'team'",
+          "samples": 10,
+          "scoreable": 10,
+          "true_negative": 5,
+          "true_positive": 0
+        },
+        "sector": {
+          "accuracy": 0.5,
+          "confidence_bias": 0.05,
+          "false_negative": 5,
+          "false_positive": 0,
+          "precision": null,
+          "recommendation": "calibrate confidence downward for sector category 'ai'",
+          "samples": 10,
+          "scoreable": 10,
+          "true_negative": 5,
+          "true_positive": 0
+        },
+        "stage": {
+          "accuracy": 0.5,
+          "confidence_bias": 0.05,
+          "false_negative": 5,
+          "false_positive": 0,
+          "precision": null,
+          "recommendation": "calibrate confidence downward for stage category 'seed'",
+          "samples": 10,
+          "scoreable": 10,
+          "true_negative": 5,
+          "true_positive": 0
+        },
+        "technology": {
+          "accuracy": 0.5,
+          "confidence_bias": 0.05,
+          "false_negative": 5,
+          "false_positive": 0,
+          "precision": null,
+          "recommendation": "calibrate confidence downward for technology category 'ml'",
+          "samples": 10,
+          "scoreable": 10,
+          "true_negative": 5,
+          "true_positive": 0
+        }
+      },
+      "perfect": {
+        "business_model": {
+          "accuracy": 1.0,
+          "confidence_bias": 0.0,
+          "false_negative": 0,
+          "false_positive": 0,
+          "precision": 1.0,
+          "recommendation": "maintain current confidence weighting for business_model category 'saas'",
+          "samples": 10,
+          "scoreable": 10,
+          "true_negative": 5,
+          "true_positive": 5
+        },
+        "country": {
+          "accuracy": 1.0,
+          "confidence_bias": 0.0,
+          "false_negative": 0,
+          "false_positive": 0,
+          "precision": 1.0,
+          "recommendation": "maintain current confidence weighting for country category 'us'",
+          "samples": 10,
+          "scoreable": 10,
+          "true_negative": 5,
+          "true_positive": 5
+        },
+        "founder": {
+          "accuracy": 1.0,
+          "confidence_bias": 0.0,
+          "false_negative": 0,
+          "false_positive": 0,
+          "precision": 1.0,
+          "recommendation": "maintain current confidence weighting for founder category 'team'",
+          "samples": 10,
+          "scoreable": 10,
+          "true_negative": 5,
+          "true_positive": 5
+        },
+        "sector": {
+          "accuracy": 1.0,
+          "confidence_bias": 0.0,
+          "false_negative": 0,
+          "false_positive": 0,
+          "precision": 1.0,
+          "recommendation": "maintain current confidence weighting for sector category 'ai'",
+          "samples": 10,
+          "scoreable": 10,
+          "true_negative": 5,
+          "true_positive": 5
+        },
+        "stage": {
+          "accuracy": 1.0,
+          "confidence_bias": 0.0,
+          "false_negative": 0,
+          "false_positive": 0,
+          "precision": 1.0,
+          "recommendation": "maintain current confidence weighting for stage category 'seed'",
+          "samples": 10,
+          "scoreable": 10,
+          "true_negative": 5,
+          "true_positive": 5
+        },
+        "technology": {
+          "accuracy": 1.0,
+          "confidence_bias": 0.0,
+          "false_negative": 0,
+          "false_positive": 0,
+          "precision": 1.0,
+          "recommendation": "maintain current confidence weighting for technology category 'ml'",
+          "samples": 10,
+          "scoreable": 10,
+          "true_negative": 5,
+          "true_positive": 5
+        }
+      }
+    },
+    "run": {
+      "cases": [
+        {
+          "assertions": [
+            {
+              "detail": "1.0",
+              "name": "schema_version",
+              "passed": true
+            },
+            {
+              "detail": "d8f1da9b738f78864eaaa661b4e9488ece3a5620ccc76d096b3ceafb587abf8f",
+              "name": "content_hash_present",
+              "passed": true
+            },
+            {
+              "detail": "d8f1da9b738f78864eaaa661b4e9488ece3a5620ccc76d096b3ceafb587abf8f",
+              "name": "verify",
+              "passed": true
+            },
+            {
+              "detail": "9a2c6f372b892478493100eade05946df716ae576a3e737d4e62098042543d9f",
+              "name": "snapshot_id_stable",
+              "passed": true
+            },
+            {
+              "detail": "9a2c6f372b892478493100eade05946df716ae576a3e737d4e62098042543d9f",
+              "name": "snapshot_id_epoch",
+              "passed": true
+            },
+            {
+              "detail": "d8f1da9b738f78864eaaa661b4e9488ece3a5620ccc76d096b3ceafb587abf8f",
+              "name": "content_hash_stable_across_timestamps",
+              "passed": true
+            },
+            {
+              "detail": "d8f1da9b738f78864eaaa661b4e9488ece3a5620ccc76d096b3ceafb587abf8f",
+              "name": "twin_verify",
+              "passed": true
+            },
+            {
+              "detail": "7.0.0",
+              "name": "engine_version",
+              "passed": true
+            },
+            {
+              "detail": "{'evaluations': 0, 'samples': 0, 'scoreable': 0}",
+              "name": "counts_exact",
+              "passed": true
+            },
+            {
+              "detail": "0",
+              "name": "digest_scoreable",
+              "passed": true
+            },
+            {
+              "detail": "{'scoreable': 0, 'tp': 0, 'tn': 0, 'fp': 0, 'fn': 0}",
+              "name": "digest_matches_reference",
+              "passed": true
+            },
+            {
+              "detail": "{'accuracy': None, 'precision': None, 'recall': None, 'false_positive_rate': None, 'false_negative_rate': None}",
+              "name": "digest_rates_match_reference",
+              "passed": true
+            },
+            {
+              "detail": "None",
+              "name": "accuracy_pinned",
+              "passed": true
+            },
+            {
+              "detail": "None",
+              "name": "precision_pinned",
+              "passed": true
+            },
+            {
+              "detail": "{'accuracy': None, 'precision': None, 'recall': None, 'false_positive_rate': None, 'false_negative_rate': None, 'ece': 0.0, 'overconfidence': 0.0, 'confidence.mean': None, 'confidence.bias': 0.0}",
+              "name": "metrics_accuracy",
+              "passed": true
+            },
+            {
+              "detail": "0.0",
+              "name": "ece_matches_reference",
+              "passed": true
+            },
+            {
+              "detail": "0.0",
+              "name": "ece_pinned",
+              "passed": true
+            },
+            {
+              "detail": "0.0",
+              "name": "ece_within_tolerance",
+              "passed": true
+            },
+            {
+              "detail": "0",
+              "name": "calibration_total_samples",
+              "passed": true
+            },
+            {
+              "detail": "False",
+              "name": "overconfidence_detected_pinned",
+              "passed": true
+            },
+            {
+              "detail": "{'accuracy': None, 'precision': None, 'recall': None, 'false_positive_rate': None, 'false_negative_rate': None, 'ece': 0.0, 'overconfidence': 0.0, 'confidence.mean': None, 'confidence.bias': 0.0}",
+              "name": "metrics_ece",
+              "passed": true
+            },
+            {
+              "detail": "0",
+              "name": "confidence_count",
+              "passed": true
+            },
+            {
+              "detail": "0.0",
+              "name": "confidence_bias_pinned",
+              "passed": true
+            },
+            {
+              "detail": "0.0",
+              "name": "confidence_bias_independent",
+              "passed": true
+            },
+            {
+              "detail": "{'accuracy': None, 'precision': None, 'recall': None, 'false_positive_rate': None, 'false_negative_rate': None, 'ece': 0.0, 'overconfidence': 0.0, 'confidence.mean': None, 'confidence.bias': 0.0}",
+              "name": "metrics_bias",
+              "passed": true
+            },
+            {
+              "detail": "{'sector': {}, 'stage': {}, 'country': {}, 'technology': {}, 'business_model': {}, 'founder': {}}",
+              "name": "distributions_match_reference",
+              "passed": true
+            },
+            {
+              "detail": "['business_model', 'country', 'founder', 'sector', 'stage', 'technology']",
+              "name": "distributions_dimensions",
+              "passed": true
+            },
+            {
+              "detail": "0",
+              "name": "patterns_reference_count",
+              "passed": true
+            },
+            {
+              "detail": "0",
+              "name": "patterns_pinned",
+              "passed": true
+            },
+            {
+              "detail": "[]",
+              "name": "patterns_dimensions_ordered",
+              "passed": true
+            },
+            {
+              "detail": "0",
+              "name": "patterns_buckets_sorted",
+              "passed": true
+            },
+            {
+              "detail": "['business_model', 'country', 'founder', 'sector', 'stage', 'technology']",
+              "name": "knowledge_dimensions",
+              "passed": true
+            },
+            {
+              "detail": "0",
+              "name": "knowledge_sorted",
+              "passed": true
+            },
+            {
+              "detail": "0",
+              "name": "knowledge_sorted",
+              "passed": true
+            },
+            {
+              "detail": "0",
+              "name": "knowledge_sorted",
+              "passed": true
+            },
+            {
+              "detail": "0",
+              "name": "knowledge_sorted",
+              "passed": true
+            },
+            {
+              "detail": "0",
+              "name": "knowledge_sorted",
+              "passed": true
+            },
+            {
+              "detail": "0",
+              "name": "knowledge_sorted",
+              "passed": true
+            },
+            {
+              "detail": "0",
+              "name": "observations_empty",
+              "passed": true
+            },
+            {
+              "detail": "0",
+              "name": "observations_pinned_count",
+              "passed": true
+            },
+            {
+              "detail": "0",
+              "name": "recommendations_pinned_count",
+              "passed": true
+            },
+            {
+              "detail": "[]",
+              "name": "recommendations_kinds_nonempty",
+              "passed": true
+            },
+            {
+              "detail": "{}",
+              "name": "verdict_counts_correct",
+              "passed": true
+            }
+          ],
+          "case_id": "empty",
+          "passed": true
+        },
+        {
+          "assertions": [
+            {
+              "detail": "1.0",
+              "name": "schema_version",
+              "passed": true
+            },
+            {
+              "detail": "11ada54bb6aff40bc01a80f4fd6710d9b43abe8c767e4bdf88baaa0f088a2c59",
+              "name": "content_hash_present",
+              "passed": true
+            },
+            {
+              "detail": "11ada54bb6aff40bc01a80f4fd6710d9b43abe8c767e4bdf88baaa0f088a2c59",
+              "name": "verify",
+              "passed": true
+            },
+            {
+              "detail": "ba5719a5b2743087b84b2210dae5f4134d1942b2b86d7e53dcb6846c75a8db1a",
+              "name": "snapshot_id_stable",
+              "passed": true
+            },
+            {
+              "detail": "ba5719a5b2743087b84b2210dae5f4134d1942b2b86d7e53dcb6846c75a8db1a",
+              "name": "snapshot_id_epoch",
+              "passed": true
+            },
+            {
+              "detail": "11ada54bb6aff40bc01a80f4fd6710d9b43abe8c767e4bdf88baaa0f088a2c59",
+              "name": "content_hash_stable_across_timestamps",
+              "passed": true
+            },
+            {
+              "detail": "11ada54bb6aff40bc01a80f4fd6710d9b43abe8c767e4bdf88baaa0f088a2c59",
+              "name": "twin_verify",
+              "passed": true
+            },
+            {
+              "detail": "7.0.0",
+              "name": "engine_version",
+              "passed": true
+            },
+            {
+              "detail": "{'evaluations': 10, 'samples': 10, 'scoreable': 10}",
+              "name": "counts_exact",
+              "passed": true
+            },
+            {
+              "detail": "10",
+              "name": "digest_scoreable",
+              "passed": true
+            },
+            {
+              "detail": "{'scoreable': 10, 'tp': 2, 'tn': 2, 'fp': 3, 'fn': 3}",
+              "name": "digest_matches_reference",
+              "passed": true
+            },
+            {
+              "detail": "{'accuracy': 0.4, 'precision': 0.4, 'recall': 0.4, 'false_positive_rate': 0.6, 'false_negative_rate': 0.6}",
+              "name": "digest_rates_match_reference",
+              "passed": true
+            },
+            {
+              "detail": "0.4",
+              "name": "accuracy_pinned",
+              "passed": true
+            },
+            {
+              "detail": "0.4",
+              "name": "precision_pinned",
+              "passed": true
+            },
+            {
+              "detail": "0.4",
+              "name": "recall_pinned",
+              "passed": true
+            },
+            {
+              "detail": "0.6",
+              "name": "fpr_pinned",
+              "passed": true
+            },
+            {
+              "detail": "0.6",
+              "name": "fnr_pinned",
+              "passed": true
+            },
+            {
+              "detail": "{'accuracy': 0.4, 'precision': 0.4, 'recall': 0.4, 'false_positive_rate': 0.6, 'false_negative_rate': 0.6, 'ece': 0.54, 'overconfidence': 1.0, 'confidence.mean': 0.56, 'confidence.bias': 0.06}",
+              "name": "metrics_accuracy",
+              "passed": true
+            },
+            {
+              "detail": "0.54",
+              "name": "ece_matches_reference",
+              "passed": true
+            },
+            {
+              "detail": "0.54",
+              "name": "ece_pinned",
+              "passed": true
+            },
+            {
+              "detail": "0.54",
+              "name": "ece_within_tolerance",
+              "passed": true
+            },
+            {
+              "detail": "10",
+              "name": "calibration_total_samples",
+              "passed": true
+            },
+            {
+              "detail": "True",
+              "name": "overconfidence_detected_pinned",
+              "passed": true
+            },
+            {
+              "detail": "2",
+              "name": "overconfident_bins_pinned",
+              "passed": true
+            },
+            {
+              "detail": "{'accuracy': 0.4, 'precision': 0.4, 'recall': 0.4, 'false_positive_rate': 0.6, 'false_negative_rate': 0.6, 'ece': 0.54, 'overconfidence': 1.0, 'confidence.mean': 0.56, 'confidence.bias': 0.06}",
+              "name": "metrics_ece",
+              "passed": true
+            },
+            {
+              "detail": "0.56",
+              "name": "confidence_mean_pinned",
+              "passed": true
+            },
+            {
+              "detail": "10",
+              "name": "confidence_count",
+              "passed": true
+            },
+            {
+              "detail": "0.2059",
+              "name": "confidence_stddev_independent",
+              "passed": true
+            },
+            {
+              "detail": "0.06",
+              "name": "confidence_bias_pinned",
+              "passed": true
+            },
+            {
+              "detail": "0.06",
+              "name": "confidence_bias_independent",
+              "passed": true
+            },
+            {
+              "detail": "{'accuracy': 0.4, 'precision': 0.4, 'recall': 0.4, 'false_positive_rate': 0.6, 'false_negative_rate': 0.6, 'ece': 0.54, 'overconfidence': 1.0, 'confidence.mean': 0.56, 'confidence.bias': 0.06}",
+              "name": "metrics_bias",
+              "passed": true
+            },
+            {
+              "detail": "{'sector': {'ai': 10}, 'stage': {'seed': 10}, 'country': {'us': 10}, 'technology': {'ml': 10}, 'business_model': {'saas': 10}, 'founder': {'team': 10}}",
+              "name": "distributions_match_reference",
+              "passed": true
+            },
+            {
+              "detail": "['business_model', 'country', 'founder', 'sector', 'stage', 'technology']",
+              "name": "distributions_dimensions",
+              "passed": true
+            },
+            {
+              "detail": "6",
+              "name": "patterns_reference_count",
+              "passed": true
+            },
+            {
+              "detail": "6",
+              "name": "patterns_pinned",
+              "passed": true
+            },
+            {
+              "detail": "['sector', 'stage', 'country', 'technology', 'business_model', 'founder']",
+              "name": "patterns_dimensions_ordered",
+              "passed": true
+            },
+            {
+              "detail": "6",
+              "name": "patterns_buckets_sorted",
+              "passed": true
+            },
+            {
+              "detail": "{'dimension': 'sector', 'value': 'ai', 'samples': 10, 'scoreable': 10, 'true_positive': 2, 'true_negative': 2, 'false_positive': 3, 'false_negative': 3, 'accuracy': 0.4, 'precision': 0.4, 'false_positive_rate': 0.6, 'false_negative_rate': 0.6, 'confidence': 0.56, 'confidence_bias': 0.06, 'recommendation': \"calibrate confidence downward for sector category 'ai'\"}",
+              "name": "patterns_rate_bounds",
+              "passed": true
+            },
+            {
+              "detail": "{'dimension': 'stage', 'value': 'seed', 'samples': 10, 'scoreable': 10, 'true_positive': 2, 'true_negative': 2, 'false_positive': 3, 'false_negative': 3, 'accuracy': 0.4, 'precision': 0.4, 'false_positive_rate': 0.6, 'false_negative_rate': 0.6, 'confidence': 0.56, 'confidence_bias': 0.06, 'recommendation': \"calibrate confidence downward for stage category 'seed'\"}",
+              "name": "patterns_rate_bounds",
+              "passed": true
+            },
+            {
+              "detail": "{'dimension': 'country', 'value': 'us', 'samples': 10, 'scoreable': 10, 'true_positive': 2, 'true_negative': 2, 'false_positive': 3, 'false_negative': 3, 'accuracy': 0.4, 'precision': 0.4, 'false_positive_rate': 0.6, 'false_negative_rate': 0.6, 'confidence': 0.56, 'confidence_bias': 0.06, 'recommendation': \"calibrate confidence downward for country category 'us'\"}",
+              "name": "patterns_rate_bounds",
+              "passed": true
+            },
+            {
+              "detail": "{'dimension': 'technology', 'value': 'ml', 'samples': 10, 'scoreable': 10, 'true_positive': 2, 'true_negative': 2, 'false_positive': 3, 'false_negative': 3, 'accuracy': 0.4, 'precision': 0.4, 'false_positive_rate': 0.6, 'false_negative_rate': 0.6, 'confidence': 0.56, 'confidence_bias': 0.06, 'recommendation': \"calibrate confidence downward for technology category 'ml'\"}",
+              "name": "patterns_rate_bounds",
+              "passed": true
+            },
+            {
+              "detail": "{'dimension': 'business_model', 'value': 'saas', 'samples': 10, 'scoreable': 10, 'true_positive': 2, 'true_negative': 2, 'false_positive': 3, 'false_negative': 3, 'accuracy': 0.4, 'precision': 0.4, 'false_positive_rate': 0.6, 'false_negative_rate': 0.6, 'confidence': 0.56, 'confidence_bias': 0.06, 'recommendation': \"calibrate confidence downward for business_model category 'saas'\"}",
+              "name": "patterns_rate_bounds",
+              "passed": true
+            },
+            {
+              "detail": "{'dimension': 'founder', 'value': 'team', 'samples': 10, 'scoreable': 10, 'true_positive': 2, 'true_negative': 2, 'false_positive': 3, 'false_negative': 3, 'accuracy': 0.4, 'precision': 0.4, 'false_positive_rate': 0.6, 'false_negative_rate': 0.6, 'confidence': 0.56, 'confidence_bias': 0.06, 'recommendation': \"calibrate confidence downward for founder category 'team'\"}",
+              "name": "patterns_rate_bounds",
+              "passed": true
+            },
+            {
+              "detail": "['business_model', 'country', 'founder', 'sector', 'stage', 'technology']",
+              "name": "knowledge_dimensions",
+              "passed": true
+            },
+            {
+              "detail": "1",
+              "name": "knowledge_sorted",
+              "passed": true
+            },
+            {
+              "detail": "1",
+              "name": "knowledge_sorted",
+              "passed": true
+            },
+            {
+              "detail": "1",
+              "name": "knowledge_sorted",
+              "passed": true
+            },
+            {
+              "detail": "1",
+              "name": "knowledge_sorted",
+              "passed": true
+            },
+            {
+              "detail": "1",
+              "name": "knowledge_sorted",
+              "passed": true
+            },
+            {
+              "detail": "1",
+              "name": "knowledge_sorted",
+              "passed": true
+            },
+            {
+              "detail": "12",
+              "name": "observations_nonempty",
+              "passed": true
+            },
+            {
+              "detail": "['high_false_positive_rate', 'overconfidence']",
+              "name": "observations_canonical",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'high_false_positive_rate', 'dimension': 'sector', 'value': 'ai', 'metric': 'false_positive_rate', 'metric_value': 0.6, 'delta': None, 'direction': 'flat', 'baseline': None, 'sample_size': 10, 'summary': 'sector category ai shows high false positive rate (false_positive_rate=0.60)'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'overconfidence', 'dimension': 'sector', 'value': 'ai', 'metric': 'confidence_bias', 'metric_value': 0.06, 'delta': None, 'direction': 'up', 'baseline': 0.05, 'sample_size': 10, 'summary': 'sector category ai is overconfident by 0.0600'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'high_false_positive_rate', 'dimension': 'stage', 'value': 'seed', 'metric': 'false_positive_rate', 'metric_value': 0.6, 'delta': None, 'direction': 'flat', 'baseline': None, 'sample_size': 10, 'summary': 'stage category seed shows high false positive rate (false_positive_rate=0.60)'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'overconfidence', 'dimension': 'stage', 'value': 'seed', 'metric': 'confidence_bias', 'metric_value': 0.06, 'delta': None, 'direction': 'up', 'baseline': 0.05, 'sample_size': 10, 'summary': 'stage category seed is overconfident by 0.0600'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'high_false_positive_rate', 'dimension': 'country', 'value': 'us', 'metric': 'false_positive_rate', 'metric_value': 0.6, 'delta': None, 'direction': 'flat', 'baseline': None, 'sample_size': 10, 'summary': 'country category us shows high false positive rate (false_positive_rate=0.60)'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'overconfidence', 'dimension': 'country', 'value': 'us', 'metric': 'confidence_bias', 'metric_value': 0.06, 'delta': None, 'direction': 'up', 'baseline': 0.05, 'sample_size': 10, 'summary': 'country category us is overconfident by 0.0600'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'high_false_positive_rate', 'dimension': 'technology', 'value': 'ml', 'metric': 'false_positive_rate', 'metric_value': 0.6, 'delta': None, 'direction': 'flat', 'baseline': None, 'sample_size': 10, 'summary': 'technology category ml shows high false positive rate (false_positive_rate=0.60)'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'overconfidence', 'dimension': 'technology', 'value': 'ml', 'metric': 'confidence_bias', 'metric_value': 0.06, 'delta': None, 'direction': 'up', 'baseline': 0.05, 'sample_size': 10, 'summary': 'technology category ml is overconfident by 0.0600'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'high_false_positive_rate', 'dimension': 'business_model', 'value': 'saas', 'metric': 'false_positive_rate', 'metric_value': 0.6, 'delta': None, 'direction': 'flat', 'baseline': None, 'sample_size': 10, 'summary': 'business_model category saas shows high false positive rate (false_positive_rate=0.60)'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'overconfidence', 'dimension': 'business_model', 'value': 'saas', 'metric': 'confidence_bias', 'metric_value': 0.06, 'delta': None, 'direction': 'up', 'baseline': 0.05, 'sample_size': 10, 'summary': 'business_model category saas is overconfident by 0.0600'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'high_false_positive_rate', 'dimension': 'founder', 'value': 'team', 'metric': 'false_positive_rate', 'metric_value': 0.6, 'delta': None, 'direction': 'flat', 'baseline': None, 'sample_size': 10, 'summary': 'founder category team shows high false positive rate (false_positive_rate=0.60)'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'overconfidence', 'dimension': 'founder', 'value': 'team', 'metric': 'confidence_bias', 'metric_value': 0.06, 'delta': None, 'direction': 'up', 'baseline': 0.05, 'sample_size': 10, 'summary': 'founder category team is overconfident by 0.0600'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "12",
+              "name": "observations_pinned_count",
+              "passed": true
+            },
+            {
+              "detail": "1",
+              "name": "recommendations_pinned_count",
+              "passed": true
+            },
+            {
+              "detail": "['recalibrate_confidence']",
+              "name": "recommendations_kinds_nonempty",
+              "passed": true
+            },
+            {
+              "detail": "{'correct': 4, 'incorrect': 6}",
+              "name": "verdict_counts_correct",
+              "passed": true
+            }
+          ],
+          "case_id": "imperfect_balanced",
+          "passed": true
+        },
+        {
+          "assertions": [
+            {
+              "detail": "1.0",
+              "name": "schema_version",
+              "passed": true
+            },
+            {
+              "detail": "2cb28ec4254a4b04a5226b262d8115127a82e2ba5b8d976c08284f55657a5cb2",
+              "name": "content_hash_present",
+              "passed": true
+            },
+            {
+              "detail": "2cb28ec4254a4b04a5226b262d8115127a82e2ba5b8d976c08284f55657a5cb2",
+              "name": "verify",
+              "passed": true
+            },
+            {
+              "detail": "aa9beabeeb8d3a0cd4ed2d342944d94ed2a5dbb2298caed0fafbea1598c368ac",
+              "name": "snapshot_id_stable",
+              "passed": true
+            },
+            {
+              "detail": "aa9beabeeb8d3a0cd4ed2d342944d94ed2a5dbb2298caed0fafbea1598c368ac",
+              "name": "snapshot_id_epoch",
+              "passed": true
+            },
+            {
+              "detail": "2cb28ec4254a4b04a5226b262d8115127a82e2ba5b8d976c08284f55657a5cb2",
+              "name": "content_hash_stable_across_timestamps",
+              "passed": true
+            },
+            {
+              "detail": "2cb28ec4254a4b04a5226b262d8115127a82e2ba5b8d976c08284f55657a5cb2",
+              "name": "twin_verify",
+              "passed": true
+            },
+            {
+              "detail": "7.0.0",
+              "name": "engine_version",
+              "passed": true
+            },
+            {
+              "detail": "{'evaluations': 10, 'samples': 10, 'scoreable': 10}",
+              "name": "counts_exact",
+              "passed": true
+            },
+            {
+              "detail": "10",
+              "name": "digest_scoreable",
+              "passed": true
+            },
+            {
+              "detail": "{'scoreable': 10, 'tp': 5, 'tn': 5, 'fp': 0, 'fn': 0}",
+              "name": "digest_matches_reference",
+              "passed": true
+            },
+            {
+              "detail": "{'accuracy': 1.0, 'precision': 1.0, 'recall': 1.0, 'false_positive_rate': 0.0, 'false_negative_rate': 0.0}",
+              "name": "digest_rates_match_reference",
+              "passed": true
+            },
+            {
+              "detail": "1.0",
+              "name": "accuracy_pinned",
+              "passed": true
+            },
+            {
+              "detail": "1.0",
+              "name": "precision_pinned",
+              "passed": true
+            },
+            {
+              "detail": "{'accuracy': 1.0, 'precision': 1.0, 'recall': 1.0, 'false_positive_rate': 0.0, 'false_negative_rate': 0.0, 'ece': 0.35, 'overconfidence': 1.0, 'confidence.mean': 0.75, 'confidence.bias': 0.25}",
+              "name": "metrics_accuracy",
+              "passed": true
+            },
+            {
+              "detail": "0.35",
+              "name": "ece_matches_reference",
+              "passed": true
+            },
+            {
+              "detail": "0.35",
+              "name": "ece_pinned",
+              "passed": true
+            },
+            {
+              "detail": "0.35",
+              "name": "ece_within_tolerance",
+              "passed": true
+            },
+            {
+              "detail": "10",
+              "name": "calibration_total_samples",
+              "passed": true
+            },
+            {
+              "detail": "True",
+              "name": "overconfidence_detected_pinned",
+              "passed": true
+            },
+            {
+              "detail": "1",
+              "name": "overconfident_bins_pinned",
+              "passed": true
+            },
+            {
+              "detail": "{'accuracy': 1.0, 'precision': 1.0, 'recall': 1.0, 'false_positive_rate': 0.0, 'false_negative_rate': 0.0, 'ece': 0.35, 'overconfidence': 1.0, 'confidence.mean': 0.75, 'confidence.bias': 0.25}",
+              "name": "metrics_ece",
+              "passed": true
+            },
+            {
+              "detail": "0.75",
+              "name": "confidence_mean_pinned",
+              "passed": true
+            },
+            {
+              "detail": "10",
+              "name": "confidence_count",
+              "passed": true
+            },
+            {
+              "detail": "0.15",
+              "name": "confidence_stddev_independent",
+              "passed": true
+            },
+            {
+              "detail": "0.25",
+              "name": "confidence_bias_pinned",
+              "passed": true
+            },
+            {
+              "detail": "0.25",
+              "name": "confidence_bias_independent",
+              "passed": true
+            },
+            {
+              "detail": "{'accuracy': 1.0, 'precision': 1.0, 'recall': 1.0, 'false_positive_rate': 0.0, 'false_negative_rate': 0.0, 'ece': 0.35, 'overconfidence': 1.0, 'confidence.mean': 0.75, 'confidence.bias': 0.25}",
+              "name": "metrics_bias",
+              "passed": true
+            },
+            {
+              "detail": "{'sector': {'ai': 10}, 'stage': {'seed': 10}, 'country': {'us': 10}, 'technology': {'ml': 10}, 'business_model': {'saas': 10}, 'founder': {'team': 10}}",
+              "name": "distributions_match_reference",
+              "passed": true
+            },
+            {
+              "detail": "['business_model', 'country', 'founder', 'sector', 'stage', 'technology']",
+              "name": "distributions_dimensions",
+              "passed": true
+            },
+            {
+              "detail": "6",
+              "name": "patterns_reference_count",
+              "passed": true
+            },
+            {
+              "detail": "6",
+              "name": "patterns_pinned",
+              "passed": true
+            },
+            {
+              "detail": "['sector', 'stage', 'country', 'technology', 'business_model', 'founder']",
+              "name": "patterns_dimensions_ordered",
+              "passed": true
+            },
+            {
+              "detail": "6",
+              "name": "patterns_buckets_sorted",
+              "passed": true
+            },
+            {
+              "detail": "{'dimension': 'sector', 'value': 'ai', 'samples': 10, 'scoreable': 10, 'true_positive': 5, 'true_negative': 5, 'false_positive': 0, 'false_negative': 0, 'accuracy': 1.0, 'precision': 1.0, 'false_positive_rate': 0.0, 'false_negative_rate': 0.0, 'confidence': 0.75, 'confidence_bias': 0.25, 'recommendation': \"calibrate confidence downward for sector category 'ai'\"}",
+              "name": "patterns_rate_bounds",
+              "passed": true
+            },
+            {
+              "detail": "{'dimension': 'stage', 'value': 'seed', 'samples': 10, 'scoreable': 10, 'true_positive': 5, 'true_negative': 5, 'false_positive': 0, 'false_negative': 0, 'accuracy': 1.0, 'precision': 1.0, 'false_positive_rate': 0.0, 'false_negative_rate': 0.0, 'confidence': 0.75, 'confidence_bias': 0.25, 'recommendation': \"calibrate confidence downward for stage category 'seed'\"}",
+              "name": "patterns_rate_bounds",
+              "passed": true
+            },
+            {
+              "detail": "{'dimension': 'country', 'value': 'us', 'samples': 10, 'scoreable': 10, 'true_positive': 5, 'true_negative': 5, 'false_positive': 0, 'false_negative': 0, 'accuracy': 1.0, 'precision': 1.0, 'false_positive_rate': 0.0, 'false_negative_rate': 0.0, 'confidence': 0.75, 'confidence_bias': 0.25, 'recommendation': \"calibrate confidence downward for country category 'us'\"}",
+              "name": "patterns_rate_bounds",
+              "passed": true
+            },
+            {
+              "detail": "{'dimension': 'technology', 'value': 'ml', 'samples': 10, 'scoreable': 10, 'true_positive': 5, 'true_negative': 5, 'false_positive': 0, 'false_negative': 0, 'accuracy': 1.0, 'precision': 1.0, 'false_positive_rate': 0.0, 'false_negative_rate': 0.0, 'confidence': 0.75, 'confidence_bias': 0.25, 'recommendation': \"calibrate confidence downward for technology category 'ml'\"}",
+              "name": "patterns_rate_bounds",
+              "passed": true
+            },
+            {
+              "detail": "{'dimension': 'business_model', 'value': 'saas', 'samples': 10, 'scoreable': 10, 'true_positive': 5, 'true_negative': 5, 'false_positive': 0, 'false_negative': 0, 'accuracy': 1.0, 'precision': 1.0, 'false_positive_rate': 0.0, 'false_negative_rate': 0.0, 'confidence': 0.75, 'confidence_bias': 0.25, 'recommendation': \"calibrate confidence downward for business_model category 'saas'\"}",
+              "name": "patterns_rate_bounds",
+              "passed": true
+            },
+            {
+              "detail": "{'dimension': 'founder', 'value': 'team', 'samples': 10, 'scoreable': 10, 'true_positive': 5, 'true_negative': 5, 'false_positive': 0, 'false_negative': 0, 'accuracy': 1.0, 'precision': 1.0, 'false_positive_rate': 0.0, 'false_negative_rate': 0.0, 'confidence': 0.75, 'confidence_bias': 0.25, 'recommendation': \"calibrate confidence downward for founder category 'team'\"}",
+              "name": "patterns_rate_bounds",
+              "passed": true
+            },
+            {
+              "detail": "['business_model', 'country', 'founder', 'sector', 'stage', 'technology']",
+              "name": "knowledge_dimensions",
+              "passed": true
+            },
+            {
+              "detail": "1",
+              "name": "knowledge_sorted",
+              "passed": true
+            },
+            {
+              "detail": "1",
+              "name": "knowledge_sorted",
+              "passed": true
+            },
+            {
+              "detail": "1",
+              "name": "knowledge_sorted",
+              "passed": true
+            },
+            {
+              "detail": "1",
+              "name": "knowledge_sorted",
+              "passed": true
+            },
+            {
+              "detail": "1",
+              "name": "knowledge_sorted",
+              "passed": true
+            },
+            {
+              "detail": "1",
+              "name": "knowledge_sorted",
+              "passed": true
+            },
+            {
+              "detail": "12",
+              "name": "observations_nonempty",
+              "passed": true
+            },
+            {
+              "detail": "['overconfidence', 'strong_accuracy']",
+              "name": "observations_canonical",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'strong_accuracy', 'dimension': 'sector', 'value': 'ai', 'metric': 'accuracy', 'metric_value': 1.0, 'delta': None, 'direction': 'flat', 'baseline': None, 'sample_size': 10, 'summary': 'sector category ai shows strong accuracy (accuracy=1.00)'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'overconfidence', 'dimension': 'sector', 'value': 'ai', 'metric': 'confidence_bias', 'metric_value': 0.25, 'delta': None, 'direction': 'up', 'baseline': 0.05, 'sample_size': 10, 'summary': 'sector category ai is overconfident by 0.2500'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'strong_accuracy', 'dimension': 'stage', 'value': 'seed', 'metric': 'accuracy', 'metric_value': 1.0, 'delta': None, 'direction': 'flat', 'baseline': None, 'sample_size': 10, 'summary': 'stage category seed shows strong accuracy (accuracy=1.00)'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'overconfidence', 'dimension': 'stage', 'value': 'seed', 'metric': 'confidence_bias', 'metric_value': 0.25, 'delta': None, 'direction': 'up', 'baseline': 0.05, 'sample_size': 10, 'summary': 'stage category seed is overconfident by 0.2500'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'strong_accuracy', 'dimension': 'country', 'value': 'us', 'metric': 'accuracy', 'metric_value': 1.0, 'delta': None, 'direction': 'flat', 'baseline': None, 'sample_size': 10, 'summary': 'country category us shows strong accuracy (accuracy=1.00)'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'overconfidence', 'dimension': 'country', 'value': 'us', 'metric': 'confidence_bias', 'metric_value': 0.25, 'delta': None, 'direction': 'up', 'baseline': 0.05, 'sample_size': 10, 'summary': 'country category us is overconfident by 0.2500'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'strong_accuracy', 'dimension': 'technology', 'value': 'ml', 'metric': 'accuracy', 'metric_value': 1.0, 'delta': None, 'direction': 'flat', 'baseline': None, 'sample_size': 10, 'summary': 'technology category ml shows strong accuracy (accuracy=1.00)'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'overconfidence', 'dimension': 'technology', 'value': 'ml', 'metric': 'confidence_bias', 'metric_value': 0.25, 'delta': None, 'direction': 'up', 'baseline': 0.05, 'sample_size': 10, 'summary': 'technology category ml is overconfident by 0.2500'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'strong_accuracy', 'dimension': 'business_model', 'value': 'saas', 'metric': 'accuracy', 'metric_value': 1.0, 'delta': None, 'direction': 'flat', 'baseline': None, 'sample_size': 10, 'summary': 'business_model category saas shows strong accuracy (accuracy=1.00)'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'overconfidence', 'dimension': 'business_model', 'value': 'saas', 'metric': 'confidence_bias', 'metric_value': 0.25, 'delta': None, 'direction': 'up', 'baseline': 0.05, 'sample_size': 10, 'summary': 'business_model category saas is overconfident by 0.2500'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'strong_accuracy', 'dimension': 'founder', 'value': 'team', 'metric': 'accuracy', 'metric_value': 1.0, 'delta': None, 'direction': 'flat', 'baseline': None, 'sample_size': 10, 'summary': 'founder category team shows strong accuracy (accuracy=1.00)'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'overconfidence', 'dimension': 'founder', 'value': 'team', 'metric': 'confidence_bias', 'metric_value': 0.25, 'delta': None, 'direction': 'up', 'baseline': 0.05, 'sample_size': 10, 'summary': 'founder category team is overconfident by 0.2500'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "12",
+              "name": "observations_pinned_count",
+              "passed": true
+            },
+            {
+              "detail": "2",
+              "name": "recommendations_pinned_count",
+              "passed": true
+            },
+            {
+              "detail": "['maintain_confidence_weighting', 'recalibrate_confidence']",
+              "name": "recommendations_kinds_nonempty",
+              "passed": true
+            },
+            {
+              "detail": "{'correct': 10}",
+              "name": "verdict_counts_correct",
+              "passed": true
+            }
+          ],
+          "case_id": "mixed_bias",
+          "passed": true
+        },
+        {
+          "assertions": [
+            {
+              "detail": "1.0",
+              "name": "schema_version",
+              "passed": true
+            },
+            {
+              "detail": "ece8cd70dd1ccff474e6a29a0ca0a5474d3c846c62e24e3f59f7cd4fb57bb7e9",
+              "name": "content_hash_present",
+              "passed": true
+            },
+            {
+              "detail": "ece8cd70dd1ccff474e6a29a0ca0a5474d3c846c62e24e3f59f7cd4fb57bb7e9",
+              "name": "verify",
+              "passed": true
+            },
+            {
+              "detail": "50eca4ffba4311b197acca9f2a481b30f1b70e82c7c1f49448d5457febadd45d",
+              "name": "snapshot_id_stable",
+              "passed": true
+            },
+            {
+              "detail": "50eca4ffba4311b197acca9f2a481b30f1b70e82c7c1f49448d5457febadd45d",
+              "name": "snapshot_id_epoch",
+              "passed": true
+            },
+            {
+              "detail": "ece8cd70dd1ccff474e6a29a0ca0a5474d3c846c62e24e3f59f7cd4fb57bb7e9",
+              "name": "content_hash_stable_across_timestamps",
+              "passed": true
+            },
+            {
+              "detail": "ece8cd70dd1ccff474e6a29a0ca0a5474d3c846c62e24e3f59f7cd4fb57bb7e9",
+              "name": "twin_verify",
+              "passed": true
+            },
+            {
+              "detail": "7.0.0",
+              "name": "engine_version",
+              "passed": true
+            },
+            {
+              "detail": "{'evaluations': 10, 'samples': 10, 'scoreable': 10}",
+              "name": "counts_exact",
+              "passed": true
+            },
+            {
+              "detail": "10",
+              "name": "digest_scoreable",
+              "passed": true
+            },
+            {
+              "detail": "{'scoreable': 10, 'tp': 0, 'tn': 5, 'fp': 0, 'fn': 5}",
+              "name": "digest_matches_reference",
+              "passed": true
+            },
+            {
+              "detail": "{'accuracy': 0.5, 'precision': None, 'recall': 0.0, 'false_positive_rate': 0.0, 'false_negative_rate': 1.0}",
+              "name": "digest_rates_match_reference",
+              "passed": true
+            },
+            {
+              "detail": "0.5",
+              "name": "accuracy_pinned",
+              "passed": true
+            },
+            {
+              "detail": "None",
+              "name": "precision_pinned",
+              "passed": true
+            },
+            {
+              "detail": "0.0",
+              "name": "recall_pinned",
+              "passed": true
+            },
+            {
+              "detail": "0.0",
+              "name": "fpr_pinned",
+              "passed": true
+            },
+            {
+              "detail": "1.0",
+              "name": "fnr_pinned",
+              "passed": true
+            },
+            {
+              "detail": "{'accuracy': 0.5, 'precision': None, 'recall': 0.0, 'false_positive_rate': 0.0, 'false_negative_rate': 1.0, 'ece': 0.15, 'overconfidence': 1.0, 'confidence.mean': 0.55, 'confidence.bias': 0.05}",
+              "name": "metrics_accuracy",
+              "passed": true
+            },
+            {
+              "detail": "0.15",
+              "name": "ece_matches_reference",
+              "passed": true
+            },
+            {
+              "detail": "0.15",
+              "name": "ece_pinned",
+              "passed": true
+            },
+            {
+              "detail": "0.15",
+              "name": "ece_within_tolerance",
+              "passed": true
+            },
+            {
+              "detail": "10",
+              "name": "calibration_total_samples",
+              "passed": true
+            },
+            {
+              "detail": "True",
+              "name": "overconfidence_detected_pinned",
+              "passed": true
+            },
+            {
+              "detail": "1",
+              "name": "overconfident_bins_pinned",
+              "passed": true
+            },
+            {
+              "detail": "{'accuracy': 0.5, 'precision': None, 'recall': 0.0, 'false_positive_rate': 0.0, 'false_negative_rate': 1.0, 'ece': 0.15, 'overconfidence': 1.0, 'confidence.mean': 0.55, 'confidence.bias': 0.05}",
+              "name": "metrics_ece",
+              "passed": true
+            },
+            {
+              "detail": "0.55",
+              "name": "confidence_mean_pinned",
+              "passed": true
+            },
+            {
+              "detail": "10",
+              "name": "confidence_count",
+              "passed": true
+            },
+            {
+              "detail": "0.35",
+              "name": "confidence_stddev_independent",
+              "passed": true
+            },
+            {
+              "detail": "0.05",
+              "name": "confidence_bias_pinned",
+              "passed": true
+            },
+            {
+              "detail": "0.05",
+              "name": "confidence_bias_independent",
+              "passed": true
+            },
+            {
+              "detail": "{'accuracy': 0.5, 'precision': None, 'recall': 0.0, 'false_positive_rate': 0.0, 'false_negative_rate': 1.0, 'ece': 0.15, 'overconfidence': 1.0, 'confidence.mean': 0.55, 'confidence.bias': 0.05}",
+              "name": "metrics_bias",
+              "passed": true
+            },
+            {
+              "detail": "{'sector': {'ai': 10}, 'stage': {'seed': 10}, 'country': {'us': 10}, 'technology': {'ml': 10}, 'business_model': {'saas': 10}, 'founder': {'team': 10}}",
+              "name": "distributions_match_reference",
+              "passed": true
+            },
+            {
+              "detail": "['business_model', 'country', 'founder', 'sector', 'stage', 'technology']",
+              "name": "distributions_dimensions",
+              "passed": true
+            },
+            {
+              "detail": "6",
+              "name": "patterns_reference_count",
+              "passed": true
+            },
+            {
+              "detail": "6",
+              "name": "patterns_pinned",
+              "passed": true
+            },
+            {
+              "detail": "['sector', 'stage', 'country', 'technology', 'business_model', 'founder']",
+              "name": "patterns_dimensions_ordered",
+              "passed": true
+            },
+            {
+              "detail": "6",
+              "name": "patterns_buckets_sorted",
+              "passed": true
+            },
+            {
+              "detail": "{'dimension': 'sector', 'value': 'ai', 'samples': 10, 'scoreable': 10, 'true_positive': 0, 'true_negative': 5, 'false_positive': 0, 'false_negative': 5, 'accuracy': 0.5, 'precision': None, 'false_positive_rate': 0.0, 'false_negative_rate': 1.0, 'confidence': 0.55, 'confidence_bias': 0.05, 'recommendation': \"calibrate confidence downward for sector category 'ai'\"}",
+              "name": "patterns_rate_bounds",
+              "passed": true
+            },
+            {
+              "detail": "{'dimension': 'stage', 'value': 'seed', 'samples': 10, 'scoreable': 10, 'true_positive': 0, 'true_negative': 5, 'false_positive': 0, 'false_negative': 5, 'accuracy': 0.5, 'precision': None, 'false_positive_rate': 0.0, 'false_negative_rate': 1.0, 'confidence': 0.55, 'confidence_bias': 0.05, 'recommendation': \"calibrate confidence downward for stage category 'seed'\"}",
+              "name": "patterns_rate_bounds",
+              "passed": true
+            },
+            {
+              "detail": "{'dimension': 'country', 'value': 'us', 'samples': 10, 'scoreable': 10, 'true_positive': 0, 'true_negative': 5, 'false_positive': 0, 'false_negative': 5, 'accuracy': 0.5, 'precision': None, 'false_positive_rate': 0.0, 'false_negative_rate': 1.0, 'confidence': 0.55, 'confidence_bias': 0.05, 'recommendation': \"calibrate confidence downward for country category 'us'\"}",
+              "name": "patterns_rate_bounds",
+              "passed": true
+            },
+            {
+              "detail": "{'dimension': 'technology', 'value': 'ml', 'samples': 10, 'scoreable': 10, 'true_positive': 0, 'true_negative': 5, 'false_positive': 0, 'false_negative': 5, 'accuracy': 0.5, 'precision': None, 'false_positive_rate': 0.0, 'false_negative_rate': 1.0, 'confidence': 0.55, 'confidence_bias': 0.05, 'recommendation': \"calibrate confidence downward for technology category 'ml'\"}",
+              "name": "patterns_rate_bounds",
+              "passed": true
+            },
+            {
+              "detail": "{'dimension': 'business_model', 'value': 'saas', 'samples': 10, 'scoreable': 10, 'true_positive': 0, 'true_negative': 5, 'false_positive': 0, 'false_negative': 5, 'accuracy': 0.5, 'precision': None, 'false_positive_rate': 0.0, 'false_negative_rate': 1.0, 'confidence': 0.55, 'confidence_bias': 0.05, 'recommendation': \"calibrate confidence downward for business_model category 'saas'\"}",
+              "name": "patterns_rate_bounds",
+              "passed": true
+            },
+            {
+              "detail": "{'dimension': 'founder', 'value': 'team', 'samples': 10, 'scoreable': 10, 'true_positive': 0, 'true_negative': 5, 'false_positive': 0, 'false_negative': 5, 'accuracy': 0.5, 'precision': None, 'false_positive_rate': 0.0, 'false_negative_rate': 1.0, 'confidence': 0.55, 'confidence_bias': 0.05, 'recommendation': \"calibrate confidence downward for founder category 'team'\"}",
+              "name": "patterns_rate_bounds",
+              "passed": true
+            },
+            {
+              "detail": "['business_model', 'country', 'founder', 'sector', 'stage', 'technology']",
+              "name": "knowledge_dimensions",
+              "passed": true
+            },
+            {
+              "detail": "1",
+              "name": "knowledge_sorted",
+              "passed": true
+            },
+            {
+              "detail": "1",
+              "name": "knowledge_sorted",
+              "passed": true
+            },
+            {
+              "detail": "1",
+              "name": "knowledge_sorted",
+              "passed": true
+            },
+            {
+              "detail": "1",
+              "name": "knowledge_sorted",
+              "passed": true
+            },
+            {
+              "detail": "1",
+              "name": "knowledge_sorted",
+              "passed": true
+            },
+            {
+              "detail": "1",
+              "name": "knowledge_sorted",
+              "passed": true
+            },
+            {
+              "detail": "12",
+              "name": "observations_nonempty",
+              "passed": true
+            },
+            {
+              "detail": "['high_false_negative_rate', 'overconfidence']",
+              "name": "observations_canonical",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'high_false_negative_rate', 'dimension': 'sector', 'value': 'ai', 'metric': 'false_negative_rate', 'metric_value': 1.0, 'delta': None, 'direction': 'flat', 'baseline': None, 'sample_size': 10, 'summary': 'sector category ai shows high false negative rate (false_negative_rate=1.00)'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'overconfidence', 'dimension': 'sector', 'value': 'ai', 'metric': 'confidence_bias', 'metric_value': 0.05, 'delta': None, 'direction': 'up', 'baseline': 0.05, 'sample_size': 10, 'summary': 'sector category ai is overconfident by 0.0500'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'high_false_negative_rate', 'dimension': 'stage', 'value': 'seed', 'metric': 'false_negative_rate', 'metric_value': 1.0, 'delta': None, 'direction': 'flat', 'baseline': None, 'sample_size': 10, 'summary': 'stage category seed shows high false negative rate (false_negative_rate=1.00)'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'overconfidence', 'dimension': 'stage', 'value': 'seed', 'metric': 'confidence_bias', 'metric_value': 0.05, 'delta': None, 'direction': 'up', 'baseline': 0.05, 'sample_size': 10, 'summary': 'stage category seed is overconfident by 0.0500'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'high_false_negative_rate', 'dimension': 'country', 'value': 'us', 'metric': 'false_negative_rate', 'metric_value': 1.0, 'delta': None, 'direction': 'flat', 'baseline': None, 'sample_size': 10, 'summary': 'country category us shows high false negative rate (false_negative_rate=1.00)'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'overconfidence', 'dimension': 'country', 'value': 'us', 'metric': 'confidence_bias', 'metric_value': 0.05, 'delta': None, 'direction': 'up', 'baseline': 0.05, 'sample_size': 10, 'summary': 'country category us is overconfident by 0.0500'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'high_false_negative_rate', 'dimension': 'technology', 'value': 'ml', 'metric': 'false_negative_rate', 'metric_value': 1.0, 'delta': None, 'direction': 'flat', 'baseline': None, 'sample_size': 10, 'summary': 'technology category ml shows high false negative rate (false_negative_rate=1.00)'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'overconfidence', 'dimension': 'technology', 'value': 'ml', 'metric': 'confidence_bias', 'metric_value': 0.05, 'delta': None, 'direction': 'up', 'baseline': 0.05, 'sample_size': 10, 'summary': 'technology category ml is overconfident by 0.0500'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'high_false_negative_rate', 'dimension': 'business_model', 'value': 'saas', 'metric': 'false_negative_rate', 'metric_value': 1.0, 'delta': None, 'direction': 'flat', 'baseline': None, 'sample_size': 10, 'summary': 'business_model category saas shows high false negative rate (false_negative_rate=1.00)'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'overconfidence', 'dimension': 'business_model', 'value': 'saas', 'metric': 'confidence_bias', 'metric_value': 0.05, 'delta': None, 'direction': 'up', 'baseline': 0.05, 'sample_size': 10, 'summary': 'business_model category saas is overconfident by 0.0500'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'high_false_negative_rate', 'dimension': 'founder', 'value': 'team', 'metric': 'false_negative_rate', 'metric_value': 1.0, 'delta': None, 'direction': 'flat', 'baseline': None, 'sample_size': 10, 'summary': 'founder category team shows high false negative rate (false_negative_rate=1.00)'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'overconfidence', 'dimension': 'founder', 'value': 'team', 'metric': 'confidence_bias', 'metric_value': 0.05, 'delta': None, 'direction': 'up', 'baseline': 0.05, 'sample_size': 10, 'summary': 'founder category team is overconfident by 0.0500'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "12",
+              "name": "observations_pinned_count",
+              "passed": true
+            },
+            {
+              "detail": "1",
+              "name": "recommendations_pinned_count",
+              "passed": true
+            },
+            {
+              "detail": "['recalibrate_confidence']",
+              "name": "recommendations_kinds_nonempty",
+              "passed": true
+            },
+            {
+              "detail": "{'correct': 5, 'incorrect': 5}",
+              "name": "verdict_counts_correct",
+              "passed": true
+            }
+          ],
+          "case_id": "overconfident",
+          "passed": true
+        },
+        {
+          "assertions": [
+            {
+              "detail": "1.0",
+              "name": "schema_version",
+              "passed": true
+            },
+            {
+              "detail": "8372b7f4842af34d28b1b1d68ca41c8cd89d9421084b3198641acd7a7dee6f44",
+              "name": "content_hash_present",
+              "passed": true
+            },
+            {
+              "detail": "8372b7f4842af34d28b1b1d68ca41c8cd89d9421084b3198641acd7a7dee6f44",
+              "name": "verify",
+              "passed": true
+            },
+            {
+              "detail": "3e14eb39222d452e33ee3d46647abc2c20771d1b6fc782ff218f1a85a028ae7e",
+              "name": "snapshot_id_stable",
+              "passed": true
+            },
+            {
+              "detail": "3e14eb39222d452e33ee3d46647abc2c20771d1b6fc782ff218f1a85a028ae7e",
+              "name": "snapshot_id_epoch",
+              "passed": true
+            },
+            {
+              "detail": "8372b7f4842af34d28b1b1d68ca41c8cd89d9421084b3198641acd7a7dee6f44",
+              "name": "content_hash_stable_across_timestamps",
+              "passed": true
+            },
+            {
+              "detail": "8372b7f4842af34d28b1b1d68ca41c8cd89d9421084b3198641acd7a7dee6f44",
+              "name": "twin_verify",
+              "passed": true
+            },
+            {
+              "detail": "7.0.0",
+              "name": "engine_version",
+              "passed": true
+            },
+            {
+              "detail": "{'evaluations': 10, 'samples': 10, 'scoreable': 10}",
+              "name": "counts_exact",
+              "passed": true
+            },
+            {
+              "detail": "10",
+              "name": "digest_scoreable",
+              "passed": true
+            },
+            {
+              "detail": "{'scoreable': 10, 'tp': 5, 'tn': 5, 'fp': 0, 'fn': 0}",
+              "name": "digest_matches_reference",
+              "passed": true
+            },
+            {
+              "detail": "{'accuracy': 1.0, 'precision': 1.0, 'recall': 1.0, 'false_positive_rate': 0.0, 'false_negative_rate': 0.0}",
+              "name": "digest_rates_match_reference",
+              "passed": true
+            },
+            {
+              "detail": "1.0",
+              "name": "accuracy_pinned",
+              "passed": true
+            },
+            {
+              "detail": "1.0",
+              "name": "precision_pinned",
+              "passed": true
+            },
+            {
+              "detail": "1.0",
+              "name": "recall_pinned",
+              "passed": true
+            },
+            {
+              "detail": "0.0",
+              "name": "fpr_pinned",
+              "passed": true
+            },
+            {
+              "detail": "0.0",
+              "name": "fnr_pinned",
+              "passed": true
+            },
+            {
+              "detail": "{'accuracy': 1.0, 'precision': 1.0, 'recall': 1.0, 'false_positive_rate': 0.0, 'false_negative_rate': 0.0, 'ece': 0.0, 'overconfidence': 0.0, 'confidence.mean': 0.5, 'confidence.bias': 0.0}",
+              "name": "metrics_accuracy",
+              "passed": true
+            },
+            {
+              "detail": "0.0",
+              "name": "ece_matches_reference",
+              "passed": true
+            },
+            {
+              "detail": "0.0",
+              "name": "ece_pinned",
+              "passed": true
+            },
+            {
+              "detail": "0.0",
+              "name": "ece_within_tolerance",
+              "passed": true
+            },
+            {
+              "detail": "10",
+              "name": "calibration_total_samples",
+              "passed": true
+            },
+            {
+              "detail": "False",
+              "name": "overconfidence_detected_pinned",
+              "passed": true
+            },
+            {
+              "detail": "{'accuracy': 1.0, 'precision': 1.0, 'recall': 1.0, 'false_positive_rate': 0.0, 'false_negative_rate': 0.0, 'ece': 0.0, 'overconfidence': 0.0, 'confidence.mean': 0.5, 'confidence.bias': 0.0}",
+              "name": "metrics_ece",
+              "passed": true
+            },
+            {
+              "detail": "0.5",
+              "name": "confidence_mean_pinned",
+              "passed": true
+            },
+            {
+              "detail": "10",
+              "name": "confidence_count",
+              "passed": true
+            },
+            {
+              "detail": "0.5",
+              "name": "confidence_stddev_independent",
+              "passed": true
+            },
+            {
+              "detail": "0.0",
+              "name": "confidence_bias_pinned",
+              "passed": true
+            },
+            {
+              "detail": "0.0",
+              "name": "confidence_bias_independent",
+              "passed": true
+            },
+            {
+              "detail": "{'accuracy': 1.0, 'precision': 1.0, 'recall': 1.0, 'false_positive_rate': 0.0, 'false_negative_rate': 0.0, 'ece': 0.0, 'overconfidence': 0.0, 'confidence.mean': 0.5, 'confidence.bias': 0.0}",
+              "name": "metrics_bias",
+              "passed": true
+            },
+            {
+              "detail": "{'sector': {'ai': 10}, 'stage': {'seed': 10}, 'country': {'us': 10}, 'technology': {'ml': 10}, 'business_model': {'saas': 10}, 'founder': {'team': 10}}",
+              "name": "distributions_match_reference",
+              "passed": true
+            },
+            {
+              "detail": "['business_model', 'country', 'founder', 'sector', 'stage', 'technology']",
+              "name": "distributions_dimensions",
+              "passed": true
+            },
+            {
+              "detail": "6",
+              "name": "patterns_reference_count",
+              "passed": true
+            },
+            {
+              "detail": "6",
+              "name": "patterns_pinned",
+              "passed": true
+            },
+            {
+              "detail": "['sector', 'stage', 'country', 'technology', 'business_model', 'founder']",
+              "name": "patterns_dimensions_ordered",
+              "passed": true
+            },
+            {
+              "detail": "6",
+              "name": "patterns_buckets_sorted",
+              "passed": true
+            },
+            {
+              "detail": "{'dimension': 'sector', 'value': 'ai', 'samples': 10, 'scoreable': 10, 'true_positive': 5, 'true_negative': 5, 'false_positive': 0, 'false_negative': 0, 'accuracy': 1.0, 'precision': 1.0, 'false_positive_rate': 0.0, 'false_negative_rate': 0.0, 'confidence': 0.5, 'confidence_bias': 0.0, 'recommendation': \"maintain current confidence weighting for sector category 'ai'\"}",
+              "name": "patterns_rate_bounds",
+              "passed": true
+            },
+            {
+              "detail": "{'dimension': 'stage', 'value': 'seed', 'samples': 10, 'scoreable': 10, 'true_positive': 5, 'true_negative': 5, 'false_positive': 0, 'false_negative': 0, 'accuracy': 1.0, 'precision': 1.0, 'false_positive_rate': 0.0, 'false_negative_rate': 0.0, 'confidence': 0.5, 'confidence_bias': 0.0, 'recommendation': \"maintain current confidence weighting for stage category 'seed'\"}",
+              "name": "patterns_rate_bounds",
+              "passed": true
+            },
+            {
+              "detail": "{'dimension': 'country', 'value': 'us', 'samples': 10, 'scoreable': 10, 'true_positive': 5, 'true_negative': 5, 'false_positive': 0, 'false_negative': 0, 'accuracy': 1.0, 'precision': 1.0, 'false_positive_rate': 0.0, 'false_negative_rate': 0.0, 'confidence': 0.5, 'confidence_bias': 0.0, 'recommendation': \"maintain current confidence weighting for country category 'us'\"}",
+              "name": "patterns_rate_bounds",
+              "passed": true
+            },
+            {
+              "detail": "{'dimension': 'technology', 'value': 'ml', 'samples': 10, 'scoreable': 10, 'true_positive': 5, 'true_negative': 5, 'false_positive': 0, 'false_negative': 0, 'accuracy': 1.0, 'precision': 1.0, 'false_positive_rate': 0.0, 'false_negative_rate': 0.0, 'confidence': 0.5, 'confidence_bias': 0.0, 'recommendation': \"maintain current confidence weighting for technology category 'ml'\"}",
+              "name": "patterns_rate_bounds",
+              "passed": true
+            },
+            {
+              "detail": "{'dimension': 'business_model', 'value': 'saas', 'samples': 10, 'scoreable': 10, 'true_positive': 5, 'true_negative': 5, 'false_positive': 0, 'false_negative': 0, 'accuracy': 1.0, 'precision': 1.0, 'false_positive_rate': 0.0, 'false_negative_rate': 0.0, 'confidence': 0.5, 'confidence_bias': 0.0, 'recommendation': \"maintain current confidence weighting for business_model category 'saas'\"}",
+              "name": "patterns_rate_bounds",
+              "passed": true
+            },
+            {
+              "detail": "{'dimension': 'founder', 'value': 'team', 'samples': 10, 'scoreable': 10, 'true_positive': 5, 'true_negative': 5, 'false_positive': 0, 'false_negative': 0, 'accuracy': 1.0, 'precision': 1.0, 'false_positive_rate': 0.0, 'false_negative_rate': 0.0, 'confidence': 0.5, 'confidence_bias': 0.0, 'recommendation': \"maintain current confidence weighting for founder category 'team'\"}",
+              "name": "patterns_rate_bounds",
+              "passed": true
+            },
+            {
+              "detail": "['business_model', 'country', 'founder', 'sector', 'stage', 'technology']",
+              "name": "knowledge_dimensions",
+              "passed": true
+            },
+            {
+              "detail": "1",
+              "name": "knowledge_sorted",
+              "passed": true
+            },
+            {
+              "detail": "1",
+              "name": "knowledge_sorted",
+              "passed": true
+            },
+            {
+              "detail": "1",
+              "name": "knowledge_sorted",
+              "passed": true
+            },
+            {
+              "detail": "1",
+              "name": "knowledge_sorted",
+              "passed": true
+            },
+            {
+              "detail": "1",
+              "name": "knowledge_sorted",
+              "passed": true
+            },
+            {
+              "detail": "1",
+              "name": "knowledge_sorted",
+              "passed": true
+            },
+            {
+              "detail": "6",
+              "name": "observations_nonempty",
+              "passed": true
+            },
+            {
+              "detail": "['strong_accuracy']",
+              "name": "observations_canonical",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'strong_accuracy', 'dimension': 'sector', 'value': 'ai', 'metric': 'accuracy', 'metric_value': 1.0, 'delta': None, 'direction': 'flat', 'baseline': None, 'sample_size': 10, 'summary': 'sector category ai shows strong accuracy (accuracy=1.00)'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'strong_accuracy', 'dimension': 'stage', 'value': 'seed', 'metric': 'accuracy', 'metric_value': 1.0, 'delta': None, 'direction': 'flat', 'baseline': None, 'sample_size': 10, 'summary': 'stage category seed shows strong accuracy (accuracy=1.00)'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'strong_accuracy', 'dimension': 'country', 'value': 'us', 'metric': 'accuracy', 'metric_value': 1.0, 'delta': None, 'direction': 'flat', 'baseline': None, 'sample_size': 10, 'summary': 'country category us shows strong accuracy (accuracy=1.00)'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'strong_accuracy', 'dimension': 'technology', 'value': 'ml', 'metric': 'accuracy', 'metric_value': 1.0, 'delta': None, 'direction': 'flat', 'baseline': None, 'sample_size': 10, 'summary': 'technology category ml shows strong accuracy (accuracy=1.00)'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'strong_accuracy', 'dimension': 'business_model', 'value': 'saas', 'metric': 'accuracy', 'metric_value': 1.0, 'delta': None, 'direction': 'flat', 'baseline': None, 'sample_size': 10, 'summary': 'business_model category saas shows strong accuracy (accuracy=1.00)'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "{'category': 'strong_accuracy', 'dimension': 'founder', 'value': 'team', 'metric': 'accuracy', 'metric_value': 1.0, 'delta': None, 'direction': 'flat', 'baseline': None, 'sample_size': 10, 'summary': 'founder category team shows strong accuracy (accuracy=1.00)'}",
+              "name": "observations_fields",
+              "passed": true
+            },
+            {
+              "detail": "6",
+              "name": "observations_pinned_count",
+              "passed": true
+            },
+            {
+              "detail": "1",
+              "name": "recommendations_pinned_count",
+              "passed": true
+            },
+            {
+              "detail": "['maintain_confidence_weighting']",
+              "name": "recommendations_kinds_nonempty",
+              "passed": true
+            },
+            {
+              "detail": "{'correct': 10}",
+              "name": "verdict_counts_correct",
+              "passed": true
+            }
+          ],
+          "case_id": "perfect",
+          "passed": true
+        }
+      ],
+      "created_at": "2026-09-22T11:11:37.498147+00:00",
+      "engine_version": "7.0.0",
+      "passed": true,
+      "run_id": "cf6295d36cc0a4d1df6a64d77db09ec67be303f644d76f01875f4d4c6321a80c",
+      "total_assertions": 305,
+      "total_passed": 305
+    },
+    "snapshots": {
+      "empty": {
+        "confidence": {
+          "bias": 0.0,
+          "calibrated": true,
+          "count": 0,
+          "mean": null,
+          "std_dev": null
+        },
+        "content_hash": "66926b99b642df6b3d18bcc8b1cafa1dfbe5a1e86317022a340974ffb0694e75",
+        "counts": {
+          "evaluations": 0,
+          "samples": 0,
+          "scoreable": 0
+        },
+        "digest": {
+          "accuracy": null,
+          "evaluation_count": 0,
+          "false_negative": 0,
+          "false_negative_rate": null,
+          "false_positive": 0,
+          "false_positive_rate": null,
+          "precision": null,
+          "recall": null,
+          "sample_count": 0,
+          "scoreable": 0,
+          "true_negative": 0,
+          "true_positive": 0,
+          "verdict_counts": {}
+        },
+        "distributions": {
+          "business_model": {},
+          "country": {},
+          "founder": {},
+          "sector": {},
+          "stage": {},
+          "technology": {}
+        },
+        "evaluation_count": 0,
+        "metrics": {
+          "accuracy": null,
+          "confidence.bias": 0.0,
+          "confidence.mean": null,
+          "ece": 0.0,
+          "false_negative_rate": null,
+          "false_positive_rate": null,
+          "overconfidence": 0.0,
+          "precision": null,
+          "recall": null
+        },
+        "sample_count": 0,
+        "schema_version": "1.0",
+        "scoreable": 0,
+        "snapshot_id": "ee08831404ce5f0da98bbc9e778c320a742cc43b2de06cc380e100205acf830e",
+        "verify": true
+      },
+      "imperfect_balanced": {
+        "confidence": {
+          "bias": 0.06,
+          "calibrated": false,
+          "count": 10,
+          "mean": 0.56,
+          "std_dev": 0.2059
+        },
+        "content_hash": "5da66a894a4b267484a9318209a2680bdb6a44a629365c296d78c6ec6499bd06",
+        "counts": {
+          "evaluations": 10,
+          "samples": 10,
+          "scoreable": 10
+        },
+        "digest": {
+          "accuracy": 0.4,
+          "evaluation_count": 10,
+          "false_negative": 3,
+          "false_negative_rate": 0.6,
+          "false_positive": 3,
+          "false_positive_rate": 0.6,
+          "precision": 0.4,
+          "recall": 0.4,
+          "sample_count": 10,
+          "scoreable": 10,
+          "true_negative": 2,
+          "true_positive": 2,
+          "verdict_counts": {
+            "correct": 4,
+            "incorrect": 6
+          }
+        },
+        "distributions": {
+          "business_model": {
+            "saas": 10
+          },
+          "country": {
+            "us": 10
+          },
+          "founder": {
+            "team": 10
+          },
+          "sector": {
+            "ai": 10
+          },
+          "stage": {
+            "seed": 10
+          },
+          "technology": {
+            "ml": 10
+          }
+        },
+        "evaluation_count": 10,
+        "metrics": {
+          "accuracy": 0.4,
+          "confidence.bias": 0.06,
+          "confidence.mean": 0.56,
+          "ece": 0.54,
+          "false_negative_rate": 0.6,
+          "false_positive_rate": 0.6,
+          "overconfidence": 1.0,
+          "precision": 0.4,
+          "recall": 0.4
+        },
+        "sample_count": 10,
+        "schema_version": "1.0",
+        "scoreable": 10,
+        "snapshot_id": "ee08831404ce5f0da98bbc9e778c320a742cc43b2de06cc380e100205acf830e",
+        "verify": true
+      },
+      "mixed_bias": {
+        "confidence": {
+          "bias": 0.25,
+          "calibrated": false,
+          "count": 10,
+          "mean": 0.75,
+          "std_dev": 0.15
+        },
+        "content_hash": "68eadc44d205a5245c5f9d4223e30a749fee41987f6fd37fd9260f35fdb9309c",
+        "counts": {
+          "evaluations": 10,
+          "samples": 10,
+          "scoreable": 10
+        },
+        "digest": {
+          "accuracy": 1.0,
+          "evaluation_count": 10,
+          "false_negative": 0,
+          "false_negative_rate": 0.0,
+          "false_positive": 0,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "sample_count": 10,
+          "scoreable": 10,
+          "true_negative": 5,
+          "true_positive": 5,
+          "verdict_counts": {
+            "correct": 10
+          }
+        },
+        "distributions": {
+          "business_model": {
+            "saas": 10
+          },
+          "country": {
+            "us": 10
+          },
+          "founder": {
+            "team": 10
+          },
+          "sector": {
+            "ai": 10
+          },
+          "stage": {
+            "seed": 10
+          },
+          "technology": {
+            "ml": 10
+          }
+        },
+        "evaluation_count": 10,
+        "metrics": {
+          "accuracy": 1.0,
+          "confidence.bias": 0.25,
+          "confidence.mean": 0.75,
+          "ece": 0.35,
+          "false_negative_rate": 0.0,
+          "false_positive_rate": 0.0,
+          "overconfidence": 1.0,
+          "precision": 1.0,
+          "recall": 1.0
+        },
+        "sample_count": 10,
+        "schema_version": "1.0",
+        "scoreable": 10,
+        "snapshot_id": "ee08831404ce5f0da98bbc9e778c320a742cc43b2de06cc380e100205acf830e",
+        "verify": true
+      },
+      "overconfident": {
+        "confidence": {
+          "bias": 0.05,
+          "calibrated": false,
+          "count": 10,
+          "mean": 0.55,
+          "std_dev": 0.35
+        },
+        "content_hash": "1dbf01d6cdea286b7902d974d4343e364a52e99ea5a28e690dbf4ec31a26475a",
+        "counts": {
+          "evaluations": 10,
+          "samples": 10,
+          "scoreable": 10
+        },
+        "digest": {
+          "accuracy": 0.5,
+          "evaluation_count": 10,
+          "false_negative": 5,
+          "false_negative_rate": 1.0,
+          "false_positive": 0,
+          "false_positive_rate": 0.0,
+          "precision": null,
+          "recall": 0.0,
+          "sample_count": 10,
+          "scoreable": 10,
+          "true_negative": 5,
+          "true_positive": 0,
+          "verdict_counts": {
+            "correct": 5,
+            "incorrect": 5
+          }
+        },
+        "distributions": {
+          "business_model": {
+            "saas": 10
+          },
+          "country": {
+            "us": 10
+          },
+          "founder": {
+            "team": 10
+          },
+          "sector": {
+            "ai": 10
+          },
+          "stage": {
+            "seed": 10
+          },
+          "technology": {
+            "ml": 10
+          }
+        },
+        "evaluation_count": 10,
+        "metrics": {
+          "accuracy": 0.5,
+          "confidence.bias": 0.05,
+          "confidence.mean": 0.55,
+          "ece": 0.15,
+          "false_negative_rate": 1.0,
+          "false_positive_rate": 0.0,
+          "overconfidence": 1.0,
+          "precision": null,
+          "recall": 0.0
+        },
+        "sample_count": 10,
+        "schema_version": "1.0",
+        "scoreable": 10,
+        "snapshot_id": "ee08831404ce5f0da98bbc9e778c320a742cc43b2de06cc380e100205acf830e",
+        "verify": true
+      },
+      "perfect": {
+        "confidence": {
+          "bias": 0.0,
+          "calibrated": true,
+          "count": 10,
+          "mean": 0.5,
+          "std_dev": 0.5
+        },
+        "content_hash": "2c47b45ee53158cf678107191b1328b0da5a4a32ace53472dbaed989e5d338af",
+        "counts": {
+          "evaluations": 10,
+          "samples": 10,
+          "scoreable": 10
+        },
+        "digest": {
+          "accuracy": 1.0,
+          "evaluation_count": 10,
+          "false_negative": 0,
+          "false_negative_rate": 0.0,
+          "false_positive": 0,
+          "false_positive_rate": 0.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "sample_count": 10,
+          "scoreable": 10,
+          "true_negative": 5,
+          "true_positive": 5,
+          "verdict_counts": {
+            "correct": 10
+          }
+        },
+        "distributions": {
+          "business_model": {
+            "saas": 10
+          },
+          "country": {
+            "us": 10
+          },
+          "founder": {
+            "team": 10
+          },
+          "sector": {
+            "ai": 10
+          },
+          "stage": {
+            "seed": 10
+          },
+          "technology": {
+            "ml": 10
+          }
+        },
+        "evaluation_count": 10,
+        "metrics": {
+          "accuracy": 1.0,
+          "confidence.bias": 0.0,
+          "confidence.mean": 0.5,
+          "ece": 0.0,
+          "false_negative_rate": 0.0,
+          "false_positive_rate": 0.0,
+          "overconfidence": 0.0,
+          "precision": 1.0,
+          "recall": 1.0
+        },
+        "sample_count": 10,
+        "schema_version": "1.0",
+        "scoreable": 10,
+        "snapshot_id": "ee08831404ce5f0da98bbc9e778c320a742cc43b2de06cc380e100205acf830e",
+        "verify": true
+      }
+    }
+  }
+}

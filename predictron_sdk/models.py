@@ -127,7 +127,38 @@ __all__ = [
     "MonitorHealthList",
     "MonitorDrift",
     "MonitorTrends",
+    # Monitoring (CIH Phase 6)
+    "MonitorDistribution",
+    "MonitorHorizonPerformance",
+    "MonitorSectorPerformance",
+    "MonitorTimePoint",
+    "MonitorMetricTrend",
+    "MonitorHealthEntry",
+    "MonitorDriftSignal",
+    "MonitorReanalysisRecommendation",
+    "MonitorSummary",
+    "MonitorHealthList",
+    "MonitorDrift",
+    "MonitorTrends",
     "MonitorReanalysis",
+    # Learning (CIH Phase 7)
+    "LearningCalibration",
+    "LearningConfidenceStats",
+    "LearningDigest",
+    "LearningPeriodEntry",
+    "LearningObservation",
+    "LearningPattern",
+    "LearningRecommendation",
+    "LearningSummary",
+    "LearningKnowledge",
+    "LearningPatterns",
+    "LearningObservations",
+    "LearningConfidence",
+    "LearningBias",
+    "LearningRecommendations",
+    "LearningReportHeader",
+    "LearningReports",
+    "LearningReportDetail",
 ]
 
 
@@ -1333,3 +1364,209 @@ class MonitorReanalysis(_Base):
     recommendations: list[MonitorReanalysisRecommendation] = Field(
         default_factory=list
     )
+
+
+# ---------------------------------------------------------------------------
+# Continuous learning intelligence (CIH Phase 7)
+# ---------------------------------------------------------------------------
+
+
+class LearningConfidenceStats(_Base):
+    """Population confidence statistics."""
+
+    count: int = 0
+    mean: float | None = None
+    std_dev: float | None = None
+    bias: float = 0.0
+    calibrated: bool = True
+
+
+class LearningCalibration(_Base):
+    """Deterministic calibration digest over learned samples."""
+
+    expected_calibration_error: float = 0.0
+    overconfidence_detected: bool = False
+    overconfident_bins: int = 0
+    total_samples: int = 0
+    bins: list[dict[str, Any]] = Field(default_factory=list)
+
+
+class LearningDigest(_Base):
+    """Flat aggregate metrics and confusion counts for a snapshot."""
+
+    evaluation_count: int = 0
+    sample_count: int = 0
+    scoreable: int = 0
+    accuracy: float | None = None
+    precision: float | None = None
+    recall: float | None = None
+    false_positive_rate: float | None = None
+    false_negative_rate: float | None = None
+    true_positive: int = 0
+    true_negative: int = 0
+    false_positive: int = 0
+    false_negative: int = 0
+    verdict_counts: dict[str, int] = Field(default_factory=dict)
+
+
+class LearningPeriodEntry(_Base):
+    """A paired value-bucket within one intelligence dimension."""
+
+    dimension: str = ""
+    value: str = ""
+    sample_size: int = 0
+    accuracy: float | None = None
+    confidence_bias: float | None = None
+    false_positive_rate: float | None = None
+    false_negative_rate: float | None = None
+    recommendation: str = ""
+
+
+class LearningObservation(_Base):
+    """One canonical, deterministic observation about the population."""
+
+    category: str = ""
+    dimension: str = ""
+    value: str = ""
+    metric: str = ""
+    metric_value: float | None = None
+    delta: float | None = None
+    direction: str = "flat"
+    baseline: float | None = None
+    sample_size: int = 0
+    summary: str = ""
+
+
+class LearningPattern(_Base):
+    """Cohort aggregation of samples for one ``(dimension, value)``."""
+
+    dimension: str = ""
+    value: str = ""
+    samples: int = 0
+    scoreable: int = 0
+    true_positive: int = 0
+    true_negative: int = 0
+    false_positive: int = 0
+    false_negative: int = 0
+    accuracy: float | None = None
+    precision: float | None = None
+    false_positive_rate: float | None = None
+    false_negative_rate: float | None = None
+    confidence: float = 0.0
+    confidence_bias: float | None = None
+    recommendation: str = ""
+
+
+class LearningRecommendation(_Base):
+    """Canned, rule-based recommendation at the snapshot level."""
+
+    kind: str = ""
+    message: str = ""
+    severity: str = "info"
+    parameters: dict[str, Any] = Field(default_factory=dict)
+
+
+class LearningSummary(_Base):
+    """Live learning summary over the caller's evaluated population."""
+
+    scope: str = ""
+    period_kind: str = "daily"
+    anchor_date: date | None = None
+    generated_at: str | None = None
+    engine_version: str = ""
+    counts: dict[str, int] = Field(default_factory=dict)
+    metrics: dict[str, float | None] = Field(default_factory=dict)
+    digest: LearningDigest = Field(default_factory=LearningDigest)
+    calibration: LearningCalibration = Field(default_factory=LearningCalibration)
+    confidence: LearningConfidenceStats = Field(default_factory=LearningConfidenceStats)
+    distributions: dict[str, dict[str, int]] = Field(default_factory=dict)
+    knowledge: dict[str, list[LearningPeriodEntry]] = Field(default_factory=dict)
+    patterns: list[LearningPattern] = Field(default_factory=list)
+    observations: list[LearningObservation] = Field(default_factory=list)
+    recommendations: list[LearningRecommendation] = Field(default_factory=list)
+
+
+class LearningKnowledge(_Base):
+    """Per-dimension knowledge view."""
+
+    dimension: str = ""
+    scope: str = ""
+    anchor_date: date | None = None
+    generated_at: str | None = None
+    entries: list[LearningPeriodEntry] = Field(default_factory=list)
+
+
+class LearningPatterns(_Base):
+    """Per-dimension cohort patterns for the whole evaluated population."""
+
+    scope: str = ""
+    anchor_date: date | None = None
+    generated_at: str | None = None
+    patterns: list[LearningPattern] = Field(default_factory=list)
+
+
+class LearningObservations(_Base):
+    """Canonical observations about the evaluated population."""
+
+    scope: str = ""
+    anchor_date: date | None = None
+    generated_at: str | None = None
+    observations: list[LearningObservation] = Field(default_factory=list)
+
+
+class LearningConfidence(_Base):
+    """Population confidence statistics and calibration digest."""
+
+    scope: str = ""
+    anchor_date: date | None = None
+    generated_at: str | None = None
+    confidence: LearningConfidenceStats = Field(default_factory=LearningConfidenceStats)
+    calibration: LearningCalibration = Field(default_factory=LearningCalibration)
+
+
+class LearningBias(_Base):
+    """Confidence-bias view plus the population metric surface."""
+
+    scope: str = ""
+    anchor_date: date | None = None
+    generated_at: str | None = None
+    metrics: dict[str, float | None] = Field(default_factory=dict)
+    knowledge: dict[str, list[LearningPeriodEntry]] = Field(default_factory=dict)
+
+
+class LearningRecommendations(_Base):
+    """Deterministic, rule-based recommendations for the population."""
+
+    scope: str = ""
+    anchor_date: date | None = None
+    generated_at: str | None = None
+    recommendations: list[LearningRecommendation] = Field(default_factory=list)
+
+
+class LearningReportHeader(_Base):
+    """Lightweight header of one recorded learning snapshot."""
+
+    snapshot_id: str = ""
+    scope: str = ""
+    period_kind: str = ""
+    anchor_date: str = ""
+    engine_version: str = ""
+    content_hash: str = ""
+    recorded_at: str = ""
+
+
+class LearningReports(_Base):
+    """Recorded learning snapshots (headers only)."""
+
+    period_kind: str = "daily"
+    reports: list[LearningReportHeader] = Field(default_factory=list)
+
+
+class LearningReportDetail(_Base):
+    """Full recorded learning report payload plus its integrity hash."""
+
+    snapshot_id: str = ""
+    report_id: str = ""
+    content_hash: str = ""
+    recorded_at: str = ""
+    payload: dict[str, Any] = Field(default_factory=dict)
