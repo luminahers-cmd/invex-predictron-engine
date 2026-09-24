@@ -1,32 +1,46 @@
-"""Autonomous Research Intelligence — Research Planner (Phase 8, Sprint 1).
+"""Autonomous Research Intelligence — Research Planner and Source Discovery.
 
-The deterministic planning layer that decides, for a given company:
+The deterministic planning and source-selection layer that decides, for
+a given company:
 
-* What information is missing,
-* What research should be performed,
-* In what order that research should occur.
+* What information is missing (Research Planner, Sprint 1),
+* What research should be performed (Research Planner, Sprint 1),
+* In what order that research should occur (Research Planner, Sprint 1),
+* Where the research should be performed — the highest-quality candidate
+  source categories (Source Discovery, Sprint 2).
 
-This sprint is **planning only**: no source discovery, no scraping, no
-search APIs, no LLMs, and no evidence collection.  The planner is pure —
-the same input always produces the same plan.
+This package is **planning only**: no source discovery done over the
+network, no scraping, no search APIs, no LLMs, and no evidence
+collection.  The layer is pure — the same input always produces the same
+plan and the same ranked source recommendations.
 """
 
 from predictron_engine.research.exceptions import (
     DependencyCycleError,
+    InvalidDiscoveryInputError,
     InvalidPlannerInputError,
     ResearchError,
     RuleRegistrationError,
+    SourceRegistryError,
+    UnknownSourceError,
     UnknownTopicError,
 )
 from predictron_engine.research.models import (
     PLAN_SCHEMA_VERSION,
+    SOURCE_SCHEMA_VERSION,
     EvidenceStatus,
     KnowledgeGap,
     PlannerInput,
     ResearchPlan,
     ResearchPriority,
+    ResearchSource,
     ResearchTask,
     ResearchTopic,
+    SourceCategory,
+    SourceDiscoveryPlan,
+    SourceRank,
+    SourceRecommendation,
+    SourceScore,
 )
 from predictron_engine.research.planner import (
     ResearchPlanner,
@@ -60,6 +74,37 @@ from predictron_engine.research.rules import (
     registered_rules,
     research_rules,
 )
+from predictron_engine.research.source_discovery import SourceDiscovery
+from predictron_engine.research.source_ranker import (
+    COST_WEIGHT,
+    COVERAGE_WEIGHT,
+    RANKING_WEIGHTS,
+    STRUCTURED_WEIGHT,
+    TRUST_WEIGHT,
+    compute_source_score,
+    freshness_priority_scale,
+    rank_sources,
+    topic_fit_factor,
+)
+from predictron_engine.research.source_ranker import (
+    FRESHNESS_WEIGHT as RANKING_FRESHNESS_WEIGHT,
+)
+from predictron_engine.research.source_registry import (
+    DEFAULT_DISCOVERY_RULES,
+    SOURCE_CATALOG,
+    SOURCE_REGISTRY,
+    SourceDiscoveryRule,
+    SourceRegistry,
+    all_sources,
+    candidate_sources,
+    categories,
+    discovery_rules,
+    get_source,
+    has_source,
+    rule_for_topic,
+    source_index,
+    sources_by_category,
+)
 from predictron_engine.research.topics import (
     RESEARCH_TOPICS,
     SOURCE_CATEGORIES,
@@ -73,13 +118,17 @@ from predictron_engine.research.topics import (
 )
 
 __all__ = [
+    "COST_WEIGHT",
+    "COVERAGE_WEIGHT",
     "CoverageRule",
+    "DEFAULT_DISCOVERY_RULES",
     "DEFAULT_RULES",
     "DEPENDENCY_WEIGHT",
     "DependencyCycleError",
     "EvidenceStatus",
     "FRESHNESS_WEIGHT",
     "IMPORTANCE_WEIGHT",
+    "InvalidDiscoveryInputError",
     "InvalidPlannerInputError",
     "KnowledgeGap",
     "MISSING_EVIDENCE_WEIGHT",
@@ -91,34 +140,65 @@ __all__ = [
     "PLAN_SCHEMA_VERSION",
     "PREDICTION_IMPACT_WEIGHT",
     "PlannerInput",
+    "RANKING_WEIGHTS",
+    "RANKING_FRESHNESS_WEIGHT",
     "RESEARCH_TOPICS",
     "RuleRegistrationError",
     "SOURCE_AVAILABILITY_WEIGHT",
+    "SOURCE_CATALOG",
     "SOURCE_CATEGORIES",
     "SOURCE_CATEGORY_DESCRIPTIONS",
+    "SOURCE_REGISTRY",
+    "SOURCE_SCHEMA_VERSION",
+    "STRUCTURED_WEIGHT",
+    "SourceCategory",
+    "SourceDiscovery",
+    "SourceDiscoveryPlan",
+    "SourceDiscoveryRule",
+    "SourceRank",
+    "SourceRecommendation",
+    "SourceRegistry",
+    "SourceRegistryError",
+    "SourceScore",
     "TOPIC_REGISTRY",
+    "TRUST_WEIGHT",
     "ResearchError",
     "ResearchPlan",
     "ResearchPlanner",
     "ResearchPriority",
     "ResearchRule",
+    "ResearchSource",
     "ResearchTask",
     "ResearchTopic",
+    "UnknownSourceError",
     "UnknownTopicError",
+    "all_sources",
     "all_topic_ids",
+    "candidate_sources",
+    "categories",
     "compute_priority_score",
+    "compute_source_score",
     "coverage_status",
     "dependency_edges",
+    "discovery_rules",
     "evaluate_rules",
     "evidence_missing_factor",
+    "freshness_priority_scale",
+    "get_source",
     "get_topic",
+    "has_source",
     "has_topic",
     "horizon_freshness_scale",
     "priority_from_score",
+    "rank_sources",
     "recommend_topics",
     "register_rule",
     "registered_rules",
     "research_rules",
+    "rule_for_topic",
     "source_availability_factor",
+    "source_index",
+    "sources_by_category",
+    "topic_fit_factor",
     "topic_index",
 ]
