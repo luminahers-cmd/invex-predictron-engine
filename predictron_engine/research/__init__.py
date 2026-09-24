@@ -1,33 +1,80 @@
-"""Autonomous Research Intelligence — Research Planner and Source Discovery.
+"""Autonomous Research Intelligence — Research Planner, Source Discovery, and Collection.
 
-The deterministic planning and source-selection layer that decides, for
-a given company:
+The deterministic planning, selection, and collection layer that, for a
+given company:
 
-* What information is missing (Research Planner, Sprint 1),
-* What research should be performed (Research Planner, Sprint 1),
-* In what order that research should occur (Research Planner, Sprint 1),
-* Where the research should be performed — the highest-quality candidate
-  source categories (Source Discovery, Sprint 2).
+* Decides what information is missing (Research Planner, Sprint 1),
+* Decides what research to perform (Research Planner, Sprint 1),
+* Orders that research (Research Planner, Sprint 1),
+* Selects the highest-quality candidate sources (Source Discovery,
+  Sprint 2),
+* Executes the research by orchestrating placeholder collectors and
+  aggregating deterministic evidence (Evidence Collection, Sprint 3).
 
-This package is **planning only**: no source discovery done over the
-network, no scraping, no search APIs, no LLMs, and no evidence
-collection.  The layer is pure — the same input always produces the same
-plan and the same ranked source recommendations.
+The package is **pure planning and collection**: no network scraping, no
+search APIs, no browser automation, no LLMs, and no live evidence.
+Every layer is deterministic — the same input always produces the same
+plan, the same ranked source recommendations, and the same collection
+result.
 """
 
+from predictron_engine.research.collector import (
+    EvidenceCollector,
+    enforce_supported,
+)
+from predictron_engine.research.collectors import (
+    DEFAULT_COLLECTORS,
+    PLACEHOLDER_EVIDENCE_ORIGIN,
+    ClaimSpec,
+    CompetitionCollector,
+    CustomerCollector,
+    FounderCollector,
+    FundingCollector,
+    HiringCollector,
+    LegalCollector,
+    MarketCollector,
+    NewsCollector,
+    PartnershipCollector,
+    PlaceholderCollector,
+    PricingCollector,
+    ProductCollector,
+    ReviewsCollector,
+    RiskCollector,
+    TechnologyCollector,
+    TractionCollector,
+)
+from predictron_engine.research.dispatcher import (
+    CollectorDispatch,
+    Dispatcher,
+    DispatchPlan,
+)
 from predictron_engine.research.exceptions import (
+    CollectorExecutionError,
+    CollectorNotFound,
     DependencyCycleError,
+    DuplicateCollector,
+    InvalidCollectionInputError,
     InvalidDiscoveryInputError,
+    InvalidEvidence,
     InvalidPlannerInputError,
     ResearchError,
     RuleRegistrationError,
     SourceRegistryError,
     UnknownSourceError,
     UnknownTopicError,
+    UnsupportedTopic,
 )
+from predictron_engine.research.execution import EvidenceCollectionEngine
 from predictron_engine.research.models import (
+    COLLECTION_SCHEMA_VERSION,
     PLAN_SCHEMA_VERSION,
     SOURCE_SCHEMA_VERSION,
+    CollectionResult,
+    CollectionStatus,
+    Evidence,
+    EvidenceCollection,
+    EvidenceMetadata,
+    EvidenceReference,
     EvidenceStatus,
     KnowledgeGap,
     PlannerInput,
@@ -58,6 +105,18 @@ from predictron_engine.research.priorities import (
     horizon_freshness_scale,
     priority_from_score,
     source_availability_factor,
+)
+from predictron_engine.research.registry import (
+    COLLECTOR_REGISTRY,
+    CollectorRegistry,
+    collectors_for,
+    covered_topics,
+    default_collector_registry,
+    has_collector,
+    list_collectors,
+    register_collector,
+    resolve_collector,
+    unregister_collector,
 )
 from predictron_engine.research.rules import (
     DEFAULT_RULES,
@@ -118,31 +177,67 @@ from predictron_engine.research.topics import (
 )
 
 __all__ = [
+    "COLLECTION_SCHEMA_VERSION",
+    "COLLECTOR_REGISTRY",
     "COST_WEIGHT",
     "COVERAGE_WEIGHT",
+    "ClaimSpec",
+    "CollectionResult",
+    "CollectionStatus",
+    "CollectorDispatch",
+    "CollectorExecutionError",
+    "CollectorNotFound",
+    "CollectorRegistry",
+    "CompetitionCollector",
     "CoverageRule",
+    "CustomerCollector",
+    "DEFAULT_COLLECTORS",
     "DEFAULT_DISCOVERY_RULES",
     "DEFAULT_RULES",
     "DEPENDENCY_WEIGHT",
     "DependencyCycleError",
+    "DispatchPlan",
+    "Dispatcher",
+    "DuplicateCollector",
+    "Evidence",
+    "EvidenceCollection",
+    "EvidenceCollectionEngine",
+    "EvidenceCollector",
+    "EvidenceMetadata",
+    "EvidenceReference",
     "EvidenceStatus",
     "FRESHNESS_WEIGHT",
+    "FounderCollector",
+    "FundingCollector",
+    "HiringCollector",
     "IMPORTANCE_WEIGHT",
+    "InvalidCollectionInputError",
     "InvalidDiscoveryInputError",
+    "InvalidEvidence",
     "InvalidPlannerInputError",
     "KnowledgeGap",
+    "LegalCollector",
     "MISSING_EVIDENCE_WEIGHT",
+    "MarketCollector",
     "MissingFoundersRule",
     "MissingFundingRule",
     "MissingMarketRule",
     "MissingPricingRule",
     "MissingTechnologyRule",
+    "NewsCollector",
+    "PLACEHOLDER_EVIDENCE_ORIGIN",
     "PLAN_SCHEMA_VERSION",
     "PREDICTION_IMPACT_WEIGHT",
+    "PartnershipCollector",
+    "PlaceholderCollector",
     "PlannerInput",
+    "PricingCollector",
+    "ProductCollector",
     "RANKING_WEIGHTS",
     "RANKING_FRESHNESS_WEIGHT",
     "RESEARCH_TOPICS",
+    "ReviewsCollector",
+    "RiskCollector",
     "RuleRegistrationError",
     "SOURCE_AVAILABILITY_WEIGHT",
     "SOURCE_CATALOG",
@@ -162,6 +257,8 @@ __all__ = [
     "SourceScore",
     "TOPIC_REGISTRY",
     "TRUST_WEIGHT",
+    "TechnologyCollector",
+    "TractionCollector",
     "ResearchError",
     "ResearchPlan",
     "ResearchPlanner",
@@ -172,33 +269,43 @@ __all__ = [
     "ResearchTopic",
     "UnknownSourceError",
     "UnknownTopicError",
+    "UnsupportedTopic",
     "all_sources",
     "all_topic_ids",
     "candidate_sources",
     "categories",
+    "collectors_for",
     "compute_priority_score",
     "compute_source_score",
     "coverage_status",
+    "covered_topics",
+    "default_collector_registry",
     "dependency_edges",
     "discovery_rules",
+    "enforce_supported",
     "evaluate_rules",
     "evidence_missing_factor",
     "freshness_priority_scale",
     "get_source",
     "get_topic",
+    "has_collector",
     "has_source",
     "has_topic",
     "horizon_freshness_scale",
+    "list_collectors",
     "priority_from_score",
     "rank_sources",
     "recommend_topics",
+    "register_collector",
     "register_rule",
     "registered_rules",
     "research_rules",
+    "resolve_collector",
     "rule_for_topic",
     "source_availability_factor",
     "source_index",
     "sources_by_category",
     "topic_fit_factor",
     "topic_index",
+    "unregister_collector",
 ]

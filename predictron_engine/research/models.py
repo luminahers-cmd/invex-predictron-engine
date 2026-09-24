@@ -1,7 +1,8 @@
-﻿"""Research Planner models — Phase 8 Sprints 1 and 2.
+﻿"""Research Intelligence models — Phase 8 Sprints 1, 2, and 3.
 
 Immutable value objects describing the deterministic planning layer
-(Sprint 1) and the source discovery layer (Sprint 2):
+(Sprint 1), the source discovery layer (Sprint 2), and the evidence
+collection layer (Sprint 3):
 
 * :class:`PlannerInput` — what a caller tells the planner.
 * :class:`ResearchTopic` — one node in the research taxonomy.
@@ -16,24 +17,37 @@ Immutable value objects describing the deterministic planning layer
 * :class:`SourceRank` — one source ranked for one topic.
 * :class:`SourceRecommendation` — ranked sources for one research task.
 * :class:`SourceDiscoveryPlan` — ranked sources for a whole plan.
+* :class:`Evidence` — one deterministic piece of collected evidence.
+* :class:`EvidenceReference` — source provenance for an evidence item.
+* :class:`EvidenceMetadata` — metadata describing one collector.
+* :class:`EvidenceCollection` — aggregate of collected evidence.
+* :class:`CollectionStatus` — overall collection outcome.
+* :class:`CollectionResult` — the result of executing a research plan.
 
 Models are ``frozen`` dataclasses so they cannot mutate after creation.
 Every model exposes ``to_dict`` / ``from_dict`` for lossless
 serialization.  Nothing here performs I/O, calls models, or touches the
-network — the planning and discovery layers are pure and deterministic.
+network — the planning, discovery, and collection layers are pure and
+deterministic.
 """
 
 from __future__ import annotations
 
+import hashlib
+import json
 from collections.abc import Mapping
 from dataclasses import dataclass
 from enum import Enum
 from urllib.parse import urlsplit
 
-from predictron_engine.research.exceptions import InvalidPlannerInputError
+from predictron_engine.research.exceptions import (
+    InvalidEvidence,
+    InvalidPlannerInputError,
+)
 
 PLAN_SCHEMA_VERSION = "1.0.0"
 SOURCE_SCHEMA_VERSION = "1.0.0"
+COLLECTION_SCHEMA_VERSION = "1.0.0"
 
 
 class ResearchPriority(str, Enum):
@@ -861,3 +875,422 @@ def _require_list_of_dicts(
             raise ValueError(f"expected list of dicts for '{key}'")
         result.append(item)
     return result
+
+
+# ----------------------------------------------------------------------
+# Sprint 3 — Evidence Collection models
+# ----------------------------------------------------------------------
+
+
+class CollectionStatus(str, Enum):
+    """Deterministic outcome of a collection run over a research plan.
+
+    * ``SUCCESS`` — every task in the plan produced evidence.
+    * ``PARTIAL`` — some tasks produced evidence and others failed.
+    * ``FAILED`` — no task produced evidence.
+    * ``EMPTY`` — the plan contained no tasks to execute.
+    """
+
+    SUCCESS = "success"
+    PARTIAL = "partial"
+    FAILED = "failed"
+    EMPTY = "empty"
+
+
+@dataclass(frozen=True)
+class EvidenceReference:
+    """Source provenance attached to one :class:`Evidence` item.
+
+    The reference is metadata only — placeholders describe *where* the
+    evidence would be found.  It never performs or describes a network
+    request.
+    """
+
+    source_category: str
+    source_identifier: str
+    url: str = ""
+    description: str = ""
+
+    def __post_init__(self) -> None:
+        category = self.source_category.strip()
+        identifier = self.source_identifier.strip()
+        url = self.url.strip()
+        description = self.description.strip()
+        if not category:
+            raise InvalidEvidence("source_category must not be empty")
+        if not identifier:
+            raise InvalidEvidence("source_identifier must not be empty")
+        object.__setattr__(self, "source_category", category)
+        object.__setattr__(self, "source_identifier", identifier)
+        object.__setattr__(self, "url", url)
+        object.__setattr__(self, "description", description)
+
+    def to_dict(self) -> dict[str, object]:
+        """Serialize to a JSON-ready dictionary."""
+        return {
+            "source_category": self.source_category,
+            "source_identifier": self.source_identifier,
+            "url": self.url,
+            "description": self.description,
+        }
+
+    @classmethod
+    def from_dict(cls, data: Mapping[str, object]) -> EvidenceReference:
+        """Deserialize from the dictionary produced by :meth:`to_dict`."""
+        return cls(
+            source_category=_require_str(data, "source_category"),
+            source_identifier=_require_str(data, "source_identifier"),
+            url=_require_str(data, "url", default=""),
+            description=_require_str(data, "description", default=""),
+        )
+
+
+@dataclass(frozen=True)
+class EvidenceMetadata:
+    """Deterministic metadata describing one evidence collector."""
+
+    collector_id: str
+    display_name: str
+    description: str = ""
+    supported_topics: tuple[str, ...] = ()
+    deterministic: bool = True
+
+    def __post_init__(self) -> None:
+        collector_id = self.collector_id.strip()
+        display_name = self.display_name.strip()
+        description = self.description.strip()
+        topics = tuple(dict.fromkeys(self.supported_topics))
+        if not collector_id:
+            raise InvalidEvidence("collector_id must not be empty")
+        if not display_name:
+            raise InvalidEvidence("display_name must not be empty")
+        if not topics:
+            raise InvalidEvidence("supported_topics must not be empty")
+        object.__setattr__(self, "collector_id", collector_id)
+        object.__setattr__(self, "display_name", display_name)
+        object.__setattr__(self, "description", description)
+        object.__setattr__(self, "supported_topics", topics)
+
+    def to_dict(self) -> dict[str, object]:
+        """Serialize to a JSON-ready dictionary."""
+        return {
+            "collector_id": self.collector_id,
+            "display_name": self.display_name,
+            "description": self.description,
+            "supported_topics": list(self.supported_topics),
+            "deterministic": self.deterministic,
+        }
+
+    @classmethod
+    def from_dict(cls, data: Mapping[str, object]) -> EvidenceMetadata:
+        """Deserialize from the dictionary produced by :meth:`to_dict`."""
+        return cls(
+            collector_id=_require_str(data, "collector_id"),
+            display_name=_require_str(data, "display_name"),
+            description=_require_str(data, "description", default=""),
+            supported_topics=tuple(_require_str_list(data, "supported_topics")),
+            deterministic=_require_bool(data, "deterministic"),
+        )
+
+
+@dataclass(frozen=True)
+class Evidence:
+    """One deterministic placeholder piece of collected evidence.
+
+    ``evidence_id`` is a stable content hash over the item's fields, so
+    the same claim always yields the same identifier and ordering is
+    fully deterministic.
+    """
+
+    task_id: str
+    topic_id: str
+    collector_id: str
+    category: str
+    claim: str
+    confidence: float
+    reference: EvidenceReference
+    evidence_id: str = ""
+
+    def __post_init__(self) -> None:
+        task_id = self.task_id.strip()
+        topic_id = self.topic_id.strip()
+        collector_id = self.collector_id.strip()
+        category = self.category.strip()
+        claim = self.claim.strip()
+        if not task_id:
+            raise InvalidEvidence("task_id must not be empty")
+        if not topic_id:
+            raise InvalidEvidence("topic_id must not be empty")
+        if not collector_id:
+            raise InvalidEvidence("collector_id must not be empty")
+        if not category:
+            raise InvalidEvidence("category must not be empty")
+        if not claim:
+            raise InvalidEvidence("claim must not be empty")
+        if not _in_unit_range(self.confidence):
+            raise InvalidEvidence("confidence must be within [0, 1]")
+        if not isinstance(self.reference, EvidenceReference):
+            raise InvalidEvidence("reference must be an EvidenceReference")
+        evidence_id = _evidence_digest(
+            {
+                "task_id": task_id,
+                "topic_id": topic_id,
+                "collector_id": collector_id,
+                "category": category,
+                "claim": claim,
+                "confidence": self.confidence,
+                "reference": self.reference.to_dict(),
+            }
+        )
+        object.__setattr__(self, "task_id", task_id)
+        object.__setattr__(self, "topic_id", topic_id)
+        object.__setattr__(self, "collector_id", collector_id)
+        object.__setattr__(self, "category", category)
+        object.__setattr__(self, "claim", claim)
+        object.__setattr__(self, "evidence_id", evidence_id)
+
+    def to_dict(self) -> dict[str, object]:
+        """Serialize to a JSON-ready dictionary."""
+        return {
+            "evidence_id": self.evidence_id,
+            "task_id": self.task_id,
+            "topic_id": self.topic_id,
+            "collector_id": self.collector_id,
+            "category": self.category,
+            "claim": self.claim,
+            "confidence": self.confidence,
+            "reference": self.reference.to_dict(),
+        }
+
+    @classmethod
+    def from_dict(cls, data: Mapping[str, object]) -> Evidence:
+        """Deserialize from the dictionary produced by :meth:`to_dict`."""
+        return cls(
+            task_id=_require_str(data, "task_id"),
+            topic_id=_require_str(data, "topic_id"),
+            collector_id=_require_str(data, "collector_id"),
+            category=_require_str(data, "category"),
+            claim=_require_str(data, "claim"),
+            confidence=_require_float(data, "confidence"),
+            reference=EvidenceReference.from_dict(
+                _require_dict(data, "reference")
+            ),
+        )
+
+
+@dataclass(frozen=True)
+class EvidenceCollection:
+    """An immutable, deterministically ordered aggregation of evidence.
+
+    Items are re-sorted on construction by topic order and then by
+    ``evidence_id`` so any insertion order produces an identical
+    collection — the same plan always yields the same aggregate.
+    """
+
+    evidence: tuple[Evidence, ...] = ()
+    topic_order: tuple[str, ...] = ()
+
+    def __post_init__(self) -> None:
+        items = tuple(self.evidence)
+        for item in items:
+            if not isinstance(item, Evidence):
+                raise InvalidEvidence(
+                    "collection entries must be Evidence instances"
+                )
+        order = tuple(dict.fromkeys(self.topic_order))
+        positions = {topic_id: position for position, topic_id in enumerate(order)}
+
+        def _position(item: Evidence) -> int:
+            return positions.get(item.topic_id, len(order))
+
+        ordered = tuple(
+            sorted(items, key=lambda item: (_position(item), item.evidence_id))
+        )
+        object.__setattr__(self, "evidence", ordered)
+        object.__setattr__(self, "topic_order", order)
+
+    def __len__(self) -> int:
+        """Return the number of evidence items."""
+        return len(self.evidence)
+
+    def items(self) -> tuple[Evidence, ...]:
+        """Return the evidence items in deterministic order."""
+        return self.evidence
+
+    def for_topic(self, topic_id: str) -> tuple[Evidence, ...]:
+        """Return the evidence items for ``topic_id``, ordered."""
+        return tuple(item for item in self.evidence if item.topic_id == topic_id)
+
+    def has_topic(self, topic_id: str) -> bool:
+        """Return whether any evidence exists for ``topic_id``."""
+        return any(item.topic_id == topic_id for item in self.evidence)
+
+    def topics_covered(self) -> tuple[str, ...]:
+        """Return topics with evidence, in deterministic topic order."""
+        covered = [
+            topic_id
+            for topic_id in self.topic_order
+            if any(item.topic_id == topic_id for item in self.evidence)
+        ]
+        covered.extend(_topics_not_in_order(self.evidence, self.topic_order))
+        return tuple(covered)
+
+    def evidence_count(self, topic_id: str) -> int:
+        """Return how many evidence items exist for ``topic_id``."""
+        return sum(1 for item in self.evidence if item.topic_id == topic_id)
+
+    def to_dict(self) -> dict[str, object]:
+        """Serialize to a fully JSON-ready dictionary."""
+        return {
+            "evidence": [item.to_dict() for item in self.evidence],
+            "topic_order": list(self.topic_order),
+            "topics_covered": list(self.topics_covered()),
+        }
+
+    @classmethod
+    def from_dict(cls, data: Mapping[str, object]) -> EvidenceCollection:
+        """Deserialize from the dictionary produced by :meth:`to_dict`."""
+        return cls(
+            evidence=tuple(
+                Evidence.from_dict(item)
+                for item in _require_list_of_dicts(data, "evidence")
+            ),
+            topic_order=tuple(_require_str_list(data, "topic_order")),
+        )
+
+
+@dataclass(frozen=True)
+class CollectionResult:
+    """The deterministic result of executing a research plan.
+
+    ``collection_id`` is a stable content hash so storing or comparing
+    results is deterministic.  ``executed_tasks`` preserves the plan's
+    execution order; ``failed_tasks`` and ``unresolved_tasks`` list
+    task identifiers that did not produce evidence.
+    """
+
+    schema_version: str
+    plan_id: str
+    company_name: str
+    collection_id: str
+    status: CollectionStatus
+    collection: EvidenceCollection
+    executed_tasks: tuple[str, ...] = ()
+    failed_tasks: tuple[str, ...] = ()
+    unresolved_tasks: tuple[str, ...] = ()
+
+    def __post_init__(self) -> None:
+        schema_version = self.schema_version.strip()
+        plan_id = self.plan_id.strip()
+        company_name = self.company_name.strip()
+        collection_id = self.collection_id.strip()
+        if not schema_version:
+            raise InvalidEvidence("schema_version must not be empty")
+        if not plan_id:
+            raise InvalidEvidence("plan_id must not be empty")
+        if not company_name:
+            raise InvalidEvidence("company_name must not be empty")
+        if not collection_id:
+            raise InvalidEvidence("collection_id must not be empty")
+        if not isinstance(self.status, CollectionStatus):
+            raise InvalidEvidence("status must be a CollectionStatus")
+        if not isinstance(self.collection, EvidenceCollection):
+            raise InvalidEvidence(
+                "collection must be an EvidenceCollection"
+            )
+        object.__setattr__(self, "schema_version", schema_version)
+        object.__setattr__(self, "plan_id", plan_id)
+        object.__setattr__(self, "company_name", company_name)
+        object.__setattr__(self, "collection_id", collection_id)
+        object.__setattr__(
+            self,
+            "executed_tasks",
+            tuple(dict.fromkeys(self.executed_tasks)),
+        )
+        object.__setattr__(
+            self, "failed_tasks", tuple(dict.fromkeys(self.failed_tasks))
+        )
+        object.__setattr__(
+            self,
+            "unresolved_tasks",
+            tuple(dict.fromkeys(self.unresolved_tasks)),
+        )
+
+    @property
+    def topics_covered(self) -> tuple[str, ...]:
+        """Return the topics with evidence, in deterministic order."""
+        return self.collection.topics_covered()
+
+    @property
+    def evidence_count(self) -> int:
+        """Return the total number of collected evidence items."""
+        return len(self.collection)
+
+    def has_failures(self) -> bool:
+        """Return whether any task failed or was left unresolved."""
+        return bool(self.failed_tasks or self.unresolved_tasks)
+
+    def successfully_executed(self) -> bool:
+        """Return whether the plan ran without failures or misses."""
+        return not self.has_failures()
+
+    def to_dict(self) -> dict[str, object]:
+        """Serialize to a fully JSON-ready dictionary."""
+        return {
+            "schema_version": self.schema_version,
+            "plan_id": self.plan_id,
+            "company_name": self.company_name,
+            "collection_id": self.collection_id,
+            "status": self.status.value,
+            "collection": self.collection.to_dict(),
+            "executed_tasks": list(self.executed_tasks),
+            "failed_tasks": list(self.failed_tasks),
+            "unresolved_tasks": list(self.unresolved_tasks),
+            "topics_covered": list(self.topics_covered),
+        }
+
+    @classmethod
+    def from_dict(cls, data: Mapping[str, object]) -> CollectionResult:
+        """Deserialize from the dictionary produced by :meth:`to_dict`."""
+        return cls(
+            schema_version=_require_str(data, "schema_version"),
+            plan_id=_require_str(data, "plan_id"),
+            company_name=_require_str(data, "company_name"),
+            collection_id=_require_str(data, "collection_id"),
+            status=CollectionStatus(_require_str(data, "status")),
+            collection=EvidenceCollection.from_dict(
+                _require_dict(data, "collection")
+            ),
+            executed_tasks=tuple(_require_str_list(data, "executed_tasks")),
+            failed_tasks=tuple(_require_str_list(data, "failed_tasks")),
+            unresolved_tasks=tuple(
+                _require_str_list(data, "unresolved_tasks")
+            ),
+        )
+
+
+def _topics_not_in_order(
+    evidence: tuple[Evidence, ...],
+    topic_order: tuple[str, ...],
+) -> tuple[str, ...]:
+    """Return topics outside ``topic_order``, sorted for determinism.
+
+    Deterministic fallback ordering for evidence whose topic is not part
+    of the declared topic order (for example hand-built collections).
+    """
+    ordered = set(topic_order)
+    topics = sorted(
+        {item.topic_id for item in evidence if item.topic_id not in ordered}
+    )
+    return tuple(topics)
+
+
+def _evidence_digest(payload: Mapping[str, object]) -> str:
+    """Return a stable content-hash identifier for an evidence item."""
+    canonical = json.dumps(
+        payload,
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+    digest = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return f"ev_{digest[:16]}"
