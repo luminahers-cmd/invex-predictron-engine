@@ -21,9 +21,21 @@ import asyncio
 import sys
 from datetime import UTC, datetime
 
-from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
+from sqlalchemy.ext.asyncio import (
+    AsyncEngine,
+    AsyncSession,
+    async_sessionmaker,
+    create_async_engine,
+)
 
 from app.core.config import get_settings
+from app.schemas.monitoring import (
+    MonitorDriftResponse,
+    MonitorHealthListResponse,
+    MonitorReanalysisResponse,
+    MonitorSummaryResponse,
+    MonitorTrendsResponse,
+)
 from app.services.monitoring import MonitoringService
 from predictron_engine.monitoring.history import MonitorHistory
 from predictron_engine.monitoring.models import MonitorPeriodKind
@@ -38,7 +50,7 @@ def _parse_as_of(value: str | None) -> datetime | None:
     return parsed.astimezone(UTC)
 
 
-async def _open_live():
+async def _open_live() -> tuple[AsyncEngine, AsyncSession]:
     settings = get_settings()
     engine = create_async_engine(settings.DATABASE_URL)
     factory = async_sessionmaker(engine, expire_on_commit=False)
@@ -51,6 +63,11 @@ async def _run_live(
     engine, session = await _open_live()
     try:
         service = MonitoringService()
+        data: (
+            MonitorSummaryResponse
+            | MonitorHealthListResponse
+            | MonitorReanalysisResponse
+        )
         if command == "summary":
             data = await service.summary(session, as_of=as_of)
         elif command == "rolling":
@@ -117,6 +134,7 @@ def _run_history(command: str, args: argparse.Namespace) -> int:
         history=MonitorHistory(settings.MONITOR_HISTORY_DIR)
     )
     try:
+        data: MonitorTrendsResponse | MonitorDriftResponse
         if command == "trends":
             data = service.trends(
                 period_kind=period_kind,
