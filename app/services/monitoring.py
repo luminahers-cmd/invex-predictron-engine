@@ -258,6 +258,9 @@ class MonitoringService:
         snapshots = self._history.snapshots("repository", period_kind.value)
         by_id = {snapshot.snapshot_id: snapshot for snapshot in snapshots}
 
+        before: MonitorSnapshot
+        after: MonitorSnapshot
+
         if before_id is None:
             if len(snapshots) < 2:
                 raise LookupError(
@@ -266,9 +269,10 @@ class MonitoringService:
                 )
             before, after = snapshots[-2], snapshots[-1]
         else:
-            before = by_id.get(before_id)
-            if before is None:
+            before_snapshot = by_id.get(before_id)
+            if before_snapshot is None:
                 raise LookupError(f"snapshot {before_id} not found in history")
+            before = before_snapshot
             if after_id is None:
                 candidates = [
                     snapshot
@@ -282,9 +286,10 @@ class MonitoringService:
                     )
                 after = candidates[-1]
             else:
-                after = by_id.get(after_id)
-                if after is None:
+                after_snapshot = by_id.get(after_id)
+                if after_snapshot is None:
                     raise LookupError(f"snapshot {after_id} not found in history")
+                after = after_snapshot
 
         report = detect_monitor_drift(before, after)
         return MonitorDriftResponse(
@@ -310,25 +315,29 @@ class MonitoringService:
         as_of_utc = _normalized(as_of) if as_of is not None else datetime.now(UTC)
         records = await self._forecast_records(session, user_id=None, scope_all=True)
         evaluations = await self._evaluation_rows(session, user_id=None, scope_all=True)
-        builder = (
-            build_monitor_rolling_snapshot
-            if window is not None
-            else build_monitor_snapshot
-        )
-        kwargs: dict[str, object] = {}
         if window is not None:
-            kwargs["window"] = window
-        snapshot = builder(
-            records,
-            evaluations,
-            anchor_date=as_of_utc.date(),
-            period_kind=MonitorPeriodKind.DAILY,
-            scope="repository",
-            engine_version=_ENGINE_VERSION,
-            recorded_at=as_of_utc,
-            as_of=as_of_utc,
-            **kwargs,
-        )
+            snapshot = build_monitor_rolling_snapshot(
+                records,
+                evaluations,
+                anchor_date=as_of_utc.date(),
+                period_kind=MonitorPeriodKind.DAILY,
+                scope="repository",
+                engine_version=_ENGINE_VERSION,
+                window=window,
+                recorded_at=as_of_utc,
+                as_of=as_of_utc,
+            )
+        else:
+            snapshot = build_monitor_snapshot(
+                records,
+                evaluations,
+                anchor_date=as_of_utc.date(),
+                period_kind=MonitorPeriodKind.DAILY,
+                scope="repository",
+                engine_version=_ENGINE_VERSION,
+                recorded_at=as_of_utc,
+                as_of=as_of_utc,
+            )
         return snapshot
 
     # ------------------------------------------------------------------

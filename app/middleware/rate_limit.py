@@ -49,8 +49,6 @@ from app.core.config import get_settings
 
 logger = logging.getLogger(__name__)
 
-settings = get_settings()
-
 
 type _IPNetwork = "ipaddress._BaseNetwork[Any]"
 
@@ -128,6 +126,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         """
         peer = request.client.host if request.client else "127.0.0.1"
 
+        settings = get_settings()
         raw_proxies = tuple(settings.RATE_LIMIT_TRUSTED_PROXIES)
         if not raw_proxies:
             return peer
@@ -181,6 +180,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
 
     def _evict_if_needed(self) -> None:
         """Evict the least-recently-seen clients when the key cap is exceeded."""
+        settings = get_settings()
         max_clients = settings.RATE_LIMIT_MAX_TRACKED_CLIENTS
         while len(self._windows) > max_clients:
             # Keys are rotated to the end on every hit, so the first key in
@@ -193,6 +193,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         request: Request,
         call_next: Callable[[Request], Awaitable[Response]],
     ) -> Response:
+        settings = get_settings()
         if not settings.RATE_LIMIT_ENABLED:
             return await call_next(request)
 
