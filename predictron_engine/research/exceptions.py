@@ -2,9 +2,9 @@
 
 Every error raised by the research planning (Sprint 1), source discovery
 (Sprint 2), evidence collection (Sprint 3), evidence validation (Sprint 4),
-and research execution (Sprint 5) layers derives from
-:class:`ResearchError` so callers can handle failures uniformly without
-coupling to implementation details.
+research execution (Sprint 5), and research memory / knowledge graph
+(Sprint 6) layers derives from :class:`ResearchError` so callers can handle
+failures uniformly without coupling to implementation details.
 """
 
 from __future__ import annotations
@@ -182,4 +182,67 @@ class InvalidExecutionStateTransitionError(  # noqa: N818
     -> ``VALIDATION`` -> ``COMPLETED``), plus an exit to ``FAILED`` from
     any active state.  Anything else is an orchestrator bug and raises
     rather than being silently accepted.
+    """
+
+
+class ResearchMemoryError(ResearchError):
+    """Base class for every error raised by Research Memory and the graph.
+
+    Phase 8 Sprint 6.  Anything that goes wrong while persisting research
+    or building the internal knowledge graph raises a subclass of
+    :class:`ResearchMemoryError` so callers can distinguish persistence
+    faults from the domain failures produced by the earlier sprints.
+    """
+
+
+class InvalidGraphModelError(ResearchMemoryError, ValueError):  # noqa: N818
+    """Raised when a knowledge-graph value object breaks its contract.
+
+    Used on construction and during deserialization when a field is
+    missing, malformed, or of the wrong type.
+    """
+
+
+class InvalidRelationshipError(ResearchMemoryError, ValueError):  # noqa: N818
+    """Raised when a relationship is not valid for its endpoint types.
+
+    The research knowledge graph is strongly typed: every relationship has
+    a fixed set of permitted source and target entity types, and every
+    relationship must carry confidence, provenance, a timestamp, and at
+    least one supporting evidence identifier.
+    """
+
+
+class InvalidMemoryInputError(ResearchMemoryError, ValueError):  # noqa: N818
+    """Raised when :class:`ResearchMemory` receives input it cannot store.
+
+    Also raised when an add operation is asked to overwrite an existing
+    record: research memory is append-only and never rewrites history.
+    """
+
+
+class ImmutableRecordError(ResearchMemoryError, ValueError):  # noqa: N818
+    """Raised when an append-only invariant would be violated.
+
+    A stored :class:`~predictron_engine.research.execution_report.ResearchReport`,
+    :class:`~predictron_engine.research.models.Evidence` item, or history
+    entry can never be replaced or edited.  Attempting to do so raises this
+    error rather than silently dropping the new value.
+    """
+
+
+class EntityLinkingError(ResearchMemoryError, ValueError):  # noqa: N818
+    """Raised when two names cannot be reduced to a canonical entity.
+
+    Entity linking is rule-based; when a name carries no usable characters
+    there is no canonical key, so no identifier can be derived and the
+    operation fails instead of inventing one.
+    """
+
+
+class DeduplicationError(ResearchMemoryError, ValueError):  # noqa: N818
+    """Raised when a duplicate-detection key cannot be computed.
+
+    Raised by :func:`~predictron_engine.research.deduplication.duplicate_key`
+    for empty inputs, which have no deterministic content digest.
     """

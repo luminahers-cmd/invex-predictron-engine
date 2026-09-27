@@ -15,6 +15,7 @@ evaluations the validity loop does.
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from datetime import UTC, datetime
 from typing import TYPE_CHECKING
 
@@ -266,9 +267,10 @@ class MonitoringService:
                 )
             before, after = snapshots[-2], snapshots[-1]
         else:
-            before = by_id.get(before_id)
-            if before is None:
+            before_lookup = by_id.get(before_id)
+            if before_lookup is None:
                 raise LookupError(f"snapshot {before_id} not found in history")
+            before = before_lookup
             if after_id is None:
                 candidates = [
                     snapshot
@@ -282,9 +284,10 @@ class MonitoringService:
                     )
                 after = candidates[-1]
             else:
-                after = by_id.get(after_id)
-                if after is None:
+                after_lookup = by_id.get(after_id)
+                if after_lookup is None:
                     raise LookupError(f"snapshot {after_id} not found in history")
+                after = after_lookup
 
         report = detect_monitor_drift(before, after)
         return MonitorDriftResponse(
@@ -310,7 +313,7 @@ class MonitoringService:
         as_of_utc = _normalized(as_of) if as_of is not None else datetime.now(UTC)
         records = await self._forecast_records(session, user_id=None, scope_all=True)
         evaluations = await self._evaluation_rows(session, user_id=None, scope_all=True)
-        builder = (
+        builder: Callable[..., MonitorSnapshot] = (
             build_monitor_rolling_snapshot
             if window is not None
             else build_monitor_snapshot

@@ -31,13 +31,17 @@ def override_get_db(sqlite_session):
 
 @pytest.fixture
 def isolate_history(monkeypatch, tmp_path):
-    """Bind ``MONITOR_HISTORY_DIR`` to a fresh temp dir for this test."""
+    """Bind ``MONITOR_HISTORY_DIR`` to a fresh temp dir for this test.
+
+    The attribute is patched on the live settings singleton instead of
+    clearing the cache: modules that snapshot ``get_settings()`` at import
+    time (e.g. ``app.middleware.rate_limit``) must keep reading the same
+    instance, otherwise every later test patches an orphaned copy.
+    """
     from app.core.config import get_settings
 
-    monkeypatch.setenv("MONITOR_HISTORY_DIR", str(tmp_path))
-    get_settings.cache_clear()
+    monkeypatch.setattr(get_settings(), "MONITOR_HISTORY_DIR", str(tmp_path))
     yield tmp_path
-    get_settings.cache_clear()
 
 
 def _headers(user_id: str) -> dict[str, str]:
