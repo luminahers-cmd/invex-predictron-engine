@@ -4,3 +4,6 @@ pytest==8.4.0
 pytest-asyncio==1.0.0
 httpx==0.28.1
 ruff==0.11.12
+# Async SQLite driver for the in-memory test engine (`sqlite+aiosqlite://` in
+# tests/conftest.py). Test-only: the app itself talks to Postgres via asyncpg.
+aiosqlite==0.22.1
