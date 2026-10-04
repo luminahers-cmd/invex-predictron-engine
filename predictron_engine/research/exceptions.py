@@ -2,9 +2,10 @@
 
 Every error raised by the research planning (Sprint 1), source discovery
 (Sprint 2), evidence collection (Sprint 3), evidence validation (Sprint 4),
-research execution (Sprint 5), and research memory / knowledge graph
-(Sprint 6) layers derives from :class:`ResearchError` so callers can handle
-failures uniformly without coupling to implementation details.
+research execution (Sprint 5), research memory / knowledge graph
+(Sprint 6), and research intelligence loop (Sprint 7) layers derives from
+:class:`ResearchError` so callers can handle failures uniformly without
+coupling to implementation details.
 """
 
 from __future__ import annotations
@@ -245,4 +246,39 @@ class DeduplicationError(ResearchMemoryError, ValueError):  # noqa: N818
 
     Raised by :func:`~predictron_engine.research.deduplication.duplicate_key`
     for empty inputs, which have no deterministic content digest.
+    """
+
+
+class ResearchIterationError(ResearchError):
+    """Base class for every error raised by the Research Intelligence Loop.
+
+    Phase 8 Sprint 7.  Anything that goes wrong while driving the research
+    pipeline iteratively raises a subclass of this error so callers can
+    distinguish loop faults from the domain failures produced by the earlier
+    sprints.
+
+    Note that a *pass* that fails inside the loop is not an error: it is
+    recorded deterministically on the pass's
+    :class:`~predictron_engine.research.execution_models.ExecutionError`
+    value object and the loop terminates with
+    :attr:`~predictron_engine.research.iteration_models.TerminationReason.EXECUTION_FAILED`,
+    exactly mirroring how the Sprint 5 orchestrator treats stage failures.
+    """
+
+
+class InvalidIterationInputError(ResearchIterationError, ValueError):  # noqa: N818
+    """Raised when the research loop receives input it cannot run.
+
+    Used when the loop is not handed a
+    :class:`~predictron_engine.research.models.PlannerInput` instance or a
+    run that does not describe a research pass.  There is no loop to report
+    in that case, so the call fails immediately.
+    """
+
+
+class InvalidIterationModelError(ResearchIterationError, ValueError):  # noqa: N818
+    """Raised when a loop value object violates its model contract.
+
+    Used by the iteration models when required fields are missing, malformed,
+    or of the wrong type — both on construction and during deserialization.
     """
