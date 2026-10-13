@@ -16,7 +16,6 @@ and the same assertion results.
 
 from __future__ import annotations
 
-import hashlib
 from datetime import UTC, datetime
 from statistics import pstdev
 
@@ -34,6 +33,7 @@ from benchmarks.learning_eval.reference import (
     reference_ece,
     reference_rates,
 )
+from predictron_engine.canonical import text_digest
 from predictron_engine.dataset.evaluation import EvaluationVerdict
 from predictron_engine.learning import (
     LEARNING_DIMENSIONS,
@@ -76,7 +76,7 @@ def _close(value: float | None, expected: float | None) -> bool:
 
 def _expected_snapshot_id(scope: str) -> str:
     material = "|".join((scope, "daily", FIXED_ANCHOR.isoformat()))
-    return hashlib.sha256(material.encode("utf-8")).hexdigest()
+    return text_digest(material)
 
 
 def _freeze(scope: str, case_id: str, samples: list[LearningSample]):
@@ -568,7 +568,7 @@ def sorted_case_run_id(all_cases: dict[str, list[LearningSample]]) -> str:
         + ",".join(sorted({s.evaluation_id for s in all_cases[key]}))
         for key in sorted(all_cases)
     )
-    return hashlib.sha256(material.encode("utf-8")).hexdigest()
+    return text_digest(material)
 
 
 def fail_counts(run: LearningEvalRun) -> tuple[int, int]:

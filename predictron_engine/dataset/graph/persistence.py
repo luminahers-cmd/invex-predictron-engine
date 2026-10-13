@@ -17,6 +17,7 @@ import json
 from pathlib import Path
 from typing import Any
 
+from predictron_engine.canonical import canonical_json
 from predictron_engine.dataset.graph.model import (
     EdgeType,
     GraphEdge,
@@ -41,11 +42,7 @@ def graph_to_dict(graph: KnowledgeGraph) -> dict[str, Any]:
 
 def canonical_graph_json(graph: KnowledgeGraph) -> str:
     """Return canonical JSON (sorted keys, no insignificant whitespace)."""
-    return json.dumps(
-        graph_to_dict(graph),
-        sort_keys=True,
-        separators=(",", ":"),
-    )
+    return canonical_json(graph_to_dict(graph))
 
 
 def graph_from_dict(data: dict[str, Any]) -> KnowledgeGraph:

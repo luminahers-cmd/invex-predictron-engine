@@ -10,7 +10,6 @@ suite yields the identical id, and a second write to that id is rejected.
 
 from __future__ import annotations
 
-import hashlib
 import json
 import re
 from pathlib import Path
@@ -20,6 +19,7 @@ from benchmarks.learning_eval.models import (
     LearningEvalReport,
     LearningEvalRun,
 )
+from predictron_engine.canonical import FULL_DIGEST_LENGTH, content_digest
 
 _RUN_ID_PATTERN = re.compile(r"^[A-Za-z0-9._-]+$")
 
@@ -31,10 +31,7 @@ class HistoryError(RuntimeError):
 
 
 def _record_hash(document: dict[str, Any]) -> str:
-    material = json.dumps(
-        document, sort_keys=True, separators=(",", ":"), default=str
-    )
-    return hashlib.sha256(material.encode("utf-8")).hexdigest()
+    return content_digest(document, length=FULL_DIGEST_LENGTH)
 
 
 class LearningEvalHistory:

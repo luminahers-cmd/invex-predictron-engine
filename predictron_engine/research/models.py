@@ -33,16 +33,26 @@ deterministic.
 
 from __future__ import annotations
 
-import hashlib
-import json
 from collections.abc import Mapping
 from dataclasses import dataclass
 from enum import Enum
 from urllib.parse import urlsplit
 
+from pydantic import ValidationError
+
+from predictron_engine.canonical import RESEARCH_DIGEST_LENGTH, content_digest
+from predictron_engine.evidence.provenance import TrustScore
 from predictron_engine.research.exceptions import (
     InvalidEvidence,
     InvalidPlannerInputError,
+)
+from predictron_engine.research.provenance_bridge import (
+    EVIDENCE_ID_VERSION,
+    GROUNDED_EVIDENCE_ID_VERSION,
+    evidence_identity_payload,
+    normalise_link_ids,
+    require_supported_version,
+    trust_score_payload,
 )
 
 PLAN_SCHEMA_VERSION = "1.0.0"
@@ -877,6 +887,32 @@ def _require_list_of_dicts(
     return result
 
 
+def _optional_trust_score(
+    data: Mapping[str, object],
+) -> TrustScore | None:
+    """Read an imported trust score, or ``None`` when absent.
+
+    The value is validated as the evidence subsystem's own
+    :class:`TrustScore` — research never constructs one from scratch and
+    never recalculates what it reads.
+    """
+    value = data.get("trust_score")
+    if value is None:
+        return None
+    if isinstance(value, TrustScore):
+        return value
+    if not isinstance(value, Mapping):
+        raise InvalidEvidence(
+            "trust_score must be a TrustScore mapping or None"
+        )
+    try:
+        return TrustScore.model_validate(dict(value))
+    except ValidationError as exc:
+        raise InvalidEvidence(
+            f"trust_score is not a valid TrustScore: {exc}"
+        ) from exc
+
+
 # ----------------------------------------------------------------------
 # Sprint 3 — Evidence Collection models
 # ----------------------------------------------------------------------
@@ -995,11 +1031,25 @@ class EvidenceMetadata:
 
 @dataclass(frozen=True)
 class Evidence:
-    """One deterministic placeholder piece of collected evidence.
+    """One deterministic piece of collected evidence.
 
     ``evidence_id`` is a stable content hash over the item's fields, so
     the same claim always yields the same identifier and ordering is
     fully deterministic.
+
+    Identity is **versioned** by ``evidence_id_version``:
+
+    * ``"1"`` (default) covers exactly the fields that existed before
+      research claims could point at real documents.  Its field set is
+      frozen — see :data:`predictron_engine.research.provenance_bridge.V1_IDENTITY_FIELDS`.
+    * ``"2"`` covers those fields plus :attr:`document_ids`,
+      :attr:`trust_score`, and :attr:`citation_ids`.
+
+    Grounded provenance may only be recorded under version ``"2"``.
+    There is no automatic migration and no implicit rehashing: an item
+    is upgraded by calling :meth:`rehash`, which returns a new item
+    under the requested identity.  Version ``"1"`` objects therefore
+    never carry linkage that their identifier does not cover.
     """
 
     task_id: str
@@ -1010,6 +1060,10 @@ class Evidence:
     confidence: float
     reference: EvidenceReference
     evidence_id: str = ""
+    evidence_id_version: str = EVIDENCE_ID_VERSION
+    document_ids: tuple[str, ...] = ()
+    trust_score: TrustScore | None = None
+    citation_ids: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
         task_id = self.task_id.strip()
@@ -1031,27 +1085,100 @@ class Evidence:
             raise InvalidEvidence("confidence must be within [0, 1]")
         if not isinstance(self.reference, EvidenceReference):
             raise InvalidEvidence("reference must be an EvidenceReference")
+        evidence_id_version = require_supported_version(self.evidence_id_version)
+        if self.trust_score is not None and not isinstance(
+            self.trust_score, TrustScore
+        ):
+            raise InvalidEvidence(
+                "trust_score must be a TrustScore from the evidence "
+                "subsystem or None"
+            )
+        document_ids = normalise_link_ids(self.document_ids, "document_ids")
+        citation_ids = normalise_link_ids(self.citation_ids, "citation_ids")
+        grounded = bool(document_ids) or self.trust_score is not None
+        grounded = grounded or bool(citation_ids)
+        if grounded and evidence_id_version == EVIDENCE_ID_VERSION:
+            raise InvalidEvidence(
+                "grounded provenance (document_ids, trust_score, "
+                "citation_ids) is not covered by evidence_id_version '1'; "
+                "call rehash(to_version='"
+                f"{GROUNDED_EVIDENCE_ID_VERSION}') to record it"
+            )
         evidence_id = _evidence_digest(
-            {
-                "task_id": task_id,
-                "topic_id": topic_id,
-                "collector_id": collector_id,
-                "category": category,
-                "claim": claim,
-                "confidence": self.confidence,
-                "reference": self.reference.to_dict(),
-            }
+            evidence_identity_payload(
+                evidence_id_version,
+                {
+                    "task_id": task_id,
+                    "topic_id": topic_id,
+                    "collector_id": collector_id,
+                    "category": category,
+                    "claim": claim,
+                    "confidence": self.confidence,
+                    "reference": self.reference.to_dict(),
+                    "evidence_id_version": evidence_id_version,
+                    "document_ids": list(document_ids),
+                    "trust_score": trust_score_payload(self.trust_score),
+                    "citation_ids": list(citation_ids),
+                },
+            )
         )
         object.__setattr__(self, "task_id", task_id)
         object.__setattr__(self, "topic_id", topic_id)
         object.__setattr__(self, "collector_id", collector_id)
         object.__setattr__(self, "category", category)
         object.__setattr__(self, "claim", claim)
+        object.__setattr__(self, "evidence_id_version", evidence_id_version)
+        object.__setattr__(self, "document_ids", document_ids)
+        object.__setattr__(self, "citation_ids", citation_ids)
         object.__setattr__(self, "evidence_id", evidence_id)
 
+    def rehash(self, *, to_version: str) -> Evidence:
+        """Return this item under identity version ``to_version``.
+
+        The only supported way to change identity.  Nothing migrates
+        implicitly: a caller that wants a grounded identifier asks for
+        one, and a caller that wants to keep the existing identifier
+        does nothing.
+
+        Returning ``self`` when already on ``to_version`` makes the
+        operation idempotent, so it can be applied unconditionally.
+
+        Raises
+        ------
+        InvalidEvidence:
+            When ``to_version`` is unsupported, or when downgrading to
+            version ``"1"`` while grounded provenance is present.
+            Version ``"1"`` identity cannot represent linkage, so
+            downgrading would silently discard it; build a new
+            :class:`Evidence` without those fields instead.
+        """
+        target = require_supported_version(to_version)
+        if target == self.evidence_id_version:
+            return self
+        return Evidence(
+            task_id=self.task_id,
+            topic_id=self.topic_id,
+            collector_id=self.collector_id,
+            category=self.category,
+            claim=self.claim,
+            confidence=self.confidence,
+            reference=self.reference,
+            evidence_id_version=target,
+            document_ids=self.document_ids,
+            trust_score=self.trust_score,
+            citation_ids=self.citation_ids,
+        )
+
     def to_dict(self) -> dict[str, object]:
-        """Serialize to a JSON-ready dictionary."""
-        return {
+        """Serialize to a JSON-ready dictionary.
+
+        Version ``"1"`` output is byte-identical to the pre-linkage
+        shape: the new keys are emitted only when identity version
+        ``"2"`` makes them part of the record.  A version ``"1"``
+        payload has no linkage to emit — carrying any would have been
+        rejected at construction.
+        """
+        payload: dict[str, object] = {
             "evidence_id": self.evidence_id,
             "task_id": self.task_id,
             "topic_id": self.topic_id,
@@ -1061,10 +1188,21 @@ class Evidence:
             "confidence": self.confidence,
             "reference": self.reference.to_dict(),
         }
+        if self.evidence_id_version != EVIDENCE_ID_VERSION:
+            payload["evidence_id_version"] = self.evidence_id_version
+            payload["document_ids"] = list(self.document_ids)
+            payload["trust_score"] = trust_score_payload(self.trust_score)
+            payload["citation_ids"] = list(self.citation_ids)
+        return payload
 
     @classmethod
     def from_dict(cls, data: Mapping[str, object]) -> Evidence:
-        """Deserialize from the dictionary produced by :meth:`to_dict`."""
+        """Deserialize from the dictionary produced by :meth:`to_dict`.
+
+        A payload written before identity versioning existed simply has
+        no version or linkage keys, so it resolves to version ``"1"``
+        and reproduces the same identifier it was written with.
+        """
         return cls(
             task_id=_require_str(data, "task_id"),
             topic_id=_require_str(data, "topic_id"),
@@ -1075,6 +1213,12 @@ class Evidence:
             reference=EvidenceReference.from_dict(
                 _require_dict(data, "reference")
             ),
+            evidence_id_version=_require_str(
+                data, "evidence_id_version", default=EVIDENCE_ID_VERSION
+            ),
+            document_ids=tuple(_require_str_list(data, "document_ids")),
+            trust_score=_optional_trust_score(data),
+            citation_ids=tuple(_require_str_list(data, "citation_ids")),
         )
 
 
@@ -1287,10 +1431,4 @@ def _topics_not_in_order(
 
 def _evidence_digest(payload: Mapping[str, object]) -> str:
     """Return a stable content-hash identifier for an evidence item."""
-    canonical = json.dumps(
-        payload,
-        sort_keys=True,
-        separators=(",", ":"),
-    )
-    digest = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
-    return f"ev_{digest[:16]}"
+    return content_digest(payload, length=RESEARCH_DIGEST_LENGTH, prefix="ev_")

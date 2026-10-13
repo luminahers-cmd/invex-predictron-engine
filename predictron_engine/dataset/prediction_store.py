@@ -20,7 +20,6 @@ pipeline (:mod:`benchmarks.cohort.execute`).
 
 from __future__ import annotations
 
-import hashlib
 import json
 import re
 from dataclasses import asdict, dataclass
@@ -28,6 +27,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+from predictron_engine.canonical import FULL_DIGEST_LENGTH, content_digest, text_digest
 from predictron_engine.dataset.prediction import TimeScopedPrediction
 
 # A prediction id is used directly as a filename, so keep it strictly safe.
@@ -80,19 +80,27 @@ def stable_prediction_id(*, company_id: str, analysis_timestamp: datetime) -> st
     material = _PREDICTION_ID_SEPARATOR.join(
         [company_id, analysis_timestamp.isoformat()]
     )
-    return hashlib.sha256(material.encode("utf-8")).hexdigest()
+    return text_digest(material)
 
 
 def prediction_hash(prediction: TimeScopedPrediction) -> str:
-    """Deterministic canonical fingerprint of a time-scoped prediction."""
-    payload = json.dumps(
-        prediction.model_dump(mode="json"),
-        sort_keys=True,
-        separators=(",", ":"),
-        ensure_ascii=False,
-        default=str,
+    """Deterministic canonical fingerprint of a time-scoped prediction.
+
+    This is the integrity hash the store re-verifies on every read, so
+    it must stay reproducible across processes and platforms.
+
+    It previously encoded with ``ensure_ascii=False`` and
+    ``default=str``, which made the digest depend on whether a
+    ``company_name`` happened to contain a non-ASCII character — two
+    records differing only in that respect hashed incompatibly with
+    every other canonical id in the engine.  Routing through
+    :mod:`predictron_engine.canonical` fixes that; fingerprints written
+    before this change are not comparable, and ``verify_all`` re-derives
+    them on next read.
+    """
+    return content_digest(
+        prediction.model_dump(mode="json"), length=FULL_DIGEST_LENGTH
     )
-    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
 class PredictionStore:

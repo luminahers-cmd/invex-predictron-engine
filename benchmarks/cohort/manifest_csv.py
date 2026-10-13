@@ -33,6 +33,7 @@ from benchmarks.cohort.manifest import (
     ManifestSourceRecord,
 )
 from benchmarks.ground_truth.schema import OutcomeEvent, StartupStatus
+from predictron_engine.canonical import canonical_json
 
 _MANIFEST_SECTION = "manifest"
 _RECORD_SECTION = "record"
@@ -141,7 +142,7 @@ def _to_date(value: str) -> date | None:
 
 
 def _json_cell(value: Any) -> str:
-    return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+    return canonical_json(value)
 
 
 # ---------------------------------------------------------------------------

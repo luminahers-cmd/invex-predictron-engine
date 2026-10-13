@@ -27,9 +27,9 @@ Mathematical definitions
 
 from __future__ import annotations
 
-import hashlib
 from datetime import UTC, date, datetime
 
+from predictron_engine.canonical import text_digest
 from predictron_engine.dataset.evaluation import PredictionEvaluation
 from predictron_engine.dataset.metrics import compute_evaluation_metrics
 from predictron_engine.monitoring import health, summaries
@@ -47,7 +47,7 @@ def _now() -> datetime:
 
 def _snapshot_id(scope: str, period_kind: MonitorPeriodKind, anchor_date: date) -> str:
     material = "|".join((scope, period_kind.value, anchor_date.isoformat()))
-    return hashlib.sha256(material.encode("utf-8")).hexdigest()
+    return text_digest(material)
 
 
 def _build_payload(

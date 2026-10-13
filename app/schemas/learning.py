@@ -119,23 +119,17 @@ class LearningReportDetailResponse(BaseModel):
 
     def verify(self) -> bool:
         """``True`` when the stored hash matches the recomputed payload."""
-        import json
-
+        from predictron_engine.canonical import FULL_DIGEST_LENGTH, content_digest
         from predictron_engine.learning.models import LearningSnapshot
 
         try:
             snapshot = LearningSnapshot.model_validate(self.payload)
         except Exception:
             return False
-        material = json.dumps(
-            snapshot.analytic_payload(),
-            sort_keys=True,
-            separators=(",", ":"),
-            default=str,
+        digest = content_digest(
+            snapshot.analytic_payload(), length=FULL_DIGEST_LENGTH
         )
-        import hashlib
-
-        return hashlib.sha256(material.encode("utf-8")).hexdigest() == self.content_hash
+        return digest == self.content_hash
 
 
 __all__ = [

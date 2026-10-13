@@ -34,14 +34,13 @@ recommendation rules reference these constants exclusively.
 
 from __future__ import annotations
 
-import hashlib
-import json
 from datetime import date, datetime
 from enum import Enum
 from typing import Any
 
 from pydantic import BaseModel, Field
 
+from predictron_engine.canonical import FULL_DIGEST_LENGTH, content_digest
 from predictron_engine.dataset.evaluation import EvaluationVerdict
 
 # ---------------------------------------------------------------------------
@@ -309,10 +308,7 @@ class LearningSnapshot(BaseModel):
 
     def content_fingerprint(self) -> str:
         """Deterministic SHA-256 of the canonical analysis payload."""
-        material = json.dumps(
-            self.analytic_payload(), sort_keys=True, separators=(",", ":"), default=str
-        )
-        return hashlib.sha256(material.encode("utf-8")).hexdigest()
+        return content_digest(self.analytic_payload(), length=FULL_DIGEST_LENGTH)
 
     def verify(self) -> bool:
         """``True`` when the stored hash matches the recomputed payload."""

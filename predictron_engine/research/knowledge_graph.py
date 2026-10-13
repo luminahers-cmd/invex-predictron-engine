@@ -31,12 +31,15 @@ the reason a future graph database is an additive change.
 
 from __future__ import annotations
 
-import hashlib
-import json
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from enum import Enum
 
+from predictron_engine.canonical import (
+    RESEARCH_DIGEST_LENGTH,
+    canonical_json,
+    text_digest,
+)
 from predictron_engine.research.exceptions import (
     InvalidGraphModelError,
     InvalidMemoryInputError,
@@ -60,6 +63,7 @@ from predictron_engine.research.linking import (
     EntityLinker,
     normalize_name,
 )
+from predictron_engine.research.ports import GraphStorePort
 
 #: Serialization schema version for the canonical graph document.
 KNOWLEDGE_GRAPH_SCHEMA_VERSION = GRAPH_SCHEMA_VERSION
@@ -306,14 +310,14 @@ class KnowledgeGraph:
 
     def __init__(
         self,
-        store: GraphStore | None = None,
+        store: GraphStorePort | None = None,
         linker: EntityLinker | None = None,
     ) -> None:
-        if store is not None and not isinstance(store, GraphStore):
-            raise InvalidGraphModelError("store must be a GraphStore instance")
+        if store is not None and not isinstance(store, GraphStorePort):
+            raise InvalidGraphModelError("store must implement GraphStorePort")
         if linker is not None and not isinstance(linker, EntityLinker):
             raise InvalidGraphModelError("linker must be an EntityLinker instance")
-        self.store = store if store is not None else GraphStore()
+        self.store: GraphStorePort = store if store is not None else GraphStore()
         self.linker = linker if linker is not None else EntityLinker()
 
     # -- Basic views -------------------------------------------------
@@ -745,13 +749,10 @@ class KnowledgeGraph:
 
         Canonical means sorted keys, compact separators, and nodes and edges
         in sorted order — so the same graph always produces the same string,
-        which is what :meth:`graph_key` hashes.
+        which is what :meth:`graph_key` hashes.  Delegates to the shared
+        encoder in :mod:`predictron_engine.canonical`.
         """
-        return json.dumps(
-            self.to_dict(),
-            sort_keys=True,
-            separators=(",", ":"),
-        )
+        return canonical_json(self.to_dict())
 
     def graph_key(self) -> str:
         """Return the stable content hash identifying this graph.
@@ -763,8 +764,8 @@ class KnowledgeGraph:
         re-observed".
         """
         canonical = self.canonical_json()
-        digest = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
-        return f"{GRAPH_KEY_PREFIX}{digest[:16]}"
+        digest = text_digest(canonical, length=RESEARCH_DIGEST_LENGTH)
+        return f"{GRAPH_KEY_PREFIX}{digest}"
 
     def report(self) -> dict[str, object]:
         """Return a compact, JSON-ready overview of the graph."""

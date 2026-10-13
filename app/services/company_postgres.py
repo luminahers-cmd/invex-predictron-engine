@@ -34,6 +34,7 @@ from app.services.company_protocols import (
     SnapshotAppendResult,
     SnapshotPage,
 )
+from predictron_engine.canonical import text_digest
 
 if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncSession
@@ -47,10 +48,8 @@ def compute_snapshot_id(company_id: str, analysis_id: str) -> str:
     Re-ingesting the same analysis for the same company always yields the
     same primary key, which is what makes snapshot appends idempotent.
     """
-    import hashlib
-
     material = f"{company_id}{_SNAPSHOT_ID_SEPARATOR}{analysis_id}"
-    return hashlib.sha256(material.encode("utf-8")).hexdigest()
+    return text_digest(material)
 
 
 class PostgresCompanyStore:

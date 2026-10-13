@@ -25,12 +25,21 @@ deterministic with no randomness.
 
 from __future__ import annotations
 
-import hashlib
-import json
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from enum import Enum
 
+from predictron_engine.canonical import (
+    FULL_DIGEST_LENGTH,
+    RESEARCH_DIGEST_LENGTH,
+    text_digest,
+)
+from predictron_engine.canonical import (
+    canonical_json as canonical_canonical_json,
+)
+from predictron_engine.canonical import (
+    content_digest as canonical_content_digest,
+)
 from predictron_engine.research.exceptions import (
     FingerprintError,
     InvalidEvidenceError,
@@ -854,10 +863,9 @@ def compute_fingerprint(evidence: Evidence) -> EvidenceFingerprint:
             "fingerprint expects an Evidence instance"
         )
     canonical = canonical_json(evidence.to_dict())
-    digest = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     return EvidenceFingerprint(
         algorithm=FINGERPRINT_ALGORITHM,
-        value=digest,
+        value=text_digest(canonical, length=FULL_DIGEST_LENGTH),
         canonical=canonical,
         prefix=FINGERPRINT_PREFIX,
     )
@@ -865,9 +873,11 @@ def compute_fingerprint(evidence: Evidence) -> EvidenceFingerprint:
 
 def collection_fingerprint(evidence_ids: Sequence[str]) -> str:
     """Return a stable fingerprint for an ordered sequence of evidence ids."""
-    canonical = canonical_json({"evidence_ids": list(evidence_ids)})
-    digest = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
-    return f"collection_{digest[:16]}"
+    return canonical_content_digest(
+        {"evidence_ids": list(evidence_ids)},
+        length=RESEARCH_DIGEST_LENGTH,
+        prefix="collection_",
+    )
 
 
 def content_digest(payload: Mapping[str, object]) -> str:
@@ -875,19 +885,22 @@ def content_digest(payload: Mapping[str, object]) -> str:
 
     The payload is canonicalized (sorted keys, compact separators) before
     hashing so the digest never depends on dictionary insertion order.
+
+    Delegates to :func:`predictron_engine.canonical.content_digest` at the
+    16-character research width, so research and monitoring digests are
+    computed by one encoder.  The output is unchanged.
     """
-    canonical = canonical_json(payload)
-    digest = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
-    return f"{digest[:16]}"
+    return canonical_content_digest(payload, length=RESEARCH_DIGEST_LENGTH)
 
 
 def canonical_json(payload: object) -> str:
-    """Canonicalize ``payload`` into a deterministic JSON string."""
-    return json.dumps(
-        payload,
-        sort_keys=True,
-        separators=(",", ":"),
-    )
+    """Canonicalize ``payload`` into a deterministic JSON string.
+
+    Retained under its historical name and delegated to
+    :func:`predictron_engine.canonical.canonical_json`.  The output is
+    unchanged for every JSON-native payload.
+    """
+    return canonical_canonical_json(payload)
 
 
 def _in_unit_range(value: float) -> bool:

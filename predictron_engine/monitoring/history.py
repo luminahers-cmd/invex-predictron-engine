@@ -24,6 +24,7 @@ from datetime import date
 from pathlib import Path
 from urllib.parse import quote
 
+from predictron_engine.canonical import canonical_json, text_digest
 from predictron_engine.monitoring.models import (
     MonitorPeriodKind,
     MonitorSnapshot,
@@ -93,8 +94,7 @@ class MonitorHistory:
             ).to_dict(),
             "snapshot": json.loads(snapshot.model_dump_json()),
         }
-        with path.open("w", encoding="utf-8") as handle:
-            json.dump(document, handle, sort_keys=True, separators=(",", ":"))
+        path.write_text(canonical_json(document), encoding="utf-8")
         if keep is not None:
             self._rotate(snapshot.scope, snapshot.period_kind, keep)
         return path
@@ -149,10 +149,8 @@ class MonitorHistory:
 def _snapshot_id_for(
     scope: str, period_kind: MonitorPeriodKind, anchor_date: date
 ) -> str:
-    import hashlib
-
     material = "|".join((scope, period_kind.value, anchor_date.isoformat()))
-    return hashlib.sha256(material.encode("utf-8")).hexdigest()
+    return text_digest(material)
 
 
 __all__ = ["MonitorHistory"]

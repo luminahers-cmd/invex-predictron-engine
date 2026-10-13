@@ -24,13 +24,13 @@ Design
 
 from __future__ import annotations
 
-import hashlib
 import re
 import time
 from collections import Counter
 from dataclasses import dataclass
 from urllib.parse import urlparse
 
+from predictron_engine.canonical import text_digest
 from predictron_engine.evidence.models import (
     DocumentMetadata,
     DocumentStatus,
@@ -481,8 +481,7 @@ def _normalise_text_for_hash(text: str) -> str:
 
 def compute_content_hash(text: str) -> str:
     """Return a deterministic SHA-256 hex digest of normalised text."""
-    normalised = _normalise_text_for_hash(text)
-    return hashlib.sha256(normalised.encode("utf-8")).hexdigest()
+    return text_digest(_normalise_text_for_hash(text))
 
 
 def _url_sort_key(url_str: str) -> str:

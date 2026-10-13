@@ -47,6 +47,7 @@ from predictron_engine.research.execution_report import ResearchReport
 from predictron_engine.research.graph_store import MemoryIndex, MemoryRecordKey
 from predictron_engine.research.linking import normalize_name
 from predictron_engine.research.models import Evidence
+from predictron_engine.research.ports import MemoryIndexPort
 
 #: Serialization schema version for the memory record store.
 MEMORY_SCHEMA_VERSION = "1.0.0"
@@ -207,12 +208,14 @@ class MemoryStore:
 
     def __init__(
         self,
-        index: MemoryIndex | None = None,
+        index: MemoryIndexPort | None = None,
         deduplication: DeduplicationIndex | None = None,
     ) -> None:
-        if index is not None and not isinstance(index, MemoryIndex):
-            raise InvalidMemoryInputError("index must be a MemoryIndex instance")
-        self.index = index if index is not None else MemoryIndex()
+        if index is not None and not isinstance(index, MemoryIndexPort):
+            raise InvalidMemoryInputError("index must implement MemoryIndexPort")
+        self.index: MemoryIndexPort = (
+            index if index is not None else MemoryIndex()
+        )
         self.deduplication = (
             deduplication if deduplication is not None else DeduplicationIndex()
         )
@@ -590,7 +593,7 @@ class MemoryStore:
     def from_dict(
         cls,
         data: Mapping[str, object],
-        index: MemoryIndex | None = None,
+        index: MemoryIndexPort | None = None,
         deduplication: DeduplicationIndex | None = None,
     ) -> MemoryStore:
         """Rebuild a store from :meth:`to_dict` output.

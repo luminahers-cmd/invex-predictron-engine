@@ -13,6 +13,7 @@ always returns collection order.
 from __future__ import annotations
 
 from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 from predictron_engine.research.collector import EvidenceCollector
 from predictron_engine.research.collectors import DEFAULT_COLLECTORS
@@ -20,6 +21,13 @@ from predictron_engine.research.exceptions import (
     CollectorNotFound,
     DuplicateCollector,
 )
+
+if TYPE_CHECKING:
+    from predictron_engine.research.grounding import (
+        ClaimProjector,
+        DocumentSource,
+        GroundingPolicy,
+    )
 
 
 class CollectorRegistry:
@@ -150,6 +158,32 @@ COLLECTOR_REGISTRY = CollectorRegistry(DEFAULT_COLLECTORS)
 def default_collector_registry() -> CollectorRegistry:
     """Return a fresh registry preloaded with the default collectors."""
     return CollectorRegistry(DEFAULT_COLLECTORS)
+
+
+def grounded_collector_registry(
+    policy: GroundingPolicy,
+    *,
+    source: DocumentSource,
+    projector: ClaimProjector,
+    fallback: EvidenceCollector | None = None,
+) -> CollectorRegistry:
+    """Return a new registry whose only collector is a grounded collector.
+
+    Grounding is opt-in: the shared :data:`COLLECTOR_REGISTRY` and the
+    default collectors are never mutated.  The returned registry resolves
+    every research topic through a single :class:`GroundedCollector`, so
+    callers wire it in via ``EvidenceCollectionEngine(registry=...)`` or
+    ``ResearchOrchestrator(collection_engine=...)``.
+    """
+    from predictron_engine.research.grounding import GroundedCollector
+
+    collector = GroundedCollector(
+        policy,
+        source=source,
+        projector=projector,
+        fallback=fallback,
+    )
+    return CollectorRegistry([collector])
 
 
 def register_collector(collector: EvidenceCollector) -> EvidenceCollector:

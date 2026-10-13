@@ -54,6 +54,23 @@ async def client():
         yield ac
 
 
+@pytest.fixture(autouse=True)
+def _reset_rate_limiter():
+    """Reset the rate-limiter window store before each test.
+
+    The middleware keeps a class-level window store keyed by client IP, so
+    without a reset this module inherits whatever request budget earlier
+    modules left in the shared 100 req/60s bucket. On a runner fast enough
+    to keep those earlier requests inside the same window, the concurrent
+    load below gets HTTP 429 for the requests over the remaining budget and
+    ``raise_for_status()`` turns them into counted errors.
+    """
+    from app.middleware.rate_limit import RateLimitMiddleware
+
+    RateLimitMiddleware.reset_windows()
+    yield
+
+
 def _compute_percentile(sorted_data: list[float], p: float) -> float:
     if not sorted_data:
         return 0.0

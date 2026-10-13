@@ -16,11 +16,13 @@ deterministic dependency ordering, deterministic serialization).
 
 from __future__ import annotations
 
-import hashlib
-import json
 from collections.abc import Mapping, Sequence
 from dataclasses import replace
 
+from predictron_engine.canonical import (
+    RESEARCH_DIGEST_LENGTH,
+    content_digest,
+)
 from predictron_engine.research.exceptions import (
     DependencyCycleError,
     InvalidPlannerInputError,
@@ -314,13 +316,11 @@ class ResearchPlanner:
             "gaps": [gap.topic_id for gap in gaps],
             "tasks": [task.task_id for task in tasks],
         }
-        canonical = json.dumps(
+        return content_digest(
             payload,
-            sort_keys=True,
-            separators=(",", ":"),
+            length=RESEARCH_DIGEST_LENGTH,
+            prefix="plan_",
         )
-        digest = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
-        return f"plan_{digest[:16]}"
 
 
 def recommend_topics(planner_input: PlannerInput) -> tuple[str, ...]:

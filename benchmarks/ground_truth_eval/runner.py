@@ -21,8 +21,6 @@ code path to production) and the existing offline-corpus tooling
 
 from __future__ import annotations
 
-import hashlib
-import json
 import time
 import uuid
 from datetime import UTC, datetime
@@ -33,6 +31,7 @@ from pydantic import BaseModel, Field
 from app.schemas.analysis import StartupAnalysisRequest
 from benchmarks.ground_truth_eval.dataset import dataset_hash
 from benchmarks.ground_truth_eval.models import GoldenDataset, GoldenEntry
+from predictron_engine.canonical import FULL_DIGEST_LENGTH, content_digest
 from predictron_engine.dataset.prediction import ScopeStats, time_scope_bundle
 from predictron_engine.evidence.models import EvidenceBundle
 from predictron_engine.evidence.replay.dataset import (
@@ -202,16 +201,11 @@ def _result_hash(entries: list[RunEntryOutput]) -> str:
     dataset always produce the same hash.
     """
     ordered = sorted((e.sorted() for e in entries), key=lambda e: e.company_id)
-    payload = json.dumps(
-        [
-            {k: v for k, v in e.model_dump(mode="json").items() if k != "processing_time_ms"}
-            for e in ordered
-        ],
-        sort_keys=True,
-        separators=(",", ":"),
-        default=str,
-    ).encode("utf-8")
-    return hashlib.sha256(payload).hexdigest()
+    payload = [
+        {k: v for k, v in e.model_dump(mode="json").items() if k != "processing_time_ms"}
+        for e in ordered
+    ]
+    return content_digest(payload, length=FULL_DIGEST_LENGTH)
 
 
 def generate_run_id(engine_version: str) -> str:

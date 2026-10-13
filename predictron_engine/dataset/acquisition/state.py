@@ -207,12 +207,19 @@ class AcquisitionStateManager:
 
 
 def compute_file_hash(file_path: Path | str) -> str:
-    """Compute SHA-256 hex digest of a file's contents."""
-    h = hashlib.sha256()
-    with open(file_path, "rb") as f:
-        for chunk in iter(lambda: f.read(8192), b""):
-            h.update(chunk)
-    return h.hexdigest()
+    """Compute SHA-256 hex digest of a file's contents.
+
+    Deliberately *not* routed through
+    :mod:`predictron_engine.canonical`: this digests raw file bytes for
+    change detection, not the canonical encoding of a structure.  There
+    is no JSON step to canonicalize, and streaming avoids loading an
+    arbitrarily large artifact into memory.
+    """
+    digest = hashlib.sha256()
+    with open(file_path, "rb") as handle:
+        for chunk in iter(lambda: handle.read(8192), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def generate_batch_id() -> str:

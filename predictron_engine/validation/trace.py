@@ -7,11 +7,12 @@ to original startup input.
 
 from __future__ import annotations
 
-import hashlib
 from enum import Enum
 from typing import Any
 
 from pydantic import BaseModel, Field
+
+from predictron_engine.canonical import TRACE_DIGEST_LENGTH, text_digest
 
 
 class PipelineStage(str, Enum):
@@ -100,8 +101,7 @@ def _make_id(stage: str, artifact_type: str, index: int) -> str:
 
 def _content_id(content: str) -> str:
     """Generate a short hash-based ID from content."""
-    h = hashlib.sha256(content.encode("utf-8")).hexdigest()[:12]
-    return f"hash:{h}"
+    return f"hash:{text_digest(content, length=TRACE_DIGEST_LENGTH)}"
 
 
 class TraceGraphBuilder:

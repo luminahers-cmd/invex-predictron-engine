@@ -61,6 +61,7 @@ from predictron_engine.research.graph_models import (
     RelationshipType,
     ValidationMarker,
 )
+from predictron_engine.research.ports import MemoryIndexPort
 
 #: Serialization schema version for the graph store and the memory index.
 STORE_SCHEMA_VERSION = "1.0.0"
@@ -390,8 +391,8 @@ class GraphStore:
     hands out the previous values needed to build it.
     """
 
-    def __init__(self, index: MemoryIndex | None = None) -> None:
-        self.index = index if index is not None else MemoryIndex()
+    def __init__(self, index: MemoryIndexPort | None = None) -> None:
+        self.index: MemoryIndexPort = index if index is not None else MemoryIndex()
         self._entities: dict[str, GraphEntity] = {}
         self._relationships: dict[tuple[str, str, str], GraphRelationship] = {}
         self._outgoing: dict[str, set[tuple[str, str, str]]] = {}

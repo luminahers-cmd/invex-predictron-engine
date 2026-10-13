@@ -16,11 +16,11 @@ state, no generated prose.
 
 from __future__ import annotations
 
-import hashlib
 from collections import defaultdict
 from datetime import UTC, date, datetime
 from statistics import fmean, pstdev
 
+from predictron_engine.canonical import text_digest
 from predictron_engine.dataset.evaluation import EvaluationVerdict
 from predictron_engine.learning.models import (
     ATTR_UNKNOWN,
@@ -65,7 +65,7 @@ def _round4(value: float | None) -> float | None:
 
 def _snapshot_id(scope: str, period_kind: LearningPeriodKind, anchor_date: date) -> str:
     material = "|".join((scope, period_kind.value, anchor_date.isoformat()))
-    return hashlib.sha256(material.encode("utf-8")).hexdigest()
+    return text_digest(material)
 
 
 def _confusion(

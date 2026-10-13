@@ -26,6 +26,7 @@ from typing import Any
 from pydantic import BaseModel, Field, model_validator
 
 from benchmarks.ground_truth.schema import OutcomeEvent, StartupStatus
+from predictron_engine.canonical import canonical_json, text_digest
 
 MANIFEST_SCHEMA_VERSION = 1
 
@@ -105,20 +106,19 @@ class ManifestError(ValueError):
     """Raised when a cohort manifest cannot be loaded or is invalid."""
 
 
+def _manifest_canonical(manifest: CohortManifest) -> str:
+    """Deterministic canonical encoding of a manifest."""
+    return canonical_json(_sort_keys(manifest.model_dump(mode="json")))
+
+
 def manifest_bytes(manifest: CohortManifest) -> bytes:
     """Deterministic UTF-8 bytes for a manifest (sorted keys)."""
-    return json.dumps(
-        _sort_keys(manifest.model_dump(mode="json")),
-        sort_keys=True,
-        separators=(",", ":"),
-    ).encode("utf-8")
+    return _manifest_canonical(manifest).encode("utf-8")
 
 
 def manifest_hash(manifest: CohortManifest) -> str:
     """Canonical sha256 fingerprint of a cohort manifest."""
-    import hashlib
-
-    return hashlib.sha256(manifest_bytes(manifest)).hexdigest()
+    return text_digest(_manifest_canonical(manifest))
 
 
 def dump_manifest(manifest: CohortManifest, path: Path | str, *, overwrite: bool = False) -> Path:

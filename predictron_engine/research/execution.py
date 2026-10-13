@@ -21,9 +21,10 @@ no LLMs — collectors in this sprint return placeholder evidence only.
 
 from __future__ import annotations
 
-import hashlib
-import json
-
+from predictron_engine.canonical import (
+    RESEARCH_DIGEST_LENGTH,
+    content_digest,
+)
 from predictron_engine.research.dispatcher import (
     CollectorDispatch,
     Dispatcher,
@@ -249,10 +250,8 @@ class EvidenceCollectionEngine:
                 item.evidence_id for item in collection.evidence
             ],
         }
-        canonical = json.dumps(
+        return content_digest(
             payload,
-            sort_keys=True,
-            separators=(",", ":"),
+            length=RESEARCH_DIGEST_LENGTH,
+            prefix="collection_",
         )
-        digest = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
-        return f"collection_{digest[:16]}"

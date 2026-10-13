@@ -42,6 +42,7 @@ from app.services.company_outcomes import (
     outcome_record_from_row,
 )
 from app.services.company_postgres import PostgresCompanyStore
+from predictron_engine.canonical import text_digest
 from predictron_engine.dataset.evaluation import (
     EvaluationVerdict,
     PredictionEvaluation,
@@ -69,12 +70,10 @@ def compute_evaluation_id(
     *, company_id: str, snapshot_id: str, outcome_id: str
 ) -> str:
     """Deterministic evaluation ID derived from (company, snapshot, outcome)."""
-    import hashlib
-
     material = _EVALUATION_ID_SEPARATOR.join(
         [company_id, snapshot_id, outcome_id]
     )
-    return hashlib.sha256(material.encode("utf-8")).hexdigest()
+    return text_digest(material)
 
 
 def decision_label(value: str | None) -> DecisionLabel:

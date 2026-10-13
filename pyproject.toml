@@ -31,15 +31,18 @@ select = ["E", "F", "I", "N", "W", "UP"]
 "predictron_engine/extraction/derived/*.py" = ["E501"]
 "predictron_engine/extraction/quantitative/*.py" = ["E501"]
 "tests/engine/test_scoring/*.py" = ["E501"]
+# The invariant guard subclasses ast.NodeVisitor, whose `visit_*` method
+# names are fixed by the stdlib dispatch contract and cannot be renamed.
+"tools/check_canonical_invariant.py" = ["N802"]
 
 [tool.mypy]
 python_version = "3.12"
 strict = true
-files = ["predictron_engine", "app", "benchmarks", "predictron_sdk"]
+files = ["predictron_engine", "app", "benchmarks", "predictron_sdk", "tools"]
 exclude = ["^alembic/"]
 
 [[tool.mypy.overrides]]
-module = ["benchmarks.*", "app.*"]
+module = ["benchmarks.*", "app.*", "tools.*"]
 disallow_untyped_defs = false
 disallow_incomplete_defs = false
 check_untyped_defs = true

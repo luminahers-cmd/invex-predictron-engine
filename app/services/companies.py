@@ -17,7 +17,6 @@ This module owns:
 
 from __future__ import annotations
 
-import hashlib
 import logging
 import re
 from dataclasses import dataclass, field
@@ -30,6 +29,7 @@ from app.services.company_protocols import (
     CompanySnapshotPayload,
     CompanyStore,
 )
+from predictron_engine.canonical import text_digest
 from predictron_engine.dataset.company_name import canonical_name_key as _name_key
 from predictron_engine.dataset.company_name import core_name as _core_name
 from predictron_engine.dataset.company_name import fold_name as _fold_name
@@ -59,7 +59,7 @@ def compute_company_id(material: str) -> str:
     """Deterministic company ID: SHA-256 digest of the identity material."""
     if not material:
         material = "unknown"
-    return hashlib.sha256(material.encode("utf-8")).hexdigest()
+    return text_digest(material)
 
 
 def normalize_fallback_slug(name: str) -> str:

@@ -42,13 +42,13 @@ processes and machines.
 
 from __future__ import annotations
 
-import hashlib
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 from enum import Enum
 from types import MappingProxyType
 from typing import TypeVar
 
+from predictron_engine.canonical import RESEARCH_DIGEST_LENGTH, text_digest
 from predictron_engine.research.exceptions import (
     InvalidGraphModelError,
     InvalidRelationshipError,
@@ -1164,8 +1164,9 @@ def relationship_id(
     if relationship_type in _SYMMETRIC_RELATIONSHIPS and target_id < source_id:
         source_id, target_id = target_id, source_id
     payload = f"{relationship_type.value}\x1f{source_id}\x1f{target_id}"
-    digest = hashlib.sha256(payload.encode("utf-8")).hexdigest()
-    return f"{RELATIONSHIP_ID_PREFIX}{digest[:16]}"
+    return RELATIONSHIP_ID_PREFIX + text_digest(
+        payload, length=RESEARCH_DIGEST_LENGTH
+    )
 
 
 _SYMMETRIC_RELATIONSHIPS: frozenset[RelationshipType] = frozenset(

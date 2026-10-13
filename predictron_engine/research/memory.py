@@ -90,6 +90,11 @@ from predictron_engine.research.memory_store import (
     TopicRetrieval,
 )
 from predictron_engine.research.models import Evidence
+from predictron_engine.research.ports import (
+    GraphStorePort,
+    MemoryIndexPort,
+    MemoryStorePort,
+)
 
 #: Serialization schema version for a whole research memory snapshot.
 MEMORY_SNAPSHOT_SCHEMA_VERSION = "1.0.0"
@@ -449,17 +454,32 @@ class ResearchMemory:
         The entity linker.  When omitted the graph's own linker is used.
     history:
         An existing history log.  When omitted an empty one is created.
+    store:
+        The graph container to write through.  When omitted, the store the
+        graph already holds is used; when memory also builds the graph, that
+        is a fresh store on ``index``.  Supplied together with ``graph`` it
+        must be that graph's own store, and supplied together with ``index``
+        it must allocate through that index, because records, facts, and
+        history share one order.
+    records:
+        The report and evidence ledger.  When omitted a
+        :class:`~predictron_engine.research.memory_store.MemoryStore` is
+        built on ``index``.  An implementation supplied here must allocate
+        through ``index`` for the same reason.
 
     Attributes
     ----------
     graph:
         The :class:`~predictron_engine.research.knowledge_graph.KnowledgeGraph`
         holding every fact, exposed as ``memory.graph``.
+    store:
+        The :class:`~predictron_engine.research.ports.GraphStorePort` the
+        graph reads and memory writes through, exposed as ``memory.store``.
     records:
-        The :class:`~predictron_engine.research.memory_store.MemoryStore`
+        The :class:`~predictron_engine.research.ports.MemoryStorePort`
         holding every report and evidence item.
     index:
-        The shared :class:`~predictron_engine.research.graph_store.MemoryIndex`
+        The shared :class:`~predictron_engine.research.ports.MemoryIndexPort`
         that orders records, facts, and history with one sequence.
     history:
         The :class:`~predictron_engine.research.history.HistoryLog`.
@@ -467,19 +487,18 @@ class ResearchMemory:
 
     def __init__(
         self,
-        index: MemoryIndex | None = None,
+        index: MemoryIndexPort | None = None,
         graph: KnowledgeGraph | None = None,
         history: HistoryLog | None = None,
+        *,
+        store: GraphStorePort | None = None,
+        records: MemoryStorePort | None = None,
     ) -> None:
-        if index is None:
-            index = MemoryIndex()
-        elif not isinstance(index, MemoryIndex):
-            raise InvalidMemoryInputError(
-                "index must be a MemoryIndex instance"
-            )
-        if graph is None:
-            graph = KnowledgeGraph(store=GraphStore(index=index))
-        elif not isinstance(graph, KnowledgeGraph):
+        if index is not None and not isinstance(index, MemoryIndexPort):
+            raise InvalidMemoryInputError("index must implement MemoryIndexPort")
+        if store is not None and not isinstance(store, GraphStorePort):
+            raise InvalidMemoryInputError("store must implement GraphStorePort")
+        if graph is not None and not isinstance(graph, KnowledgeGraph):
             raise InvalidMemoryInputError(
                 "graph must be a KnowledgeGraph instance"
             )
@@ -487,10 +506,41 @@ class ResearchMemory:
             raise InvalidMemoryInputError(
                 "history must be a HistoryLog instance"
             )
-        self.index = index
-        self.graph = graph
+        if store is None:
+            if index is None:
+                index = MemoryIndex()
+            store = GraphStore(index=index) if graph is None else graph.store
+        elif index is None:
+            index = store.index
+        elif store.index is not index:
+            raise InvalidMemoryInputError(
+                "store must sequence through the memory's own index"
+            )
+        if graph is None:
+            graph = KnowledgeGraph(store=store)
+        elif graph.store is not store:
+            raise InvalidMemoryInputError(
+                "store must be the graph's own GraphStorePort implementation"
+            )
+        self.index: MemoryIndexPort = index
+        self.graph: KnowledgeGraph = graph
+        self.store: GraphStorePort = store
         self.deduplication = DeduplicationIndex()
-        self.records = MemoryStore(index=index, deduplication=self.deduplication)
+        if records is None:
+            self.records: MemoryStorePort = MemoryStore(
+                index=index,
+                deduplication=self.deduplication,
+            )
+        elif not isinstance(records, MemoryStorePort):
+            raise InvalidMemoryInputError(
+                "records must implement MemoryStorePort"
+            )
+        elif records.index is not index:
+            raise InvalidMemoryInputError(
+                "records must sequence through the memory's own index"
+            )
+        else:
+            self.records = records
         self._history = history if history is not None else HistoryLog()
 
     # -- Views -------------------------------------------------------
@@ -681,7 +731,7 @@ class ResearchMemory:
             topic_id="",
             record_id=report.report_id,
         )
-        write = self.graph.store.add_entity(
+        write = self.store.add_entity(
             entity,
             stored_at=stored_at,
             record_id=report.report_id,
@@ -751,7 +801,7 @@ class ResearchMemory:
             topic_id=evidence.topic_id,
             record_id=report.report_id,
         )
-        write = self.graph.store.add_entity(
+        write = self.store.add_entity(
             entity,
             stored_at=stored_at,
             record_id=report.report_id,
@@ -803,7 +853,7 @@ class ResearchMemory:
             topic_id=observation.topic_id,
             record_id=report.report_id,
         )
-        write = self.graph.store.add_entity(
+        write = self.store.add_entity(
             entity,
             stored_at=stored_at,
             record_id=report.report_id,
@@ -907,7 +957,7 @@ class ResearchMemory:
             evidence_ids=observation.evidence_ids,
             attributes=tuple(sorted(observation.attributes.items())),
         )
-        write = self.graph.store.add_relationship(
+        write = self.store.add_relationship(
             relationship, stored_at=stored_at
         )
         relationship_id = write.relationship.relationship_id()

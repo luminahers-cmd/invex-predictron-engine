@@ -22,7 +22,6 @@ exposed to the CLI through :mod:`predictron_engine.dataset.cli_cohort`.
 
 from __future__ import annotations
 
-import hashlib
 from dataclasses import dataclass, field
 from datetime import UTC, date, datetime
 from pathlib import Path
@@ -36,6 +35,7 @@ from benchmarks.cohort.manifest import (
     manifest_hash,
 )
 from benchmarks.ground_truth.schema import OutcomeEventKind, StartupStatus
+from predictron_engine.canonical import canonical_json, text_digest
 from predictron_engine.dataset.evaluation import PredictionEvaluation
 from predictron_engine.dataset.forecast import dataset_record_from_prediction
 from predictron_engine.dataset.metrics import (
@@ -364,11 +364,11 @@ def _evaluate(
 ) -> PredictionEvaluation:
     dataset_record = dataset_record_from_prediction(prediction, website=website)
     evaluation = PredictionEvaluation.from_records(dataset_record, outcome_record)
-    evaluation_id = hashlib.sha256(
+    evaluation_id = text_digest(
         _PREDICTION_EVALUATION_SEPARATOR.join(
             [prediction.prediction_id, outcome_record.outcome_id]
-        ).encode("utf-8")
-    ).hexdigest()
+        )
+    )
     return evaluation.model_copy(update={"evaluation_id": evaluation_id})
 
 
@@ -376,13 +376,9 @@ def stable_outcome_id(
     *, company_id: str, outcome: ManifestOutcome
 ) -> str:
     """Deterministic outcome identity from (company, manifest outcome)."""
-    import json
-
-    signature = json.dumps(
-        outcome.model_dump(mode="json"), sort_keys=True, default=str
-    )
+    signature = canonical_json(outcome.model_dump(mode="json"))
     material = _PREDICTION_EVALUATION_SEPARATOR.join([company_id, signature])
-    return hashlib.sha256(material.encode("utf-8")).hexdigest()
+    return text_digest(material)
 
 
 def outcome_record_from_manifest(

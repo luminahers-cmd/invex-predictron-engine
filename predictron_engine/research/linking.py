@@ -58,12 +58,13 @@ share the name.
 
 from __future__ import annotations
 
-import hashlib
 import re
 import unicodedata
 from collections.abc import Iterable, Mapping
 from types import MappingProxyType
 from urllib.parse import urlsplit, urlunsplit
+
+from predictron_engine.canonical import RESEARCH_DIGEST_LENGTH, text_digest
 
 #: Version of the normalization ruleset.  Bump this only when a rule
 #: changes, because the value participates in the canonical-key digest and
@@ -304,8 +305,11 @@ def canonical_key(value: str) -> str:
     normalized = normalize_name(value)
     if not normalized:
         raise ValueError("cannot derive a canonical key from an empty name")
-    digest = _digest(f"{LINKING_VERSION}\x1f{normalized}")
-    return f"{IDENTIFIER_VERSION}_{digest[:16]}"
+    digest = text_digest(
+        f"{LINKING_VERSION}\x1f{normalized}",
+        length=RESEARCH_DIGEST_LENGTH,
+    )
+    return f"{IDENTIFIER_VERSION}_{digest}"
 
 
 def entity_id(entity_type: str, value: str) -> str:
@@ -315,14 +319,20 @@ def entity_id(entity_type: str, value: str) -> str:
     share a name never share an identifier.
     """
     payload_type = _validated_type(entity_type)
-    digest = _digest(f"{LINKING_VERSION}\x1f{payload_type}\x1f{canonical_key(value)}")
-    return f"{ENTITY_ID_PREFIX}{payload_type}{ENTITY_ID_SEPARATOR}{digest[:16]}"
+    digest = text_digest(
+        f"{LINKING_VERSION}\x1f{payload_type}\x1f{canonical_key(value)}",
+        length=RESEARCH_DIGEST_LENGTH,
+    )
+    return f"{ENTITY_ID_PREFIX}{payload_type}{ENTITY_ID_SEPARATOR}{digest}"
 
 
 def alias_id(value: str) -> str:
     """Return the stable identifier for an alias of ``value``."""
-    digest = _digest(f"{LINKING_VERSION}\x1f{canonical_key(value)}")
-    return f"alias{ALIAS_ID_SEPARATOR}{digest[:16]}"
+    digest = text_digest(
+        f"{LINKING_VERSION}\x1f{canonical_key(value)}",
+        length=RESEARCH_DIGEST_LENGTH,
+    )
+    return f"alias{ALIAS_ID_SEPARATOR}{digest}"
 
 
 def normalize_url(value: str) -> str:
@@ -372,8 +382,11 @@ def title_key(value: str) -> str:
     normalized = normalize_title(value)
     if not normalized:
         raise ValueError("cannot derive a title key from an empty title")
-    digest = _digest(f"{LINKING_VERSION}\x1f{normalized}")
-    return f"{IDENTIFIER_VERSION}_t_{digest[:16]}"
+    digest = text_digest(
+        f"{LINKING_VERSION}\x1f{normalized}",
+        length=RESEARCH_DIGEST_LENGTH,
+    )
+    return f"{IDENTIFIER_VERSION}_t_{digest}"
 
 
 class EntityLinker:
@@ -538,11 +551,6 @@ def resolve_aliases(entity_type: str, names: Iterable[str]) -> tuple[str, ...]:
         if identifier not in resolved:
             resolved.append(identifier)
     return tuple(resolved)
-
-
-def _digest(payload: str) -> str:
-    """Return the hex SHA-256 digest of ``payload``."""
-    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
 def _validated_type(entity_type: str) -> str:

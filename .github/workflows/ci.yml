@@ -30,6 +30,14 @@ jobs:
       - name: Type check (mypy)
         run: mypy
 
+      - name: Canonical hashing invariant
+        # Every content-addressed identifier must be computed through
+        # predictron_engine.canonical. This is a hard failure rather than
+        # a review convention: two subsystems encoding one fact in two
+        # dialects compute two different digests, and only a replay run
+        # comparing them would ever notice.
+        run: python -m tools.check_canonical_invariant
+
       - name: Tests (pytest)
         run: pytest
 

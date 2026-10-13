@@ -22,14 +22,14 @@ Guarantees
 
 from __future__ import annotations
 
-import hashlib
-import json
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from enum import Enum
 from types import MappingProxyType
 from typing import Any
+
+from predictron_engine.canonical import FULL_DIGEST_LENGTH, content_digest
 
 
 class SignalType(str, Enum):
@@ -148,13 +148,9 @@ def compute_signal_id(signal: CompanySignal) -> str:
     regardless of process, machine, or insertion order of ``metadata``
     keys (keys are canonicalized with ``sort_keys``).
     """
-    canonical = json.dumps(
-        signal_canonical_dict(signal),
-        sort_keys=True,
-        separators=(",", ":"),
-        default=str,
+    return content_digest(
+        signal_canonical_dict(signal), length=FULL_DIGEST_LENGTH
     )
-    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
 
 def signal_to_dict(signal: CompanySignal) -> dict[str, object]:

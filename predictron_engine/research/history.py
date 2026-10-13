@@ -33,10 +33,13 @@ Two properties the rest of the layer depends on:
 
 from __future__ import annotations
 
-import hashlib
 from collections.abc import Iterable, Iterator, Mapping
 from dataclasses import dataclass
 
+from predictron_engine.canonical import (
+    RESEARCH_DIGEST_LENGTH,
+    text_digest,
+)
 from predictron_engine.research.exceptions import (
     ImmutableRecordError,
     InvalidGraphModelError,
@@ -85,11 +88,6 @@ CHANGE_KINDS: tuple[str, ...] = (
 _ABSENT = "\x00absent"
 
 
-def _digest(payload: str) -> str:
-    """Return the hex SHA-256 digest of ``payload``."""
-    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
-
-
 def history_entry_id(entity_id: str, sequence: int) -> str:
     """Return the stable identifier of one history entry.
 
@@ -103,7 +101,8 @@ def history_entry_id(entity_id: str, sequence: int) -> str:
     if sequence < 1:
         raise ImmutableRecordError("sequence must be at least 1")
     payload = f"{entity_id.strip()}\x1f{sequence}"
-    return f"{HISTORY_ENTRY_PREFIX}{_digest(payload)[:16]}"
+    digest = text_digest(payload, length=RESEARCH_DIGEST_LENGTH)
+    return f"{HISTORY_ENTRY_PREFIX}{digest}"
 
 
 @dataclass(frozen=True)

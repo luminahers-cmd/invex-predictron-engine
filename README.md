@@ -152,7 +152,19 @@ python -m pytest tests/test_analyze.py -v
 
 # Run Ruff linter
 python -m ruff check
+
+# Run the mypy strict type checker
+python -m mypy
+
+# Verify the canonical hashing invariant (fails on a new direct digest)
+python -m tools.check_canonical_invariant
 ```
+
+All three checks run in CI. The last one enforces that every
+content-addressed identifier is computed through
+`predictron_engine.canonical`, so that two subsystems encoding the same
+fact cannot disagree on its digest. See
+[docs/architecture.md](docs/architecture.md#canonical-hashing-enforced).
 
 ---
 
@@ -198,6 +210,8 @@ Before deploying to production:
 - [Examples](examples/README.md)
 - [Benchmarking](benchmarks/README.md)
 - [Contributing](CONTRIBUTING.md)
+- [Architectural Invariants](CONTRIBUTING.md#architectural-invariants)
+- [Architecture Decision Records](docs/adr/README.md)
 - [Security Policy](SECURITY.md)
 
 ---

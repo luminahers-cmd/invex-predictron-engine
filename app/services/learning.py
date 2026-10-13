@@ -22,7 +22,6 @@ repository-wide.
 
 from __future__ import annotations
 
-import hashlib
 from datetime import UTC, date, datetime
 from typing import Any
 
@@ -47,6 +46,7 @@ from app.schemas.learning import (
     LearningReportsResponse,
     LearningSummaryResponse,
 )
+from predictron_engine.canonical import text_digest
 from predictron_engine.dataset.evaluation import EvaluationVerdict
 from predictron_engine.learning.engine import build_learning_snapshot
 from predictron_engine.learning.models import (
@@ -682,17 +682,17 @@ def _actual_positive(verdict: EvaluationVerdict | None) -> bool | None:
 
 def _observation_id(snapshot_id: str, index: int) -> str:
     material = f"observation\x00{snapshot_id}\x00{index}"
-    return hashlib.sha256(material.encode("utf-8")).hexdigest()
+    return text_digest(material)
 
 
 def _pattern_id(snapshot_id: str, index: int) -> str:
     material = f"pattern\x00{snapshot_id}\x00{index}"
-    return hashlib.sha256(material.encode("utf-8")).hexdigest()
+    return text_digest(material)
 
 
 def _report_id(snapshot_id: str) -> str:
     material = f"report\x00{snapshot_id}"
-    return hashlib.sha256(material.encode("utf-8")).hexdigest()
+    return text_digest(material)
 
 
 __all__ = [

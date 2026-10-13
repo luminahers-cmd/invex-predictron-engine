@@ -17,8 +17,6 @@ newly applicable prediction evaluations are generated immediately.
 
 from __future__ import annotations
 
-import hashlib
-import json
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from typing import TYPE_CHECKING
@@ -28,6 +26,7 @@ from sqlalchemy import desc, func, select
 from app.models.company import CompanySnapshot
 from app.models.company_outcome import CompanyOutcome
 from app.services.company_postgres import PostgresCompanyStore
+from predictron_engine.canonical import canonical_json, text_digest
 from predictron_engine.dataset.outcomes import (
     OutcomeRecord,
     OutcomeVerdict,
@@ -65,7 +64,7 @@ class OutcomePageResult:
 
 def _outcome_signature(outcome: StartupOutcome) -> str:
     """Canonical JSON signature of an observed outcome payload."""
-    return json.dumps(outcome.model_dump(mode="json"), sort_keys=True, default=str)
+    return canonical_json(outcome.model_dump(mode="json"))
 
 
 def compute_outcome_id(
@@ -91,7 +90,7 @@ def compute_outcome_id(
             _outcome_signature(outcome),
         ]
     )
-    return hashlib.sha256(material.encode("utf-8")).hexdigest()
+    return text_digest(material)
 
 
 def outcome_verdict(outcome: StartupOutcome) -> OutcomeVerdict:

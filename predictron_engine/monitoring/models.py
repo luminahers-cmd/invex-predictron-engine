@@ -40,12 +40,12 @@ constants live here; see :mod:`drift`).
 
 from __future__ import annotations
 
-import hashlib
 from datetime import date, datetime
 from enum import Enum
 
 from pydantic import BaseModel, Field
 
+from predictron_engine.canonical import canonical_json, text_digest
 from predictron_engine.intelligence.models import TrendDirection
 
 # ---------------------------------------------------------------------------
@@ -417,7 +417,7 @@ class MonitorSnapshot(BaseModel):
     def content_fingerprint(self) -> str:
         """Deterministic SHA-256 of the canonical analytic payload."""
         material = json_dumps_canonical(self.analytic_payload())
-        return hashlib.sha256(material.encode("utf-8")).hexdigest()
+        return text_digest(material)
 
     def verify(self) -> bool:
         """``True`` when the stored hash matches the recomputed payload."""
@@ -460,10 +460,21 @@ class MonitorSnapshotSummary(BaseModel):
 
 
 def json_dumps_canonical(payload: object) -> str:
-    """Canonical JSON serialization (sorted keys, compact separators)."""
-    import json
+    """Canonical JSON serialization (sorted keys, compact separators).
 
-    return json.dumps(payload, sort_keys=True, separators=(",", ":"), default=str)
+    Retained as the monitoring/learning entry point and now backed by
+    :func:`predictron_engine.canonical.canonical_json`, so monitoring
+    digests and research digests are computed by the same encoder.
+
+    Behaviour is unchanged for every JSON-native payload.  One
+    difference is deliberate and was verified before this delegation
+    landed: the shared helper no longer passes ``default=str``, so a
+    ``datetime`` reaching this function raises instead of being
+    silently stringified into the digest.  A snapshot whose hash and
+    whose persisted bytes could disagree with no error is worse than one
+    that refuses to hash.
+    """
+    return canonical_json(payload)
 
 
 __all__ = [

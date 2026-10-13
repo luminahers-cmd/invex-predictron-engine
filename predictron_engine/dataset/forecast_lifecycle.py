@@ -18,10 +18,10 @@ grace mirroring :class:`ForecastHorizon`) has elapsed, otherwise active.
 
 from __future__ import annotations
 
-import hashlib
 from datetime import UTC, datetime, timedelta
 from enum import Enum
 
+from predictron_engine.canonical import text_digest
 from predictron_engine.dataset.forecast import ForecastHorizon
 
 FORECAST_SCHEMA_VERSION = "1.0"
@@ -55,7 +55,7 @@ def stable_forecast_id(*, company_id: str, snapshot_id: str, horizon_days: int) 
     material = _ID_SEPARATOR.join(
         [company_id, snapshot_id, str(int(horizon_days))]
     )
-    return hashlib.sha256(material.encode("utf-8")).hexdigest()
+    return text_digest(material)
 
 
 def stable_event_id(
@@ -73,7 +73,7 @@ def stable_event_id(
         event_type.value if isinstance(event_type, ForecastEventType) else event_type
     )
     material = _ID_SEPARATOR.join([forecast_id, label, outcome_id or ""])
-    return hashlib.sha256(material.encode("utf-8")).hexdigest()
+    return text_digest(material)
 
 
 def forecast_due_at(*, analysis_timestamp: datetime, horizon_days: int) -> datetime:

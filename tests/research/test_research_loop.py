@@ -32,6 +32,7 @@ from predictron_engine.research.iteration_models import (
     ResidualGap,
     TerminationReason,
 )
+from predictron_engine.research.ports import ResearchExecutorPort
 from predictron_engine.research.research_loop import (
     ACTIONABLE_GAP_KINDS,
     STOP_EXPLANATIONS,
@@ -188,6 +189,45 @@ def test_orchestrator_returning_wrong_type_rejected():
 
     with pytest.raises(InvalidIterationInputError):
         ResearchLoop(orchestrator=_Bad()).run(PlannerInput(company_name=COMPANY))
+
+
+def test_orchestrator_with_non_callable_execute_rejected():
+    class _NotCallable:
+        execute = "not callable"  # type: ignore[var-annotated]
+
+    with pytest.raises(
+        InvalidIterationInputError,
+        match="the orchestrator must expose a callable execute",
+    ):
+        ResearchLoop(orchestrator=_NotCallable()).run(
+            PlannerInput(company_name=COMPANY)
+        )
+
+
+def test_a_protocol_only_executor_runs_the_loop():
+    class _ExecutorDouble:
+        def __init__(self, inner: ResearchOrchestrator) -> None:
+            self._inner = inner
+            self.calls: list[PlannerInput] = []
+
+        def execute(self, planner_input: PlannerInput) -> ResearchExecutionResult:
+            self.calls.append(planner_input)
+            return self._inner.execute(planner_input)
+
+    double = _ExecutorDouble(ResearchOrchestrator())
+    assert isinstance(double, ResearchExecutorPort)
+
+    loop = ResearchLoop(orchestrator=double)
+    history = loop.run_for_company(COMPANY)
+    assert history.count == 1
+    assert history.termination is TerminationReason.CONVERGED
+    assert [call.company_name for call in double.calls] == [COMPANY]
+
+
+def test_orchestrator_default_is_constructed_lazily():
+    loop = ResearchLoop()
+    assert isinstance(loop.orchestrator, ResearchOrchestrator)
+    assert isinstance(loop.orchestrator, ResearchExecutorPort)
 
 
 def test_gap_engine_defaults_to_policy_thresholds():

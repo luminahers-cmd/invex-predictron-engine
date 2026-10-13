@@ -94,6 +94,7 @@ from predictron_engine.research.models import (
     PlannerInput,
     ResearchPlan,
 )
+from predictron_engine.research.ports import ResearchExecutorPort
 from predictron_engine.research.residual import ResidualGapEngine
 from predictron_engine.research.validation_models import ValidationSummary
 
@@ -143,6 +144,9 @@ class ResearchLoop:
         The pipeline runner.  Defaults to a fresh
         :class:`~predictron_engine.research.orchestrator.ResearchOrchestrator`,
         constructed lazily so importing this module never builds collectors.
+        Anything satisfying :class:`~predictron_engine.research.ports.ResearchExecutorPort`
+        structurally is accepted, so custom executors can be injected without
+        subclassing the orchestrator.
     policy:
         Bounds and thresholds for the loop.  Defaults to
         :class:`~predictron_engine.research.iteration_models.IterationPolicy`,
@@ -172,7 +176,7 @@ class ResearchLoop:
 
     def __init__(
         self,
-        orchestrator: object | None = None,
+        orchestrator: ResearchExecutorPort | None = None,
         *,
         policy: IterationPolicy | None = None,
         memory: ResearchMemory | None = None,
@@ -209,7 +213,7 @@ class ResearchLoop:
         return self._gap_engine
 
     @property
-    def orchestrator(self) -> object:
+    def orchestrator(self) -> ResearchExecutorPort:
         """Return the pipeline runner, constructing the default on first use."""
         if self._orchestrator is None:
             from predictron_engine.research.orchestrator import (
@@ -349,7 +353,12 @@ class ResearchLoop:
 
     def _execute(self, planner_input: PlannerInput) -> ResearchExecutionResult:
         """Run one full pipeline pass and return its result."""
-        execute = getattr(self.orchestrator, "execute", None)
+        orchestrator = self.orchestrator
+        if not isinstance(orchestrator, ResearchExecutorPort):
+            raise InvalidIterationInputError(
+                "the orchestrator must expose a callable execute(planner_input)"
+            )
+        execute = orchestrator.execute
         if not callable(execute):
             raise InvalidIterationInputError(
                 "the orchestrator must expose a callable execute(planner_input)"

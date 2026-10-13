@@ -13,7 +13,6 @@ NOT change the hash; changing any *value* does.
 
 from __future__ import annotations
 
-import hashlib
 import json
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -23,6 +22,8 @@ from benchmarks.ground_truth_eval.models import (
     GOLDEN_DATASET_SCHEMA_VERSION,
     GoldenDataset,
 )
+from predictron_engine.canonical import canonical_json as canonical_text
+from predictron_engine.canonical import text_digest
 
 
 class GoldenDatasetError(RuntimeError):
@@ -51,16 +52,19 @@ def _sort_keys(value: Any) -> Any:
     return value
 
 
+def _dataset_canonical(dataset: GoldenDataset) -> str:
+    """Return the deterministic canonical encoding of a dataset."""
+    return canonical_text(canonical_json(dataset))
+
+
 def canonical_bytes(dataset: GoldenDataset) -> bytes:
     """Return deterministic UTF-8 bytes for a dataset (sorted keys)."""
-    return json.dumps(
-        canonical_json(dataset), sort_keys=True, separators=(",", ":"), ensure_ascii=True
-    ).encode("utf-8")
+    return _dataset_canonical(dataset).encode("utf-8")
 
 
 def dataset_hash(dataset: GoldenDataset) -> str:
     """Return the canonical sha256 (hex) fingerprint of a dataset."""
-    return hashlib.sha256(canonical_bytes(dataset)).hexdigest()
+    return text_digest(_dataset_canonical(dataset))
 
 
 def load_golden_dataset(path: Path | str) -> GoldenDataset:

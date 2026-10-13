@@ -23,11 +23,11 @@ same ``graph_key``) is produced regardless of input order.
 
 from __future__ import annotations
 
-import hashlib
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 from typing import Any
 
+from predictron_engine.canonical import text_digest
 from predictron_engine.dataset.company_name import (
     canonical_name_key,
     core_name,
@@ -577,9 +577,7 @@ class CompanyKnowledgeGraphBuilder:
             edge_counts=edge_counts,
             sources=sorted({record.source for record in records}),
             provenance_issues=graph.validate(),
-            graph_key=hashlib.sha256(
-                canonical_graph_json(graph).encode("utf-8")
-            ).hexdigest(),
+            graph_key=text_digest(canonical_graph_json(graph)),
         )
 
 

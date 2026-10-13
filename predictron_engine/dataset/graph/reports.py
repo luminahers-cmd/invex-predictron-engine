@@ -12,9 +12,9 @@ canonical serialization is added so reports are reproducible.
 
 from __future__ import annotations
 
-import hashlib
 from typing import Any
 
+from predictron_engine.canonical import text_digest
 from predictron_engine.dataset.graph.metrics import compute_graph_metrics
 from predictron_engine.dataset.graph.persistence import canonical_graph_json
 from predictron_engine.dataset.graph.store import KnowledgeGraph
@@ -22,9 +22,7 @@ from predictron_engine.dataset.graph.store import KnowledgeGraph
 
 def graph_key(graph: KnowledgeGraph) -> str:
     """Return the reproducible SHA-256 key of a graph's canonical form."""
-    return hashlib.sha256(
-        canonical_graph_json(graph).encode("utf-8")
-    ).hexdigest()
+    return text_digest(canonical_graph_json(graph))
 
 
 def build_graph_report(graph: KnowledgeGraph) -> dict[str, Any]:

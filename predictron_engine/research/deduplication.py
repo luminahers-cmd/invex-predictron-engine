@@ -35,10 +35,13 @@ duplicate groupings.  Nothing here consults a clock, a network, or a model.
 
 from __future__ import annotations
 
-import hashlib
 from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 
+from predictron_engine.canonical import (
+    RESEARCH_DIGEST_LENGTH,
+    text_digest,
+)
 from predictron_engine.research.exceptions import (
     DeduplicationError,
     InvalidMemoryInputError,
@@ -80,14 +83,10 @@ DUPLICATE_KEY_PREFIX = "dup_"
 KEY_SEPARATOR = "|"
 
 
-def _digest(payload: str) -> str:
-    """Return the hex SHA-256 digest of ``payload``."""
-    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
-
-
 def _key(prefix: str, payload: str) -> str:
     """Return the prefixed digest of ``payload``."""
-    return f"{prefix}{_digest(payload)[:16]}"
+    digest = text_digest(payload, length=RESEARCH_DIGEST_LENGTH)
+    return f"{prefix}{digest}"
 
 
 def evidence_fingerprint_key(fingerprint: EvidenceFingerprint | str) -> str:
