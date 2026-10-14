@@ -217,3 +217,61 @@ compatibility impact, and why the previous invariant no longer applies
 — see [`docs/adr/`](adr/README.md). Technical enforcement tells you a
 rule is forbidden; an ADR is where the cost of stopping forbidding it
 gets a permanent, reviewable answer.
+
+## Sprint 8 Checkpoint (Approved)
+
+### Git checkpoint
+- Commit: `23a6592e763d528129c2b8e3aea3007ceae9afc0`
+- Annotated tag: `sprint-8-approved`
+
+### Frozen architectural baseline
+Sprint 8 (WI-1 through WI-5, including WI-3 Grounding Stage) is the current architectural baseline.
+
+Future modifications to any WI-1–WI-5 implementation must be classified as one of:
+
+1. Bug fix (behavior inconsistent with the approved specification)
+2. New approved work item
+3. ADR-approved architectural evolution (where required by the architectural invariants)
+
+No other modifications should be made.
+
+### WI-3 checkpoint
+
+Files introduced:
+- predictron_engine/research/grounding.py
+- predictron_engine/integrations/grounding.py
+- predictron_engine/integrations/__init__.py
+- tests/research/test_grounding.py
+- docs/sprint-8/wi-3-grounding-spec.md
+
+Files modified:
+- predictron_engine/research/registry.py
+- predictron_engine/research/__init__.py
+
+Public APIs:
+- DocumentSource
+- ClaimProjector
+- ProjectedClaim
+- GroundingPolicy
+- MissingDocumentPolicy
+- ReplayDocumentSource
+- ExtractionClaimProjector
+- GroundedCollector
+- grounded_collector_registry(...)
+- SyncEvidenceSource (integration layer)
+
+Architectural guarantees:
+- Research package remains pure (no live I/O).
+- Live adapters remain outside research.
+- Trust is imported, never recomputed.
+- Placeholder execution remains byte-identical.
+- Grounded execution is opt-in.
+- Canonical hashing invariant preserved.
+- Provenance bridge remains the only identity/linkage mechanism.
+- WI-1 through WI-5 invariants remain frozen.
+
+Deferred (out of scope):
+- Live SyncEvidenceSource provider validation.
+- Richer multi-field claim projection.
+
+This checkpoint is informational only and does not change runtime behavior.
