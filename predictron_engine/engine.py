@@ -29,6 +29,7 @@ Usage:
 import logging
 import time
 import uuid
+from typing import TYPE_CHECKING
 
 from app.schemas.analysis import StartupAnalysisRequest
 from predictron_engine.collection.collector import DefaultDataCollector
@@ -69,6 +70,11 @@ from predictron_engine.scoring.scoring_engine import DefaultScoringEngine
 from predictron_engine.synthesis.engine import DecisionSynthesisEngine
 from predictron_engine.validation.debug_report import DebugReport
 from predictron_engine.version import ENGINE_VERSION
+
+if TYPE_CHECKING:
+    from predictron_engine.integrations.research_analysis import (
+        ResearchAnalysisIntegration,
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -130,6 +136,7 @@ class PredictronEngine:
         decision: DefaultDecisionEngine | None = None,
         report_builder: DefaultReportBuilder | None = None,
         synthesis: DecisionSynthesisEngine | None = None,
+        research_integration: "ResearchAnalysisIntegration | None" = None,
     ) -> None:
         self._normalizer = normalizer or DefaultNormalizer()
         self._collector = collector or DefaultDataCollector()
@@ -148,6 +155,10 @@ class PredictronEngine:
         self._decision = decision or DefaultDecisionEngine()
         self._report_builder = report_builder or DefaultReportBuilder()
         self._synthesis = synthesis or DecisionSynthesisEngine()
+        # WI-6: opt-in grounded-research integration boundary.  When left
+        # as ``None`` the pipeline never calls into the research
+        # subsystem and every default output stays byte-identical.
+        self._research_integration = research_integration
         logger.info("PredictronEngine initialized")
 
     def analyze(
@@ -201,6 +212,17 @@ class PredictronEngine:
 
         # Stage 5: Gather evidence
         evidence_set = self._evidence.gather(features)
+
+        # Stage 5b (WI-6): opt-in grounded-research integration.  Only
+        # reached when a boundary was injected; it projects research
+        # evidence into the same evidence plane, preserving ids,
+        # provenance, and versioning.  Disabled, the set is untouched.
+        if self._research_integration is not None:
+            evidence_set = self._research_integration.augment(
+                evidence_set,
+                company_name=getattr(startup, "name", ""),
+                website=str(getattr(startup, "website", "") or ""),
+            )
 
         # Stage 6: Reason (thread the collected EvidenceBundle through so
         # reasoning consumes trust, provenance, authority, quality, and

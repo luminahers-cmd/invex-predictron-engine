@@ -58,7 +58,17 @@ class SyncEvidenceSource:
         """Collect and return the documents for ``company_name``.
 
         An empty ``website`` yields no documents (the bridge returns an
-        empty bundle),         never a fabricated URL.
+        empty bundle), never a fabricated URL.
+
+        Provider failures are isolated by
+        :class:`~predictron_engine.evidence.orchestrator.EvidenceOrchestrator`
+        (a failing provider is recorded in the bundle's diagnostics and
+        skipped), so the documents returned here are exactly what the
+        collection produced.  This adapter performs no failure handling of
+        its own: the production best-effort guarantee — a failed collection
+        never aborts an analysis — lives at the integration seam,
+        :meth:`ResearchAnalysisIntegration.augment
+        <predictron_engine.integrations.research_analysis.ResearchAnalysisIntegration.augment>`.
         """
         bundle = collect_evidence_sync(
             self._orchestrator, company_name, website
