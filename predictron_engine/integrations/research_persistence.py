@@ -114,6 +114,10 @@ from predictron_engine.research.ports import MemoryIndexPort
 #: Serialization schema version for the durable research-memory document.
 PERSISTENCE_SCHEMA_VERSION = "1.1.0"
 
+#: Document versions the loader accepts.  ``1.0.0`` documents predate the
+#: persisted history section, so they load with an empty history log.
+_SUPPORTED_SCHEMA_VERSIONS = ("1.0.0", "1.1.0")
+
 
 class ResearchPersistenceError(ResearchMemoryError):
     """Raised when the durable research-memory backend cannot read or write.
@@ -233,10 +237,15 @@ class PersistentMemoryBackend:
     def __init__(self, path: str | os.PathLike[str]) -> None:
         self._store = FileDocumentStore(path)
         document = self._store.read()
+        version = _validated_schema_version(document)
         self.index: MemoryIndex = _restore_index(document)
         self.graph: GraphStore = _restore_graph(document, self.index)
         self.records: MemoryStore = _restore_records(document, self.index)
-        self.history: HistoryLog = _restore_history(document)
+        self.history: HistoryLog = (
+            _restore_history(document)
+            if version == "1.1.0"
+            else HistoryLog()
+        )
 
     @property
     def path(self) -> Path:
@@ -657,6 +666,33 @@ def open_persistent_memory(path: str | os.PathLike[str]) -> ResearchMemory:
     ``memory.records``, ``memory.history``, and ``memory.index``.
     """
     return PersistentResearchMemory(path).memory
+
+
+def _validated_schema_version(
+    document: Mapping[str, object] | None,
+) -> str | None:
+    """Validate the persisted document version and return it.
+
+    A fresh store has no document and therefore no version to check.  A stored
+    document must name one of :data:`_SUPPORTED_SCHEMA_VERSIONS`; a missing,
+    non-string, or unsupported version is rejected before any section is
+    restored, so an unrecognized document is never partially interpreted.
+    """
+    if document is None:
+        return None
+    supported = ", ".join(_SUPPORTED_SCHEMA_VERSIONS)
+    version = document.get("schema_version")
+    if not isinstance(version, str):
+        raise ResearchPersistenceError(
+            "missing or invalid 'schema_version' in research memory; "
+            f"supported versions: {supported}"
+        )
+    if version not in _SUPPORTED_SCHEMA_VERSIONS:
+        raise ResearchPersistenceError(
+            f"unsupported persistence schema version {version!r} in research "
+            f"memory; supported versions: {supported}"
+        )
+    return version
 
 
 def _restore_index(

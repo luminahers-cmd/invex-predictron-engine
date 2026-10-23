@@ -63,6 +63,11 @@ from predictron_engine.research.ports import (
 )
 from tests.research.memory_helpers import make_evidence, make_report
 
+#: The frozen ``1.0.0`` golden document from the Commit 1 compatibility suite.
+GOLDEN_DOCUMENT_PATH = (
+    Path(__file__).resolve().parent / "fixtures" / "research_memory_v1.json"
+)
+
 
 def gpt_observation(evidence_id: str) -> EntityObservation:
     """Build a grounded technology observation, as the memory tests do."""
@@ -103,6 +108,25 @@ def populate(memory: ResearchMemory) -> str:
         relationships=[has_technology(evidence.evidence_id)],
     )
     return evidence.evidence_id
+
+
+def write_variant(
+    path: Path,
+    document: dict[str, object],
+    *,
+    version: str,
+    history: object | None = None,
+) -> None:
+    """Write ``document`` under a chosen version, optionally with history."""
+    variant = {
+        key: value
+        for key, value in document.items()
+        if key not in {"schema_version", "history"}
+    }
+    variant["schema_version"] = version
+    if history is not None:
+        variant["history"] = history
+    path.write_text(canonical_json(variant), encoding="utf-8")
 
 
 # -- the persistent ports satisfy the protocols ------------------------
@@ -461,6 +485,134 @@ def test_canonical_hashes_are_unchanged_across_a_restart(
 
     assert second.memory.graph.graph_key() == graph_key
     assert second.memory.memory_key() == memory_key
+
+
+# -- the persistence schema-version gate -------------------------------
+
+
+def test_a_1_0_0_document_loads_with_empty_history(tmp_path: Path) -> None:
+    source = PersistentResearchMemory(tmp_path / "source.json")
+    populate(source.memory)
+    path = tmp_path / "memory.json"
+    write_variant(path, source.document(), version="1.0.0")
+    before = path.read_bytes()
+
+    reopened = PersistentResearchMemory(path)
+
+    assert reopened.memory.history.is_empty() is True
+    assert reopened.memory.counts()["history"] == 0
+    assert [report.report_id for report in reopened.memory.reports()] == [
+        "rep-1",
+        "rep-2",
+    ]
+    assert path.read_bytes() == before
+
+
+def test_a_1_1_0_document_loads_with_its_history(tmp_path: Path) -> None:
+    source = PersistentResearchMemory(tmp_path / "source.json")
+    populate(source.memory)
+    path = tmp_path / "memory.json"
+    write_variant(
+        path,
+        source.document(),
+        version="1.1.0",
+        history=source.document()["history"],
+    )
+
+    reopened = PersistentResearchMemory(path)
+
+    assert reopened.memory.history.to_dict() == (
+        source.memory.history.to_dict()
+    )
+    assert reopened.memory.counts()["history"] == (
+        source.memory.counts()["history"]
+    )
+
+
+def test_a_1_1_0_document_without_history_loads_empty(
+    tmp_path: Path,
+) -> None:
+    source = PersistentResearchMemory(tmp_path / "source.json")
+    populate(source.memory)
+    path = tmp_path / "memory.json"
+    write_variant(path, source.document(), version="1.1.0")
+
+    reopened = PersistentResearchMemory(path)
+
+    assert reopened.memory.history.is_empty() is True
+    assert reopened.memory.counts()["history"] == 0
+
+
+def test_a_stray_history_section_on_a_1_0_0_document_is_ignored(
+    tmp_path: Path,
+) -> None:
+    source = PersistentResearchMemory(tmp_path / "source.json")
+    populate(source.memory)
+    path = tmp_path / "memory.json"
+    write_variant(
+        path,
+        source.document(),
+        version="1.0.0",
+        history=source.document()["history"],
+    )
+    before = path.read_bytes()
+
+    reopened = PersistentResearchMemory(path)
+
+    assert reopened.memory.history.is_empty() is True
+    assert reopened.memory.counts()["history"] == 0
+    assert path.read_bytes() == before
+
+
+def test_an_unsupported_schema_version_is_rejected(tmp_path: Path) -> None:
+    path = tmp_path / "memory.json"
+    path.write_text('{"schema_version": "2.0.0"}', encoding="utf-8")
+
+    with pytest.raises(ResearchPersistenceError) as error:
+        PersistentResearchMemory(path)
+
+    message = str(error.value)
+    assert "2.0.0" in message
+    assert "1.0.0" in message
+    assert "1.1.0" in message
+
+
+@pytest.mark.parametrize(
+    "raw",
+    [
+        "{}",
+        '{"schema_version": 110}',
+        '{"schema_version": null}',
+    ],
+)
+def test_a_missing_or_non_string_schema_version_is_rejected(
+    tmp_path: Path,
+    raw: str,
+) -> None:
+    path = tmp_path / "memory.json"
+    path.write_text(raw, encoding="utf-8")
+
+    with pytest.raises(ResearchPersistenceError) as error:
+        PersistentResearchMemory(path)
+
+    message = str(error.value)
+    assert "schema_version" in message
+    assert "1.0.0" in message
+    assert "1.1.0" in message
+
+
+def test_the_commit_1_fixture_loads_with_empty_history() -> None:
+    before = GOLDEN_DOCUMENT_PATH.read_bytes()
+
+    reopened = PersistentResearchMemory(GOLDEN_DOCUMENT_PATH)
+
+    assert reopened.memory.history.is_empty() is True
+    assert reopened.memory.counts()["history"] == 0
+    assert [report.report_id for report in reopened.memory.reports()] == [
+        "rep-1",
+        "rep-2",
+    ]
+    assert GOLDEN_DOCUMENT_PATH.read_bytes() == before
 
 
 # -- filesystem durability details -------------------------------------
