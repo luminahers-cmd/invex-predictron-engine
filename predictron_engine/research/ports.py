@@ -37,6 +37,10 @@ The ports
 ``MemoryStorePort``
     The ledger of reports and evidence, plus the duplicate-aware write path
     research memory calls directly.
+``HistoryPort``
+    The append-only log of entity snapshots research memory records
+    through, so durable history can be substituted at the same seam as
+    the other stores.
 ``ResearchExecutorPort``
     The execution boundary of a full pipeline pass — exactly
     ``execute(planner_input) -> ResearchExecutionResult``.  The research loop
@@ -57,6 +61,7 @@ if TYPE_CHECKING:
         ResearchReport,
     )
     from predictron_engine.research.graph_models import (
+        EntitySnapshot,
         EntityType,
         GraphEntity,
         GraphRelationship,
@@ -70,6 +75,7 @@ if TYPE_CHECKING:
         MemoryRecordKey,
         RelationshipWrite,
     )
+    from predictron_engine.research.history import HistoryEntry
     from predictron_engine.research.memory_store import (
         EvidenceWrite,
         ReportWrite,
@@ -320,6 +326,62 @@ class MemoryStorePort(Protocol):
 
     def to_dict(self) -> dict[str, object]:
         """Serialize the store into its JSON-ready snapshot document."""
+        ...
+
+
+@runtime_checkable
+class HistoryPort(Protocol):
+    """The append-only log research memory records entity history through.
+
+    Every write returns a *new* log rather than mutating, so an earlier
+    snapshot of memory can be held and compared forever.  The port covers
+    what research memory itself exercises: the two write paths, the
+    sequence-ordered reads behind its snapshot reconstruction, the
+    deterministic length, and the snapshot document.  Narrower helpers
+    such as ``latest_for`` or ``changes_for`` stay concrete because
+    research memory reaches them through ``ordered`` and ``for_entity``.
+    """
+
+    def append(self, entry: HistoryEntry) -> HistoryPort:
+        """Return a new log with ``entry`` appended."""
+        ...
+
+    def record(
+        self,
+        *,
+        entity_id: str,
+        entity_type: EntityType,
+        sequence: int,
+        recorded_at: str,
+        source: str,
+        previous: EntitySnapshot | None,
+        current: EntitySnapshot | None,
+    ) -> HistoryPort:
+        """Return a new log carrying a fully derived entry."""
+        ...
+
+    def ordered(self) -> tuple[HistoryEntry, ...]:
+        """Return every entry, ordered by sequence."""
+        ...
+
+    def for_entity(self, entity_id: str) -> tuple[HistoryEntry, ...]:
+        """Return every entry for ``entity_id``, ordered by sequence."""
+        ...
+
+    def snapshots_for(self, entity_id: str) -> tuple[EntitySnapshot, ...]:
+        """Return every snapshot recorded for ``entity_id``, in version order."""
+        ...
+
+    def to_dict(self) -> dict[str, object]:
+        """Serialize the log into its JSON-ready snapshot document."""
+        ...
+
+    def __len__(self) -> int:
+        """Return how many entries are recorded."""
+        ...
+
+    def is_empty(self) -> bool:
+        """Return whether the log holds no entries."""
         ...
 
 

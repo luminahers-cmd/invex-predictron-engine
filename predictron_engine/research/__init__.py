@@ -298,6 +298,7 @@ from predictron_engine.research.planner import (
 )
 from predictron_engine.research.ports import (
     GraphStorePort,
+    HistoryPort,
     MemoryIndexPort,
     MemoryStorePort,
     ResearchExecutorPort,
@@ -623,6 +624,7 @@ __all__ = [
     "HistoryChange",
     "HistoryEntry",
     "HistoryLog",
+    "HistoryPort",
     "HISTORY_BLEND_CURRENT",
     "HISTORY_BLEND_PREVIOUS",
     "HiringCollector",

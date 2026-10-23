@@ -40,6 +40,7 @@ from predictron_engine.research.graph_store import (
     MemoryRecordKey,
     RelationshipWrite,
 )
+from predictron_engine.research.history import HistoryLog
 from predictron_engine.research.knowledge_graph import KnowledgeGraph
 from predictron_engine.research.memory import (
     MEMORY_SNAPSHOT_SCHEMA_VERSION,
@@ -57,6 +58,7 @@ from predictron_engine.research.memory_store import (
 from predictron_engine.research.orchestrator import ResearchOrchestrator
 from predictron_engine.research.ports import (
     GraphStorePort,
+    HistoryPort,
     MemoryIndexPort,
     MemoryStorePort,
     ResearchExecutorPort,
@@ -69,6 +71,7 @@ PORTS_PATH = Path(__file__).resolve().parents[2] / "predictron_engine" / "resear
 PORTS: tuple[type, ...] = (
     MemoryIndexPort,
     GraphStorePort,
+    HistoryPort,
     MemoryStorePort,
     ResearchExecutorPort,
 )
@@ -394,6 +397,7 @@ def test_a_port_cannot_be_instantiated(port: type) -> None:
         (MemoryIndexPort, MemoryIndex),
         (GraphStorePort, GraphStore),
         (MemoryStorePort, MemoryStore),
+        (HistoryPort, HistoryLog),
         (ResearchExecutorPort, ResearchOrchestrator),
     ],
 )
@@ -413,6 +417,7 @@ def test_the_ports_type_check_against_the_stores_they_port() -> None:
         "predictron_engine.research.execution_report",
         "predictron_engine.research.graph_models",
         "predictron_engine.research.graph_store",
+        "predictron_engine.research.history",
         "predictron_engine.research.memory_store",
         "predictron_engine.research.models",
     }
@@ -422,6 +427,7 @@ def test_the_ports_are_exported_from_the_research_package() -> None:
     for name in (
         "MemoryIndexPort",
         "GraphStorePort",
+        "HistoryPort",
         "MemoryStorePort",
         "ResearchExecutorPort",
     ):
@@ -437,6 +443,7 @@ def test_the_in_memory_implementations_satisfy_their_ports() -> None:
     assert isinstance(GraphStore(), GraphStorePort)
     assert isinstance(KnowledgeGraph().store, GraphStorePort)
     assert isinstance(MemoryStore(), MemoryStorePort)
+    assert isinstance(HistoryLog(), HistoryPort)
     assert isinstance(ResearchOrchestrator(), ResearchExecutorPort)
 
 
