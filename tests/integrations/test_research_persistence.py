@@ -33,6 +33,7 @@ from predictron_engine.integrations.research_persistence import (
 from predictron_engine.integrations.research_persistence import (
     FileDocumentStore,
     PersistentGraphStore,
+    PersistentHistoryStore,
     PersistentMemoryIndex,
     PersistentMemoryStore,
     PersistentResearchMemory,
@@ -56,6 +57,7 @@ from predictron_engine.research.memory import (
 from predictron_engine.research.memory_store import MemoryStore
 from predictron_engine.research.ports import (
     GraphStorePort,
+    HistoryPort,
     MemoryIndexPort,
     MemoryStorePort,
 )
@@ -112,6 +114,7 @@ def test_the_persistent_ports_satisfy_their_protocols(tmp_path: Path) -> None:
     assert isinstance(handle.graph, GraphStorePort)
     assert isinstance(handle.records, MemoryStorePort)
     assert isinstance(handle.memory, ResearchMemory)
+    assert isinstance(handle.memory.history, HistoryPort)
 
 
 def test_the_persistent_ports_share_one_index(tmp_path: Path) -> None:
@@ -130,6 +133,7 @@ def test_open_persistent_memory_returns_the_wired_facade(
     assert isinstance(memory.index, PersistentMemoryIndex)
     assert isinstance(memory.store, PersistentGraphStore)
     assert isinstance(memory.records, PersistentMemoryStore)
+    assert isinstance(memory.history, PersistentHistoryStore)
 
 
 def test_a_fresh_memory_is_empty_and_writes_nothing(tmp_path: Path) -> None:
@@ -224,6 +228,69 @@ def test_writes_continue_after_a_restart_without_collisions(
     assert third.index.next_sequence() == second.index.next_sequence()
     assert third.records.counts() == second.records.counts()
     assert third.graph.stats() == second.graph.stats()
+
+
+def test_history_survives_a_restart(tmp_path: Path) -> None:
+    path = tmp_path / "memory.json"
+    first = PersistentResearchMemory(path)
+    populate(first.memory)
+    before_document = first.memory.history.to_dict()
+    before_entries = first.memory.history.ordered()
+
+    second = PersistentResearchMemory(path)
+
+    assert second.memory.history.to_dict() == before_document
+    assert second.memory.history.ordered() == before_entries
+    assert len(second.memory.history) == len(before_entries)
+
+
+def test_history_counts_survive_a_restart(tmp_path: Path) -> None:
+    path = tmp_path / "memory.json"
+    first = PersistentResearchMemory(path)
+    populate(first.memory)
+    before = first.memory.counts()["history"]
+
+    second = PersistentResearchMemory(path)
+
+    assert before > 0
+    assert second.memory.counts()["history"] == before
+
+
+def test_a_post_restart_record_continues_version_numbering(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "memory.json"
+    first = PersistentResearchMemory(path)
+    populate(first.memory)
+    technology = first.memory.get_entity("GPT")
+    assert technology is not None
+
+    second = PersistentResearchMemory(path)
+    evidence = make_evidence(
+        claim="Acme ships GPT-5",
+        url="https://example.test/c",
+    )
+    second.memory.add_report(
+        make_report("rep-3"),
+        evidence=[evidence],
+        entities=[
+            EntityObservation(
+                "GPT",
+                EntityType.TECHNOLOGY,
+                attributes={"generation": 5},
+                evidence_ids=(evidence.evidence_id,),
+                confidence=0.8,
+            )
+        ],
+    )
+
+    versions = [
+        entry.version
+        for entry in second.memory.history.for_entity(
+            technology.entity_id
+        )
+    ]
+    assert versions == [1, 2]
 
 
 # -- requirement 3: round-trip serialization is byte-identical ---------
