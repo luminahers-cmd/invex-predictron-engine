@@ -92,6 +92,7 @@ from predictron_engine.research.memory_store import (
 from predictron_engine.research.models import Evidence
 from predictron_engine.research.ports import (
     GraphStorePort,
+    HistoryPort,
     MemoryIndexPort,
     MemoryStorePort,
 )
@@ -482,14 +483,14 @@ class ResearchMemory:
         The shared :class:`~predictron_engine.research.ports.MemoryIndexPort`
         that orders records, facts, and history with one sequence.
     history:
-        The :class:`~predictron_engine.research.history.HistoryLog`.
+        The :class:`~predictron_engine.research.ports.HistoryPort`.
     """
 
     def __init__(
         self,
         index: MemoryIndexPort | None = None,
         graph: KnowledgeGraph | None = None,
-        history: HistoryLog | None = None,
+        history: HistoryPort | None = None,
         *,
         store: GraphStorePort | None = None,
         records: MemoryStorePort | None = None,
@@ -502,9 +503,9 @@ class ResearchMemory:
             raise InvalidMemoryInputError(
                 "graph must be a KnowledgeGraph instance"
             )
-        if history is not None and not isinstance(history, HistoryLog):
+        if history is not None and not isinstance(history, HistoryPort):
             raise InvalidMemoryInputError(
-                "history must be a HistoryLog instance"
+                "history must implement HistoryPort"
             )
         if store is None:
             if index is None:
@@ -546,7 +547,7 @@ class ResearchMemory:
     # -- Views -------------------------------------------------------
 
     @property
-    def history(self) -> HistoryLog:
+    def history(self) -> HistoryPort:
         """Return the append-only history log."""
         return self._history
 

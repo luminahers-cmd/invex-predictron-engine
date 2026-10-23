@@ -476,7 +476,7 @@ def test_research_memory_validates_collaborators_against_the_ports() -> None:
         ResearchMemory(records="records")
     with pytest.raises(InvalidMemoryInputError, match="KnowledgeGraph"):
         ResearchMemory(graph="graph")
-    with pytest.raises(InvalidMemoryInputError, match="HistoryLog"):
+    with pytest.raises(InvalidMemoryInputError, match="HistoryPort"):
         ResearchMemory(history="history")
 
 
