@@ -235,6 +235,23 @@ Future modifications to any WI-1–WI-5 implementation must be classified as one
 
 No other modifications should be made.
 
+### G-R2 checkpoint (New approved work item)
+
+G-R2 — persisting research memory history through a `HistoryPort` seam —
+is classified as a **New approved work item** under the frozen-baseline
+rule above. It strengthens the protocol-boundary invariant: history was
+the last durable research collaborator without a persistence port, and
+it now reaches persistence through an injected Protocol while the
+research package keeps no concrete dependency on the integrations layer.
+
+No ADR is required: no invariant is relaxed, removed, or narrowed, and
+no suppression, exemption, or scope carve-out is introduced.
+
+The persisted research-memory document evolves additively: its
+`schema_version` moves from `1.0.0` to `1.1.0` and gains a `history`
+section. Documents written at `1.0.0` continue to load and restore an
+empty history log. Nested artifact schema versions are unchanged.
+
 ### WI-3 checkpoint
 
 Files introduced:
