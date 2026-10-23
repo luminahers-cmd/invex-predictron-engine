@@ -2,9 +2,10 @@
 
 This module is the **initial implementation** of the persistence seam declared
 by :mod:`predictron_engine.research.ports`.  It provides persistent versions of
-the three storage ports — :class:`~predictron_engine.research.ports.MemoryIndexPort`,
-:class:`~predictron_engine.research.ports.GraphStorePort`, and
-:class:`~predictron_engine.research.ports.MemoryStorePort` — backed by a single
+the four storage ports — :class:`~predictron_engine.research.ports.MemoryIndexPort`,
+:class:`~predictron_engine.research.ports.GraphStorePort`,
+:class:`~predictron_engine.research.ports.MemoryStorePort`, and
+:class:`~predictron_engine.research.ports.HistoryPort` — backed by a single
 canonical JSON document on the filesystem, and wires them into the existing
 :class:`~predictron_engine.research.memory.ResearchMemory` facade.
 
@@ -14,7 +15,9 @@ The research package is deliberately free of I/O: it declares the seam and the
 in-memory defaults, but never touches a disk, a socket, or a clock.  A durable
 backend is an *adapter* over that seam, so it belongs with the other adapters
 in :mod:`predictron_engine.integrations` (which already host the live evidence
-and engine bridges).  Nothing in the research package is modified.
+and engine bridges).  The recent research-package changes are type-level only —
+history gained a port and the memory facade is typed against it — and no
+behaviour changed there, as the existing suite proves.
 
 How persistence works
 ---------------------
@@ -32,7 +35,8 @@ the in-memory defaults do, so they are interchangeable collaborators.
 
 Serialization contract
 ----------------------
-* The persisted document is ``{"schema_version", "index", "graph", "records"}``.
+* The persisted document is
+  ``{"schema_version", "index", "graph", "records", "history"}``.
   Each section is the store's own ``to_dict()`` output; **no schema version and
   no field is invented here**.  Existing ``to_dict``/``from_dict`` behaviour is
   authoritative and honoured verbatim.
@@ -61,8 +65,7 @@ Scope
 This work item implements the durable backend only.  It deliberately does not
 add an application API, observability, evidence redesign, a richer projection,
 networking, live providers, a UI, benchmark changes, a migration framework, or a
-schema redesign.  The history log has no port and is therefore not persisted by
-the port-level backend; a full-snapshot restore of history is a later concern.
+schema redesign.
 
 Nothing here changes the default system.  Persistence is opt-in: it is only used
 when a caller explicitly opens a :class:`PersistentResearchMemory` or injects the
@@ -81,6 +84,7 @@ from predictron_engine.canonical import canonical_json
 from predictron_engine.research.exceptions import ResearchMemoryError
 from predictron_engine.research.execution_report import ResearchReport
 from predictron_engine.research.graph_models import (
+    EntitySnapshot,
     EntityType,
     GraphEntity,
     GraphRelationship,
@@ -96,6 +100,7 @@ from predictron_engine.research.graph_store import (
     MemoryRecordKey,
     RelationshipWrite,
 )
+from predictron_engine.research.history import HistoryEntry, HistoryLog
 from predictron_engine.research.memory import ResearchMemory
 from predictron_engine.research.memory_store import (
     EvidenceWrite,
@@ -107,7 +112,7 @@ from predictron_engine.research.models import Evidence
 from predictron_engine.research.ports import MemoryIndexPort
 
 #: Serialization schema version for the durable research-memory document.
-PERSISTENCE_SCHEMA_VERSION = "1.0.0"
+PERSISTENCE_SCHEMA_VERSION = "1.1.0"
 
 
 class ResearchPersistenceError(ResearchMemoryError):
@@ -209,12 +214,13 @@ class FileDocumentStore:
 
 
 class PersistentMemoryBackend:
-    """The shared durable state behind the three persistent ports.
+    """The shared durable state behind the four persistent ports.
 
-    One backend owns one in-memory index, one in-memory graph store, and one
-    in-memory record store, plus the file they are persisted to.  The three
-    persistent ports are thin views over it, so records, facts, and history keep
-    sharing a single append order exactly as they do in memory.
+    One backend owns one in-memory index, one in-memory graph store, one
+    in-memory record store, and one in-memory history log, plus the file they
+    are persisted to.  The four persistent ports are thin views over it, so
+    records, facts, and history keep sharing a single append order exactly as
+    they do in memory.
 
     Parameters
     ----------
@@ -230,6 +236,7 @@ class PersistentMemoryBackend:
         self.index: MemoryIndex = _restore_index(document)
         self.graph: GraphStore = _restore_graph(document, self.index)
         self.records: MemoryStore = _restore_records(document, self.index)
+        self.history: HistoryLog = _restore_history(document)
 
     @property
     def path(self) -> Path:
@@ -247,6 +254,7 @@ class PersistentMemoryBackend:
             "index": self.index.to_dict(),
             "graph": self.graph.to_dict(),
             "records": self.records.to_dict(),
+            "history": self.history.to_dict(),
         }
 
     def flush(self) -> None:
@@ -531,10 +539,77 @@ class PersistentMemoryStore:
         return self._backend.records.to_dict()
 
 
+class PersistentHistoryStore:
+    """A :class:`~predictron_engine.research.ports.HistoryPort` on disk.
+
+    Reads delegate to the shared in-memory history log.  Writes rebind the
+    backend's log to the value the in-memory implementation returns — the log
+    has value semantics, so every write yields a new log — and then persist the
+    whole document, so a recorded entry is durable before the call returns.
+    """
+
+    def __init__(self, backend: PersistentMemoryBackend) -> None:
+        self._backend = backend
+
+    def append(self, entry: HistoryEntry) -> PersistentHistoryStore:
+        """Return this store after appending ``entry`` and persisting it."""
+        self._backend.history = self._backend.history.append(entry)
+        self._backend.flush()
+        return self
+
+    def record(
+        self,
+        *,
+        entity_id: str,
+        entity_type: EntityType,
+        sequence: int,
+        recorded_at: str,
+        source: str,
+        previous: EntitySnapshot | None,
+        current: EntitySnapshot | None,
+    ) -> PersistentHistoryStore:
+        """Return this store after recording a derived entry and persisting it."""
+        self._backend.history = self._backend.history.record(
+            entity_id=entity_id,
+            entity_type=entity_type,
+            sequence=sequence,
+            recorded_at=recorded_at,
+            source=source,
+            previous=previous,
+            current=current,
+        )
+        self._backend.flush()
+        return self
+
+    def ordered(self) -> tuple[HistoryEntry, ...]:
+        """Return every entry, ordered by sequence."""
+        return self._backend.history.ordered()
+
+    def for_entity(self, entity_id: str) -> tuple[HistoryEntry, ...]:
+        """Return every entry for ``entity_id``, ordered by sequence."""
+        return self._backend.history.for_entity(entity_id)
+
+    def snapshots_for(self, entity_id: str) -> tuple[EntitySnapshot, ...]:
+        """Return every snapshot recorded for ``entity_id``, in version order."""
+        return self._backend.history.snapshots_for(entity_id)
+
+    def to_dict(self) -> dict[str, object]:
+        """Serialize the log into its JSON-ready snapshot document."""
+        return self._backend.history.to_dict()
+
+    def __len__(self) -> int:
+        """Return how many entries are recorded."""
+        return len(self._backend.history)
+
+    def is_empty(self) -> bool:
+        """Return whether the log holds no entries."""
+        return self._backend.history.is_empty()
+
+
 class PersistentResearchMemory:
     """A :class:`ResearchMemory` whose state is persisted to disk.
 
-    The facade wires the three persistent ports over one shared backend and
+    The facade wires the four persistent ports over one shared backend and
     hands them to the unchanged :class:`ResearchMemory`, whose constructor
     enforces the shared-sequence invariant.  Reads and writes behave exactly as
     the in-memory implementation does; the only difference is that each write is
@@ -552,7 +627,12 @@ class PersistentResearchMemory:
         self.index = PersistentMemoryIndex(self.backend)
         self.graph = PersistentGraphStore(self.backend, self.index)
         self.records = PersistentMemoryStore(self.backend, self.index)
-        self.memory = ResearchMemory(store=self.graph, records=self.records)
+        self.history = PersistentHistoryStore(self.backend)
+        self.memory = ResearchMemory(
+            store=self.graph,
+            records=self.records,
+            history=self.history,
+        )
 
     @property
     def path(self) -> Path:
@@ -571,10 +651,10 @@ class PersistentResearchMemory:
 def open_persistent_memory(path: str | os.PathLike[str]) -> ResearchMemory:
     """Open (or create) a durable :class:`ResearchMemory` at ``path``.
 
-    This is the convenience entry point: it builds the three persistent ports,
+    This is the convenience entry point: it builds the four persistent ports,
     wires them into the unchanged memory facade, and returns the facade.  The
     persistent collaborators remain reachable as ``memory.store``,
-    ``memory.records``, and ``memory.index``.
+    ``memory.records``, ``memory.history``, and ``memory.index``.
     """
     return PersistentResearchMemory(path).memory
 
@@ -651,6 +731,18 @@ def _restore_records(
     )
 
 
+def _restore_history(
+    document: Mapping[str, object] | None,
+) -> HistoryLog:
+    """Rebuild the history log from a persisted document."""
+    if document is None:
+        return HistoryLog()
+    section = document.get("history")
+    if section is None:
+        return HistoryLog()
+    return HistoryLog.from_dict(_require_mapping(section, what="'history'"))
+
+
 def _require_mapping(value: object, *, what: str) -> Mapping[str, object]:
     """Validate that a serialized section is a mapping."""
     if not isinstance(value, Mapping):
@@ -670,6 +762,7 @@ __all__ = [
     "PERSISTENCE_SCHEMA_VERSION",
     "FileDocumentStore",
     "PersistentGraphStore",
+    "PersistentHistoryStore",
     "PersistentMemoryBackend",
     "PersistentMemoryIndex",
     "PersistentMemoryStore",

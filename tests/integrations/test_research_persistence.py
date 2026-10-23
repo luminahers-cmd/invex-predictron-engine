@@ -244,6 +244,9 @@ def test_the_document_round_trips_byte_identically(tmp_path: Path) -> None:
     assert canonical_json(reopened.document()) == canonical_json(
         original_document
     )
+    assert canonical_json(reopened.document()["history"]) == canonical_json(
+        original_document["history"]
+    )
 
 
 def test_writing_the_same_state_twice_is_byte_stable(tmp_path: Path) -> None:
@@ -264,10 +267,17 @@ def test_the_document_carries_only_the_existing_schema_sections(
     populate(handle.memory)
     document = handle.document()
     assert document["schema_version"] == PERSISTENCE_VERSION
-    assert set(document) == {"schema_version", "index", "graph", "records"}
+    assert set(document) == {
+        "schema_version",
+        "index",
+        "graph",
+        "records",
+        "history",
+    }
     assert document["graph"]["schema_version"] == "1.0.0"
     assert document["records"]["schema_version"] == "1.0.0"
     assert document["index"]["schema_version"] == "1.0.0"
+    assert document["history"]["schema_version"] == "1.0.0"
 
 
 # -- requirement 4: ordering is deterministic --------------------------
